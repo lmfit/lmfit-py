@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Getting started with Non-Linear Least-Squares Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Downloading and Installation" href="installation.html" />
+    <link rel="prev" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="contents.html">Contents</a></li>
+    <li><a href="examples/index.html">Examples</a></li>
+    <li><a href="installation.html">Installation</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Downloading and Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="#">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="confidence.html">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Non-Linear Least-Squares Minimization and Curve-Fitting for Python</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="installation.html"
+                          title="next chapter">Downloading and Installation</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="getting-started-with-non-linear-least-squares-fitting">
+<span id="intro-chapter"></span><h1>Getting started with Non-Linear Least-Squares Fitting<a class="headerlink" href="#getting-started-with-non-linear-least-squares-fitting" title="Permalink to this heading">¶</a></h1>
+<p>The lmfit package provides simple tools to help you build complex fitting
+models for non-linear least-squares problems and apply these models to real
+data. This section gives an overview of the concepts and describes how to
+set up and perform simple fits. Some basic knowledge of Python, NumPy, and
+modeling data are assumed – this is not a tutorial on why or how to
+perform a minimization or fit data, but is rather aimed at explaining how
+to use lmfit to do these things.</p>
+<p>In order to do a non-linear least-squares fit of a model to data or for any
+other optimization problem, the main task is to write an <em>objective
+function</em> that takes the values of the fitting variables and calculates
+either a scalar value to be minimized or an array of values that are to be
+minimized, typically in the least-squares sense. For many data fitting
+processes, the latter approach is used, and the objective function should
+return an array of <code class="docutils literal notranslate"><span class="pre">(data-model)</span></code>, perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data. For such a problem,
+the chi-square (<span class="math notranslate nohighlight">\(\chi^2\)</span>) statistic is often defined as:</p>
+<div class="math notranslate nohighlight">
+\[\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(y_i^{\rm meas}\)</span> is the set of measured data, <span class="math notranslate nohighlight">\(y_i^{\rm
+model}({\bf{v}})\)</span> is the model calculation, <span class="math notranslate nohighlight">\({\bf{v}}\)</span> is the set of
+variables in the model to be optimized in the fit, and <span class="math notranslate nohighlight">\(\epsilon_i\)</span>
+is the estimated uncertainty in the data, respectively.</p>
+<p>In a traditional non-linear fit, one writes an objective function that
+takes the variable values and calculates the residual array <span class="math notranslate nohighlight">\(y^{\rm
+meas}_i - y_i^{\rm model}({\bf{v}})\)</span>, or the residual array scaled by the
+data uncertainties, <span class="math notranslate nohighlight">\([y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
+<p>As a simple concrete example, one might want to model data with a decaying
+sine wave, and so write an objective function like this:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">uncertainty</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>To perform the minimization with <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code>, one would do this:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
+
+<span class="c1"># generate synthetic data with noise</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="mf">7.5</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mf">0.22</span> <span class="o">+</span> <span class="mf">2.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="mf">0.01</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="c1"># generate experimental uncertainties</span>
+<span class="n">uncertainty</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mf">0.16</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>Though it is wonderful to be able to use Python for such optimization
+problems, and the SciPy library is robust and easy to use, the approach
+here is not terribly different from how one would do the same fit in C or
+Fortran. There are several practical challenges to using this approach,
+including:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>The user has to keep track of the order of the variables, and their
+meaning – <code class="docutils literal notranslate"><span class="pre">variables[0]</span></code> is the <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">variables[2]</span></code> is
+the <code class="docutils literal notranslate"><span class="pre">frequency</span></code>, and so on, although there is no intrinsic meaning
+to this order.</p></li>
+<li><p>If the user wants to fix a particular variable (<em>not</em> vary it in the
+fit), the residual function has to be altered to have fewer variables,
+and have the corresponding constant value passed in some other way.
+While reasonable for simple cases, this quickly becomes a significant
+work for more complex models, and greatly complicates modeling for
+people not intimately familiar with the details of the fitting code.</p></li>
+<li><p>There is no simple, robust way to put bounds on values for the
+variables, or enforce mathematical relationships between the
+variables. In fact, the optimization methods that do provide
+bounds, require bounds to be set for all variables with separate
+arrays that are in the same arbitrary order as variable values.
+Again, this is acceptable for small or one-off cases, but becomes
+painful if the fitting model needs to change.</p></li>
+</ol>
+</div></blockquote>
+<p>These shortcomings are due to the use of traditional arrays to hold the
+variables, which matches closely the implementation of the underlying
+Fortran code, but does not fit very well with Python’s rich selection of
+objects and data structures. The key concept in lmfit is to define and use
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects instead of plain floating point numbers as the
+variables for the fit. Using <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects (or the closely
+related <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> – a dictionary of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects),
+allows one to:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>forget about the order of variables and refer to Parameters
+by meaningful names.</p></li>
+<li><p>place bounds on Parameters as attributes, without worrying about
+preserving the order of arrays for variables and boundaries.</p></li>
+<li><p>fix Parameters, without having to rewrite the objective function.</p></li>
+<li><p>place algebraic constraints on Parameters.</p></li>
+</ol>
+</div></blockquote>
+<p>To illustrate the value of this approach, we can rewrite the above example
+for the decaying sine wave as:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
+    <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">uncertainty</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>At first look, we simply replaced a list of values with a dictionary,
+accessed by name – not a huge improvement. But each of the named
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> object holds additional
+attributes to modify the value during the fit. For example, Parameters can
+be fixed or bounded. This can be done during definition:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
+<code class="docutils literal notranslate"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter’s value. It can also
+be done later by setting the corresponding attributes after they have been
+created:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.10</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>Importantly, our objective function remains unchanged. This means the
+objective function can simply express the parametrized phenomenon to be
+modeled, and is separate from the choice of parameters to be varied in the
+fit.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">params</span></code> object can be copied and modified to make many user-level
+changes to the model and fitting process. Of course, most of the
+information about how your data is modeled goes into the objective
+function, but the approach here allows some external control; that is,
+control by the <strong>user</strong> performing the fit, instead of by the author of the
+objective function.</p>
+<p>Finally, in addition to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> approach to fitting data,
+lmfit allows switching optimization methods without changing the objective
+function, provides tools for generating fitting reports, and provides a
+better determination of Parameters confidence levels.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Downloading and Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python"
+             >previous</a> |</li>
+    <li>[ <a href="#">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="confidence.html">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

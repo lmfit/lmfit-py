@@ -1,0 +1,58 @@
+
+:orphan:
+
+.. _sphx_glr_examples_documentation_sg_execution_times:
+
+Computation times
+=================
+**00:13.578** total execution time for **examples_documentation** files:
+
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_fitting_emcee.py` (``fitting_emcee.py``)                         | 00:06.083 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_confidence_advanced.py` (``confidence_advanced.py``)             | 00:03.529 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_uncertainty2.py` (``model_uncertainty2.py``)               | 00:00.640 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py` (``builtinmodels_peakmodels.py``)   | 00:00.600 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py` (``builtinmodels_nistgauss.py``)     | 00:00.299 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_builtinmodels_splinemodel.py` (``builtinmodels_splinemodel.py``) | 00:00.282 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_composite.py` (``model_composite.py``)                     | 00:00.269 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py` (``builtinmodels_nistgauss2.py``)   | 00:00.156 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py` (``model_with_iter_callback.py``)   | 00:00.155 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_uncertainty.py` (``model_uncertainty.py``)                 | 00:00.154 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py` (``builtinmodels_stepmodel.py``)     | 00:00.144 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py` (``model_with_nan_policy.py``)         | 00:00.144 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_two_components.py` (``model_two_components.py``)           | 00:00.141 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py` (``model_loadmodelresult2.py``)       | 00:00.137 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_gaussian.py` (``model_gaussian.py``)                       | 00:00.137 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_parameters_basic.py` (``parameters_basic.py``)                   | 00:00.135 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_loadmodel.py` (``model_loadmodel.py``)                     | 00:00.133 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py` (``model_loadmodelresult.py``)         | 00:00.133 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py` (``parameters_valuesdict.py``)         | 00:00.132 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_confidence_basic.py` (``confidence_basic.py``)                   | 00:00.108 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py` (``model_savemodelresult2.py``)       | 00:00.033 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_savemodelresult.py` (``model_savemodelresult.py``)         | 00:00.021 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_fitting_withreport.py` (``fitting_withreport.py``)               | 00:00.008 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_documentation_model_savemodel.py` (``model_savemodel.py``)                     | 00:00.004 | 0.0 MB |
++--------------------------------------------------------------------------------------------------------+-----------+--------+

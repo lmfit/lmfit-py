@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Calculation of confidence intervals &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bounds Implementation" href="bounds.html" />
+    <link rel="prev" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="contents.html">Contents</a></li>
+    <li><a href="examples/index.html">Examples</a></li>
+    <li><a href="installation.html">Installation</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bounds.html" title="Bounds Implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="builtin_models.html" title="Built-in Fitting Models in the models module"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="intro.html">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="#">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Calculation of confidence intervals</a><ul>
+<li><a class="reference internal" href="#method-used-for-calculating-confidence-intervals">Method used for calculating confidence intervals</a></li>
+<li><a class="reference internal" href="#a-basic-example">A basic example</a></li>
+<li><a class="reference internal" href="#working-without-standard-error-estimates">Working without standard error estimates</a></li>
+<li><a class="reference internal" href="#an-advanced-example-for-evaluating-confidence-intervals">An advanced example for evaluating confidence intervals</a></li>
+<li><a class="reference internal" href="#confidence-interval-functions">Confidence Interval Functions</a><ul>
+<li><a class="reference internal" href="#lmfit.conf_interval"><code class="docutils literal notranslate"><span class="pre">conf_interval()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.conf_interval2d"><code class="docutils literal notranslate"><span class="pre">conf_interval2d()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.ci_report"><code class="docutils literal notranslate"><span class="pre">ci_report()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="builtin_models.html"
+                          title="previous chapter">Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="bounds.html"
+                          title="next chapter">Bounds Implementation</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-lmfit.confidence">
+<span id="calculation-of-confidence-intervals"></span><span id="confidence-chapter"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-lmfit.confidence" title="Permalink to this heading">¶</a></h1>
+<p>The lmfit <code class="xref py py-mod docutils literal notranslate"><span class="pre">confidence</span></code> module allows you to explicitly calculate
+confidence intervals for variable parameters. For most models, it is not
+necessary since the estimation of the standard error from the estimated
+covariance matrix is normally quite good.</p>
+<p>But for some models, the sum of two exponentials for example, the approximation
+begins to fail. For this case, lmfit has the function <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>
+to calculate confidence intervals directly. This is substantially slower
+than using the errors estimated from the covariance matrix, but the results
+are more robust.</p>
+<section id="method-used-for-calculating-confidence-intervals">
+<h2>Method used for calculating confidence intervals<a class="headerlink" href="#method-used-for-calculating-confidence-intervals" title="Permalink to this heading">¶</a></h2>
+<p>The F-test is used to compare our null model, which is the best fit we have
+found, with an alternate model, where one of the parameters is fixed to a
+specific value. The value is changed until the difference between <span class="math notranslate nohighlight">\(\chi^2_0\)</span>
+and <span class="math notranslate nohighlight">\(\chi^2_{f}\)</span> can’t be explained by the loss of a degree of freedom
+within a certain confidence.</p>
+<div class="math notranslate nohighlight">
+\[F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}\]</div>
+<p><code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of data points and <code class="docutils literal notranslate"><span class="pre">P</span></code> the number of parameters of the null model.
+<span class="math notranslate nohighlight">\(P_{fix}\)</span> is the number of fixed parameters (or to be more clear, the
+difference of number of parameters between our null model and the alternate
+model).</p>
+<p>Adding a log-likelihood method is under consideration.</p>
+</section>
+<section id="a-basic-example">
+<h2>A basic example<a class="headerlink" href="#a-basic-example" title="Permalink to this heading">¶</a></h2>
+<p>First we create an example problem:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>before we can generate the confidence intervals, we have to run a fit, so
+that the automated estimate of the standard errors can be used as a
+starting point:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mini</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">pars</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">lmfit</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    a:  0.09943896 +/- 1.9322e-04 (0.19%) (init = 0.1)
+    b:  1.98476942 +/- 0.01222678 (0.62%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a, b) = 0.601
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it is just a simple function call to calculate the confidence
+intervals:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ci</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>      99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
+ a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
+ b:  -0.03764  -0.02477  -0.01229   1.98477  +0.01229  +0.02477  +0.03764
+</pre></div>
+</div>
+</div>
+</div>
+<p>This shows the best-fit values for the parameters in the <code class="docutils literal notranslate"><span class="pre">_BEST_</span></code> column,
+and parameter values that are at the varying confidence levels given by
+steps in <span class="math notranslate nohighlight">\(\sigma\)</span>. As we can see, the estimated error is almost the
+same, and the uncertainties are well behaved: Going from 1-<span class="math notranslate nohighlight">\(\sigma\)</span>
+(68% confidence) to 3-<span class="math notranslate nohighlight">\(\sigma\)</span> (99.7% confidence) uncertainties is
+fairly linear. It can also be seen that the errors are fairly symmetric
+around the best fit value. For this problem, it is not necessary to
+calculate confidence intervals, and the estimates of the uncertainties from
+the covariance matrix are sufficient.</p>
+</section>
+<section id="working-without-standard-error-estimates">
+<h2>Working without standard error estimates<a class="headerlink" href="#working-without-standard-error-estimates" title="Permalink to this heading">¶</a></h2>
+<p>Sometimes the estimation of the standard errors from the covariance
+matrix fails, especially if values are near given bounds. Hence, to
+find the confidence intervals in these cases, it is necessary to set
+the errors by hand. Note that the standard error is only used to find an
+upper limit for each value, hence the exact value is not important.</p>
+<p>To set the step-size to 10% of the initial value we loop through all
+parameters and set it manually:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</section>
+<section id="an-advanced-example-for-evaluating-confidence-intervals">
+<span id="label-confidence-advanced"></span><h2>An advanced example for evaluating confidence intervals<a class="headerlink" href="#an-advanced-example-for-evaluating-confidence-intervals" title="Permalink to this heading">¶</a></h2>
+<p>Now we look at a problem where calculating the error from approximated
+covariance can lead to misleading result – the same double exponential
+problem shown in <a class="reference internal" href="fitting.html#label-emcee"><span class="std std-ref">Minimizer.emcee() - calculating the posterior probability distribution of parameters</span></a>. In fact such a problem is particularly
+hard for the Levenberg-Marquardt method, so we first estimate the results
+using the slower but robust Nelder-Mead method. We can then compare the
+uncertainties computed (if the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package is installed) with
+those estimated using Levenberg-Marquardt around the previously found
+solution. We can also compare to the results of using <code class="docutils literal notranslate"><span class="pre">emcee</span></code>.</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_confidence_advanced.py&gt;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;t1&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;a2&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="n">y</span>
+
+
+<span class="c1"># create Minimizer</span>
+<span class="n">mini</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;propagate&#39;</span><span class="p">)</span>
+
+<span class="c1"># first solve with Nelder-Mead algorithm</span>
+<span class="n">out1</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder&#39;</span><span class="p">)</span>
+
+<span class="c1"># then solve with Levenberg-Marquardt using the</span>
+<span class="c1"># Nelder-Mead solution as a starting point</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;leastsq&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+
+<span class="c1"># plot data and best fit</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">residual</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># plot confidence intervals (a1 vs t2 and a2 vs t2)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
+<span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;t2&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">ctp</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ctp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+
+<span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="s1">&#39;t2&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">ctp</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ctp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;a2&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># plot dependence between two parameters</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
+<span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
+<span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># &lt;end examples/doc_confidence_advanced.py&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>which will report:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
+    a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
+    t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
+    t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(a2, t2) = 0.987
+    C(a2, t1) = -0.925
+    C(t1, t2) = -0.881
+    C(a1, t1) = -0.599
+
+       95.45%    68.27%    _BEST_    68.27%    95.45%
+ a1:  -0.27285  -0.14165   2.98622  +0.16353  +0.36343
+ a2:  -0.30440  -0.13220  -4.33526  +0.10689  +0.19684
+ t1:  -0.23392  -0.12494   1.30994  +0.14660  +0.32369
+ t2:  -1.01937  -0.48813  11.82404  +0.46045  +0.90439
+</pre></div>
+</div>
+</div>
+</div>
+<p>Again we called <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>, this time with tracing and only for
+1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</span>. Comparing these two different estimates, we see
+that the estimate for <code class="docutils literal notranslate"><span class="pre">a1</span></code> is reasonably well approximated from the
+covariance matrix, but the estimates for <code class="docutils literal notranslate"><span class="pre">a2</span></code> and especially for <code class="docutils literal notranslate"><span class="pre">t1</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">t2</span></code> are very asymmetric and that going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span> (68%
+confidence) to 2 <span class="math notranslate nohighlight">\(\sigma\)</span> (95% confidence) is not very predictable.</p>
+<p>Plots of the confidence region are shown in the figures below for <code class="docutils literal notranslate"><span class="pre">a1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">t2</span></code> (left), and <code class="docutils literal notranslate"><span class="pre">a2</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> (right):</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/confidence_7_0.svg" src="_images/confidence_7_0.svg" /></div>
+</div>
+<p>Neither of these plots is very much like an ellipse, which is implicitly
+assumed by the approach using the covariance matrix. The plots actually
+look quite a bit like those found with MCMC and shown in the “corner plot”
+in <a class="reference internal" href="fitting.html#label-emcee"><span class="std std-ref">Minimizer.emcee() - calculating the posterior probability distribution of parameters</span></a>. In fact, comparing the confidence interval results
+here with the results for the 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</span> error estimated with
+<code class="docutils literal notranslate"><span class="pre">emcee</span></code>, we can see that the agreement is pretty good and that the
+asymmetry in the parameter distributions are reflected well in the
+asymmetry of the uncertainties.</p>
+<p>The trace returned as the optional second argument from
+<code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code> contains a dictionary for each variable parameter.
+The values are dictionaries with arrays of values for each variable, and an
+array of corresponding probabilities for the corresponding cumulative
+variables. This can be used to show the dependence between two
+parameters:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
+<span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
+<span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;t2&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>which shows the trace of values:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/confidence_9_0.svg" src="_images/confidence_9_0.svg" /></div>
+</div>
+<p>As an alternative/complement to the confidence intervals, the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code>
+method uses Markov Chain Monte Carlo to sample the posterior probability distribution.
+These distributions demonstrate the range of solutions that the data supports and we
+refer to <a class="reference internal" href="fitting.html#label-emcee"><span class="std std-ref">Minimizer.emcee() - calculating the posterior probability distribution of parameters</span></a> where this methodology was used on the same problem.</p>
+<p>Credible intervals (the Bayesian equivalent of the frequentist confidence
+interval) can be obtained with this method. MCMC can be used for model
+selection, to determine outliers, to marginalize over nuisance parameters, etcetera.
+For example, you may have fractionally underestimated the uncertainties on a
+dataset. MCMC can be used to estimate the true level of uncertainty on each
+data point. A tutorial on the possibilities offered by MCMC can be found at <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/</a></p>
+</aside>
+</aside>
+</section>
+<section id="confidence-interval-functions">
+<h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lmfit.conf_interval">
+<span class="sig-name descname"><span class="pre">conf_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the confidence interval (CI) for parameters.</p>
+<p>The parameter for which the CI is calculated will be varied, while the
+remaining parameters are re-optimized to minimize the chi-square. The
+resulting chi-square is used to calculate the probability with a given
+statistic (e.g., F-test). This function uses a 1d-rootfinder from SciPy
+to find the values resulting in the searched confidence region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
+<li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
+<li><p><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the CI is calculated. If None
+(default), the CI is calculated for every parameter.</p></li>
+<li><p><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Notes below.</p></li>
+<li><p><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability
+calculation is saved along with the parameter. This can be used to
+plot so-called “profile traces”.</p></li>
+<li><p><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debugging information (default is False).</p></li>
+<li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
+Default is None and uses the built-in function <cite>f_compare</cite>
+(i.e., F-test).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>output</strong> (<em>dict</em>) – A dictionary containing a list of <code class="docutils literal notranslate"><span class="pre">(sigma,</span> <span class="pre">vals)</span></code>-tuples for
+each parameter.</p></li>
+<li><p><strong>trace_dict</strong> (<em>dict, optional</em>) – Only if trace is True. Is a dictionary, the key is the parameter
+which was fixed. The values are again a dict with the names as
+keys, but with an additional key ‘prob’. Each contains an array
+of the corresponding values.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#lmfit.conf_interval2d" title="lmfit.conf_interval2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conf_interval2d</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The values for <cite>sigma</cite> are taken as the number of standard deviations
+for a normal distribution and converted to probabilities. That is, the
+default <code class="docutils literal notranslate"><span class="pre">sigma=[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will use probabilities of 0.6827, 0.9545,
+and 0.9973. If any of the sigma values is less than 1, that will be
+interpreted as a probability. That is, a value of 1 and 0.6827 will
+give the same results, within precision.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit.printfuncs</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">some_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_errors</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">... </span><span class="c1">#report</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+<span class="gp">... </span><span class="c1">#report</span>
+</pre></div>
+</div>
+<p>Now with quantiles for the sigmas and using the trace.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fixed</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;para1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">free</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;not_para1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This makes it possible to plot the dependence between free and fixed
+parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lmfit.conf_interval2d">
+<span class="sig-name descname"><span class="pre">conf_interval2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate confidence regions for two fixed parameters.</p>
+<p>The method itself is explained in <cite>conf_interval</cite>: here we are fixing
+two parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
+<li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
+<li><p><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the x direction.</p></li>
+<li><p><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the y direction.</p></li>
+<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction.</p></li>
+<li><p><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction.</p></li>
+<li><p><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form <code class="docutils literal notranslate"><span class="pre">((x_upper,</span> <span class="pre">x_lower),</span> <span class="pre">(y_upper,</span> <span class="pre">y_lower))</span></code>.
+If not given, the default is 5.0*std-errors in each direction.</p></li>
+<li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
+Default is None and uses the built-in function <cite>f_compare</cite>
+(i.e., F-test).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) – X-coordinates (same shape as <cite>nx</cite>).</p></li>
+<li><p><strong>y</strong> (<em>numpy.ndarray</em>) – Y-coordinates (same shape as <cite>ny</cite>).</p></li>
+<li><p><strong>grid</strong> (<em>numpy.ndarray</em>) – Grid containing the calculated probabilities (with shape
+<code class="docutils literal notranslate"><span class="pre">(nx,</span> <span class="pre">ny)</span></code>).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#lmfit.conf_interval" title="lmfit.conf_interval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conf_interval</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">some_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">gr</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="s1">&#39;para1&#39;</span><span class="p">,</span><span class="s1">&#39;para2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">gr</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lmfit.ci_report">
+<span class="sig-name descname"><span class="pre">ci_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndigits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.ci_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return text of a report for confidence intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ci</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The result of <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>: a dictionary
+containing a list of <code class="docutils literal notranslate"><span class="pre">(sigma,</span> <span class="pre">vals)</span></code>-tuples for each parameter.</p></li>
+<li><p><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is
+True).</p></li>
+<li><p><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Text of formatted report on confidence intervals.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bounds.html" title="Bounds Implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="builtin_models.html" title="Built-in Fitting Models in the models module"
+             >previous</a> |</li>
+    <li>[ <a href="intro.html">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="#">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
