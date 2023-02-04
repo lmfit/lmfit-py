@@ -29,7 +29,7 @@ repos:
         additional_dependencies: [flake8-deprecated, flake8-mutable]
 
 -   repo: https://github.com/PyCQA/isort/
-    rev: 5.11.4
+    rev: 5.12.0
     hooks:
     -   id: isort
 
