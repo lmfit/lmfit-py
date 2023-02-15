@@ -1879,6 +1879,11 @@ class ModelResult(Minimizer):
         -------
         matplotlib.axes.Axes
 
+        Raises
+        ------
+        RuntimeError
+            Raised if the independent variable is not one dimensional.
+
         See Also
         --------
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
@@ -1913,12 +1918,12 @@ class ModelResult(Minimizer):
         # The function reduce_complex will convert complex vectors into real vectors
         reduce_complex = get_reducer(parse_complex)
 
-        if len(self.model.independent_vars) == 1:
+        if (len(self.model.independent_vars) == 1
+                and len(self.userkws[self.model.independent_vars[0]].shape) == 1):
             independent_var = self.model.independent_vars[0]
         else:
-            print('Fit can only be plotted if the model function has one '
-                  'independent variable.')
-            return False
+            raise RuntimeError('Fit can only be plotted if the model function has one '
+                               'independent variable.')
 
         if not isinstance(ax, plt.Axes):
             ax = plt.axes(**ax_kws)
@@ -2141,6 +2146,11 @@ class ModelResult(Minimizer):
         -------
         matplotlib.figure.Figure
 
+        Raises
+        ------
+        RuntimeError
+            Raised if the independent variable is not one dimensional.
+
         See Also
         --------
         ModelResult.plot_fit : Plot the fit results using matplotlib.
@@ -2181,10 +2191,10 @@ class ModelResult(Minimizer):
         if fig_kws is not None:
             fig_kws_.update(fig_kws)
 
-        if len(self.model.independent_vars) != 1:
-            print('Fit can only be plotted if the model function has one '
-                  'independent variable.')
-            return False
+        if (len(self.model.independent_vars) != 1
+                or len(self.userkws[self.model.independent_vars[0]].shape) > 1):
+            raise RuntimeError('Fit can only be plotted if the model function has one '
+                               'independent variable.')
 
         if not isinstance(fig, plt.Figure):
             fig = plt.figure(**fig_kws_)

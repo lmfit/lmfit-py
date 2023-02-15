@@ -1016,6 +1016,43 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         assert len(comps) == 2
         assert 'g1_' in comps
 
+    def test_2d_plotting_error_message(self):
+        """Test that calling plot with a 2-dimensional model gives a helpful
+        error message.
+        """
+        import matplotlib
+        matplotlib.use('Agg')
+
+        n = 10
+        coords = np.empty((2, n, n))
+        data = np.empty((n, n))
+        x = np.arange(0, n)
+        y = np.arange(0, n)
+        xx, yy = np.meshgrid(x, y)
+        coords[0] = xx
+        coords[1] = yy
+
+        def gaussian2d(x, flux, xcen, ycen, xsigma, ysigma):
+            return flux * np.exp(-(x[0] - xcen)**2/xsigma) * np.exp(-(x[1] - ycen)**2/ysigma)
+
+        values = dict(flux=10, xcen=4, ycen=6, xsigma=1.5, ysigma=2.5)
+        data = gaussian2d(coords, **values)
+
+        gmod = Model(gaussian2d)
+        params = gmod.make_params()
+        params['flux'].set(5, min=1)
+        params['xcen'].set(3)
+        params['ycen'].set(5)
+        params['xsigma'].set(1, min=0.0)
+        params['ysigma'].set(2, min=0.0)
+
+        result = gmod.fit(data, params=params, x=coords)
+        with self.assertRaisesRegex(RuntimeError, "one independent variable"):
+            result.plot()
+
+        with self.assertRaisesRegex(RuntimeError, "one independent variable"):
+            result.plot_fit()
+
     def test_hints_in_composite_models(self):
         # test propagation of hints from base models to composite model
         def func(x, amplitude):
