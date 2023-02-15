@@ -95,7 +95,7 @@ def get_reducer(option):
             Returned array will be purely real.
 
         """
-        if any(np.iscomplex(array)):
+        if np.iscomplex(array).any():
             parsed_array = getattr(np, option)(array)
         else:
             parsed_array = array
@@ -149,7 +149,7 @@ def propagate_err(z, dz, option):
         raise ValueError(f"shape of z: {z.shape} != shape of dz: {dz.shape}")
 
     # Check the main vector for complex. Do nothing if real.
-    if any(np.iscomplex(z)):
+    if np.iscomplex(z).any():
         # if uncertainties are real, apply them equally to
         # real and imaginary parts
         if all(np.isreal(dz)):
