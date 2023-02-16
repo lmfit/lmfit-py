@@ -1605,7 +1605,10 @@ class Minimizer:
 
         if not result.aborted:
             for attr in ret:
-                setattr(result, attr, ret[attr])
+                outattr = attr
+                if attr == 'nfev':
+                    outattr = 'least_squares_nfev'
+                setattr(result, outattr, ret[attr])
 
             result.x = np.atleast_1d(result.x)
 
