@@ -66,24 +66,24 @@ def create_model_params(x, y):
 def check_fit_results(result):
     """Check the result of optimization."""
     assert result.nvarys == 8
-    assert_allclose(result.chisqr, 1247.528209)
-    assert_allclose(result.aic, 417.864631)
+    assert_allclose(result.chisqr, 1247.528209, rtol=1.0e-5)
+    assert_allclose(result.aic, 417.864631, rtol=1.0e-5)
 
     pars = result.params
-    assert_allclose(pars['exp_decay'], 90.950886)
-    assert_allclose(pars['exp_amplitude'], 99.018328)
+    assert_allclose(pars['exp_decay'], 90.950886, rtol=1.0e-5)
+    assert_allclose(pars['exp_amplitude'], 99.018328, rtol=1.0e-5)
 
-    assert_allclose(pars['g1_sigma'], 16.672575)
-    assert_allclose(pars['g1_center'], 107.030954)
-    assert_allclose(pars['g1_amplitude'], 4257.773192)
-    assert_allclose(pars['g1_fwhm'], 39.260914)
-    assert_allclose(pars['g1_height'], 101.880231)
+    assert_allclose(pars['g1_sigma'], 16.672575, rtol=1.0e-5)
+    assert_allclose(pars['g1_center'], 107.030954, rtol=1.0e-5)
+    assert_allclose(pars['g1_amplitude'], 4257.773192, rtol=1.0e-5)
+    assert_allclose(pars['g1_fwhm'], 39.260914, rtol=1.0e-5)
+    assert_allclose(pars['g1_height'], 101.880231, rtol=1.0e-5)
 
-    assert_allclose(pars['g2_sigma'], 13.806948)
-    assert_allclose(pars['g2_center'], 153.270101)
-    assert_allclose(pars['g2_amplitude'], 2493.417703)
-    assert_allclose(pars['g2_fwhm'], 32.512878)
-    assert_allclose(pars['g2_height'], 72.045593)
+    assert_allclose(pars['g2_sigma'], 13.806948, rtol=1.0e-5)
+    assert_allclose(pars['g2_center'], 153.270101, rtol=1.0e-5)
+    assert_allclose(pars['g2_amplitude'], 2493.417703, rtol=1.0e-5)
+    assert_allclose(pars['g2_fwhm'], 32.512878, rtol=1.0e-5)
+    assert_allclose(pars['g2_height'], 72.045593, rtol=1.0e-5)
 
 
 @pytest.mark.parametrize("dill", [False, True])

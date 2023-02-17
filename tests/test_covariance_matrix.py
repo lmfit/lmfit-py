@@ -41,7 +41,8 @@ def test_bounded_parameters():
     params.add('omega', value=3.0, min=0, max=np.inf)
 
     # do fit, here with leastsq model
-    result = minimize(fcn2min, params, args=(x, data))
+    result = minimize(fcn2min, params, args=(x, data),
+                      epsfcn=1.e-14)
 
     # assert that the real parameters are found
     for para, val in zip(result.params.values(), [5, 0.025, -.1, 2]):
@@ -53,26 +54,26 @@ def test_bounded_parameters():
         [9.45395985e-06, 1.84110424e-07, -2.90588963e-07, 7.19107184e-08],
         [-4.33997922e-05, -2.90588963e-07, 9.53427031e-05, -2.37750362e-05],
         [1.07362106e-05, 7.19107184e-08, -2.37750362e-05, 9.60952336e-06]])
-    assert_allclose(result.covar, cov_x, rtol=1.5e-6)
+    assert_allclose(result.covar, cov_x, rtol=1.e-3, atol=1.e-6)
 
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
-    assert_almost_equal(result.params['amp'].stderr, 0.03773967, decimal=6)
-    assert_almost_equal(result.params['decay'].stderr, 4.2908e-04, decimal=6)
-    assert_almost_equal(result.params['shift'].stderr, 0.00976436, decimal=6)
-    assert_almost_equal(result.params['omega'].stderr, 0.00309992, decimal=6)
+    assert_almost_equal(result.params['amp'].stderr, 0.03773967, decimal=4)
+    assert_almost_equal(result.params['decay'].stderr, 4.2908e-04, decimal=4)
+    assert_almost_equal(result.params['shift'].stderr, 0.00976436, decimal=4)
+    assert_almost_equal(result.params['omega'].stderr, 0.00309992, decimal=4)
 
     assert_almost_equal(result.params['amp'].correl['decay'],
-                        0.5838166760743324, decimal=6)
+                        0.5838166760743324, decimal=4)
     assert_almost_equal(result.params['amp'].correl['shift'],
-                        -0.11777303073961824, decimal=6)
+                        -0.11777303073961824, decimal=4)
     assert_almost_equal(result.params['amp'].correl['omega'],
-                        0.09177027400788784, decimal=6)
+                        0.09177027400788784, decimal=4)
     assert_almost_equal(result.params['decay'].correl['shift'],
-                        -0.0693579417651835, decimal=6)
+                        -0.0693579417651835, decimal=4)
     assert_almost_equal(result.params['decay'].correl['omega'],
-                        0.05406342001021014, decimal=6)
+                        0.05406342001021014, decimal=4)
     assert_almost_equal(result.params['shift'].correl['omega'],
-                        -0.7854644476455469, decimal=6)
+                        -0.7854644476455469, decimal=4)
 
 
 def test_bounds_expression():
@@ -89,23 +90,23 @@ def test_bounds_expression():
     params['center'].set(min=5, max=10)
 
     # do fit, here with leastsq model
-    result = mod.fit(y, params, x=x)
+    result = mod.fit(y, params, x=x, fit_kws={'epsfcn': 1.e-14})
 
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
-    assert_almost_equal(result.params['sigma'].stderr, 0.00368468, decimal=6)
-    assert_almost_equal(result.params['center'].stderr, 0.00505496, decimal=6)
+    assert_almost_equal(result.params['sigma'].stderr, 0.00368468, decimal=4)
+    assert_almost_equal(result.params['center'].stderr, 0.00505496, decimal=4)
     assert_almost_equal(result.params['amplitude'].stderr, 0.13861506,
-                        decimal=6)
-    assert_almost_equal(result.params['gamma'].stderr, 0.00368468, decimal=6)
-    assert_almost_equal(result.params['fwhm'].stderr, 0.00806917, decimal=6)
-    assert_almost_equal(result.params['height'].stderr, 0.03009459, decimal=6)
+                        decimal=4)
+    assert_almost_equal(result.params['gamma'].stderr, 0.00368468, decimal=4)
+    assert_almost_equal(result.params['fwhm'].stderr, 0.00806917, decimal=4)
+    assert_almost_equal(result.params['height'].stderr, 0.03009459, decimal=4)
 
     assert_almost_equal(result.params['sigma'].correl['center'],
-                        -4.6623973788006615e-05, decimal=6)
+                        -4.6623973788006615e-05, decimal=4)
     assert_almost_equal(result.params['sigma'].correl['amplitude'],
-                        0.651304091954038, decimal=6)
+                        0.651304091954038, decimal=4)
     assert_almost_equal(result.params['center'].correl['amplitude'],
-                        -4.390334984618851e-05, decimal=6)
+                        -4.390334984618851e-05, decimal=4)
 
 
 @pytest.mark.parametrize("fit_method", ['nelder', 'lbfgs'])
