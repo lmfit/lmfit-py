@@ -32,11 +32,14 @@ def convolve(arr, kernel):
 
 # create Composite Model using the custom convolution operator
 mod = CompositeModel(Model(jump), Model(gaussian), convolve)
-pars = mod.make_params(amplitude=1, center=3.5, sigma=1.5, mid=5.0)
 
-# 'mid' and 'center' should be completely correlated, and 'mid' is
-# used as an integer index, so a very poor fit variable:
-pars['mid'].vary = False
+# create parameters for model.  Note that 'mid' and 'center' will be highly
+# correlated. Since 'mid' is used as an integer index, it will be very
+# hard to fit, so we fix its value
+pars = mod.make_params(amplitude=dict(value=1, min=0),
+                       center=3.5,
+                       sigma=dict(value=1.5, min=0),
+                       mid=dict(value=4, vary=False))
 
 # fit this model to data array y
 result = mod.fit(y, params=pars, x=x)

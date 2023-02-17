@@ -8,8 +8,7 @@ x = np.linspace(1, 10, 250)
 np.random.seed(0)
 y = 3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1)/10.) + 0.1*np.random.randn(x.size)
 
-p = lmfit.Parameters()
-p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3.))
+p = lmfit.create_params(a1=4, a2=4, t1=3, t2=3)
 
 
 def residual(p):

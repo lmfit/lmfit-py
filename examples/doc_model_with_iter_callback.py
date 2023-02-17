@@ -17,12 +17,11 @@ y = y - .20*x + 3.333 + random.normal(scale=0.23, size=x.size)
 
 mod = GaussianModel(prefix='peak_') + LinearModel(prefix='bkg_')
 
-pars = mod.make_params()
-pars['peak_amplitude'].value = 3.0
-pars['peak_center'].value = 6.0
-pars['peak_sigma'].value = 2.0
-pars['bkg_intercept'].value = 0.0
-pars['bkg_slope'].value = 0.0
+pars = mod.make_params(peak_amplitude=dict(value=3.0, min=0),
+                       peak_center=dict(value=6.0, min=0, max=20),
+                       peak_sigma=2.0,
+                       bkg_intercept=0,
+                       bkg_slope=0)
 
 out = mod.fit(y, pars, x=x, iter_cb=per_iteration)
 

@@ -1,8 +1,14 @@
 # <examples/doc_model_loadmodelresult.py>
+import os
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 from lmfit.model import load_modelresult
+
+if not os.path.exists('gauss_modelresult.sav'):
+    os.system(f"{sys.executable} doc_model_savemodelresult.py")
 
 data = np.loadtxt('model1d_gauss.dat')
 x = data[:, 0]

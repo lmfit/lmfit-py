@@ -1,13 +1,9 @@
 # <examples/doc_fitting_withreport.py>
 from numpy import exp, linspace, pi, random, sign, sin
 
-from lmfit import Parameters, fit_report, minimize
+from lmfit import create_params, fit_report, minimize
 
-p_true = Parameters()
-p_true.add('amp', value=14.0)
-p_true.add('period', value=5.46)
-p_true.add('shift', value=0.123)
-p_true.add('decay', value=0.032)
+p_true = create_params(amp=14.0, period=5.46, shift=0.123, decay=0.032)
 
 
 def residual(pars, x, data=None):
@@ -31,11 +27,7 @@ x = linspace(0.0, 250., 1001)
 noise = random.normal(scale=0.7215, size=x.size)
 data = residual(p_true, x) + noise
 
-fit_params = Parameters()
-fit_params.add('amp', value=13.0)
-fit_params.add('period', value=2)
-fit_params.add('shift', value=0.0)
-fit_params.add('decay', value=0.02)
+fit_params = create_params(amp=13, period=2, shift=0, decay=0.02)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 

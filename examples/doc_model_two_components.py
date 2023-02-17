@@ -20,10 +20,10 @@ def line(x, slope, intercept):
 
 
 mod = Model(gaussian) + Model(line)
-pars = mod.make_params(amp=5, cen=5, wid=1, slope=0, intercept=1)
+pars = mod.make_params(amp=5, cen=5, wid={'value': 1, 'min': 0},
+                       slope=0, intercept=1)
 
 result = mod.fit(y, pars, x=x)
-
 print(result.fit_report())
 
 plt.plot(x, y, 'o')

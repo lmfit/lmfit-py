@@ -48,7 +48,6 @@ np.random.seed(2021)
 x = np.linspace(-1, 2, 151)
 data = []
 for _ in np.arange(5):
-    params = Parameters()
     amp = 0.60 + 9.50*np.random.rand()
     cen = -0.20 + 1.20*np.random.rand()
     sig = 0.25 + 0.03*np.random.rand()

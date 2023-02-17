@@ -80,11 +80,7 @@ report_fit(result.params)
 # Passing parameters to ``fit`` can become unwieldy. As an alternative, you
 # can extract the parameters from ``model`` like so, set them individually,
 # and pass them to ``fit``.
-params = model.make_params()
-
-params['N'].value = 10
-params['tau'].value = 1
-params['tau'].min = 0
+params = model.make_params(N=10, tau={'value': 1, 'min': 0})
 
 result = model.fit(data, params, t=t)
 report_fit(result.params)

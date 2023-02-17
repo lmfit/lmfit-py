@@ -12,16 +12,14 @@ exp_mod = ExponentialModel(prefix='exp_')
 pars = exp_mod.guess(y, x=x)
 
 gauss1 = GaussianModel(prefix='g1_')
-pars.update(gauss1.make_params())
-pars['g1_center'].set(value=105, min=75, max=125)
-pars['g1_sigma'].set(value=15, min=3)
-pars['g1_amplitude'].set(value=2000, min=10)
+pars.update(gauss1.make_params(center=dict(value=105, min=75, max=125),
+                               sigma=dict(value=15, min=0),
+                               amplitude=dict(value=2000, min=0)))
 
 gauss2 = GaussianModel(prefix='g2_')
-pars.update(gauss2.make_params())
-pars['g2_center'].set(value=155, min=125, max=175)
-pars['g2_sigma'].set(value=15, min=3)
-pars['g2_amplitude'].set(value=2000, min=10)
+pars.update(gauss2.make_params(center=dict(value=155, min=125, max=175),
+                               sigma=dict(value=15, min=0),
+                               amplitude=dict(value=2000, min=0)))
 
 mod = gauss1 + gauss2 + exp_mod
 

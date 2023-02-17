@@ -18,7 +18,7 @@ from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt
 import numpy as np
 
-from lmfit import Minimizer, Parameters, fit_report
+from lmfit import Minimizer, create_params, fit_report
 
 ###############################################################################
 # Let's start with the example given in the documentation of SciPy:
@@ -32,23 +32,26 @@ from lmfit import Minimizer, Parameters, fit_report
 #
 # First, we create a set of Parameters where all variables except ``x`` and
 # ``y`` are given fixed values.
-params = Parameters()
-params.add_many(
-        ('a', 2, False),
-        ('b', 3, False),
-        ('c', 7, False),
-        ('d', 8, False),
-        ('e', 9, False),
-        ('f', 10, False),
-        ('g', 44, False),
-        ('h', -1, False),
-        ('i', 2, False),
-        ('j', 26, False),
-        ('k', 1, False),
-        ('l', -2, False),
-        ('scale', 0.5, False),
-        ('x', 0.0, True),
-        ('y', 0.0, True))
+# Just as in the documentation we will do a grid search between ``-4`` and
+# ``4`` and use a stepsize of ``0.25``. The bounds can be set as usual with
+# the ``min`` and ``max`` attributes, and the stepsize is set using
+# ``brute_step``.
+
+params = create_params(a=dict(value=2, vary=False),
+                       b=dict(value=3, vary=False),
+                       c=dict(value=7, vary=False),
+                       d=dict(value=8, vary=False),
+                       e=dict(value=9, vary=False),
+                       f=dict(value=10, vary=False),
+                       g=dict(value=44, vary=False),
+                       h=dict(value=-1, vary=False),
+                       i=dict(value=2, vary=False),
+                       j=dict(value=26, vary=False),
+                       k=dict(value=1, vary=False),
+                       l=dict(value=-2, vary=False),
+                       scale=dict(value=0.5, vary=False),
+                       x=dict(value=0.0, vary=True, min=-4, max=4, brute_step=0.25),
+                       y=dict(value=0.0, vary=True, min=-4, max=4, brute_step=0.25))
 
 ###############################################################################
 # Second, create the three functions and the objective function:
@@ -76,14 +79,6 @@ def f3(p):
 def f(params):
     return f1(params) + f2(params) + f3(params)
 
-
-###############################################################################
-# Just as in the documentation we will do a grid search between ``-4`` and
-# ``4`` and use a stepsize of ``0.25``. The bounds can be set as usual with
-# the ``min`` and ``max`` attributes, and the stepsize is set using
-# ``brute_step``.
-params['x'].set(min=-4, max=4, brute_step=0.25)
-params['y'].set(min=-4, max=4, brute_step=0.25)
 
 ###############################################################################
 # Performing the actual grid search is done with:
@@ -148,21 +143,15 @@ def fcn2min(params, x, data):
     return model - data
 
 
-# create a set of Parameters
-params = Parameters()
-params.add('amp', value=7, min=2.5)
-params.add('decay', value=0.05)
-params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
-params.add('omega', value=3, max=5)
-
 ###############################################################################
 # In contrast to the implementation in SciPy (as shown in the first example),
-# varying parameters do not need to have finite bounds in lmfit. However, in
-# that case they **do** need the ``brute_step`` attribute specified, so let's
-# do that:
-params['amp'].set(brute_step=0.25)
-params['decay'].set(brute_step=0.005)
-params['omega'].set(brute_step=0.25)
+# varying parameters do not need to have finite bounds in lmfit. However, if a
+# parameter does not have finite bounds, then it does need a ``brute_step``
+# attribute specified:
+params = create_params(amp=dict(value=7, min=2.5, brute_step=0.25),
+                       decay=dict(value=0.05, brute_step=0.005),
+                       shift=dict(value=0.0, min=-np.pi/2., max=np.pi/2),
+                       omega=dict(value=3, max=5, brute_step=0.25))
 
 ###############################################################################
 # Our initial parameter set is now defined as shown below and this will
@@ -173,6 +162,8 @@ params.pretty_print()
 # First, we initialize a ``Minimizer`` and perform the grid search:
 fitter = Minimizer(fcn2min, params, fcn_args=(x, data))
 result_brute = fitter.minimize(method='brute', Ns=25, keep=25)
+
+print(fit_report(result_brute))
 
 ###############################################################################
 # We used two new parameters here: ``Ns`` and ``keep``. The parameter ``Ns``
@@ -398,3 +389,4 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
 ###############################################################################
 # and finally, to generated the figure:
 plot_results_brute(result_brute, best_vals=True, varlabels=None)
+plt.show()
