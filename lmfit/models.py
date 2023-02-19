@@ -168,7 +168,7 @@ class ConstantModel(Model):
                        'independent_vars': independent_vars})
 
         def constant(x, c=0.0):
-            return c
+            return c * np.ones(np.shape(x))
         super().__init__(constant, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
@@ -198,7 +198,7 @@ class ComplexConstantModel(Model):
                        'independent_vars': independent_vars})
 
         def constant(x, re=0., im=0.):
-            return re + 1j*im
+            return (re + 1j*im) * np.ones(np.shape(x))
         super().__init__(constant, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
