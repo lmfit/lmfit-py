@@ -1321,6 +1321,7 @@ class ModelResult(Minimizer):
     can be used to modify and re-run the fit for the Model.
 
     """
+    NON_RESIDUAL_METHODS = ["odr"]
 
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -1367,7 +1368,22 @@ class ModelResult(Minimizer):
         self.ci_out = None
         self.user_options = None
         self.init_params = deepcopy(params)
-        Minimizer.__init__(self, model._residual, params,
+
+        if method not in self.NON_RESIDUAL_METHODS:
+            userfcn = model._residual
+        else:
+            def userfcn(params, data, weights, **kwargs):
+                out = model.eval(params, **kwargs)
+                if nan_policy == 'raise' and not np.all(np.isfinite(out)):
+                    msg = ('The model function generated NaN values and the fit '
+                        'aborted! Please check your model function and/or set '
+                        'boundaries on parameters where applicable. In cases like '
+                        'this, using "nan_policy=\'omit\'" will probably not work.')
+                    raise ValueError(msg)
+
+                return out
+
+        Minimizer.__init__(self, userfcn, params,
                            fcn_args=fcn_args, fcn_kws=fcn_kws,
                            iter_cb=iter_cb, nan_policy=nan_policy,
                            scale_covar=scale_covar, calc_covar=calc_covar,

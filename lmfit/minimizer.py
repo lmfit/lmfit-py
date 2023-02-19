@@ -20,8 +20,10 @@ import inspect
 import multiprocessing
 import numbers
 import warnings
+from typing import Any, Literal
 
 import numpy as np
+import numpy.typing as npt
 from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
@@ -36,6 +38,7 @@ from scipy.sparse import issparse
 from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
+from scipy import odr
 import uncertainties
 
 from ._ampgo import ampgo
@@ -842,8 +845,6 @@ class Minimizer:
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
-        vbest = np.atleast_1d([self.result.params[name].value for name in
-                               self.result.var_names])
 
         has_expr = False
         for par in self.result.params.values():
@@ -864,20 +865,29 @@ class Minimizer:
                 self.result.errorbars = False
 
         if has_expr:
-            try:
-                uvars = uncertainties.correlated_values(vbest, self.result.covar)
-            except (LinAlgError, ValueError):
-                uvars = None
+            self._calculate_uncertainties_correlations_exprs()
 
-            # for uncertainties on constrained parameters, use the calculated
-            # "correlated_values", evaluate the uncertainties on the constrained
-            # parameters and reset the Parameters to best-fit value
-            if uvars is not None:
-                for par in self.result.params.values():
-                    eval_stderr(par, uvars, self.result.var_names, self.result.params)
-                # restore nominal values
-                for v, name in zip(uvars, self.result.var_names):
-                    self.result.params[name].value = v.nominal_value
+    def _calculate_uncertainties_correlations_exprs(self):
+        """
+        Calculate parameter uncertainties and correlations for parameters
+        with expressions set.
+        """
+        vbest = np.atleast_1d([self.result.params[name].value for name in
+                            self.result.var_names])
+        try:
+            uvars = uncertainties.correlated_values(vbest, self.result.covar)
+        except (LinAlgError, ValueError):
+            uvars = None
+
+        # for uncertainties on constrained parameters, use the calculated
+        # "correlated_values", evaluate the uncertainties on the constrained
+        # parameters and reset the Parameters to best-fit value
+        if uvars is not None:
+            for par in self.result.params.values():
+                eval_stderr(par, uvars, self.result.var_names, self.result.params)
+            # restore nominal values
+            for v, name in zip(uvars, self.result.var_names):
+                self.result.params[name].value = v.nominal_value
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
@@ -1982,6 +1992,94 @@ class Minimizer:
 
         return result
 
+    def odr(
+        self,
+        params: Parameters | None = None,
+        weights_x: npt.ArrayLike | None = None,
+        weights_y: npt.ArrayLike | None = None,
+        sigma_x: npt.ArrayLike | None = None,
+        sigma_y: npt.ArrayLike | None = None,
+        fit_type: Literal[0, 1, 2] = 0,
+        max_nfev: int | None = None,
+        **odr_kws: Any,
+    ) -> MinimizerResult:
+        """
+        Find the global minimum of a function using ODR.
+        """
+        userfcn_sig = inspect.signature(self.userfcn)
+        try:
+            bind = userfcn_sig.bind(params, *self.userargs, **self.userkws)
+        except TypeError:
+            raise TypeError("ODR method only supports model-based fits.")
+
+        data_y, user_weights = self.userargs
+        data_x = self.userkws["x"]
+
+        ### Check
+        if sum([x_weighter is not None for x_weighter in [weights_x, sigma_x]]) > 1:
+            raise ValueError("You can only supply one method of weighing the abscissa")
+
+        if sum([y_weighter is not None for y_weighter in [weights_y, sigma_y, user_weights]]) > 1:
+            raise ValueError("You can only supply one method of weighing the abscissa")
+
+        if not len(self.userkws) and self.userkws.keys()[0] == "x":
+            raise ValueError("ODR currently only supports one independent variable and it must be named 'x'")
+
+        ### Prep
+        # Prep uncertainties
+        odr_sx: npt.ArrayLike | None = None
+        if weights_x is not None:
+            odr_sx = np.reciprocal(np.sqrt(weights_x))
+        elif sigma_x is not None:
+            odr_sx = sigma_x
+
+        odr_sy: npt.ArrayLike | None = None
+        _weights_y = weights_y or user_weights
+        if _weights_y is not None:
+            odr_sy = np.reciprocal(np.sqrt(_weights_y))
+        elif sigma_y is not None:
+            odr_sy = sigma_y
+
+        result = self.prepare_fit(params=params)
+        result.method = "odr"
+        self.set_max_nfev(max_nfev, 5000 * (result.nvarys + 1))
+
+        # Create ODR wrapper function
+        def wrap_func(beta: npt.ArrayLike, x: npt.ArrayLike) -> npt.ArrayLike:
+            """
+            This function provides an interface in the style that
+            `scipy.odr.ODRModel` expects.
+            """
+            out = self.__residual(fvars=beta, apply_bounds_transformation=False)
+            return out
+
+        # Construct ODR objects
+        odr_model = odr.Model(wrap_func)
+        odr_data = odr.RealData(x=data_x, y=data_y, sx=odr_sx, sy=odr_sy)
+
+        # Prep initial variables
+        odr_beta0 = np.asarray([result.params[pname].value for pname in result.var_names])
+        odr_obj = odr.ODR(data=odr_data, model=odr_model, beta0=odr_beta0, maxit=self.max_nfev, **odr_kws)
+        odr_obj.set_job(fit_type=fit_type)
+        odr_output = odr_obj.run()
+
+        # Populate result with output
+        if not result.aborted:
+            result.nfev -= 1
+            result.residual = self.__residual(fvars=odr_output.beta, apply_bounds_transformation=False)
+        result._calculate_statistics()
+
+        if not result.aborted:
+            # See: https://github.com/scipy/scipy/issues/6842
+            result.covar = odr_output.cov_beta * odr_output.res_var
+
+            for i, param_name in enumerate(result.var_names):
+                result.params[param_name].value = odr_output.beta[i]
+            self._calculate_uncertainties_correlations()
+
+        return result
+
+
     def ampgo(self, params=None, max_nfev=None, **kws):
         """Find the global minimum of a multivariate function using AMPGO.
 
@@ -2287,6 +2385,7 @@ class Minimizer:
             - `'basinhopping'`: basinhopping
             - `'ampgo'`: Adaptive Memory Programming for Global
               Optimization
+            - `'odr'`: Orthogonal Distrance Regression
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
@@ -2352,6 +2451,8 @@ class Minimizer:
             function = self.brute
         elif user_method == 'basinhopping':
             function = self.basinhopping
+        elif user_method == 'odr':
+            function = self.odr
         elif user_method == 'ampgo':
             function = self.ampgo
         elif user_method == 'emcee':
