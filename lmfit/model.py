@@ -590,7 +590,6 @@ class Model:
 
         Example
         --------
-
         >>> model = GaussianModel()
         >>> model.set_param_hint('sigma', min=0)
 
@@ -648,12 +647,19 @@ class Model:
         Notes
         -----
         1. Parameter values can be numbers (floats or ints) to set the parameter
-           value, or can be dictionaries with any of the following keywords:
-             ``value``, ``vary``, ``min``, ``max``, ``expr``, ``brute_step``
-           to set those parameter attributes.
+           value, or dictionaries with any of the following keywords:
+           ``value``, ``vary``, ``min``, ``max``, ``expr``, ``brute_step``,
+           ``is_init_value`` to set those parameter attributes.
 
         2. This method will also apply any default values or parameter hints
-           that may have been set for the model.
+           that may have been defined for the model.
+
+        Example
+        --------
+        >>> gmodel = GaussianModel(prefix='peak_') + LinearModel(prefix='bkg_')
+        >>> gmodel.make_params(peak_center=3200, bkg_offset=0, bkg_slope=0,
+        ...                    peak_amplitdue=dict(value=100, min=2),
+        ...                    peak_sigma=dict(value=25, min=0, max=1000))
 
         """
         params = Parameters()
@@ -816,6 +822,17 @@ class Model:
         out = {}
         out.update(self.opts)
 
+        # 0: if a keyword argument is going to overwrite a parameter,
+        #    save that value so it can be restored before returning
+        saved_values = {}
+        for name, val in kwargs.items():
+            if name in params:
+                saved_values[name] = params[name].value
+                params[name].value = val
+
+        if len(saved_values) > 0:
+            params.update_constraints()
+
         # 1. fill in in all parameter values
         for name, par in params.items():
             if strip:
@@ -832,14 +849,16 @@ class Model:
                     if name in self._func_allargs or self._func_haskeywords:
                         out[name] = params[fullname].value
 
-        # 3. kwargs handled slightly differently -- may set param value too!
+        # 3. kwargs might directly update function arguments
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = val
-                if name in params:
-                    params[name].value = val
+
+        # 4. finally, reset any values that have overwritten parameter values
+        for name, val in saved_values.items():
+            params[name].value = val
         return out
 
     def _make_all_args(self, params=None, **kwargs):
@@ -867,18 +886,19 @@ class Model:
         Notes
         -----
         1. if `params` is None, the values for all parameters are expected
-        to be provided as keyword arguments. If `params` is given, and a
-        keyword argument for a parameter value is also given, the keyword
-        argument will be used.
+        to be provided as keyword arguments.
 
-        2. all non-parameter arguments for the model function, **including
+        2. If `params` is given, and a keyword argument for a parameter value
+        is also given, the keyword argument will be used in place of the value
+        in the value in `params`.
+
+        3. all non-parameter arguments for the model function, **including
         all the independent variables** will need to be passed in using
         keyword arguments.
 
-        3. The return type depends on the model function. For many of the
-        built-models it is a `numpy.ndarray`, with the exception of
-        `ConstantModel` and `ComplexConstantModel`, which return a `float`/`int`
-        or `complex` value.
+        4. The return types are generally `numpy.ndarray`, but may depends on
+        the model function and input independent variables. That is, return
+        values may be Python `float`, `int`, or  `complex` values.
 
         """
         return self.func(**self.make_funcargs(params, kwargs))
@@ -957,15 +977,15 @@ class Model:
         Notes
         -----
         1. if `params` is None, the values for all parameters are expected
-        to be provided as keyword arguments.
+        to be provided as keyword arguments. Mixing `params` and
+        keyword arguments is deprecated (see `Model.eval`).
 
         2. all non-parameter arguments for the model function, **including
         all the independent variables** will need to be passed in using
         keyword arguments.
 
-        3. Parameters (however passed in), are copied on input, so the
-        original Parameter objects are unchanged, and the updated values
-        are in the returned `ModelResult`.
+        3. Parameters are copied on input, so that the original Parameter objects
+        are unchanged, and the updated values are in the returned `ModelResult`.
 
         Examples
         --------
@@ -977,10 +997,6 @@ class Model:
         Or, for more control, pass a Parameters object.
 
         >>> result = my_model.fit(data, params, t=t)
-
-        Keyword arguments override Parameters.
-
-        >>> result = my_model.fit(data, params, tau=5, t=t)
 
         """
         if params is None:
