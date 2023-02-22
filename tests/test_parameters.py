@@ -587,3 +587,21 @@ def test_invalid_expr_exceptions():
         p1['y'].set(expr='t+')
     assert len(p1['y']._expr_eval.error) > 0
     assert_allclose(p1['y'].value, 34.0)
+
+
+def test_create_params():
+    """Tests for create_params() function."""
+    pars1 = lmfit.create_params(a=8, b=9,
+                                c=dict(value=3, min=0, max=10),
+                                d=dict(expr='a+b/c'),
+                                e=dict(value=10000, brute_step=4))
+
+    assert pars1['a'].value == 8
+    assert pars1['b'].value == 9
+    assert pars1['c'].value == 3
+    assert pars1['c'].min == 0
+    assert pars1['c'].max == 10
+    assert pars1['d'].expr == 'a+b/c'
+    assert pars1['d'].value == 11
+    assert pars1['e'].value == 10000
+    assert pars1['e'].brute_step == 4

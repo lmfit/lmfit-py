@@ -121,6 +121,21 @@ def testSineModel_guess():
     assert params['shift'] < 1.0
 
 
+def testSineModel_make_params():
+    mod = lmfit.models.SineModel()
+    pars = mod.make_params(amplitude=1.5, frequency=0.5,
+                           shift=dict(value=0.4, min=-10, max=10))
+
+    assert pars['amplitude'].value > 1.4
+    assert pars['amplitude'].value < 1.6
+    assert pars['amplitude'].min == 0
+    assert pars['amplitude'].max > 1e99
+    assert pars['shift'].value > 0.35
+    assert pars['shift'].value < 0.45
+    assert pars['shift'].min < -9.5
+    assert pars['shift'].max > 9.5
+
+
 def testSplineModel():
     x = np.linspace(0, 25, 501)
     y = gaussian(x, amplitude=10, center=16.2, sigma=0.8) + 3 + 0.03*x + np.sin(x/4)
