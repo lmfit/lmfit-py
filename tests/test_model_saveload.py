@@ -148,6 +148,7 @@ def test_save_load_modelresult(dill):
 
     # load the saved ModelResult from file and compare results
     result_saved = load_modelresult(SAVE_MODELRESULT)
+    assert result_saved.residual is not None
     check_fit_results(result_saved)
 
     clear_savefile(SAVE_MODEL)
@@ -240,6 +241,7 @@ def test_saveload_modelresult_expression_model():
     result2 = load_modelresult(savefile)
 
     assert result2 is not None
+    assert result2.residual is not None
     assert result2.init_fit is not None
     assert_allclose((result2.init_fit - result.init_fit).sum() + 1.00, 1.00,
                     rtol=1.0e-2)
@@ -272,6 +274,7 @@ def test_saveload_usersyms():
     time.sleep(0.25)
     result2 = load_modelresult(savefile)
 
+    assert result2.residual is not None
     assert_allclose(result2.params['sigma'], 1.075487, rtol=1.0e-5)
     assert_allclose(result2.params['center'], 8.489738, rtol=1.0e-5)
     assert_allclose(result2.params['height'], 0.557778, rtol=1.0e-5)
