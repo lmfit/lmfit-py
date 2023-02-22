@@ -487,6 +487,36 @@ def test_priority_setting_figure_title(peakdata):
     assert fig.axes[1].get_title() == ''
 
 
+def test_eval_with_kwargs():
+    # Check eval() with both params and kwargs, even when there are
+    # constraints
+    x = np.linspace(0, 30, 301)
+    np.random.seed(13)
+    y1 = (gaussian(x, amplitude=10, center=12.0, sigma=2.5) +
+          gaussian(x, amplitude=20, center=19.0, sigma=2.5))
+
+    y2 = (gaussian(x, amplitude=10, center=12.0, sigma=1.5) +
+          gaussian(x, amplitude=20, center=19.0, sigma=2.5))
+
+    model = Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')
+    params = model.make_params(g1_amplitude=10, g1_center=12.0, g1_sigma=1,
+                               g2_amplitude=20, g2_center=19.0,
+                               g2_sigma={'expr': 'g1_sigma'})
+
+    r1 = model.eval(params, g1_sigma=2.5, x=x)
+    assert_allclose(r1, y1, atol=1.e-3)
+
+    assert params['g2_sigma'].value == 1
+    assert params['g1_sigma'].value == 1
+
+    params['g1_sigma'].value = 1.5
+    params['g2_sigma'].expr = None
+    params['g2_sigma'].value = 2.5
+
+    r2 = model.eval(params, x=x)
+    assert_allclose(r2, y2, atol=1.e-3)
+
+
 def test_guess_requires_x():
     """Test to make sure that ``guess()`` method requires the argument ``x``.
 
