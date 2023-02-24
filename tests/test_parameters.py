@@ -20,9 +20,9 @@ def parameters():
                              user_data=1))
     pars.add(lmfit.Parameter(name='b', value=0.0, vary=True, min=-250.0,
                              max=250.0, expr="2.0*a", brute_step=25.0,
-                             user_data=2.5))
+                             user_data={'test': 123}))
     exp_attr_values_A = ('a', 10.0, True, -100.0, 100.0, None, 5.0, 1)
-    exp_attr_values_B = ('b', 20.0, False, -250.0, 250.0, "2.0*a", 25.0, 2.5)
+    exp_attr_values_B = ('b', 20.0, False, -250.0, 250.0, "2.0*a", 25.0, {'test': 123})
     assert_parameter_attributes(pars['a'], exp_attr_values_A)
     assert_parameter_attributes(pars['b'], exp_attr_values_B)
     return pars, exp_attr_values_A, exp_attr_values_B
@@ -58,7 +58,9 @@ def test_parameters_copy(parameters):
     pars_copy = pars.copy()
     pars__copy__ = pars.__copy__()
 
+    # modifying the original parameters should not modify the copies
     pars['a'].set(value=100)
+    pars['b'].user_data['test'] = 456
 
     for copied in [copy_pars, pars_copy, pars__copy__]:
         assert isinstance(copied, lmfit.Parameters)

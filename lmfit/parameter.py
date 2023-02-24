@@ -109,7 +109,7 @@ class Parameters(dict):
                 param.correl = par.correl
                 param.init_value = par.init_value
                 param.expr = par.expr
-                param.user_data = par.user_data
+                param.user_data = deepcopy(par.user_data)
                 parameter_list.append(param)
 
         _pars.add_many(*parameter_list)
