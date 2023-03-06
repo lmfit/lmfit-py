@@ -58,10 +58,15 @@ def gformat(val, length=11):
     Positive values will have leading blank.
 
     """
+    if val is None or isinstance(val, bool):
+        return f'{repr(val):>{length}s}'
     try:
         expon = int(log10(abs(val)))
     except (OverflowError, ValueError):
         expon = 0
+    except TypeError:
+        return f'{repr(val):>{length}s}'
+
     length = max(length, 7)
     form = 'e'
     prec = length - 7
