@@ -1696,6 +1696,7 @@ class ModelResult(Minimizer):
         1. values for data arrays are not included.
 
         2. The result summary dictionary will include the following entries:
+
           ``model``, ``method``, ``ndata``, ``nvarys``, ``nfree``, ``chisqr``,
           ``redchi``, ``aic``, ``bic``, ``rsquared``, ``nfev``, ``max_nfev``,
           ``aborted``, ``errorbars``, ``success``, ``message``,
@@ -1706,7 +1707,7 @@ class ModelResult(Minimizer):
 
         where 'params' is a list of parameter "states": tuples with entries of
         ``(name, value, vary, expr, min, max, brute_step, stderr, correl,
-            init_value, user_data)``.
+        init_value, user_data)``.
 
         3. The result will include only plain Python objects, and so should be
         easily serializable with JSON or similar tools.

@@ -1,5 +1,6 @@
 """Tests for saving/loading Models and ModelResults."""
 
+import json
 import os
 import time
 
@@ -20,6 +21,8 @@ y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
 
 SAVE_MODEL = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
+
+MODELRESULT_LMFIT_1_0 = 'gauss_modelresult_lmfit100.sav'
 
 
 def clear_savefile(fname):
@@ -154,6 +157,13 @@ def test_save_load_modelresult(dill):
     clear_savefile(SAVE_MODEL)
 
 
+def test_load_legacy_modelresult():
+    """Load legacy ModelResult."""
+    fname = os.path.join(os.path.dirname(__file__), MODELRESULT_LMFIT_1_0)
+    result_saved = load_modelresult(fname)
+    assert result_saved is not None
+
+
 def test_saveload_modelresult_attributes():
     """Test for restoring all attributes of the ModelResult."""
     model, params = create_model_params(x, y)
@@ -278,3 +288,31 @@ def test_saveload_usersyms():
     assert_allclose(result2.params['sigma'], 1.075487, rtol=1.0e-5)
     assert_allclose(result2.params['center'], 8.489738, rtol=1.0e-5)
     assert_allclose(result2.params['height'], 0.557778, rtol=1.0e-5)
+
+
+def test_modelresult_summary():
+    """Test summary() method of ModelResult.
+    """
+    x = np.linspace(0, 20, 501)
+    y = gaussian(x, 1.1, 8.5, 2) + lorentzian(x, 1.7, 8.5, 1.5)
+    np.random.seed(20)
+    y = y + np.random.normal(size=len(x), scale=0.025)
+
+    model = VoigtModel()
+    pars = model.guess(y, x=x)
+    result = model.fit(y, pars, x=x)
+
+    summary = result.summary()
+
+    assert isinstance(summary, dict)
+
+    for attr in ('ndata', 'nvarys', 'nfree', 'chisqr', 'redchi', 'aic',
+                 'bic', 'rsquared', 'nfev', 'max_nfev', 'aborted',
+                 'errorbars', 'success', 'message', 'lmdif_message', 'ier',
+                 'nan_policy', 'scale_covar', 'calc_covar', 'ci_out',
+                 'col_deriv', 'flatchain', 'call_kws', 'var_names',
+                 'user_options', 'kws', 'init_values', 'best_values'):
+        val = summary.get(attr, '__INVALID__')
+        assert val != '__INVALID__'
+
+    assert len(json.dumps(summary)) > 100
