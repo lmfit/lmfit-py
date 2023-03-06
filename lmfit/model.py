@@ -1683,6 +1683,58 @@ class ModelResult(Minimizer):
         modname = self.model._reprstring(long=True)
         return f"<h2> Model</h2> {modname} {report}"
 
+    def summary(self):
+        """Return a dictionary with statistics and attributes of a ModelResult.
+
+        Returns
+        -------
+        dict
+            Dictionary of statistics and many attributes from a ModelResult.
+
+        Notes
+        ------
+        1. values for data arrays are not included.
+
+        2. The result summary dictionary will include the following entries:
+          ``model``, ``method``, ``ndata``, ``nvarys``, ``nfree``, ``chisqr``,
+          ``redchi``, ``aic``, ``bic``, ``rsquared``, ``nfev``, ``max_nfev``,
+          ``aborted``, ``errorbars``, ``success``, ``message``,
+          ``lmdif_message``, ``ier``, ``nan_policy``, ``scale_covar``,
+          ``calc_covar``, ``ci_out``, ``col_deriv``, ``flatchain``,
+          ``call_kws``, ``var_names``, ``user_options``, ``kws``,
+          ``init_values``, ``best_values``, and ``params``.
+
+        where 'params' is a list of parameter "states": tuples with entries of
+        ``(name, value, vary, expr, min, max, brute_step, stderr, correl,
+            init_value, user_data)``.
+
+        3. The result will include only plain Python objects, and so should be
+        easily serializable with JSON or similar tools.
+
+        """
+        summary = {'model': self.model._reprstring(long=True),
+                   'method': self.method}
+
+        for attr in ('ndata', 'nvarys', 'nfree', 'chisqr', 'redchi', 'aic',
+                     'bic', 'rsquared', 'nfev', 'max_nfev', 'aborted',
+                     'errorbars', 'success', 'message', 'lmdif_message', 'ier',
+                     'nan_policy', 'scale_covar', 'calc_covar', 'ci_out',
+                     'col_deriv', 'flatchain', 'call_kws', 'var_names',
+                     'user_options', 'kws', 'init_values', 'best_values'):
+            val = getattr(self, attr, None)
+            if isinstance(val, np.float64):
+                val = float(val)
+            elif isinstance(val, (np.int32, np.int64)):
+                val = int(val)
+            elif isinstance(val, np.bool_):
+                val = bool(val)
+            elif isinstance(val, bytes):
+                val = str(val, encoding='UTF-8')
+            summary[attr] = val
+
+        summary['params'] = [par.__getstate__() for par in self.params.values()]
+        return summary
+
     def dumps(self, **kws):
         """Represent ModelResult as a JSON string.
 
@@ -1715,7 +1767,6 @@ class ModelResult(Minimizer):
                      'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws', 'values',
                      'var_names', 'weights', 'user_options'):
-
             try:
                 val = getattr(self, attr)
             except AttributeError:
@@ -1788,20 +1839,15 @@ class ModelResult(Minimizer):
         self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
 
         # params
-        self.params = Parameters()
-        self.init_params = Parameters()
-        state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-        ini_state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-        for parstate in modres['params']:
-            _par = Parameter(name='')
-            _par.__setstate__(parstate)
-            state['params'].append(_par)
-            _par = Parameter(name='')
-            _par.__setstate__(parstate)
-            ini_state['params'].append(_par)
-
-        self.params.__setstate__(state)
-        self.init_params.__setstate__(ini_state)
+        for target in ('params', 'init_params'):
+            state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+            for parstate in modres['params']:
+                _par = Parameter(name='')
+                _par.__setstate__(parstate)
+                state['params'].append(_par)
+            _params = Parameters()
+            _params.__setstate__(state)
+            setattr(self, target, _params)
 
         for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
                      'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
