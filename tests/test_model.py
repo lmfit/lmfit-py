@@ -358,8 +358,8 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
-input_dtypes = [(np.int32, np.float64), (np.float32, np.float64),
-                (np.complex64, np.complex128), ('list', np.float64),
+input_dtypes = [(np.int32, np.int32), (np.float32, np.float32),
+                (np.complex64, np.complex64), ('list', np.float64),
                 ('tuple', np.float64), ('pandas-real', np.float64),
                 ('pandas-complex', np.complex128)]
 
