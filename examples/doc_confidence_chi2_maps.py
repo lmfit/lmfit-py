@@ -56,11 +56,6 @@ nsamples = 50
 
 for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
               ('slope', 'intercept'), ('slope', 'center'), ('sigma', 'center')):
-    aix += 1
-    if aix == 2:
-        aix = 0
-        aiy += 1
-    ax = axes[aix, aiy]
 
     xpar, ypar = pairs
     print("Generating chi-square map for ", pairs)
@@ -74,6 +69,15 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
     # so:   sigma = sqrt(dchi2 / reduced_chi_square)
     sigma_mat = np.sqrt(abs(dchi2_mat)/out.redchi)
 
+    # you could calculate the matrix of probabilities from sigma as:
+    # prob_mat  = np.erf(sigma_mat/np.sqrt(2))
+
+    aix += 1
+    if aix == 2:
+        aix = 0
+        aiy += 1
+    ax = axes[aix, aiy]
+
     cnt = ax.contour(c_x, c_y, sigma_mat, levels=sigma_levels, colors=colors,
                      linestyles='-')
     ax.clabel(cnt, inline=True, fmt=r"$\sigma=%.0f$", fontsize=13)
@@ -81,7 +85,6 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
     # draw boxes for estimated uncertaties:
     #  dotted :  scaled stderr from initial fit
     #  dashed :  values found from conf_interval()
-
     xv = out.params[xpar].value
     xs = out.params[xpar].stderr
     yv = out.params[ypar].value

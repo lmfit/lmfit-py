@@ -213,6 +213,9 @@ using :func:`conf_interval2d`:
         # so:   sigma = sqrt(dchi2 / reduced_chi_square)
         sigma_mat = np.sqrt(abs(dchi2_mat)/out.redchi)
 
+        # you could calculate the matrix of probabilities from sigma as:
+        # prob_mat  = np.erf(sigma_mat/np.sqrt(2))
+
         aix += 1
         if aix == 2:
             aix = 0
