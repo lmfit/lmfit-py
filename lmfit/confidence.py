@@ -352,8 +352,8 @@ class ConfidenceInterval:
         return prob - offset
 
 
-def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
-                    limits=None, prob_func=None):
+def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10, nsigma=5,
+                    limits=None, prob_func=None, chi2_out=False):
     r"""Calculate confidence regions for two fixed parameters.
 
     The method itself is explained in `conf_interval`: here we are fixing
@@ -370,16 +370,20 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y_name : str
         The name of the parameter which will be the y direction.
     nx : int, optional
-        Number of points in the x direction.
+        Number of points in the x direction. [default = 10]
     ny : int, optional
-        Number of points in the y direction.
+        Number of points in the y direction. [default = 10]
     limits : tuple, optional
         Should have the form ``((x_upper, x_lower), (y_upper, y_lower))``.
-        If not given, the default is 5.0*std-errors in each direction.
+        If not given, the default is nsigma*stderr in each direction.
+    nsigma : float or int, optional
+        multiplier of stderr for limits.  [default = 5.0]
     prob_func : None or callable, optional
         Function to calculate the probability from the optimized chi-square.
         Default is None and uses the built-in function `f_compare`
         (i.e., F-test).
+    chi2_out: bool
+        whether to return chi-square at each coordinate instead of probability.
 
     Returns
     -------
@@ -388,8 +392,9 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y : numpy.ndarray
         Y-coordinates (same shape as `ny`).
     grid : numpy.ndarray
-        Grid containing the calculated probabilities (with shape
-        ``(nx, ny)``).
+        2-D array ((with shape ``(nx, ny)``) containing the calculated
+        probabilities
+        or chi-square
 
     See Also
     --------
@@ -408,15 +413,18 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     best_chi = result.chisqr
     org = copy_vals(result.params)
 
+    def chi2_compare(best, current):
+        return current.chisqr - best.chisqr
+
     if prob_func is None:
-        prob_func = f_compare
+        prob_func = chi2_compare if chi2_out else f_compare
 
     x = params[x_name]
     y = params[y_name]
 
     if limits is None:
-        (x_upper, x_lower) = (x.value + 5 * x.stderr, x.value - 5 * x.stderr)
-        (y_upper, y_lower) = (y.value + 5 * y.stderr, y.value - 5 * y.stderr)
+        (x_upper, x_lower) = (x.value + nsigma * x.stderr, x.value - nsigma * x.stderr)
+        (y_upper, y_lower) = (y.value + nsigma * y.stderr, y.value - nsigma * y.stderr)
     elif len(limits) == 2:
         (x_upper, x_lower) = limits[0]
         (y_upper, y_lower) = limits[1]
