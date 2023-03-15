@@ -114,7 +114,7 @@ Calculating and visualizing maps of :math:`\chi^2`
 -------------------------------------------------------
 
 The estimated values for the :math:`1-\sigma` standard error calculated by
-default for each fit includes the effects of correlation between pairs of
+default for each fit include the effects of correlation between pairs of
 variables, but assumes the uncertainties are symmetric.  While it doesn't
 exactly say what the values of the :math:`n-\sigma` uncertainties would be, the
 implication is that the :math:`n-\sigma` error is simply :math:`n^2\sigma`.
@@ -127,9 +127,8 @@ that the uncertainties are symmetric.  This function also takes into account the
 correlations between pairs of variables, but it does not convey this
 information very well.
 
-
 For even further exploration of the confidence levels of parameter values, it
-can be useful to calculation maps of :math:`\chi^2` values for pairs of
+can be useful to calculate maps of :math:`\chi^2` values for pairs of
 variables around their best fit values and visualize these as contour plots.
 Typically, pairs of variables will have elliptical contours of constant
 :math:`n-\sigma` level, with highly-correlated pairs of variables having high
@@ -177,10 +176,10 @@ constructed but "real-world" example:
     print("## Confidence Report:")
     report_ci(ci)
 
-The reports show that we a pretty good fit, and that the automated estimates of
-the uncertainties are actually pretty good -- agreeing to the second decimal
-place.  But we also see that some of the uncertainties do become noticeably
-asymmetric at high :math:`n-\sigma` levels.
+The reports show that we obtained a pretty good fit, and that the automated
+estimates of the uncertainties are actually pretty good -- agreeing to the
+second decimal place.  But we also see that some of the uncertainties do become
+noticeably asymmetric at high :math:`n-\sigma` levels.
 
 We'll plot this data and fit, and then further explore these uncertainties
 using :func:`conf_interval2d`:

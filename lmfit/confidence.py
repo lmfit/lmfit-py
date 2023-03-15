@@ -352,8 +352,8 @@ class ConfidenceInterval:
         return prob - offset
 
 
-def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10, nsigma=5,
-                    limits=None, prob_func=None, chi2_out=False):
+def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
+                    limits=None, prob_func=None, nsigma=5, chi2_out=False):
     r"""Calculate confidence regions for two fixed parameters.
 
     The method itself is explained in `conf_interval`: here we are fixing
@@ -376,12 +376,12 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10, nsigma=5,
     limits : tuple, optional
         Should have the form ``((x_upper, x_lower), (y_upper, y_lower))``.
         If not given, the default is nsigma*stderr in each direction.
-    nsigma : float or int, optional
-        multiplier of stderr for limits.  [default = 5.0]
     prob_func : None or callable, optional
         Function to calculate the probability from the optimized chi-square.
         Default is None and uses the built-in function `f_compare`
         (i.e., F-test).
+    nsigma : float or int, optional
+        multiplier of stderr for limits.  [default = 5.0]
     chi2_out: bool
         whether to return chi-square at each coordinate instead of probability.
 
@@ -392,9 +392,8 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10, nsigma=5,
     y : numpy.ndarray
         Y-coordinates (same shape as `ny`).
     grid : numpy.ndarray
-        2-D array ((with shape ``(nx, ny)``) containing the calculated
-        probabilities
-        or chi-square
+        2-D array (with shape ``(nx, ny)``) containing the calculated
+        probabilities or chi-square
 
     See Also
     --------
