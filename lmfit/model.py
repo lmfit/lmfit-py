@@ -1039,8 +1039,10 @@ class Model:
                     return np.asarray(x, dtype='complex128')
             return x
 
-        # coerce array-like (list, tuples, Series) data and
-        # independent variable(s) to float64/complex128
+        # coerce data and independent variable(s) that are 'array-like' (list,
+        # tuples, pandas Series) to float64/complex128. Note: this will not
+        # alter the dtype of data or independent variables that are already
+        # ndarrays but with dtype other than float64/complex128.
         data = coerce_arraylike(data)
         for var in self.independent_vars:
             kwargs[var] = coerce_arraylike(kwargs[var])
