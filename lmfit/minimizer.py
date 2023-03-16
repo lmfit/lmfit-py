@@ -597,7 +597,7 @@ class Minimizer:
             self.result.success = False
             raise AbortFitException("fit aborted by user.")
         else:
-            return _nan_policy(np.asarray(out).ravel(),
+            return _nan_policy(np.asfarray(out).ravel(),
                                nan_policy=self.nan_policy)
 
     def __jacobian(self, fvars):

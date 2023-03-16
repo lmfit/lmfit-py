@@ -1027,22 +1027,25 @@ class Model:
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        # Make sure `dtype` for data is always `float64` or `complex128`
-        if np.isrealobj(data):
-            data = np.asfarray(data)
-        elif np.iscomplexobj(data):
-            data = np.asarray(data, dtype='complex128')
+        def coerce_arraylike(x):
+            """
+            coerce lists, tuples, and pandas Series to float64 or complex128,
+            but leave other ndarrays of different dtypes and objects unchanged
+            """
+            if isinstance(x, (list, tuple, Series)):
+                if np.isrealobj(x):
+                    return np.asfarray(x)
+                elif np.iscomplexobj(x):
+                    return np.asarray(x, dtype='complex128')
+            return x
 
-        # Coerce `dtype` for independent variable(s) to `float64` or
-        # `complex128` when the variable has one of the following types: list,
-        # tuple, numpy.ndarray, or pandas.Series
+        # coerce data and independent variable(s) that are 'array-like' (list,
+        # tuples, pandas Series) to float64/complex128. Note: this will not
+        # alter the dtype of data or independent variables that are already
+        # ndarrays but with dtype other than float64/complex128.
+        data = coerce_arraylike(data)
         for var in self.independent_vars:
-            var_data = kwargs[var]
-            if isinstance(var_data, (list, tuple, np.ndarray, Series)):
-                if np.isrealobj(var_data):
-                    kwargs[var] = np.asfarray(var_data)
-                elif np.iscomplexobj(var_data):
-                    kwargs[var] = np.asarray(var_data, dtype='complex128')
+            kwargs[var] = coerce_arraylike(kwargs[var])
 
         if fit_kws is None:
             fit_kws = {}
