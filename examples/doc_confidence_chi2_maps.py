@@ -27,7 +27,7 @@ params = mod.make_params(amplitude=100, center=50, sigma=5,
                          slope=0, intecept=2)
 
 out = mod.fit(y, params, x=x)
-print(out.fit_report())
+print(out.fit_report(correl_mode='table'))
 
 #########################
 # run conf_intervale, print report
@@ -51,24 +51,29 @@ axes[0, 0].legend()
 
 aix, aiy = 0, 0
 nsamples = 50
+explicitly_calculate_sigma = True
 
 for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
               ('slope', 'intercept'), ('slope', 'center'), ('sigma', 'center')):
 
     xpar, ypar = pairs
-    print("Generating chi-square map for ", pairs)
-    c_x, c_y, dchi2_mat = conf_interval2d(out, out, xpar, ypar,
-                                          nsamples, nsamples, nsigma=3.5,
-                                          chi2_out=True)
-
-    # sigma matrix: sigma increases chi_square
-    # from  chi_square_best
-    # to    chi_square + sigma**2 * reduced_chi_square
-    # so:   sigma = sqrt(dchi2 / reduced_chi_square)
-    sigma_mat = np.sqrt(abs(dchi2_mat)/out.redchi)
-
-    # you could calculate the matrix of probabilities from sigma as:
-    # prob_mat  = np.erf(sigma_mat/np.sqrt(2))
+    if explicitly_calculate_sigma:
+        print("Generating chi-square map for ", pairs)
+        c_x, c_y, chi2_mat = conf_interval2d(out, out, xpar, ypar,
+                                             nsamples, nsamples, nsigma=3.5,
+                                             chi2_out=True)
+        # explicitly calculate sigma matrix: sigma increases chi_square
+        # from  chi_square_best
+        # to    chi_square + sigma**2 * reduced_chi_square
+        # so:   sigma = sqrt((chi2-chi2_best)/ reduced_chi_square)
+        chi2_min = chi2_mat.min()
+        sigma_mat = np.sqrt((chi2_mat-chi2_min)/out.redchi)
+    else:
+        print("Generating sigma map for ", pairs)
+        # or, you could just calculate the matrix of probabilities as:
+        # print("Generating chi-square map for ", pairs)
+        c_x, c_y, sigma_mat = conf_interval2d(out, out, xpar, ypar,
+                                              nsamples, nsamples, nsigma=3.5)
 
     aix += 1
     if aix == 2:

@@ -1642,7 +1642,7 @@ class ModelResult(Minimizer):
                          with_offset=with_offset, ndigits=ndigits)
 
     def fit_report(self, modelpars=None, show_correl=True,
-                   min_correl=0.1, sort_pars=False):
+                   min_correl=0.1, sort_pars=False, correl_mode='list'):
         """Return a printable fit report.
 
         The report contains fit statistics and best-fit values with
@@ -1663,6 +1663,11 @@ class ModelResult(Minimizer):
             listed in the order as they were added to the Parameters
             dictionary. If callable, then this (one argument) function is
             used to extract a comparison key from each list element.
+        correl_mode : {'list', table'} str, optional
+            Mode for how to show correlations. Can be either 'list' (default)
+            to show a sorted (if ``sort_pars`` is True) list of correlation
+            values, or 'table' to show a complete, formatted table of
+            correlations.
 
         Returns
         -------
@@ -1670,9 +1675,10 @@ class ModelResult(Minimizer):
             Multi-line text of fit report.
 
         """
-        report = fit_report(self, modelpars=modelpars,
-                            show_correl=show_correl,
-                            min_correl=min_correl, sort_pars=sort_pars)
+        report = fit_report(self, modelpars=modelpars, show_correl=show_correl,
+                            min_correl=min_correl, sort_pars=sort_pars,
+                            correl_mode=correl_mode)
+
         modname = self.model._reprstring(long=True)
         return f'[[Model]]\n    {modname}\n{report}'
 
