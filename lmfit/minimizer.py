@@ -104,6 +104,10 @@ def asteval_with_uncertainties(*vals, **kwargs):
         return 0
     for val, name in zip(vals, _names):
         _asteval.symtable[name] = val
+
+    # re-evaluate all constraint parameters to
+    # force the propagation of uncertainties
+    [p._getval() for p in _pars.values()]
     return _asteval.eval(_obj._expr_ast)
 
 
