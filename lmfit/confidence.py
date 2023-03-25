@@ -409,14 +409,9 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     """
     params = result.params
 
-    best_chi = result.chisqr
+    best_chisqr = result.chisqr
+    redchi = result.redchi
     org = copy_vals(result.params)
-
-    def chi2_compare(best, current):
-        return current.chisqr - best.chisqr
-
-    if prob_func is None:
-        prob_func = chi2_compare if chi2_out else f_compare
 
     x = params[x_name]
     y = params[y_name]
@@ -432,29 +427,30 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y_points = np.linspace(y_lower, y_upper, ny)
     grid = np.dstack(np.meshgrid(x_points, y_points))
 
-    x.vary = False
-    y.vary = False
+    x.vary, y.vary = False, False
 
-    def calc_prob(vals, restore=False):
-        """Calculate the probability."""
-        if restore:
-            restore_vals(org, result.params)
-        x.value = vals[0]
-        y.value = vals[1]
-        save_x = result.params[x.name]
-        save_y = result.params[y.name]
-        result.params[x.name] = x
-        result.params[y.name] = y
+    def calc_chisqr(vals, restore=False):
+        """Calculate chi-square for a set of parameter values."""
+        save_x = x.value
+        save_y = y.value
+        result.params[x.name].value = vals[0]
+        result.params[y.name].value = vals[1]
         minimizer.prepare_fit(params=result.params)
         out = minimizer.leastsq()
-        prob = prob_func(result, out)
-        result.params[x.name] = save_x
-        result.params[y.name] = save_y
-        return prob
+        result.params[x.name].value = save_x
+        result.params[y.name].value = save_y
+        return out.chisqr
 
-    out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)
+    # grid of chi-square
+    out_mat = np.apply_along_axis(calc_chisqr, -1, grid)
+
+    # compute grid of sigma values from chi-square
+    if not chi2_out:
+        chisqr0 = out_mat.min()
+        chisqr0 = min(best_chisqr, chisqr0)
+        out_mat = np.sqrt((out_mat-chisqr0)/redchi)
 
     x.vary, y.vary = True, True
     restore_vals(org, result.params)
-    result.chisqr = best_chi
-    return out
+    result.chisqr = best_chisqr
+    return x_points, y_points, out_mat
