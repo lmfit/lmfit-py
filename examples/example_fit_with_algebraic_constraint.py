@@ -3,6 +3,8 @@ Fit with Algebraic Constraint
 =============================
 
 """
+###############################################################################
+# Example on how to use algebraic constraints using the ``expr`` attribute.
 import matplotlib.pyplot as plt
 from numpy import linspace, random
 

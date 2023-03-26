@@ -1,4 +1,4 @@
-# <examples/doc_confidence_chi2_map.py>
+# <examples/doc_confidence_chi2_maps.py>
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +14,6 @@ rng = np.random.default_rng(seed=102)
 #########################
 # set up data -- deliberately adding imperfections and
 # a small amount of non-Gaussian noise
-
 npts = 501
 x = np.linspace(1, 100, num=npts)
 
@@ -29,7 +28,6 @@ params = mod.make_params(amplitude=100, center=50, sigma=5,
 
 out = mod.fit(y, params, x=x)
 print(out.fit_report())
-
 
 #########################
 # run conf_intervale, print report
@@ -111,4 +109,4 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
     ax.grid(True, color='#d0d0d0')
 
 plt.show()
-# <end examples/doc_confidence_chi2_map.py>
+# <end examples/doc_confidence_chi2_maps.py>

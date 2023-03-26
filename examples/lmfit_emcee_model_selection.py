@@ -2,7 +2,7 @@
 Model Selection using lmfit and emcee
 =====================================
 
-FIXME: this is a useful examples; however, it doesn't run correctly anymore as
+FIXME: this is a useful example; however, it doesn't run correctly anymore as
 the PTSampler was removed in emcee v3...
 
 """

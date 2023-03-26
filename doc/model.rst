@@ -58,6 +58,7 @@ definition of the model function:
 
     from numpy import exp, linspace, random
 
+
     def gaussian(x, amp, cen, wid):
         return amp * exp(-(x-cen)**2 / wid)
 
@@ -382,6 +383,7 @@ Parameters if the supplied default value was a valid number (but not
         else:
             arg = t/tau
         return N*np.exp(arg)
+
 
     mod = Model(decay2)
     params = mod.make_params()
