@@ -106,24 +106,21 @@ parameters and set it manually:
         result.params[p].stderr = abs(result.params[p].value * 0.1)
 
 
-
-
 ..  _label-confidence-chi2_maps:
 
 Calculating and visualizing maps of :math:`\chi^2`
--------------------------------------------------------
+--------------------------------------------------
 
 The estimated values for the :math:`1-\sigma` standard error calculated by
 default for each fit include the effects of correlation between pairs of
-variables, but assumes the uncertainties are symmetric.  While it doesn't
+variables, but assumes the uncertainties are symmetric. While it doesn't
 exactly say what the values of the :math:`n-\sigma` uncertainties would be, the
 implication is that the :math:`n-\sigma` error is simply :math:`n^2\sigma`.
-
 
 The :func:`conf_interval` function described above improves on these
 automatically (and quickly) calculated uncertainies by explicitly finding
 :math:`n-\sigma` confidence levels in both directions -- it does not assume
-that the uncertainties are symmetric.  This function also takes into account the
+that the uncertainties are symmetric. This function also takes into account the
 correlations between pairs of variables, but it does not convey this
 information very well.
 
@@ -144,12 +141,15 @@ constructed but "real-world" example:
 
 .. jupyter-execute::
 
-    # <examples/doc_confidence_chi2_map.py>
-    import numpy as np
+    # <examples/doc_confidence_chi2_maps.py>
     import matplotlib.pyplot as plt
+    import numpy as np
+
     from lmfit import conf_interval, conf_interval2d, report_ci
-    from lmfit.models import GaussianModel, LinearModel
     from lmfit.lineshapes import gaussian
+    from lmfit.models import GaussianModel, LinearModel
+
+    sigma_levels = [1, 2, 3]
 
     rng = np.random.default_rng(seed=102)
 
@@ -252,7 +252,7 @@ using :func:`conf_interval2d`:
         ax.set_ylabel(ypar)
         ax.grid(True, color='#d0d0d0')
     plt.show()
-    # <end examples/doc_confidence_chi2_map.py>
+    # <end examples/doc_confidence_chi2_maps.py>
 
 Here we made contours for the :math:`n-\sigma` levels from the 2-D array of
 :math:`\chi^2` by noting that the :math:`n-\sigma` level will have
@@ -261,7 +261,7 @@ reduced chi-square.
 
 The dotted boxes show both the scaled values of the standard errors from the
 initial fit, and the dashed boxes show the confidence levels from
-:meth:`conf_interval`.  You can see that the notion of increasing
+:meth:`conf_interval`. You can see that the notion of increasing
 :math:`\chi^2` by :math:`\chi_\nu^2` works very well, and that there is a small
 asymmetry in the uncertainties for the ``amplitude`` and ``sigma`` parameters.
 

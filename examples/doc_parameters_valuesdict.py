@@ -1,7 +1,7 @@
 # <examples/doc_parameters_valuesdict.py>
 import numpy as np
 
-from lmfit import Minimizer, Parameters, report_fit
+from lmfit import Minimizer, create_params, report_fit
 
 # create data to be fitted
 x = np.linspace(0, 15, 301)
@@ -20,11 +20,10 @@ def fcn2min(params, x, data):
 
 
 # create a set of Parameters
-params = Parameters()
-params.add('amp', value=10, min=0)
-params.add('decay', value=0.1)
-params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
-params.add('omega', value=3.0)
+params = create_params(amp=dict(value=10, min=0),
+                       decay=0.1,
+                       omega=3.0,
+                       shift=dict(value=0.0, min=-np.pi/2., max=np.pi/2))
 
 # do fit, here with the default leastsq algorithm
 minner = Minimizer(fcn2min, params, fcn_args=(x, data))

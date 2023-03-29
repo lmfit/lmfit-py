@@ -1,5 +1,6 @@
 """Tests for saving/loading Models and ModelResults."""
 
+import json
 import os
 import time
 
@@ -20,6 +21,8 @@ y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
 
 SAVE_MODEL = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
+
+MODELRESULT_LMFIT_1_0 = 'gauss_modelresult_lmfit100.sav'
 
 
 def clear_savefile(fname):
@@ -66,24 +69,24 @@ def create_model_params(x, y):
 def check_fit_results(result):
     """Check the result of optimization."""
     assert result.nvarys == 8
-    assert_allclose(result.chisqr, 1247.528209)
-    assert_allclose(result.aic, 417.864631)
+    assert_allclose(result.chisqr, 1247.528209, rtol=1.0e-5)
+    assert_allclose(result.aic, 417.864631, rtol=1.0e-5)
 
     pars = result.params
-    assert_allclose(pars['exp_decay'], 90.950886)
-    assert_allclose(pars['exp_amplitude'], 99.018328)
+    assert_allclose(pars['exp_decay'], 90.950886, rtol=1.0e-5)
+    assert_allclose(pars['exp_amplitude'], 99.018328, rtol=1.0e-5)
 
-    assert_allclose(pars['g1_sigma'], 16.672575)
-    assert_allclose(pars['g1_center'], 107.030954)
-    assert_allclose(pars['g1_amplitude'], 4257.773192)
-    assert_allclose(pars['g1_fwhm'], 39.260914)
-    assert_allclose(pars['g1_height'], 101.880231)
+    assert_allclose(pars['g1_sigma'], 16.672575, rtol=1.0e-5)
+    assert_allclose(pars['g1_center'], 107.030954, rtol=1.0e-5)
+    assert_allclose(pars['g1_amplitude'], 4257.773192, rtol=1.0e-5)
+    assert_allclose(pars['g1_fwhm'], 39.260914, rtol=1.0e-5)
+    assert_allclose(pars['g1_height'], 101.880231, rtol=1.0e-5)
 
-    assert_allclose(pars['g2_sigma'], 13.806948)
-    assert_allclose(pars['g2_center'], 153.270101)
-    assert_allclose(pars['g2_amplitude'], 2493.417703)
-    assert_allclose(pars['g2_fwhm'], 32.512878)
-    assert_allclose(pars['g2_height'], 72.045593)
+    assert_allclose(pars['g2_sigma'], 13.806948, rtol=1.0e-5)
+    assert_allclose(pars['g2_center'], 153.270101, rtol=1.0e-5)
+    assert_allclose(pars['g2_amplitude'], 2493.417703, rtol=1.0e-5)
+    assert_allclose(pars['g2_fwhm'], 32.512878, rtol=1.0e-5)
+    assert_allclose(pars['g2_height'], 72.045593, rtol=1.0e-5)
 
 
 @pytest.mark.parametrize("dill", [False, True])
@@ -148,9 +151,17 @@ def test_save_load_modelresult(dill):
 
     # load the saved ModelResult from file and compare results
     result_saved = load_modelresult(SAVE_MODELRESULT)
+    assert result_saved.residual is not None
     check_fit_results(result_saved)
 
     clear_savefile(SAVE_MODEL)
+
+
+def test_load_legacy_modelresult():
+    """Load legacy ModelResult."""
+    fname = os.path.join(os.path.dirname(__file__), MODELRESULT_LMFIT_1_0)
+    result_saved = load_modelresult(fname)
+    assert result_saved is not None
 
 
 def test_saveload_modelresult_attributes():
@@ -240,6 +251,7 @@ def test_saveload_modelresult_expression_model():
     result2 = load_modelresult(savefile)
 
     assert result2 is not None
+    assert result2.residual is not None
     assert result2.init_fit is not None
     assert_allclose((result2.init_fit - result.init_fit).sum() + 1.00, 1.00,
                     rtol=1.0e-2)
@@ -272,6 +284,35 @@ def test_saveload_usersyms():
     time.sleep(0.25)
     result2 = load_modelresult(savefile)
 
+    assert result2.residual is not None
     assert_allclose(result2.params['sigma'], 1.075487, rtol=1.0e-5)
     assert_allclose(result2.params['center'], 8.489738, rtol=1.0e-5)
     assert_allclose(result2.params['height'], 0.557778, rtol=1.0e-5)
+
+
+def test_modelresult_summary():
+    """Test summary() method of ModelResult.
+    """
+    x = np.linspace(0, 20, 501)
+    y = gaussian(x, 1.1, 8.5, 2) + lorentzian(x, 1.7, 8.5, 1.5)
+    np.random.seed(20)
+    y = y + np.random.normal(size=len(x), scale=0.025)
+
+    model = VoigtModel()
+    pars = model.guess(y, x=x)
+    result = model.fit(y, pars, x=x)
+
+    summary = result.summary()
+
+    assert isinstance(summary, dict)
+
+    for attr in ('ndata', 'nvarys', 'nfree', 'chisqr', 'redchi', 'aic',
+                 'bic', 'rsquared', 'nfev', 'max_nfev', 'aborted',
+                 'errorbars', 'success', 'message', 'lmdif_message', 'ier',
+                 'nan_policy', 'scale_covar', 'calc_covar', 'ci_out',
+                 'col_deriv', 'flatchain', 'call_kws', 'var_names',
+                 'user_options', 'kws', 'init_values', 'best_values'):
+        val = summary.get(attr, '__INVALID__')
+        assert val != '__INVALID__'
+
+    assert len(json.dumps(summary)) > 100

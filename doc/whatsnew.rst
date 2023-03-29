@@ -11,6 +11,25 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_120_label:
+
+Version 1.2.0 Release Notes (March XX, 2023)
+=================================================
+
+New features:
+
+- add ``create_params`` function (PR #844)
+
+Bug fixes/enhancements:
+
+- fix deepcopy of ``Parameters`` (mguhyo; PR #837)
+- improve ``Model.make_params`` and ``create_params`` to take optional dict of Parameter attributes (PR #844)
+- fix reporting of ``nfev`` from ``least_squares`` to better reflect actual number of function calls (PR #844)
+- fix bug in ``Model.eval`` when mixing parameters and keyword arguments (PR #844, #839)
+- re-adds ``residual`` to saved ``Model`` result (PR #844, #830)
+- ``ConstantModel`` and ``ComplexConstantModel`` will return an ndarray of the same shape as the independent variable ``x`` (JeppeKlitgaard, Issue #840; PR #841)
+- update tests for latest versions of NumPy and SciPy.
+
 .. _whatsnew_110_label:
 
 Version 1.1.0 Release Notes (November 27, 2022)

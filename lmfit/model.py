@@ -552,16 +552,23 @@ class Model:
     def set_param_hint(self, name, **kwargs):
         """Set *hints* to use when creating parameters with `make_params()`.
 
-        This is especially convenient for setting initial values. The
-        `name` can include the models `prefix` or not. The hint given can
-        also include optional bounds and constraints
+        The given hint can include optional bounds and constraints
         ``(value, vary, min, max, expr)``, which will be used by
-        `make_params()` when building default parameters.
+        `Model.make_params()` when building default parameters.
+
+        While this can be used to set initial values, `Model.make_params` or
+        the function `create_params` should be preferred for creating
+        parameters with initial values.
+
+        The intended use here is to control how a Model should create
+        parameters, such as setting bounds that are required by the mathematics
+        of the model (for example, that a peak width cannot be negative), or to
+        define common constrained parameters.
 
         Parameters
         ----------
         name : str
-            Parameter name.
+            Parameter name, can include the models `prefix` or not.
         **kwargs : optional
             Arbitrary keyword arguments, needs to be a Parameter attribute.
             Can be any of the following:
@@ -583,7 +590,6 @@ class Model:
 
         Example
         --------
-
         >>> model = GaussianModel()
         >>> model.set_param_hint('sigma', min=0)
 
@@ -630,7 +636,8 @@ class Model:
         verbose : bool, optional
             Whether to print out messages (default is False).
         **kwargs : optional
-            Parameter names and initial values.
+            Parameter names and initial values or dictionaries of
+                 values and attributes.
 
         Returns
         ---------
@@ -639,14 +646,28 @@ class Model:
 
         Notes
         -----
-        1. The parameters may or may not have decent initial values for
-        each parameter.
+        1. Parameter values can be numbers (floats or ints) to set the parameter
+           value, or dictionaries with any of the following keywords:
+           ``value``, ``vary``, ``min``, ``max``, ``expr``, ``brute_step``,
+           ``is_init_value`` to set those parameter attributes.
 
-        2. This applies any default values or parameter hints that may
-        have been set.
+        2. This method will also apply any default values or parameter hints
+           that may have been defined for the model.
+
+        Example
+        --------
+        >>> gmodel = GaussianModel(prefix='peak_') + LinearModel(prefix='bkg_')
+        >>> gmodel.make_params(peak_center=3200, bkg_offset=0, bkg_slope=0,
+        ...                    peak_amplitdue=dict(value=100, min=2),
+        ...                    peak_sigma=dict(value=25, min=0, max=1000))
 
         """
         params = Parameters()
+
+        def setpar(par, val):
+            if isinstance(val, (float, int)):
+                val = {'value': val}
+            par.set(**val)
 
         # make sure that all named parameters are in params
         for name in self.param_names:
@@ -671,11 +692,9 @@ class Model:
                         setattr(par, item, hint[item])
             # apply values passed in through kw args
             if basename in kwargs:
-                # kw parameter names with no prefix
-                par.value = kwargs[basename]
+                setpar(par, kwargs[basename])
             if name in kwargs:
-                # kw parameter names with prefix
-                par.value = kwargs[name]
+                setpar(par, kwargs[basename])
             params.add(par)
             if verbose:
                 print(f' - Adding parameter "{name}"')
@@ -697,7 +716,7 @@ class Model:
                 if item in hint:
                     setattr(par, item, hint[item])
             if basename in kwargs:
-                par.value = kwargs[basename]
+                setpar(par, kwargs[basename])
             # Add the new parameter to self._param_names
             if name not in self._param_names:
                 self._param_names.append(name)
@@ -803,6 +822,17 @@ class Model:
         out = {}
         out.update(self.opts)
 
+        # 0: if a keyword argument is going to overwrite a parameter,
+        #    save that value so it can be restored before returning
+        saved_values = {}
+        for name, val in kwargs.items():
+            if name in params:
+                saved_values[name] = params[name].value
+                params[name].value = val
+
+        if len(saved_values) > 0:
+            params.update_constraints()
+
         # 1. fill in in all parameter values
         for name, par in params.items():
             if strip:
@@ -819,14 +849,16 @@ class Model:
                     if name in self._func_allargs or self._func_haskeywords:
                         out[name] = params[fullname].value
 
-        # 3. kwargs handled slightly differently -- may set param value too!
+        # 3. kwargs might directly update function arguments
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = val
-                if name in params:
-                    params[name].value = val
+
+        # 4. finally, reset any values that have overwritten parameter values
+        for name, val in saved_values.items():
+            params[name].value = val
         return out
 
     def _make_all_args(self, params=None, **kwargs):
@@ -854,18 +886,19 @@ class Model:
         Notes
         -----
         1. if `params` is None, the values for all parameters are expected
-        to be provided as keyword arguments. If `params` is given, and a
-        keyword argument for a parameter value is also given, the keyword
-        argument will be used.
+        to be provided as keyword arguments.
 
-        2. all non-parameter arguments for the model function, **including
+        2. If `params` is given, and a keyword argument for a parameter value
+        is also given, the keyword argument will be used in place of the value
+        in the value in `params`.
+
+        3. all non-parameter arguments for the model function, **including
         all the independent variables** will need to be passed in using
         keyword arguments.
 
-        3. The return type depends on the model function. For many of the
-        built-models it is a `numpy.ndarray`, with the exception of
-        `ConstantModel` and `ComplexConstantModel`, which return a `float`/`int`
-        or `complex` value.
+        4. The return types are generally `numpy.ndarray`, but may depends on
+        the model function and input independent variables. That is, return
+        values may be Python `float`, `int`, or  `complex` values.
 
         """
         return self.func(**self.make_funcargs(params, kwargs))
@@ -944,17 +977,15 @@ class Model:
         Notes
         -----
         1. if `params` is None, the values for all parameters are expected
-        to be provided as keyword arguments. If `params` is given, and a
-        keyword argument for a parameter value is also given, the keyword
-        argument will be used.
+        to be provided as keyword arguments. Mixing `params` and
+        keyword arguments is deprecated (see `Model.eval`).
 
         2. all non-parameter arguments for the model function, **including
         all the independent variables** will need to be passed in using
         keyword arguments.
 
-        3. Parameters (however passed in), are copied on input, so the
-        original Parameter objects are unchanged, and the updated values
-        are in the returned `ModelResult`.
+        3. Parameters are copied on input, so that the original Parameter objects
+        are unchanged, and the updated values are in the returned `ModelResult`.
 
         Examples
         --------
@@ -966,10 +997,6 @@ class Model:
         Or, for more control, pass a Parameters object.
 
         >>> result = my_model.fit(data, params, t=t)
-
-        Keyword arguments override Parameters.
-
-        >>> result = my_model.fit(data, params, tau=5, t=t)
 
         """
         if params is None:
@@ -1656,6 +1683,59 @@ class ModelResult(Minimizer):
         modname = self.model._reprstring(long=True)
         return f"<h2> Model</h2> {modname} {report}"
 
+    def summary(self):
+        """Return a dictionary with statistics and attributes of a ModelResult.
+
+        Returns
+        -------
+        dict
+            Dictionary of statistics and many attributes from a ModelResult.
+
+        Notes
+        ------
+        1. values for data arrays are not included.
+
+        2. The result summary dictionary will include the following entries:
+
+          ``model``, ``method``, ``ndata``, ``nvarys``, ``nfree``, ``chisqr``,
+          ``redchi``, ``aic``, ``bic``, ``rsquared``, ``nfev``, ``max_nfev``,
+          ``aborted``, ``errorbars``, ``success``, ``message``,
+          ``lmdif_message``, ``ier``, ``nan_policy``, ``scale_covar``,
+          ``calc_covar``, ``ci_out``, ``col_deriv``, ``flatchain``,
+          ``call_kws``, ``var_names``, ``user_options``, ``kws``,
+          ``init_values``, ``best_values``, and ``params``.
+
+        where 'params' is a list of parameter "states": tuples with entries of
+        ``(name, value, vary, expr, min, max, brute_step, stderr, correl,
+        init_value, user_data)``.
+
+        3. The result will include only plain Python objects, and so should be
+        easily serializable with JSON or similar tools.
+
+        """
+        summary = {'model': self.model._reprstring(long=True),
+                   'method': self.method}
+
+        for attr in ('ndata', 'nvarys', 'nfree', 'chisqr', 'redchi', 'aic',
+                     'bic', 'rsquared', 'nfev', 'max_nfev', 'aborted',
+                     'errorbars', 'success', 'message', 'lmdif_message', 'ier',
+                     'nan_policy', 'scale_covar', 'calc_covar', 'ci_out',
+                     'col_deriv', 'flatchain', 'call_kws', 'var_names',
+                     'user_options', 'kws', 'init_values', 'best_values'):
+            val = getattr(self, attr, None)
+            if isinstance(val, np.float64):
+                val = float(val)
+            elif isinstance(val, (np.int32, np.int64)):
+                val = int(val)
+            elif isinstance(val, np.bool_):
+                val = bool(val)
+            elif isinstance(val, bytes):
+                val = str(val, encoding='UTF-8')
+            summary[attr] = val
+
+        summary['params'] = [par.__getstate__() for par in self.params.values()]
+        return summary
+
     def dumps(self, **kws):
         """Represent ModelResult as a JSON string.
 
@@ -1685,10 +1765,9 @@ class ModelResult(Minimizer):
                      'ci_out', 'col_deriv', 'covar', 'errorbars', 'flatchain',
                      'ier', 'init_values', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                     'nvarys', 'redchi', 'rsquared', 'scale_covar',
+                     'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws', 'values',
                      'var_names', 'weights', 'user_options'):
-
             try:
                 val = getattr(self, attr)
             except AttributeError:
@@ -1761,20 +1840,15 @@ class ModelResult(Minimizer):
         self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
 
         # params
-        self.params = Parameters()
-        self.init_params = Parameters()
-        state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-        ini_state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-        for parstate in modres['params']:
-            _par = Parameter(name='')
-            _par.__setstate__(parstate)
-            state['params'].append(_par)
-            _par = Parameter(name='')
-            _par.__setstate__(parstate)
-            ini_state['params'].append(_par)
-
-        self.params.__setstate__(state)
-        self.init_params.__setstate__(ini_state)
+        for target in ('params', 'init_params'):
+            state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+            for parstate in modres['params']:
+                _par = Parameter(name='')
+                _par.__setstate__(parstate)
+                state['params'].append(_par)
+            _params = Parameters()
+            _params.__setstate__(state)
+            setattr(self, target, _params)
 
         for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
                      'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',

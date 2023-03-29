@@ -20,6 +20,7 @@ Downloading and Installation
 .. _corner: https://github.com/dfm/corner.py
 .. _sphinx: https://www.sphinx-doc.org
 .. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
+.. _ipykernel: https://github.com/ipython/ipykernel
 .. _sphinxcontrib-svg2pdfconverter: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
 .. _cairosvg: https://cairosvg.org/
 .. _Pillow: https://python-pillow.org/
@@ -51,10 +52,10 @@ of them.
 
 For building the documentation and generating the examples gallery, `matplotlib`_,
 `emcee`_ (version 3+), `corner`_, `Sphinx`_, `sphinx-gallery`_, `jupyter_sphinx`_,
-`Pillow`_, and `SymPy`_ are required. For generating the PDF documentation, the Python
-packages `sphinxcontrib-svg2pdfconverter`_ and `cairosvg`_ are also required,
+`ipykernel`_, `Pillow`_, and `SymPy`_ are required. For generating the PDF documentation,
+the Python packages `sphinxcontrib-svg2pdfconverter`_ and `cairosvg`_ are also required,
 as well as the LaTex package `Latexmk`_ (which is included by default in some
-LaTex distributions).
+LaTex distriipykernelbutions).
 
 Please refer to ``setup.cfg`` under ``options.extras_require`` for a list of all
 dependencies that are needed if you want to participate in the development of lmfit.

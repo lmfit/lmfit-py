@@ -58,6 +58,7 @@ definition of the model function:
 
     from numpy import exp, linspace, random
 
+
     def gaussian(x, amp, cen, wid):
         return amp * exp(-(x-cen)**2 / wid)
 
@@ -107,12 +108,13 @@ assignment of independent variable / arguments and specify yourself what
 the independent variable is and which function arguments should be identified
 as parameter names.
 
-The Parameters are *not* created when the model is created. The model knows
-what the parameters should be named, but nothing about the scale and
-range of your data. You will normally have to make these parameters and
-assign initial values and other attributes. To help you do this, each
-model has a :meth:`make_params` method that will generate parameters with
-the expected names:
+:class:`~lmfit.parameter.Parameters` are *not* created when the model is
+created. The model knows what the parameters should be named, but nothing about
+the scale and range of your data. To help you create Parameters for a Model,
+each model has a :meth:`make_params` method that will generate parameters with
+the expected names. You will have to do this, or make Parameters some other way
+(say, with :func:`~lmfit.parameter.create_params`), and assign initial values
+for all Parameters. You can also assign other attributes when doing this:
 
 .. jupyter-execute::
 
@@ -120,8 +122,9 @@ the expected names:
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
 automatically give them initial values since it has no idea what the scale
-should be. You can set initial values for parameters with keyword
-arguments to :meth:`make_params`:
+should be. If left unspecified, the initial values will be ``-Inf``, which will
+generally fail to give useful results. You can set initial values for
+parameters with keyword arguments to :meth:`make_params`:
 
 .. jupyter-execute::
 
@@ -231,11 +234,9 @@ function as a fitting model.
 
 .. automethod:: Model.make_params
 
-
 .. automethod:: Model.set_param_hint
 
    See :ref:`model_param_hints_section`.
-
 
 .. automethod:: Model.print_param_hints
 
@@ -294,10 +295,9 @@ function as a fitting model.
 Determining parameter names and independent variables for a function
 --------------------------------------------------------------------
 
-The :class:`Model` created from the supplied function ``func`` will create
-a :class:`~lmfit.parameter.Parameters` object, and names are inferred from the function
-arguments, and a residual function is automatically constructed.
-
+The :class:`Model` created from the supplied function ``func`` will create a
+:class:`~lmfit.parameter.Parameters` object, and names are inferred from the
+function` arguments, and a residual function is automatically constructed.
 
 By default, the independent variable is taken as the first argument to the
 function. You can, of course, explicitly set this, and will need to do so
@@ -384,6 +384,7 @@ Parameters if the supplied default value was a valid number (but not
             arg = t/tau
         return N*np.exp(arg)
 
+
     mod = Model(decay2)
     params = mod.make_params()
     print('Parameters:')
@@ -428,23 +429,29 @@ You would refer to these parameters as ``f1_amplitude`` and so forth, and
 the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 
 
-Initializing model parameters
------------------------------
+Initializing model parameter values
+-----------------------------------
 
-As mentioned above, the parameters created by :meth:`Model.make_params` are
-generally created with invalid initial values of ``None``. These values
-**must** be initialized in order for the model to be evaluated or used in a
-fit. There are four different ways to do this initialization that can be
-used in any combination:
+As mentioned above, creating a model does not automatically create the
+corresponding :class:`~lmfit.parameter.Parameters`. These can be created with
+either the :func:`create_params` function, or the :meth:`Model.make_params`
+method of the corresponding instance of :class:`Model`.
+
+When creating Parameters, each parameter is created with invalid initial value
+of ``-Inf`` if it is not set explicitly. That is to say, parameter values
+**must** be initialized in order for the model to evaluate a finite result or
+used in a fit. There are a few different ways to do this:
 
   1. You can supply initial values in the definition of the model function.
   2. You can initialize the parameters when creating parameters with :meth:`Model.make_params`.
-  3. You can give parameter hints with :meth:`Model.set_param_hint`.
-  4. You can supply initial values for the parameters when you use the
+  3. You can create a Parameters object with :class:`Parameters` or :func:`create_params`.
+  4. You can supply initial values for the parameters when calling
      :meth:`Model.eval` or :meth:`Model.fit` methods.
 
-Of course these methods can be mixed, allowing you to overwrite initial
-values at any point in the process of defining and using the model.
+Generally, using the :meth:`Model.make_params` method is recommended. The methods
+described above can be mixed, allowing you to overwrite initial values at any point
+in the process of defining and using the model.
+
 
 Initializing values in the function definition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -473,38 +480,50 @@ Initializing values with :meth:`Model.make_params`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating parameters with :meth:`Model.make_params` you can specify initial
-values. To do this, use keyword arguments for the parameter names and
-initial values:
+values. To do this, use keyword arguments for the parameter names. You can
+either set initial values as numbers (floats or ints) or as dictionaries with
+keywords of (``value``, ``vary``, ``min``, ``max``, ``expr``, ``brute_step``,
+and ``is_init_value``) to specify these parameter attributes.
 
 .. jupyter-execute::
 
     mod = Model(myfunc)
+
+    # simply supply initial values
     pars = mod.make_params(a=3, b=0.5)
 
+    # supply initial values, attributes for bounds, etcetera:
+    pars_bounded = mod.make_params(a=dict(value=3, min=0),
+                                   b=dict(value=0.5, vary=False))
 
-Initializing values by setting parameter hints
+
+Creating a :class:`Parameters` object directly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After a model has been created, but prior to creating parameters with
-:meth:`Model.make_params`, you can set parameter hints. These allows you to set
-not only a default initial value but also to set other parameter attributes
-controlling bounds, whether it is varied in the fit, or a constraint
-expression. To set a parameter hint, you can use :meth:`Model.set_param_hint`,
-as with:
+You can also create your own Parameters directly using :func:`create_params`.
+This is independent of using the :class:`Model` class, but is essentially
+equivalent to :meth:`Model.make_params` except with less checking of errors for
+model prefixes and so on.
 
 .. jupyter-execute::
 
+    from lmfit import create_params
+
     mod = Model(myfunc)
-    mod.set_param_hint('a', value=1.0)
-    mod.set_param_hint('b', value=0.3, min=0, max=1.0)
-    pars = mod.make_params()
 
-Parameter hints are discussed in more detail in section
-:ref:`model_param_hints_section`.
+    # simply supply initial values
+    pars = create_params(a=3, b=0.5)
+
+    # supply initial values and attributes for bounds, etc:
+    pars_bounded = create_params(a=dict(value=3, min=0),
+                                 b=dict(value=0.5, vary=False))
+
+Because less error checking is done, :meth:`Model.make_params` should probably
+be preferred when using Models.
 
 
-Initializing values when using a model
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Initializing parameter values for a model with keyword arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Finally, you can explicitly supply initial values when using a model. That
 is, as with :meth:`Model.make_params`, you can include values as keyword
@@ -527,18 +546,27 @@ can set parameter hints but then change the initial value explicitly with
 Using parameter hints
 ---------------------
 
-After a model has been created, you can give it hints for how to create
-parameters with :meth:`Model.make_params`.  This allows you to set not only a
-default initial value but also to set other parameter attributes
-controlling bounds, whether it is varied in the fit, or a constraint
-expression. To set a parameter hint, you can use :meth:`Model.set_param_hint`,
+After a model has been created, but prior to creating parameters with
+:meth:`Model.make_params`, you can define parameter hints for that model. This
+allows you to set other parameter attributes for bounds, whether it is varied in
+the fit, or set a default constraint expression for a parameter. You can also
+set the initial value, but that is not really the intention of the method,
+which is to really to let you say that about the idealized Model, for example
+that some values may not make sense for some parameters, or that some parameters
+might be a small change from another parameter and so be fixed or constrained
+by default.
+
+To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with:
 
 .. jupyter-execute::
 
     mod = Model(myfunc)
-    mod.set_param_hint('a', value=1.0)
-    mod.set_param_hint('b', value=0.3, min=0, max=1.0)
+    mod.set_param_hint('bounded_parameter', min=0, max=1.0)
+    pars = mod.make_params()
+
+Parameter hints are discussed in more detail in section
+:ref:`model_param_hints_section`.
 
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary:
@@ -549,19 +577,26 @@ which is simply a nested dictionary:
     for pname, par in mod.param_hints.items():
         print(pname, par)
 
-You can change this dictionary directly, or with the :meth:`Model.set_param_hint`
+You can change this dictionary directly or use the :meth:`Model.set_param_hint`
 method. Either way, these parameter hints are used by :meth:`Model.make_params`
 when making parameters.
 
-An important feature of parameter hints is that you can force the creation
-of new parameters with parameter hints. This can be useful to make derived
-parameters with constraint expressions. For example to get the full-width
-at half maximum of a Gaussian model, one could use a parameter hint of:
+Parameter hints also allow you to create new parameters. This can be useful to
+make derived parameters with constraint expressions. For example to get the
+full-width at half maximum of a Gaussian model, one could use a parameter hint
+of:
 
 .. jupyter-execute::
 
     mod = Model(gaussian)
-    mod.set_param_hint('fwhm', expr='2.3548*sigma')
+    mod.set_param_hint('wid', min=0)
+    mod.set_param_hint('fwhm', expr='2.3548*wid')
+    params = mod.make_params(amp={'value': 10, 'min':0.1, 'max':2000},
+                             cen=5.5, wid=1.25)
+    params.pretty_print()
+
+With that definition, the value (and uncertainty) of the ``fwhm`` parameter
+will be reported in the output of any fit done with that model.
 
 
 .. _model_saveload_sec:
@@ -661,6 +696,8 @@ and ``bic``.
 .. automethod:: ModelResult.fit
 
 .. automethod:: ModelResult.fit_report
+
+.. automethod:: ModelResult.summary
 
 .. automethod:: ModelResult.conf_interval
 

@@ -406,6 +406,7 @@ better? To do this, we simply replace ``GaussianModel`` with
 .. jupyter-execute::
 
     from lmfit.models import LorentzianModel
+
     mod = LorentzianModel()
 
 with the rest of the script as above. Perhaps predictably, the first thing
@@ -434,6 +435,7 @@ A Voigt model does a better job. Using :class:`VoigtModel`, this is as simple as
 .. jupyter-execute::
 
     from lmfit.models import VoigtModel
+
     mod = VoigtModel()
 
 with all the rest of the script as above. This gives:
@@ -616,6 +618,7 @@ That is, with::
 	if value < min(arrval):
 	    return 0
 	return max(np.where(arrval <= value)[0])
+
 
     ix1 = index_of(x, 75)
     ix2 = index_of(x, 135)

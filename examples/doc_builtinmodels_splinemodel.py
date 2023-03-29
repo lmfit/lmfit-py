@@ -11,7 +11,9 @@ y = data[:, 1]
 plt.plot(x, y, label='data')
 
 model = GaussianModel(prefix='peak_')
-params = model.make_params(amplitude=8, center=16, sigma=1)
+params = model.make_params(amplitude=dict(value=8, min=0),
+                           center=dict(value=16, min=5, max=25),
+                           sigma=dict(value=1, min=0))
 
 # make a background spline with knots evenly spaced over the background,
 # but sort of skipping over where the peak is
@@ -23,10 +25,6 @@ bkg = SplineModel(prefix='bkg_', xknots=knot_xvals1)
 params.update(bkg.guess(y, x))
 
 model = model + bkg
-
-params['peak_center'].min = 10
-params['peak_center'].max = 20
-params['peak_amplitude'].min = 0
 
 plt.plot(x, model.eval(params, x=x), label='initial')
 

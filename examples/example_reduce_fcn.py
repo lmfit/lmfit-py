@@ -43,11 +43,8 @@ yn = y + np.random.normal(size=y.size, scale=0.250)
 outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
 yn[outliers] += 5*np.random.random(len(outliers))
 
-params = lmfit.Parameters()
-params.add('offset', 2.0)
-params.add('omega', 3.3)
-params.add('amp', 2.5)
-params.add('decay', 1.0, min=0)
+params = lmfit.create_params(offset=2.0, omega=3.3, amp=2.5,
+                             decay=dict(value=1, min=0))
 
 ###############################################################################
 # Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
@@ -68,3 +65,4 @@ plt.plot(x, yn, '--*', label='with noise+outliers')
 plt.plot(x, yn+o1.residual, '-', label='sum of squares fit')
 plt.plot(x, yn+o2.residual, '-', label='robust fit')
 plt.legend()
+plt.show()

@@ -78,7 +78,8 @@ def test_least_squares_cov_x(peakdata, bounds):
 
     # do fit with least_squares and leastsq algorithm
     result = mod.fit(y, params, x=x, method='least_squares')
-    result_lsq = mod.fit(y, params, x=x, method='leastsq')
+    result_lsq = mod.fit(y, params, x=x, method='leastsq',
+                         fit_kws={'epsfcn': 1.e-14})
 
     # assert that fit converged to the same result
     vals = [result.params[p].value for p in result.params.valuesdict()]
@@ -103,7 +104,8 @@ def test_least_squares_cov_x(peakdata, bounds):
                result.params[par1].correl.keys()]
         cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
                    result_lsq.params[par1].correl.keys()]
-        assert_allclose(cor, cor_lsq, rtol=1e-2)
+
+        assert_allclose(cor, cor_lsq, rtol=0.01, atol=1.e-6)
 
 
 def test_least_squares_solver_options(peakdata, capsys):

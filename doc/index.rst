@@ -48,7 +48,6 @@ The lmfit package is Free software, using an Open Source license. The
 software and this document are works in progress. If you are interested in
 participating in this effort please use the `lmfit GitHub repository`_.
 
-
 .. toctree::
    :maxdepth: 2
 

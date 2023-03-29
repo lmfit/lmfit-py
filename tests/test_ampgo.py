@@ -104,14 +104,14 @@ def test_ampgo_invalid_tabustrategy(minimizer_Alpine02):
                     reason="does not throw an exception in Python 2")
 def test_ampgo_local_opts(minimizer_Alpine02):
     """Test AMPGO algorithm, pass local_opts to solver."""
-    # use local_opts to pass maxiter to the local optimizer: providing a string
+    # use local_opts to pass maxfun to the local optimizer: providing a string
     # whereas an integer is required, this should throw an error.
-    kws = {'local_opts': {'maxiter': 'string'}}
+    kws = {'local_opts': {'maxfun': 'string'}}
     with pytest.raises(TypeError):
         minimizer_Alpine02.minimize(method='ampgo', **kws)
 
     # for coverage: make sure that both occurrences are reached
-    kws = {'local_opts': {'maxiter': 10}, 'maxfunevals': 50}
+    kws = {'local_opts': {'maxfun': 10}, 'maxfunevals': 50}
     minimizer_Alpine02.minimize(method='ampgo', **kws)
 
 
