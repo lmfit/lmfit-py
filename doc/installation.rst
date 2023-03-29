@@ -55,7 +55,7 @@ For building the documentation and generating the examples gallery, `matplotlib`
 `ipykernel`_, `Pillow`_, and `SymPy`_ are required. For generating the PDF documentation,
 the Python packages `sphinxcontrib-svg2pdfconverter`_ and `cairosvg`_ are also required,
 as well as the LaTex package `Latexmk`_ (which is included by default in some
-LaTex distriipykernelbutions).
+LaTex distributions).
 
 Please refer to ``setup.cfg`` under ``options.extras_require`` for a list of all
 dependencies that are needed if you want to participate in the development of lmfit.
