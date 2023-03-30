@@ -82,7 +82,7 @@ def gformat(val, length=11):
 
 
 def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
-               sort_pars=False):
+               sort_pars=False, correl_mode='list'):
     """Generate a report of the fitting results.
 
     The report contains the best-fit values for the parameters and their
@@ -104,6 +104,11 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         they were added to the Parameters dictionary. If callable, then
         this (one argument) function is used to extract a comparison key
         from each list element.
+    correl_mode : {'list', table'} str, optional
+        Mode for how to show correlations. Can be either 'list' (default)
+        to show a sorted (if ``sort_pars`` is True) list of correlation
+        values, or 'table' to show a complete, formatted table of
+        correlations.
 
     Returns
     -------
@@ -191,7 +196,11 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         else:
             add(f"    {nout} {par.value: .7g} (fixed)")
 
-    if show_correl:
+    if show_correl and correl_mode.startswith('tab'):
+        add('[[Correlations]] ')
+        for line in correl_table(params).split('\n'):
+            buff.append('  %s' % line)
+    elif show_correl:
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
@@ -211,7 +220,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             maxlen = max(len(k) for k in list(correls.keys()))
         for name, val in sort_correl:
             lspace = max(0, maxlen - len(name))
-            add(f"    C({name}){(' '*30)[:lspace]} = {val:.3f}")
+            add(f"    C({name}){(' '*30)[:lspace]} = {val:+.4f}")
     return '\n'.join(buff)
 
 
@@ -274,9 +283,45 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
             add(f'<h2>Correlations {extra}</h2>')
             add('<table>')
             for name1, name2, val in sort_correls:
-                stat_row(name1, name2, f"{val:.4f}")
+                stat_row(name1, name2, f"{val:+.4f}")
             add('</table>')
     return ''.join(html)
+
+
+def correl_table(params):
+    """Return a printable correlation table for a Parameters object."""
+    varnames = [vname for vname in params if params[vname].vary]
+    nwid = max(8, max([len(vname) for vname in varnames])) + 1
+
+    def sfmt(a):
+        return f" {a:{nwid}s}"
+
+    def ffmt(a):
+        return sfmt(f"{a:+.4f}")
+
+    title = ['', sfmt('Variable')]
+    title.extend([sfmt(vname) for vname in varnames])
+
+    title = '|'.join(title) + '|'
+    bar = [''] + ['-'*(nwid+1) for i in range(len(varnames)+1)] + ['']
+    bar = '+'.join(bar)
+
+    buff = [bar, title, bar]
+
+    for vname, par in params.items():
+        if not par.vary:
+            continue
+        line = ['', sfmt(vname)]
+        for vother in varnames:
+            if vother == vname:
+                line.append(ffmt(1))
+            elif vother in par.correl:
+                line.append(ffmt(par.correl[vother]))
+            else:
+                line.append('unknown')
+        buff.append('|'.join(line) + '|')
+    buff.append(bar)
+    return '\n'.join(buff)
 
 
 def params_html_table(params):

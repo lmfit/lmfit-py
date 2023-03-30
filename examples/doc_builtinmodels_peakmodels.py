@@ -14,7 +14,7 @@ mod = GaussianModel()
 pars = mod.guess(y, x=x)
 out = mod.fit(y, pars, x=x)
 
-print(out.fit_report(min_correl=0.25))
+print(out.fit_report(correl_mode='table'))
 
 plt.plot(x, y)
 plt.plot(x, out.best_fit, '-', label='Gaussian Model')
@@ -27,7 +27,7 @@ mod = LorentzianModel()
 pars = mod.guess(y, x=x)
 out = mod.fit(y, pars, x=x)
 
-print(out.fit_report(min_correl=0.25))
+print(out.fit_report(correl_mode='table'))
 
 plt.figure()
 plt.plot(x, y, '-')
@@ -41,7 +41,7 @@ mod = VoigtModel()
 pars = mod.guess(y, x=x)
 out = mod.fit(y, pars, x=x)
 
-print(out.fit_report(min_correl=0.25))
+print(out.fit_report(correl_mode='table'))
 
 fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
 

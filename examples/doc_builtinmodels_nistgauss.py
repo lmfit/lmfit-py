@@ -26,7 +26,7 @@ mod = gauss1 + gauss2 + exp_mod
 init = mod.eval(pars, x=x)
 out = mod.fit(y, pars, x=x)
 
-print(out.fit_report(min_correl=0.5))
+print(out.fit_report(correl_mode='table'))
 
 fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
 axes[0].plot(x, y)

@@ -12,6 +12,7 @@ from lmfit import Minimizer, Parameters, minimize
 from lmfit.lineshapes import gaussian
 from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
                              _nan_policy)
+from lmfit.models import SineModel
 
 try:
     import numdifftools  # noqa: F401
@@ -315,6 +316,32 @@ def test_ufloat():
     y = x - x
     assert_allclose(y.nominal_value, 0.0, rtol=1.e-7)
     assert_allclose(y.std_dev, 0.0, rtol=1.e-7)
+
+
+def test_stderr_propagation():
+    """Test propagation of uncertainties to constraint expressions."""
+    model = SineModel()
+    params = model.make_params(amplitude=1, frequency=9.0, shift=0)
+    params.add("period", expr="1/frequency")
+    params.add("period_2a", expr="2*period")
+    params.add("period_2b", expr="2/frequency")
+    params.add("thing_1", expr="shift + frequency")
+    params.add("thing_2", expr="shift + 1/period")
+
+    np.random.seed(3)
+    xs = np.linspace(0, 1, 51)
+    ys = np.sin(7.45 * xs) + 0.01 * np.random.normal(size=xs.shape)
+
+    result = model.fit(ys, x=xs, params=params)
+
+    opars = result.params
+    assert_allclose(opars['period'].stderr, 1.1587e-04, rtol=1.e-3)
+    assert_allclose(opars['period_2b'].stderr, 2.3175e-04, rtol=1.e-3)
+    assert_allclose(opars['thing_1'].stderr, 0.0037291, rtol=1.e-3)
+
+    assert_allclose(opars['period_2a'].stderr, 2*opars['period'].stderr, rtol=1.e-5)
+    assert_allclose(opars['period_2b'].stderr, opars['period_2a'].stderr, rtol=1.e-5)
+    assert_allclose(opars['thing_1'].stderr, opars['thing_2'].stderr, rtol=1.e-5)
 
 
 class CommonMinimizerTest(unittest.TestCase):

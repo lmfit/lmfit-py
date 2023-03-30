@@ -370,20 +370,18 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y_name : str
         The name of the parameter which will be the y direction.
     nx : int, optional
-        Number of points in the x direction. [default = 10]
+        Number of points in the x direction (default is 10).
     ny : int, optional
-        Number of points in the y direction. [default = 10]
+        Number of points in the y direction (default is 10).
     limits : tuple, optional
         Should have the form ``((x_upper, x_lower), (y_upper, y_lower))``.
         If not given, the default is nsigma*stderr in each direction.
-    prob_func : None or callable, optional
-        Function to calculate the probability from the optimized chi-square.
-        Default is None and uses the built-in function `f_compare`
-        (i.e., F-test).
+    prob_func : None or callable, deprecated
+        Starting with version 1.2, this argument is unused and has no effect.
     nsigma : float or int, optional
-        multiplier of stderr for limits.  [default = 5.0]
+        Multiplier of stderr for limits (default is 5).
     chi2_out: bool
-        whether to return chi-square at each coordinate instead of probability.
+        Whether to return chi-square at each coordinate instead of probability.
 
     Returns
     -------
@@ -393,7 +391,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
         Y-coordinates (same shape as `ny`).
     grid : numpy.ndarray
         2-D array (with shape ``(nx, ny)``) containing the calculated
-        probabilities or chi-square
+        probabilities or chi-square.
 
     See Also
     --------
@@ -407,16 +405,15 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     >>> plt.contour(x,y,gr)
 
     """
+    if prob_func is not None:
+        msg = "'prob_func' has no effect and will be removed in version 1.4."
+        raise DeprecationWarning(msg)
+
     params = result.params
 
-    best_chi = result.chisqr
+    best_chisqr = result.chisqr
+    redchi = result.redchi
     org = copy_vals(result.params)
-
-    def chi2_compare(best, current):
-        return current.chisqr - best.chisqr
-
-    if prob_func is None:
-        prob_func = chi2_compare if chi2_out else f_compare
 
     x = params[x_name]
     y = params[y_name]
@@ -432,29 +429,30 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y_points = np.linspace(y_lower, y_upper, ny)
     grid = np.dstack(np.meshgrid(x_points, y_points))
 
-    x.vary = False
-    y.vary = False
+    x.vary, y.vary = False, False
 
-    def calc_prob(vals, restore=False):
-        """Calculate the probability."""
-        if restore:
-            restore_vals(org, result.params)
-        x.value = vals[0]
-        y.value = vals[1]
-        save_x = result.params[x.name]
-        save_y = result.params[y.name]
-        result.params[x.name] = x
-        result.params[y.name] = y
+    def calc_chisqr(vals, restore=False):
+        """Calculate chi-square for a set of parameter values."""
+        save_x = x.value
+        save_y = y.value
+        result.params[x.name].value = vals[0]
+        result.params[y.name].value = vals[1]
         minimizer.prepare_fit(params=result.params)
         out = minimizer.leastsq()
-        prob = prob_func(result, out)
-        result.params[x.name] = save_x
-        result.params[y.name] = save_y
-        return prob
+        result.params[x.name].value = save_x
+        result.params[y.name].value = save_y
+        return out.chisqr
 
-    out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)
+    # grid of chi-square
+    out_mat = np.apply_along_axis(calc_chisqr, -1, grid)
+
+    # compute grid of sigma values from chi-square
+    if not chi2_out:
+        chisqr0 = out_mat.min()
+        chisqr0 = min(best_chisqr, chisqr0)
+        out_mat = np.sqrt((out_mat-chisqr0)/redchi)
 
     x.vary, y.vary = True, True
     restore_vals(org, result.params)
-    result.chisqr = best_chi
-    return out
+    result.chisqr = best_chisqr
+    return x_points, y_points, out_mat

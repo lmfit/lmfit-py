@@ -51,7 +51,7 @@ out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 fit = residual(out.params, x)
 
 ###############################################################################
-report_fit(out, modelpars=p_true)
+report_fit(out, modelpars=p_true, correl_mode='table')
 
 ###############################################################################
 plt.plot(x, data, 'o', label='data')

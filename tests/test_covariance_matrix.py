@@ -98,8 +98,8 @@ def test_bounds_expression():
     assert_almost_equal(result.params['amplitude'].stderr, 0.13861506,
                         decimal=4)
     assert_almost_equal(result.params['gamma'].stderr, 0.00368468, decimal=4)
-    assert_almost_equal(result.params['fwhm'].stderr, 0.00806917, decimal=4)
-    assert_almost_equal(result.params['height'].stderr, 0.03009459, decimal=4)
+    assert_almost_equal(result.params['fwhm'].stderr, 0.01326862028, decimal=4)
+    assert_almost_equal(result.params['height'].stderr, 0.0395990, decimal=4)
 
     assert_almost_equal(result.params['sigma'].correl['center'],
                         -4.6623973788006615e-05, decimal=4)
