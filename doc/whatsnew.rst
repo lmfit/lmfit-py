@@ -13,22 +13,37 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_120_label:
 
-Version 1.2.0 Release Notes (March XX, 2023)
+Version 1.2.0 Release Notes (April 05, 2023)
 =================================================
 
 New features:
 
 - add ``create_params`` function (PR #844)
+- add ``chi2_out`` and ``nsigma`` options to ``conf_interval2d()``
+- add ``ModelResult.summary()`` to return many resulting fit statistics and attributes into a JSON-able dict.
+- add ``correl_table()`` function to ``lmfit.printfuncs`` and ``correl_mode`` option to ``fit_report()`` and
+  ``ModelResult.fit_report()`` to optionally display a RST-formatted table of a correlation matrix.
 
 Bug fixes/enhancements:
 
-- fix deepcopy of ``Parameters`` (mguhyo; PR #837)
+- fix bug in reported uncertainties for constrained parameters by better propating uncertainties (Issue #855; PR #856)
+- Coercing of user input data and independent data for ``Model`` to float64 ndarrays is somewhat less aggressive and
+  will not increase the precision of numpy ndarrays (see :ref:`model_data_coercion_section` for details). The resulting
+  calculation from a model or objective function is more aggressively coerced to float64.  (Issue #850; PR #853)
+- the default value of ``epsfcn`` is increased to 1.e-10 to allow for handling of data with precision less than float64
+  (Issue #850; PR #853)
+- fix ``conf_interval2d`` to use "increase chi-square by sigma**2*reduced chi-square" to give the ``sigma``-level
+  probabilities (Issue #848; PR #852)
+- fix reading of older ``ModelResult`` (Issue #845; included in PR #844)
+- fix deepcopy of ``Parameters`` and user data (mguhyo; PR #837)
 - improve ``Model.make_params`` and ``create_params`` to take optional dict of Parameter attributes (PR #844)
-- fix reporting of ``nfev`` from ``least_squares`` to better reflect actual number of function calls (PR #844)
+- fix reporting of ``nfev`` from ``least_squares`` to better reflect actual number of function calls (Issue #842; PR #844)
 - fix bug in ``Model.eval`` when mixing parameters and keyword arguments (PR #844, #839)
 - re-adds ``residual`` to saved ``Model`` result (PR #844, #830)
-- ``ConstantModel`` and ``ComplexConstantModel`` will return an ndarray of the same shape as the independent variable ``x`` (JeppeKlitgaard, Issue #840; PR #841)
+- ``ConstantModel`` and ``ComplexConstantModel`` will return an ndarray of the same shape as the independent variable
+  ``x`` (JeppeKlitgaard, Issue #840; PR #841)
 - update tests for latest versions of NumPy and SciPy.
+- many fixes of doc typos and updates of dependencies, pre-commit hooks, and CI.
 
 .. _whatsnew_110_label:
 
