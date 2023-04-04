@@ -598,6 +598,59 @@ of:
 With that definition, the value (and uncertainty) of the ``fwhm`` parameter
 will be reported in the output of any fit done with that model.
 
+.. _model_data_coercion_section:
+
+Data Types for data  and independent data with ``Model``
+-------------------------------------------------------------
+
+The model as defined by your model function will use the independent
+variable(s) you specify to best match the data you provide.  The model is meant
+to be an abstract representation for data, but when you do a fit with
+:meth:`Model.fit`, you really need to pass in values for the data to be modeled
+and the independent data used to calculate that data.
+
+The mathematical solvers used by ``lmfit`` all work exclusively with
+1-dimensional numpy arrays of datatype (dtype) ``float64``.  The value of the
+calculation ``(model-data)*weights`` using the calculation of your model
+function, and the data and weights you pass in *will be coerced* to an
+1-dimensional ndarray with dtype ``float64`` when it is passed to the solver.
+
+If the data you pass to :meth:`Model.fit` is not an ndarray of dtype
+``float64`` but is instead a tuples of numbers, a list of numbers, or a
+``pandas.Series``, it will be coerced into an ndarray.  If your data is a list,
+tuple, or Series of complex numbers, it *will be coerced* to an ndarray with
+dtype ``complex128``.
+
+If your data is a numpy array of dtype ``float32``, it *will not be coerced* to
+``float64``, as we assume this was an intentional choice.  That may make all of
+the calculations done in your model function be in single-precision which may
+make fits less sensitive, but the values will be converted to ``float64``
+before being sent to the solver, so the fit should work.
+
+The independent data for models using ``Model`` are meant to be truly
+independent, and not **not** required to be strictly numerical or objects that
+are easily converted to arrays of numbers.  That is, independent data for a
+model could be a dictionary, an instance of a user-defined class, or other type
+of structured data.  You can use independent data any way you want in your
+model function.
+
+But, as with almost all the examples given here, independent data is often also
+a 1-dimensonal array of values, say ``x``, and a simple view of the fit would be
+to plot the data as ``y`` as a function of ``x``.  Again, this is not required, but
+it is very common.  Because of this very common usage, if your independent data
+is a tuple or list of numbers or ``pandas.Series``, it *will be coerced* to be
+an ndarray of dtype ``float64``.  But as with the primary data, if your
+independent data is an ndarray of some different dtype (``float32``,
+``uint16``, etc), it *will not be coerced* to ``float64``, as we assume this
+was intentional.
+
+.. note::
+
+  Data and independent data that are tuples or lists of numbers, or
+  ``panda.Series`` will be coerced to an ndarray of dtype ``float64`` before
+  passing to the model function.  Data with other dtypes (or independent data
+  of other object types such as dicts) will not be coerced to ``float64``.
+
 
 .. _model_saveload_sec:
 
