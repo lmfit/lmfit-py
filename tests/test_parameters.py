@@ -1,7 +1,7 @@
 """Tests for the Parameters class."""
 
-
 from copy import copy, deepcopy
+import os
 import pickle
 
 import numpy as np
@@ -9,6 +9,7 @@ from numpy.testing import assert_allclose
 import pytest
 
 import lmfit
+from lmfit.models import VoigtModel
 
 
 @pytest.fixture
@@ -605,3 +606,31 @@ def test_create_params():
     assert pars1['d'].value == 11
     assert pars1['e'].value == 10000
     assert pars1['e'].brute_step == 4
+
+
+def test_unset_constrained_param():
+    """test 'unsetting' a constrained parameter by
+    just setting `param.vary = True`
+
+    """
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
+                                   'examples', 'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # initial fit
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    out1 = mod.fit(y, params, x=x)
+
+    assert out1.nvarys == 3
+    assert out1.chisqr < 20.0
+
+    # now just gamma to vary
+    params['gamma'].vary = True
+    out2 = mod.fit(y, params, x=x)
+
+    assert out2.nvarys == 4
+    assert out2.chisqr < out1.chisqr
+    assert out2.rsquared > out1.rsquared
+    assert out2.params['gamma'].correl['sigma'] < -0.6
