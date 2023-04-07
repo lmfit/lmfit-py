@@ -26,6 +26,7 @@ New features:
 
 Bug fixes/enhancements:
 
+- fix bug when setting ``param.vary=True`` for a constrained parameter (Issue #859; PR #860)
 - fix bug in reported uncertainties for constrained parameters by better propating uncertainties (Issue #855; PR #856)
 - Coercing of user input data and independent data for ``Model`` to float64 ndarrays is somewhat less aggressive and
   will not increase the precision of numpy ndarrays (see :ref:`model_data_coercion_section` for details). The resulting

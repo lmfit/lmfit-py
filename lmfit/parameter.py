@@ -639,7 +639,7 @@ class Parameter:
         self.min = min
         self.max = max
         self.brute_step = brute_step
-        self.vary = vary
+        self._vary = vary
         self._expr = expr
         self._expr_ast = None
         self._expr_eval = None
@@ -702,7 +702,7 @@ class Parameter:
 
         """
         if vary is not None:
-            self.vary = vary
+            self._vary = vary
             if vary:
                 self.__set_expression('')
 
@@ -751,13 +751,13 @@ class Parameter:
 
     def __getstate__(self):
         """Get state for pickle."""
-        return (self.name, self.value, self.vary, self.expr, self.min,
+        return (self.name, self.value, self._vary, self.expr, self.min,
                 self.max, self.brute_step, self.stderr, self.correl,
                 self.init_value, self.user_data)
 
     def __setstate__(self, state):
         """Set state for pickle."""
-        (self.name, _value, self.vary, self.expr, self.min, self.max,
+        (self.name, _value, self._vary, self.expr, self.min, self.max,
          self.brute_step, self.stderr, self.correl, self.init_value,
          self.user_data) = state
         self._expr_ast = None
@@ -772,7 +772,7 @@ class Parameter:
         """Return printable representation of a Parameter object."""
         s = []
         sval = f"value={repr(self._getval())}"
-        if not self.vary and self._expr is None:
+        if not self._vary and self._expr is None:
             sval += " (fixed)"
         elif self.stderr is not None:
             sval += f" +/- {self.stderr:.3g}"
@@ -883,6 +883,18 @@ class Parameter:
             self._expr_eval.symtable[self.name] = self._val
 
     @property
+    def vary(self):
+        """Return whether the parameter is variable"""
+        return self._vary
+
+    @vary.setter
+    def vary(self, val):
+        """Set whether a parameter is varied"""
+        self._vary = val
+        if val:
+            self.__set_expression('')
+
+    @property
     def expr(self):
         """Return the mathematical expression used to constrain the value in fit."""
         return self._expr
@@ -901,7 +913,7 @@ class Parameter:
             val = None
         self._expr = val
         if val is not None:
-            self.vary = False
+            self._vary = False
         if not hasattr(self, '_expr_eval'):
             self._expr_eval = None
         if val is None:

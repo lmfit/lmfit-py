@@ -49,9 +49,11 @@ axes[0].plot(x, y, '-')
 axes[0].plot(x, out.best_fit, '-', label='Voigt Model\ngamma constrained')
 axes[0].legend()
 
-# free gamma parameter
-pars['gamma'].set(value=0.7, vary=True, expr='')
+# allow the gamma parameter to vary in the fit
+pars['gamma'].vary = True
 out_gamma = mod.fit(y, pars, x=x)
+print(out.fit_report(correl_mode='table'))
+
 axes[1].plot(x, y, '-')
 axes[1].plot(x, out_gamma.best_fit, '-', label='Voigt Model\ngamma unconstrained')
 axes[1].legend()
