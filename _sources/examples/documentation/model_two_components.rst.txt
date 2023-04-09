@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_model_two_components.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_model_two_components.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -27,7 +27,7 @@ doc_model_two_components.py
 
 .. image-sg:: /examples/documentation/images/sphx_glr_model_two_components_001.png
    :alt: model two components
-   :srcset: /examples/documentation/images/sphx_glr_model_two_components_001.png, /examples/documentation/images/sphx_glr_model_two_components_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_model_two_components_001.png, /examples/documentation/images/sphx_glr_model_two_components_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -39,7 +39,7 @@ doc_model_two_components.py
         (Model(gaussian) + Model(line))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 44
+        # function evals   = 55
         # data points      = 101
         # variables        = 5
         chi-square         = 2.57855517
@@ -48,20 +48,20 @@ doc_model_two_components.py
         Bayesian info crit = -347.381417
         R-squared          = 0.99194643
     [[Variables]]
-        amp:        8.45931062 +/- 0.12414515 (1.47%) (init = 5)
-        cen:        5.65547873 +/- 0.00917678 (0.16%) (init = 5)
-        wid:        0.67545524 +/- 0.00991686 (1.47%) (init = 1)
-        slope:      0.26484404 +/- 0.00574892 (2.17%) (init = 0)
-        intercept: -0.96860202 +/- 0.03352202 (3.46%) (init = 1)
+        amp:        8.45930976 +/- 0.12414531 (1.47%) (init = 5)
+        cen:        5.65547889 +/- 0.00917673 (0.16%) (init = 5)
+        wid:        0.67545513 +/- 0.00991697 (1.47%) (init = 1)
+        slope:      0.26484403 +/- 0.00574892 (2.17%) (init = 0)
+        intercept: -0.96860189 +/- 0.03352202 (3.46%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(slope, intercept) = -0.795
-        C(amp, wid)         = 0.666
-        C(amp, intercept)   = -0.222
-        C(amp, slope)       = -0.169
-        C(cen, slope)       = -0.162
-        C(wid, intercept)   = -0.148
-        C(cen, intercept)   = 0.129
-        C(wid, slope)       = -0.113
+        C(slope, intercept) = -0.7954
+        C(amp, wid)         = +0.6664
+        C(amp, intercept)   = -0.2216
+        C(amp, slope)       = -0.1692
+        C(cen, slope)       = -0.1618
+        C(wid, intercept)   = -0.1477
+        C(cen, intercept)   = +0.1287
+        C(wid, slope)       = -0.1127
 
 
 
@@ -94,10 +94,10 @@ doc_model_two_components.py
 
 
     mod = Model(gaussian) + Model(line)
-    pars = mod.make_params(amp=5, cen=5, wid=1, slope=0, intercept=1)
+    pars = mod.make_params(amp=5, cen=5, wid={'value': 1, 'min': 0},
+                           slope=0, intercept=1)
 
     result = mod.fit(y, pars, x=x)
-
     print(result.fit_report())
 
     plt.plot(x, y, 'o')
@@ -110,7 +110,7 @@ doc_model_two_components.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.141 seconds)
+   **Total running time of the script:** ( 0 minutes  0.143 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:
@@ -118,6 +118,8 @@ doc_model_two_components.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

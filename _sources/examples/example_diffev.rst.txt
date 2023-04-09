@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_diffev.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_diffev.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -113,12 +113,12 @@ Perform the fits and show fitting results and plot:
         Akaike info crit   = -146.871969
         Bayesian info crit = -136.411487
     [[Variables]]
-        offset:  0.96333090 +/- 0.04735921 (4.92%) (init = 2)
-        omega:   3.98700821 +/- 0.02079710 (0.52%) (init = 3.3)
-        amp:     1.80253577 +/- 0.19401989 (10.76%) (init = 2.5)
-        decay:   5.76279825 +/- 1.04073303 (18.06%) (init = 1)
+        offset:  0.96333089 +/- 0.04735890 (4.92%) (init = 2)
+        omega:   3.98700839 +/- 0.02079709 (0.52%) (init = 3.3)
+        amp:     1.80253587 +/- 0.19401928 (10.76%) (init = 2.5)
+        decay:   5.76279753 +/- 1.04073348 (18.06%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, decay) = -0.755
+        C(amp, decay) = -0.7550
 
 
 
@@ -157,7 +157,7 @@ Perform the fits and show fitting results and plot:
         amp:     1.80252618 +/- 0.19022409 (10.55%) (init = 2.5)
         decay:   5.76284509 +/- 1.00452610 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, decay) = -0.743
+        C(amp, decay) = -0.7434
 
 
 
@@ -175,7 +175,7 @@ Perform the fits and show fitting results and plot:
 
 .. image-sg:: /examples/images/sphx_glr_example_diffev_001.png
    :alt: example diffev
-   :srcset: /examples/images/sphx_glr_example_diffev_001.png, /examples/images/sphx_glr_example_diffev_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_diffev_001.png, /examples/images/sphx_glr_example_diffev_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -185,7 +185,7 @@ Perform the fits and show fitting results and plot:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.260 seconds)
+   **Total running time of the script:** ( 0 minutes  0.262 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:
@@ -193,6 +193,8 @@ Perform the fits and show fitting results and plot:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

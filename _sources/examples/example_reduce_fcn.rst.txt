@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_reduce_fcn.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_reduce_fcn.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -61,7 +61,7 @@ of data with outliers.
 
 Generate synthetic data with noise/outliers and initialize fitting Parameters:
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-52
+.. GENERATED FROM PYTHON SOURCE LINES 33-49
 
 .. code-block:: default
 
@@ -78,11 +78,8 @@ Generate synthetic data with noise/outliers and initialize fitting Parameters:
     outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
     yn[outliers] += 5*np.random.random(len(outliers))
 
-    params = lmfit.Parameters()
-    params.add('offset', 2.0)
-    params.add('omega', 3.3)
-    params.add('amp', 2.5)
-    params.add('decay', 1.0, min=0)
+    params = lmfit.create_params(offset=2.0, omega=3.3, amp=2.5,
+                                 decay=dict(value=1, min=0))
 
 
 
@@ -91,11 +88,11 @@ Generate synthetic data with noise/outliers and initialize fitting Parameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
+.. GENERATED FROM PYTHON SOURCE LINES 50-51
 
 Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-59
+.. GENERATED FROM PYTHON SOURCE LINES 51-56
 
 .. code-block:: default
 
@@ -129,12 +126,12 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         amp:     1.69977024 +/- 0.21587469 (12.70%) (init = 2.5)
         decay:   7.65901859 +/- 1.87209333 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, decay) = -0.773
+        C(amp, decay) = -0.7733
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-65
+.. GENERATED FROM PYTHON SOURCE LINES 57-62
 
 .. code-block:: default
 
@@ -170,13 +167,13 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         amp:     1.83231335 +/- 0.27241921 (14.87%) (init = 2.5)
         decay:   5.77328069 +/- 1.45141325 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, decay)  = -0.758
-        C(offset, amp) = -0.107
+        C(amp, decay)  = -0.7584
+        C(offset, amp) = -0.1067
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-71
+.. GENERATED FROM PYTHON SOURCE LINES 63-69
 
 .. code-block:: default
 
@@ -185,12 +182,13 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
     plt.plot(x, yn+o1.residual, '-', label='sum of squares fit')
     plt.plot(x, yn+o2.residual, '-', label='robust fit')
     plt.legend()
+    plt.show()
 
 
 
 .. image-sg:: /examples/images/sphx_glr_example_reduce_fcn_001.png
    :alt: example reduce fcn
-   :srcset: /examples/images/sphx_glr_example_reduce_fcn_001.png, /examples/images/sphx_glr_example_reduce_fcn_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_reduce_fcn_001.png, /examples/images/sphx_glr_example_reduce_fcn_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -200,7 +198,7 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.187 seconds)
+   **Total running time of the script:** ( 0 minutes  0.188 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:
@@ -208,6 +206,8 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

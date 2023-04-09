@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -644,7 +641,7 @@ useful for understanding the values in <a class="reference internal" href="#lmfi
 corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerResult.var_names" title="lmfit.minimizer.MinimizerResult.var_names"><code class="xref py py-attr docutils literal notranslate"><span class="pre">var_names</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -790,7 +787,7 @@ method only).</p>
 function when using the best-fit values of the parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -848,7 +845,7 @@ function when using the best-fit values of the parameters.</p>
 <dd><p>A flatchain view of the sampling chain from the <cite>emcee</cite> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.2)">pandas.DataFrame</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.0)">pandas.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1026,7 +1023,7 @@ the distributions and relations between Parameters.</p>
 <span id="fit-reports-label"></span><h2>Getting and Printing Fit Reports<a class="headerlink" href="#getting-and-printing-fit-reports" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="lmfit.printfuncs.fit_report">
-<span class="sig-name descname"><span class="pre">fit_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inpars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelpars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_correl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_correl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_pars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.printfuncs.fit_report" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inpars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelpars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_correl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_correl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_pars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correl_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'list'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.printfuncs.fit_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a report of the fitting results.</p>
 <p>The report contains the best-fit values for the parameters and their
 uncertainties and correlations.</p>
@@ -1042,6 +1039,10 @@ False (default), then the parameters will be listed in the order
 they were added to the Parameters dictionary. If callable, then
 this (one argument) function is used to extract a comparison key
 from each list element.</p></li>
+<li><p><strong>correl_mode</strong> (<em>{'list'</em><em>, </em><em>table'} str</em><em>, </em><em>optional</em>) – Mode for how to show correlations. Can be either ‘list’ (default)
+to show a sorted (if <code class="docutils literal notranslate"><span class="pre">sort_pars</span></code> is True) list of correlation
+values, or ‘table’ to show a complete, formatted table of
+correlations.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1059,17 +1060,13 @@ from each list element.</p></li>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_fitting_withreport.py&gt;</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">sin</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">minimize</span>
 
-<span class="n">p_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">14.0</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">5.46</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.123</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.032</span><span class="p">)</span>
+<span class="n">p_true</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mf">14.0</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mf">5.46</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mf">0.123</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.032</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">vals</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
     <span class="n">per</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span>
@@ -1089,11 +1086,7 @@ from each list element.</p></li>
 <span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.7215</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
 
-<span class="n">fit_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">13.0</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="n">fit_params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
 
 <span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
 
@@ -1118,17 +1111,17 @@ from each list element.</p></li>
     Akaike info crit   = -689.222517
     Bayesian info crit = -669.587497
 [[Variables]]
-    amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
-    period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
-    shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
-    decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
+    amp:     13.9121959 +/- 0.14120321 (1.01%) (init = 13)
+    period:  5.48507038 +/- 0.02666520 (0.49%) (init = 2)
+    shift:   0.16203673 +/- 0.01405662 (8.67%) (init = 0)
+    decay:   0.03264539 +/- 3.8015e-04 (1.16%) (init = 0.02)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(period, shift) = 0.797
-    C(amp, decay)    = 0.582
-    C(amp, shift)    = -0.297
-    C(amp, period)   = -0.243
-    C(shift, decay)  = -0.182
-    C(period, decay) = -0.150
+    C(period, shift) = +0.7974
+    C(amp, decay)    = +0.5816
+    C(amp, shift)    = -0.2966
+    C(amp, period)   = -0.2432
+    C(shift, decay)  = -0.1819
+    C(period, decay) = -0.1496
 </pre></div>
 </div>
 </div>
@@ -1148,8 +1141,8 @@ and standard errors could be done as</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>-------------------------------
 Parameter    Value       Stderr
-amp        13.91219     0.14120
-period      5.48507     0.02666
+amp        13.91220     0.14120
+period      5.48507     0.02667
 shift       0.16204     0.01406
 decay       0.03265     0.00038
 </pre></div>
@@ -1172,7 +1165,7 @@ be used to abort a fit.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>) – Parameters.</p></li>
 <li><p><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Iteration number.</p></li>
-<li><p><strong>resid</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – Residual array.</p></li>
+<li><p><strong>resid</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – Residual array.</p></li>
 <li><p><strong>args</strong> – Positional arguments. Must match <code class="docutils literal notranslate"><span class="pre">args</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
 <li><p><strong>kws</strong> – Keyword arguments. Must match <code class="docutils literal notranslate"><span class="pre">kws</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
 </ul>
@@ -1834,7 +1827,7 @@ the other walkers in the ensemble.’ - from the <cite>emcee</cite> webpage.</p>
 <li><p><strong>burn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Discard this many samples from the start of the sampling regime.</p></li>
 <li><p><strong>thin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Only accept 1 in every <cite>thin</cite> samples.</p></li>
 <li><p><strong>ntemps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>deprecated</em>) – ntemps has no effect.</p></li>
-<li><p><strong>pos</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler, an ndarray of
+<li><p><strong>pos</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler, an ndarray of
 shape <code class="docutils literal notranslate"><span class="pre">(nwalkers,</span> <span class="pre">nvarys)</span></code>. You can also initialise using a
 previous chain of the same <cite>nwalkers</cite> and <code class="docutils literal notranslate"><span class="pre">nvarys</span></code>. Note that
 <code class="docutils literal notranslate"><span class="pre">nvarys</span></code> may be one larger than you expect it to be if your
@@ -1881,7 +1874,7 @@ use this parameter name yourself.
 objective function returns an array. If your objective function
 returns a float, then this parameter is ignored. See Notes for
 more details.</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.23)"><em>numpy.random.RandomState</em></a><em>, </em><em>optional</em>) – If <cite>seed</cite> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, a new <cite>numpy.random.RandomState</cite>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.24)"><em>numpy.random.RandomState</em></a><em>, </em><em>optional</em>) – If <cite>seed</cite> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, a new <cite>numpy.random.RandomState</cite>
 instance is used, seeded with <cite>seed</cite>.
 If <cite>seed</cite> is already a <cite>numpy.random.RandomState</cite> instance,
 then that <cite>numpy.random.RandomState</cite> instance is used. Specify
@@ -2036,10 +2029,13 @@ the solution if starting near the solution:</p>
     t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
     t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
 [[Correlations]] (unreported correlations are &lt; 0.500)
-    C(a2, t2) = 0.988
-    C(a2, t1) = -0.928
-    C(t1, t2) = -0.885
-    C(a1, t1) = -0.609
+    C(a2, t2) = +0.9876
+    C(a2, t1) = -0.9278
+    C(t1, t2) = -0.8852
+    C(a1, t1) = -0.6093
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -2153,12 +2149,12 @@ the difference between the 15.8 and 84.2 percentiles. Printing these values:</p>
     t2:         11.7836194 +/- 0.47719763 (4.05%) (init = 11.82408)
     __lnsigma: -2.32559226 +/- 0.04542650 (1.95%) (init = -2.302585)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a2, t2) = 0.981
-    C(a2, t1) = -0.938
-    C(t1, t2) = -0.894
-    C(a1, t1) = -0.508
-    C(a1, a2) = 0.214
-    C(a1, t2) = 0.178
+    C(a2, t2) = +0.9811
+    C(a2, t1) = -0.9377
+    C(t1, t2) = -0.8943
+    C(a1, t1) = -0.5076
+    C(a1, a2) = +0.2140
+    C(a1, t2) = +0.1777
 </pre></div>
 </div>
 </div>
@@ -2282,8 +2278,8 @@ calculate the 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</sp
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

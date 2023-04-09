@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_parameters_basic.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_parameters_basic.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,13 +21,13 @@
 doc_parameters_basic.py
 =======================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-56
+.. GENERATED FROM PYTHON SOURCE LINES 7-62
 
 
 
 .. image-sg:: /examples/documentation/images/sphx_glr_parameters_basic_001.png
    :alt: parameters basic
-   :srcset: /examples/documentation/images/sphx_glr_parameters_basic_001.png, /examples/documentation/images/sphx_glr_parameters_basic_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_parameters_basic_001.png, /examples/documentation/images/sphx_glr_parameters_basic_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -45,14 +45,14 @@ doc_parameters_basic.py
         Akaike info crit   = -957.236198
         Bayesian info crit = -942.407756
     [[Variables]]
-        amp:    5.03088061 +/- 0.04005820 (0.80%) (init = 10)
-        decay:  0.02495457 +/- 4.5395e-04 (1.82%) (init = 0.1)
-        shift: -0.10264953 +/- 0.01022294 (9.96%) (init = 0)
+        amp:    5.03088059 +/- 0.04005824 (0.80%) (init = 10)
+        decay:  0.02495457 +/- 4.5396e-04 (1.82%) (init = 0.1)
         omega:  2.00026310 +/- 0.00326183 (0.16%) (init = 3)
+        shift: -0.10264952 +/- 0.01022294 (9.96%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(shift, omega) = -0.785
-        C(amp, decay)   = 0.584
-        C(amp, shift)   = -0.118
+        C(omega, shift) = -0.7852
+        C(amp, decay)   = +0.5840
+        C(amp, shift)   = -0.1179
 
 
 
@@ -66,7 +66,7 @@ doc_parameters_basic.py
     # <examples/doc_parameters_basic.py>
     import numpy as np
 
-    from lmfit import Minimizer, Parameters, report_fit
+    from lmfit import Minimizer, Parameters, create_params, report_fit
 
     # create data to be fitted
     x = np.linspace(0, 15, 301)
@@ -93,6 +93,12 @@ doc_parameters_basic.py
     params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2.)
     params.add('omega', value=3.0)
 
+    # ... or use
+    params = create_params(amp=dict(value=10, min=0),
+                           decay=0.1,
+                           omega=3,
+                           shift=dict(value=0, min=-np.pi/2, max=np.pi/2))
+
     # do fit, here with the default leastsq algorithm
     minner = Minimizer(fcn2min, params, fcn_args=(x, data))
     result = minner.minimize()
@@ -116,7 +122,7 @@ doc_parameters_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.135 seconds)
+   **Total running time of the script:** ( 0 minutes  0.140 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_basic.py:
@@ -124,6 +130,8 @@ doc_parameters_basic.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

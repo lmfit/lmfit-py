@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_model_with_nan_policy.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_model_with_nan_policy.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -27,7 +27,7 @@ doc_model_with_nan_policy.py
 
 .. image-sg:: /examples/documentation/images/sphx_glr_model_with_nan_policy_001.png
    :alt: model with nan policy
-   :srcset: /examples/documentation/images/sphx_glr_model_with_nan_policy_001.png, /examples/documentation/images/sphx_glr_model_with_nan_policy_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_model_with_nan_policy_001.png, /examples/documentation/images/sphx_glr_model_with_nan_policy_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -48,13 +48,13 @@ doc_model_with_nan_policy.py
         Bayesian info crit = -323.537918
         R-squared          = 0.98570688
     [[Variables]]
-        amplitude:  8.82064765 +/- 0.11686065 (1.32%) (init = 5)
+        amplitude:  8.82064881 +/- 0.11686114 (1.32%) (init = 5)
         center:     5.65906365 +/- 0.01055590 (0.19%) (init = 6)
-        sigma:      0.69165290 +/- 0.01060625 (1.53%) (init = 1)
-        fwhm:       1.62871808 +/- 0.02497581 (1.53%) == '2.3548200*sigma'
-        height:     5.08771012 +/- 0.06488211 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
+        sigma:      0.69165307 +/- 0.01060640 (1.53%) (init = 1)
+        fwhm:       1.62871849 +/- 0.02497615 (1.53%) == '2.3548200*sigma'
+        height:     5.08770952 +/- 0.06488251 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, sigma) = 0.610
+        C(amplitude, sigma) = +0.6105
 
 
 
@@ -102,7 +102,7 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.144 seconds)
+   **Total running time of the script:** ( 0 minutes  0.152 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:
@@ -110,6 +110,8 @@ doc_model_with_nan_policy.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

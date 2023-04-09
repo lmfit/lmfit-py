@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_fit_with_bounds.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_fit_with_bounds.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -36,7 +36,7 @@ attributes to fitting parameters.
     import matplotlib.pyplot as plt
     from numpy import exp, linspace, pi, random, sign, sin
 
-    from lmfit import Parameters, minimize
+    from lmfit import create_params, minimize
     from lmfit.printfuncs import report_fit
 
 
@@ -48,17 +48,13 @@ attributes to fitting parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-22
 
-Define the 'correct' Parameter values and residual function:
+create the 'true' Parameter values and residual function:
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-40
+.. GENERATED FROM PYTHON SOURCE LINES 22-36
 
 .. code-block:: default
 
-    p_true = Parameters()
-    p_true.add('amp', value=14.0)
-    p_true.add('period', value=5.4321)
-    p_true.add('shift', value=0.12345)
-    p_true.add('decay', value=0.01000)
+    p_true = create_params(amp=14.0, period=5.4321, shift=0.12345, decay=0.010)
 
 
     def residual(pars, x, data=None):
@@ -79,11 +75,11 @@ Define the 'correct' Parameter values and residual function:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-42
+.. GENERATED FROM PYTHON SOURCE LINES 37-38
 
 Generate synthetic data and initialize fitting Parameters:
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-53
+.. GENERATED FROM PYTHON SOURCE LINES 38-48
 
 .. code-block:: default
 
@@ -92,11 +88,10 @@ Generate synthetic data and initialize fitting Parameters:
     noise = random.normal(scale=2.8, size=x.size)
     data = residual(p_true, x) + noise
 
-    fit_params = Parameters()
-    fit_params.add('amp', value=13, max=20, min=0)
-    fit_params.add('period', value=2, max=10)
-    fit_params.add('shift', value=0, max=pi/2., min=-pi/2.)
-    fit_params.add('decay', value=0.02, max=0.1, min=0)
+    fit_params = create_params(amp=dict(value=13, max=20, min=0),
+                               period=dict(value=2, max=10),
+                               shift=dict(value=0, max=pi/2., min=-pi/2.),
+                               decay=dict(value=0.02, max=0.1, min=0))
 
 
 
@@ -105,11 +100,11 @@ Generate synthetic data and initialize fitting Parameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-55
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 Perform the fit and show the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-58
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 .. code-block:: default
 
@@ -123,11 +118,11 @@ Perform the fit and show the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-61
+.. GENERATED FROM PYTHON SOURCE LINES 54-56
 
 .. code-block:: default
 
-    report_fit(out, modelpars=p_true)
+    report_fit(out, modelpars=p_true, correl_mode='table')
 
 
 
@@ -139,7 +134,7 @@ Perform the fit and show the results:
 
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 74
+        # function evals   = 79
         # data points      = 1500
         # variables        = 4
         chi-square         = 11301.3646
@@ -147,30 +142,37 @@ Perform the fit and show the results:
         Akaike info crit   = 3037.18756
         Bayesian info crit = 3058.44044
     [[Variables]]
-        amp:     13.8903938 +/- 0.24412383 (1.76%) (init = 13), model_value = 14
-        period:  5.44026442 +/- 0.01416175 (0.26%) (init = 2), model_value = 5.4321
-        shift:   0.12464470 +/- 0.02414209 (19.37%) (init = 0), model_value = 0.12345
-        decay:   0.00996351 +/- 2.0278e-04 (2.04%) (init = 0.02), model_value = 0.01
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(period, shift) = 0.800
-        C(amp, decay)    = 0.576
+        amp:     13.8904759 +/- 0.24410753 (1.76%) (init = 13), model_value = 14
+        period:  5.44026387 +/- 0.01416106 (0.26%) (init = 2), model_value = 5.4321
+        shift:   0.12464389 +/- 0.02414210 (19.37%) (init = 0), model_value = 0.12345
+        decay:   0.00996363 +/- 2.0275e-04 (2.03%) (init = 0.02), model_value = 0.01
+    [[Correlations]] 
+      +----------+----------+----------+----------+----------+
+      | Variable | amp      | period   | shift    | decay    |
+      +----------+----------+----------+----------+----------+
+      | amp      | +1.0000  | -0.0700  | -0.0870  | +0.5757  |
+      | period   | -0.0700  | +1.0000  | +0.7999  | -0.0404  |
+      | shift    | -0.0870  | +0.7999  | +1.0000  | -0.0502  |
+      | decay    | +0.5757  | -0.0404  | -0.0502  | +1.0000  |
+      +----------+----------+----------+----------+----------+
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-65
+.. GENERATED FROM PYTHON SOURCE LINES 57-61
 
 .. code-block:: default
 
     plt.plot(x, data, 'o', label='data')
     plt.plot(x, fit, label='best fit')
     plt.legend()
+    plt.show()
 
 
 
 .. image-sg:: /examples/images/sphx_glr_example_fit_with_bounds_001.png
    :alt: example fit with bounds
-   :srcset: /examples/images/sphx_glr_example_fit_with_bounds_001.png, /examples/images/sphx_glr_example_fit_with_bounds_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_fit_with_bounds_001.png, /examples/images/sphx_glr_example_fit_with_bounds_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -180,7 +182,7 @@ Perform the fit and show the results:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.158 seconds)
+   **Total running time of the script:** ( 0 minutes  0.159 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_bounds.py:
@@ -188,6 +190,8 @@ Perform the fit and show the results:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

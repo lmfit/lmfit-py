@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
@@ -102,6 +99,7 @@
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -136,7 +134,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-fit-with-inequality-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-example-fit-with-inequality-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="fit-using-inequality-constraint">
@@ -149,7 +147,7 @@ the center of the Gaussian peak.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">report_fit</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">report_fit</span>
 <span class="kn">from</span> <span class="nn">lmfit.lineshapes</span> <span class="kn">import</span> <span class="n">gaussian</span><span class="p">,</span> <span class="n">lorentzian</span>
 
 
@@ -171,14 +169,10 @@ the center of the Gaussian peak.</p>
 First, we add a new fitting  parameter <code class="docutils literal notranslate"><span class="pre">peak_split</span></code>, which can take values
 between 0 and 5. Afterwards, we constrain the value for <code class="docutils literal notranslate"><span class="pre">cen_l</span></code> using the
 expression to be <code class="docutils literal notranslate"><span class="pre">'peak_split+cen_g'</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pfit</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;amp_g&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;amp_l&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;cen_g&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;peak_split&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;cen_l&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;peak_split+cen_g&#39;</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;wid_g&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">pfit</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;wid_l&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;wid_g&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pfit</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp_g</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cen_g</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">wid_g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp_l</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="n">peak_split</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+                     <span class="n">cen_l</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="s1">&#39;peak_split+cen_g&#39;</span><span class="p">),</span>
+                     <span class="n">wid_l</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="s1">&#39;wid_g&#39;</span><span class="p">))</span>
 
 <span class="n">mini</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">pfit</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">))</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
@@ -191,31 +185,32 @@ fitting results:</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    amp_g:       21.2722837 +/- 0.05138760 (0.24%) (init = 10)
-    amp_l:       9.46504191 +/- 0.05445416 (0.58%) (init = 10)
-    cen_g:       6.10496394 +/- 0.00334614 (0.05%) (init = 5)
-    peak_split:  3.52163535 +/- 0.01004618 (0.29%) (init = 2.5)
-    cen_l:       9.62659929 +/- 0.01066173 (0.11%) == &#39;peak_split+cen_g&#39;
-    wid_g:       1.21434950 +/- 0.00327315 (0.27%) (init = 1)
-    wid_l:       1.21434950 +/- 0.00327315 (0.27%) == &#39;wid_g&#39;
+    amp_g:       21.2722842 +/- 0.05138772 (0.24%) (init = 10)
+    cen_g:       6.10496396 +/- 0.00334613 (0.05%) (init = 5)
+    wid_g:       1.21434954 +/- 0.00327317 (0.27%) (init = 1)
+    amp_l:       9.46504173 +/- 0.05445415 (0.58%) (init = 10)
+    peak_split:  3.52163544 +/- 0.01004618 (0.29%) (init = 2.5)
+    cen_l:       9.62659940 +/- 0.01066172 (0.11%) == &#39;peak_split+cen_g&#39;
+    wid_l:       1.21434954 +/- 0.00327317 (0.27%) == &#39;wid_g&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(amp_g, wid_g)      = 0.620
-    C(amp_g, peak_split) = 0.380
-    C(peak_split, wid_g) = 0.344
-    C(amp_g, amp_l)      = -0.295
-    C(amp_l, cen_g)      = -0.276
-    C(amp_g, cen_g)      = 0.194
-    C(amp_l, wid_g)      = -0.165
-    C(cen_g, wid_g)      = 0.155
+    C(amp_g, wid_g)      = +0.6199
+    C(amp_g, peak_split) = +0.3796
+    C(wid_g, peak_split) = +0.3445
+    C(amp_g, amp_l)      = -0.2951
+    C(cen_g, amp_l)      = -0.2761
+    C(amp_g, cen_g)      = +0.1936
+    C(wid_g, amp_l)      = -0.1651
+    C(cen_g, wid_g)      = +0.1546
 </pre></div>
 </div>
 <p>and figure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_fit_with_inequality_001.png" srcset="../_images/sphx_glr_example_fit_with_inequality_001.png, ../_images/sphx_glr_example_fit_with_inequality_001_3_0x.png 3.0x" alt="example fit with inequality" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.173 seconds)</p>
+<img src="../_images/sphx_glr_example_fit_with_inequality_001.png" srcset="../_images/sphx_glr_example_fit_with_inequality_001.png, ../_images/sphx_glr_example_fit_with_inequality_001_3_00x.png 3.00x" alt="example fit with inequality" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.156 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-fit-with-inequality-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0372b8f3b0b615eb40855b665c11d339/example_fit_with_inequality.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_fit_with_inequality.py</span></code></a></p>
@@ -255,11 +250,12 @@ fitting results:</p>
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

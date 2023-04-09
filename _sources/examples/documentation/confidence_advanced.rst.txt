@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_confidence_advanced.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_confidence_advanced.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,7 +21,7 @@
 doc_confidence_advanced.py
 ==========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-75
+.. GENERATED FROM PYTHON SOURCE LINES 7-74
 
 
 
@@ -32,21 +32,21 @@ doc_confidence_advanced.py
 
       .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_001.png
          :alt: confidence advanced
-         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_001.png, /examples/documentation/images/sphx_glr_confidence_advanced_001_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_001.png, /examples/documentation/images/sphx_glr_confidence_advanced_001_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_002.png
          :alt: confidence advanced
-         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_002.png, /examples/documentation/images/sphx_glr_confidence_advanced_002_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_002.png, /examples/documentation/images/sphx_glr_confidence_advanced_002_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_003.png
          :alt: confidence advanced
-         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_003.png, /examples/documentation/images/sphx_glr_confidence_advanced_003_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_003.png, /examples/documentation/images/sphx_glr_confidence_advanced_003_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
 
@@ -55,20 +55,20 @@ doc_confidence_advanced.py
  .. code-block:: none
 
     [[Variables]]
-        a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
-        a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
-        t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
-        t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
+        a1:  2.98622095 +/- 0.14867027 (4.98%) (init = 2.986237)
+        a2: -4.33526363 +/- 0.11527574 (2.66%) (init = -4.335256)
+        t1:  1.30994276 +/- 0.13121215 (10.02%) (init = 1.309932)
+        t2:  11.8240337 +/- 0.46316956 (3.92%) (init = 11.82408)
     [[Correlations]] (unreported correlations are < 0.500)
-        C(a2, t2) = 0.987
-        C(a2, t1) = -0.925
-        C(t1, t2) = -0.881
-        C(a1, t1) = -0.599
+        C(a2, t2) = +0.9871
+        C(a2, t1) = -0.9246
+        C(t1, t2) = -0.8805
+        C(a1, t1) = -0.5988
            95.45%    68.27%    _BEST_    68.27%    95.45%
-     a1:  -0.27285  -0.14165   2.98622  +0.16353  +0.36343
-     a2:  -0.30440  -0.13220  -4.33526  +0.10689  +0.19684
+     a1:  -0.27285  -0.14165   2.98622  +0.16354  +0.36343
+     a2:  -0.30440  -0.13219  -4.33526  +0.10689  +0.19684
      t1:  -0.23392  -0.12494   1.30994  +0.14660  +0.32369
-     t2:  -1.01937  -0.48813  11.82404  +0.46045  +0.90439
+     t2:  -1.01937  -0.48813  11.82403  +0.46045  +0.90439
 
 
 
@@ -89,8 +89,7 @@ doc_confidence_advanced.py
     np.random.seed(0)
     y = 3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1)/10.) + 0.1*np.random.randn(x.size)
 
-    p = lmfit.Parameters()
-    p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3.))
+    p = lmfit.create_params(a1=4, a2=4, t1=3, t2=3)
 
 
     def residual(p):
@@ -151,7 +150,7 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.529 seconds)
+   **Total running time of the script:** ( 0 minutes  3.585 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:
@@ -159,6 +158,8 @@ doc_confidence_advanced.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

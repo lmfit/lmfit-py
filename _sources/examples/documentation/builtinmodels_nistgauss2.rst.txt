@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -27,7 +27,7 @@ doc_builtinmodels_nistgauss2.py
 
 .. image-sg:: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss2_001.png
    :alt: builtinmodels nistgauss2
-   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss2_001.png, /examples/documentation/images/sphx_glr_builtinmodels_nistgauss2_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss2_001.png, /examples/documentation/images/sphx_glr_builtinmodels_nistgauss2_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -48,29 +48,29 @@ doc_builtinmodels_nistgauss2.py
         Bayesian info crit = 446.036318
         R-squared          = 0.99648654
     [[Variables]]
-        exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
-        exp_decay:      90.9508891 +/- 1.10310483 (1.21%) (init = 111.1985)
-        g1_amplitude:   4257.77343 +/- 42.3836426 (1.00%) (init = 3189.648)
-        g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
-        g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
-        g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880230 +/- 0.59217233 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
-        g2_amplitude:   2493.41733 +/- 36.1696912 (1.45%) (init = 2818.337)
-        g2_center:      153.270101 +/- 0.19466905 (0.13%) (init = 150)
-        g2_sigma:       13.8069461 +/- 0.18679534 (1.35%) (init = 15)
-        g2_fwhm:        32.5128728 +/- 0.43986940 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455948 +/- 0.61722329 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+        exp_amplitude:  99.0183265 +/- 0.53748764 (0.54%) (init = 94.53724)
+        exp_decay:      90.9508884 +/- 1.10310753 (1.21%) (init = 111.1985)
+        g1_amplitude:   4257.77384 +/- 42.3839276 (1.00%) (init = 3189.648)
+        g1_center:      107.030957 +/- 0.15006934 (0.14%) (init = 106.5)
+        g1_sigma:       16.6725783 +/- 0.16048220 (0.96%) (init = 14.5)
+        g1_fwhm:        39.2609209 +/- 0.37790669 (0.96%) == '2.3548200*g1_sigma'
+        g1_height:      101.880228 +/- 0.59216965 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
+        g2_amplitude:   2493.41698 +/- 36.1699974 (1.45%) (init = 2818.337)
+        g2_center:      153.270103 +/- 0.19466966 (0.13%) (init = 150)
+        g2_sigma:       13.8069440 +/- 0.18680331 (1.35%) (init = 15)
+        g2_fwhm:        32.5128679 +/- 0.43988818 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455954 +/- 0.61722288 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are < 0.500)
-        C(g1_amplitude, g1_sigma)   = 0.824
-        C(g2_amplitude, g2_sigma)   = 0.815
-        C(exp_amplitude, exp_decay) = -0.695
-        C(g1_sigma, g2_center)      = 0.684
-        C(g1_center, g2_amplitude)  = -0.669
-        C(g1_center, g2_sigma)      = -0.652
-        C(g1_amplitude, g2_center)  = 0.648
-        C(g1_center, g2_center)     = 0.621
-        C(g1_center, g1_sigma)      = 0.507
-        C(exp_decay, g1_amplitude)  = -0.507
+        C(g1_amplitude, g1_sigma)   = +0.8243
+        C(g2_amplitude, g2_sigma)   = +0.8154
+        C(exp_amplitude, exp_decay) = -0.6946
+        C(g1_sigma, g2_center)      = +0.6842
+        C(g1_center, g2_amplitude)  = -0.6689
+        C(g1_center, g2_sigma)      = -0.6521
+        C(g1_amplitude, g2_center)  = +0.6477
+        C(g1_center, g2_center)     = +0.6205
+        C(g1_center, g1_sigma)      = +0.5075
+        C(exp_decay, g1_amplitude)  = -0.5074
 
 
 
@@ -128,7 +128,7 @@ doc_builtinmodels_nistgauss2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.156 seconds)
+   **Total running time of the script:** ( 0 minutes  0.159 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py:
@@ -136,6 +136,8 @@ doc_builtinmodels_nistgauss2.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

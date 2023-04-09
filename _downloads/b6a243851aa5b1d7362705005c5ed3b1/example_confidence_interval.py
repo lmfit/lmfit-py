@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from numpy import argsort, exp, linspace, pi, random, sign, sin, unique
 from scipy.interpolate import interp1d
 
-from lmfit import (Minimizer, Parameters, conf_interval, conf_interval2d,
+from lmfit import (Minimizer, conf_interval, conf_interval2d, create_params,
                    report_ci, report_fit)
 
 ###############################################################################
@@ -26,11 +26,7 @@ def residual(pars, x, data=None):
     return model - data
 
 
-p_true = Parameters()
-p_true.add('amp', value=14.0)
-p_true.add('period', value=5.33)
-p_true.add('shift', value=0.123)
-p_true.add('decay', value=0.010)
+p_true = create_params(amp=14.0, period=5.33, shift=0.123, decay=0.010)
 
 x = linspace(0.0, 250.0, 2500)
 random.seed(2021)
@@ -39,11 +35,7 @@ data = residual(p_true, x) + noise
 
 ###############################################################################
 # Create fitting parameters and set initial values:
-fit_params = Parameters()
-fit_params.add('amp', value=13.0)
-fit_params.add('period', value=2)
-fit_params.add('shift', value=0.0)
-fit_params.add('decay', value=0.02)
+fit_params = create_params(amp=13.0, period=2, shift=0.0, decay=0.020)
 
 ###############################################################################
 # Set-up the minimizer and perform the fit using ``leastsq`` algorithm, and

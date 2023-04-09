@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_detect_outliers.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_detect_outliers.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -124,7 +124,7 @@ and gives the plot and fitting results below:
 
 .. image-sg:: /examples/images/sphx_glr_example_detect_outliers_001.png
    :alt: Model(func)
-   :srcset: /examples/images/sphx_glr_example_detect_outliers_001.png, /examples/images/sphx_glr_example_detect_outliers_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_001.png, /examples/images/sphx_glr_example_detect_outliers_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -158,10 +158,10 @@ and gives the plot and fitting results below:
         Bayesian info crit = 268.612196
         R-squared          = 0.70062332
     [[Variables]]
-        a:  0.08937623 +/- 0.00590168 (6.60%) (init = 0.1)
-        b:  1.51298996 +/- 0.46229147 (30.55%) (init = 2)
+        a:  0.08937623 +/- 0.00590174 (6.60%) (init = 0.1)
+        b:  1.51298991 +/- 0.46229147 (30.55%) (init = 2)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a, b) = 0.601
+        C(a, b) = +0.6008
 
 
 
@@ -217,7 +217,7 @@ Plot the influence on the red. chisqr of each point:
 
 .. image-sg:: /examples/images/sphx_glr_example_detect_outliers_002.png
    :alt: example detect outliers
-   :srcset: /examples/images/sphx_glr_example_detect_outliers_002.png, /examples/images/sphx_glr_example_detect_outliers_002_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_002.png, /examples/images/sphx_glr_example_detect_outliers_002_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -255,7 +255,7 @@ Plot the influence on the parameter value and error of each point:
 
 .. image-sg:: /examples/images/sphx_glr_example_detect_outliers_003.png
    :alt: example detect outliers
-   :srcset: /examples/images/sphx_glr_example_detect_outliers_003.png, /examples/images/sphx_glr_example_detect_outliers_003_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_003.png, /examples/images/sphx_glr_example_detect_outliers_003_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -265,7 +265,7 @@ Plot the influence on the parameter value and error of each point:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.716 seconds)
+   **Total running time of the script:** ( 0 minutes  0.712 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:
@@ -273,6 +273,8 @@ Plot the influence on the parameter value and error of each point:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

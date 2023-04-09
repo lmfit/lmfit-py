@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
@@ -26,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="doc_model_loadmodel.py" href="model_loadmodel.html" />
+    <link rel="next" title="doc_model_loadmodelresult.py" href="model_loadmodelresult.html" />
     <link rel="prev" title="doc_model_savemodelresult.py" href="model_savemodelresult.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -88,7 +85,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="model_loadmodel.html" title="doc_model_loadmodel.py"
+          <a href="model_loadmodelresult.html" title="doc_model_loadmodelresult.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="model_savemodelresult.html" title="doc_model_savemodelresult.py"
@@ -115,8 +112,8 @@
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="model_loadmodel.html"
-                          title="next chapter">doc_model_loadmodel.py</a></p>
+    <p class="topless"><a href="model_loadmodelresult.html"
+                          title="next chapter">doc_model_loadmodelresult.py</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -138,7 +135,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-confidence-basic-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-confidence-basic-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-confidence-basic-py">
@@ -147,7 +144,7 @@ to download the full example code</p>
     a:  0.09943896 +/- 1.9322e-04 (0.19%) (init = 0.1)
     b:  1.98476942 +/- 0.01222678 (0.62%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b) = 0.601
+    C(a, b) = +0.6008
       99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
  a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
  b:  -0.03764  -0.02477  -0.01229   1.98477  +0.01229  +0.02477  +0.03764
@@ -165,8 +162,7 @@ to download the full example code</p>
 <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randn.html#numpy.random.randn" title="numpy.random.randn" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
-<span class="n">pars</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">create_params</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -183,7 +179,7 @@ to download the full example code</p>
 <span class="c1"># &lt;end examples/doc_confidence_basic.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.108 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.118 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-confidence-basic-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/2d55b4a7326bc39f1992bc5e650bf85a/confidence_basic.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">confidence_basic.py</span></code></a></p>
@@ -209,7 +205,7 @@ to download the full example code</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="model_loadmodel.html" title="doc_model_loadmodel.py"
+          <a href="model_loadmodelresult.html" title="doc_model_loadmodelresult.py"
              >next</a> |</li>
         <li class="right" >
           <a href="model_savemodelresult.html" title="doc_model_savemodelresult.py"
@@ -228,8 +224,8 @@ to download the full example code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

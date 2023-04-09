@@ -80,38 +80,40 @@ Fortran. There are several practical challenges to using this approach,
 including:
 
   a) The user has to keep track of the order of the variables, and their
-     meaning -- ``variables[0]`` is the ``amplitude``, ``variables[2]`` is
-     the ``frequency``, and so on, although there is no intrinsic meaning
-     to this order.
+     meaning -- ``variables[0]`` is the ``amplitude``, ``variables[2]`` is the
+     ``frequency``, and so on, although there is no intrinsic meaning to this
+     order.
+  b) If the user wants to fix a particular variable (*not* vary it in the fit),
+     the residual function has to be altered to have fewer variables, and have
+     the corresponding constant value passed in some other way. While
+     reasonable for simple cases, this quickly becomes a significant work for
+     more complex models, and greatly complicates modeling for people not
+     intimately familiar with the details of the fitting code.
+  c) There is no simple, robust way to put bounds on values for the variables,
+     or enforce mathematical relationships between the variables. While some
+     optimization methods in SciPy do provide bounds, they require bounds to
+     be set for all variables with separate arrays that are in the same
+     arbitrary order as variable values. Again, this is acceptable for small
+     or one-off cases, but becomes painful if the fitting model needs to
+     change.
+  d) In some cases, constraints can be placed on Parameter values, but this is
+     a pretty opaque and complex process.
 
-  b) If the user wants to fix a particular variable (*not* vary it in the
-     fit), the residual function has to be altered to have fewer variables,
-     and have the corresponding constant value passed in some other way.
-     While reasonable for simple cases, this quickly becomes a significant
-     work for more complex models, and greatly complicates modeling for
-     people not intimately familiar with the details of the fitting code.
-
-  c) There is no simple, robust way to put bounds on values for the
-     variables, or enforce mathematical relationships between the
-     variables. In fact, the optimization methods that do provide
-     bounds, require bounds to be set for all variables with separate
-     arrays that are in the same arbitrary order as variable values.
-     Again, this is acceptable for small or one-off cases, but becomes
-     painful if the fitting model needs to change.
-
-These shortcomings are due to the use of traditional arrays to hold the
-variables, which matches closely the implementation of the underlying
-Fortran code, but does not fit very well with Python's rich selection of
-objects and data structures. The key concept in lmfit is to define and use
-:class:`Parameter` objects instead of plain floating point numbers as the
-variables for the fit. Using :class:`Parameter` objects (or the closely
-related :class:`Parameters` -- a dictionary of :class:`Parameter` objects),
-allows one to:
+While these shortcomings can be worked around with some work, they are all
+essentially due to the use of arrays or lists to hold the variables.
+This closely matches the implementation of the underlying Fortran code, but
+does not fit very well with Python's rich selection of objects and data
+structures. The key concept in lmfit is to define and use :class:`Parameter`
+objects instead of plain floating point numbers as the variables for the
+fit. Using :class:`Parameter` objects (or the closely related
+:class:`Parameters` -- a dictionary of :class:`Parameter` objects), allows one
+to do the following:
 
    a) forget about the order of variables and refer to Parameters
       by meaningful names.
    b) place bounds on Parameters as attributes, without worrying about
-      preserving the order of arrays for variables and boundaries.
+      preserving the order of arrays for variables and boundaries, and without
+      relying on the solver to support bounds itself.
    c) fix Parameters, without having to rewrite the objective function.
    d) place algebraic constraints on Parameters.
 
@@ -144,43 +146,75 @@ for the decaying sine wave as:
 
     out = minimize(residual, params, args=(x, data, uncertainty))
 
-At first look, we simply replaced a list of values with a dictionary,
-accessed by name -- not a huge improvement. But each of the named
-:class:`Parameter` in the :class:`Parameters` object holds additional
-attributes to modify the value during the fit. For example, Parameters can
-be fixed or bounded. This can be done during definition:
+
+At first look, we simply replaced a list of values with a dictionary, so that
+we can access Parameters by name. Just by itself, this is better as it allows
+separation of the objective function from the code using it.
+
+Note that creation of Parameters here could also be done as:
+
+.. versionadded:: 1.2.0
 
 .. jupyter-execute::
 
-    params = Parameters()
-    params.add('amp', value=10, vary=False)
-    params.add('decay', value=0.007, min=0.0)
-    params.add('phase', value=0.2)
-    params.add('frequency', value=3.0, max=10)
+    from lmfit import create_params
 
-where ``vary=False`` will prevent the value from changing in the fit, and
-``min=0.0`` will set a lower bound on that parameter's value. It can also
-be done later by setting the corresponding attributes after they have been
-created:
+    params = create_params(amp=10, decay=0.007, phase=0.2, frequency=3.0)
+
+
+where keyword/value pairs set Parameter names and their initial values.
+
+Either when using :func:`create_param` or :class:`Parameters`, the resulting
+``params`` object is an instance of :class:`Parameters`, which acts like a
+dictionary, with keys being the Parameter name and values being individual
+:class:`Parameter` objects. These :class:`Parameter` objects hold the value
+and several other attributes that control how a Parameter acts. For example,
+Parameters can be fixed or bounded; setting attributes to control this
+behavior can be done during definition, as with:
+
+
+.. jupyter-execute::
+
+   params = Parameters()
+   params.add('amp', value=10, vary=False)
+   params.add('decay', value=0.007, min=0.0)
+   params.add('phase', value=0.2)
+   params.add('frequency', value=3.0, max=10)
+
+
+Here ``vary=False`` will prevent the value from changing in the fit, and
+``min=0.0`` will set a lower bound on that parameter's value. The same thing
+can be accomplished by providing a dictionary of attribute values to
+:func:`create_params`:
+
+.. versionadded:: 1.2.0
+
+.. jupyter-execute::
+
+   params = create_params(amp={'value': 10, 'vary': False},
+                          decay={'value': 0.007, 'min': 0},
+                          phase=0.2,
+                          frequency={'value': 3.0, 'max':10})
+
+Parameter attributes can also be modified after they have been created:
 
 .. jupyter-execute::
 
     params['amp'].vary = False
     params['decay'].min = 0.10
 
-Importantly, our objective function remains unchanged. This means the
-objective function can simply express the parametrized phenomenon to be
-modeled, and is separate from the choice of parameters to be varied in the
-fit.
+Importantly, our objective function remains unchanged. This means the objective
+function can simply express the parametrized phenomenon to be calculated,
+accessing Parameter values by name and separating the choice of parameters to
+be varied in the fit.
 
 The ``params`` object can be copied and modified to make many user-level
-changes to the model and fitting process. Of course, most of the
-information about how your data is modeled goes into the objective
-function, but the approach here allows some external control; that is,
-control by the **user** performing the fit, instead of by the author of the
-objective function.
+changes to the model and fitting process. Of course, most of the information
+about how your data is modeled goes into the objective function, but the
+approach here allows some external control; that is, control by the **user**
+performing the fit, instead of by the author of the objective function.
 
-Finally, in addition to the :class:`Parameters` approach to fitting data,
-lmfit allows switching optimization methods without changing the objective
-function, provides tools for generating fitting reports, and provides a
-better determination of Parameters confidence levels.
+Finally, in addition to the :class:`Parameters` approach to fitting data, lmfit
+allows switching optimization methods without changing the objective function,
+provides tools for generating fitting reports, and provides a better
+determination of Parameters confidence levels.

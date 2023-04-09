@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_model_uncertainty2.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_model_uncertainty2.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,13 +21,13 @@
 doc_model_uncertainty2.py
 =========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-91
+.. GENERATED FROM PYTHON SOURCE LINES 7-86
 
 
 
 .. image-sg:: /examples/documentation/images/sphx_glr_model_uncertainty2_001.png
    :alt: data, initial fit, and best-fit, data, best-fit, and uncertainty band, model components with uncertainty bands, uncertainties for model components
-   :srcset: /examples/documentation/images/sphx_glr_model_uncertainty2_001.png, /examples/documentation/images/sphx_glr_model_uncertainty2_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_model_uncertainty2_001.png, /examples/documentation/images/sphx_glr_model_uncertainty2_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -48,29 +48,29 @@ doc_model_uncertainty2.py
         Bayesian info crit = 446.036318
         R-squared          = 0.99648654
     [[Variables]]
-        g1_amplitude:   4257.77358 +/- 42.3835174 (1.00%) (init = 3000)
-        g1_center:      107.030955 +/- 0.15006808 (0.14%) (init = 100)
-        g1_sigma:       16.6725771 +/- 0.16048230 (0.96%) (init = 10)
-        g2_amplitude:   2493.41750 +/- 36.1693177 (1.45%) (init = 3000)
-        g2_center:      153.270102 +/- 0.19466663 (0.13%) (init = 150)
-        g2_sigma:       13.8069474 +/- 0.18679302 (1.35%) (init = 10)
-        bkg_amplitude:  99.0183284 +/- 0.53748781 (0.54%) (init = 100)
-        bkg_decay:      90.9508831 +/- 1.10310500 (1.21%) (init = 80)
-        g1_fwhm:        39.2609179 +/- 0.37790692 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880230 +/- 0.59217389 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
-        g2_fwhm:        32.5128758 +/- 0.43986394 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455929 +/- 0.61721943 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+        g1_amplitude:   4257.77399 +/- 42.3838008 (1.00%) (init = 3000)
+        g1_center:      107.030957 +/- 0.15006868 (0.14%) (init = 100)
+        g1_sigma:       16.6725789 +/- 0.16048222 (0.96%) (init = 10)
+        g2_amplitude:   2493.41715 +/- 36.1696228 (1.45%) (init = 3000)
+        g2_center:      153.270104 +/- 0.19466723 (0.13%) (init = 150)
+        g2_sigma:       13.8069453 +/- 0.18680099 (1.35%) (init = 10)
+        bkg_amplitude:  99.0183280 +/- 0.53748639 (0.54%) (init = 100)
+        bkg_decay:      90.9508824 +/- 1.10310769 (1.21%) (init = 80)
+        g1_fwhm:        39.2609222 +/- 0.37790675 (0.96%) == '2.3548200*g1_sigma'
+        g1_height:      101.880228 +/- 0.59217122 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
+        g2_fwhm:        32.5128710 +/- 0.43988270 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455936 +/- 0.61721901 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are < 0.500)
-        C(g1_amplitude, g1_sigma)   = 0.824
-        C(g2_amplitude, g2_sigma)   = 0.815
-        C(bkg_amplitude, bkg_decay) = -0.695
-        C(g1_sigma, g2_center)      = 0.684
-        C(g1_center, g2_amplitude)  = -0.669
-        C(g1_center, g2_sigma)      = -0.652
-        C(g1_amplitude, g2_center)  = 0.648
-        C(g1_center, g2_center)     = 0.621
-        C(g1_center, g1_sigma)      = 0.507
-        C(g1_amplitude, bkg_decay)  = -0.507
+        C(g1_amplitude, g1_sigma)   = +0.8243
+        C(g2_amplitude, g2_sigma)   = +0.8154
+        C(bkg_amplitude, bkg_decay) = -0.6946
+        C(g1_sigma, g2_center)      = +0.6842
+        C(g1_center, g2_amplitude)  = -0.6689
+        C(g1_center, g2_sigma)      = -0.6520
+        C(g1_amplitude, g2_center)  = +0.6477
+        C(g1_center, g2_center)     = +0.6205
+        C(g1_center, g1_sigma)      = +0.5075
+        C(g1_amplitude, bkg_decay)  = -0.5074
 
 
 
@@ -104,13 +104,10 @@ doc_model_uncertainty2.py
                                g2_sigma=10)
 
     result = model.fit(y, params, x=x)
-
     print(result.fit_report(min_correl=0.5))
-
 
     comps = result.eval_components(x=x)
     dely = result.eval_uncertainty(sigma=3)
-
 
     fig, axes = plt.subplots(2, 2, figsize=(12.8, 9.6))
 
@@ -126,7 +123,6 @@ doc_model_uncertainty2.py
                             color="#8A8A8A", label=r'3-$\sigma$ band')
     axes[0][1].set_title('data, best-fit, and uncertainty band')
     axes[0][1].legend()
-
 
     axes[1][0].plot(x, result.best_fit, '-', label=r'best fit, 3-$\sigma$ band')
     axes[1][0].fill_between(x,
@@ -153,7 +149,7 @@ doc_model_uncertainty2.py
                             color="#8A8A8A")
     axes[1][0].set_title('model components with uncertainty bands')
     axes[1][0].legend()
-    #
+
     axes[1][1].plot(x, result.best_fit, '-', label='best fit')
     axes[1][1].plot(x, 10*result.dely, label=r'3-$\sigma$ total (x10)')
     axes[1][1].plot(x, 10*result.dely_comps['bkg_'], label=r'3-$\sigma$ background (x10)')
@@ -163,13 +159,12 @@ doc_model_uncertainty2.py
     axes[1][1].legend()
 
     plt.show()
-
     # <end examples/doc_model_uncertainty2.py>
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.640 seconds)
+   **Total running time of the script:** ( 0 minutes  0.679 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty2.py:
@@ -177,6 +172,8 @@ doc_model_uncertainty2.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

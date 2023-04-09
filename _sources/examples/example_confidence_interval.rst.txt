@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_confidence_interval.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_confidence_interval.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -29,7 +29,7 @@ Calculate Confidence Intervals
     from numpy import argsort, exp, linspace, pi, random, sign, sin, unique
     from scipy.interpolate import interp1d
 
-    from lmfit import (Minimizer, Parameters, conf_interval, conf_interval2d,
+    from lmfit import (Minimizer, conf_interval, conf_interval2d, create_params,
                        report_ci, report_fit)
 
 
@@ -44,7 +44,7 @@ Calculate Confidence Intervals
 Define the residual function, specify "true" parameter values, and generate
 a synthetic data set with some noise:
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-40
+.. GENERATED FROM PYTHON SOURCE LINES 16-36
 
 .. code-block:: default
 
@@ -61,11 +61,7 @@ a synthetic data set with some noise:
         return model - data
 
 
-    p_true = Parameters()
-    p_true.add('amp', value=14.0)
-    p_true.add('period', value=5.33)
-    p_true.add('shift', value=0.123)
-    p_true.add('decay', value=0.010)
+    p_true = create_params(amp=14.0, period=5.33, shift=0.123, decay=0.010)
 
     x = linspace(0.0, 250.0, 2500)
     random.seed(2021)
@@ -79,19 +75,15 @@ a synthetic data set with some noise:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-42
+.. GENERATED FROM PYTHON SOURCE LINES 37-38
 
 Create fitting parameters and set initial values:
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-48
+.. GENERATED FROM PYTHON SOURCE LINES 38-40
 
 .. code-block:: default
 
-    fit_params = Parameters()
-    fit_params.add('amp', value=13.0)
-    fit_params.add('period', value=2)
-    fit_params.add('shift', value=0.0)
-    fit_params.add('decay', value=0.02)
+    fit_params = create_params(amp=13.0, period=2, shift=0.0, decay=0.020)
 
 
 
@@ -100,12 +92,12 @@ Create fitting parameters and set initial values:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-51
+.. GENERATED FROM PYTHON SOURCE LINES 41-43
 
 Set-up the minimizer and perform the fit using ``leastsq`` algorithm, and
 show the report:
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-57
+.. GENERATED FROM PYTHON SOURCE LINES 43-49
 
 .. code-block:: default
 
@@ -133,22 +125,22 @@ show the report:
         Akaike info crit   = -1670.96059
         Bayesian info crit = -1647.66441
     [[Variables]]
-        amp:     14.0708270 +/- 0.04936867 (0.35%) (init = 13)
-        period:  5.32980958 +/- 0.00273140 (0.05%) (init = 2)
+        amp:     14.0708269 +/- 0.04936878 (0.35%) (init = 13)
+        period:  5.32980958 +/- 0.00273143 (0.05%) (init = 2)
         shift:   0.12156317 +/- 0.00482312 (3.97%) (init = 0)
         decay:   0.01002489 +/- 4.0726e-05 (0.41%) (init = 0.02)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(period, shift) = 0.800
-        C(amp, decay)    = 0.576
+        C(period, shift) = +0.8002
+        C(amp, decay)    = +0.5758
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-59
+.. GENERATED FROM PYTHON SOURCE LINES 50-51
 
 Calculate the confidence intervals for parameters and display the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-104
+.. GENERATED FROM PYTHON SOURCE LINES 51-96
 
 .. code-block:: default
 
@@ -202,7 +194,7 @@ Calculate the confidence intervals for parameters and display the results:
 
 .. image-sg:: /examples/images/sphx_glr_example_confidence_interval_001.png
    :alt: example confidence interval
-   :srcset: /examples/images/sphx_glr_example_confidence_interval_001.png, /examples/images/sphx_glr_example_confidence_interval_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_confidence_interval_001.png, /examples/images/sphx_glr_example_confidence_interval_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -219,12 +211,12 @@ Calculate the confidence intervals for parameters and display the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-107
+.. GENERATED FROM PYTHON SOURCE LINES 97-99
 
 It is also possible to calculate the confidence regions for two fixed
 parameters using the function ``conf_interval2d``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-151
+.. GENERATED FROM PYTHON SOURCE LINES 99-143
 
 .. code-block:: default
 
@@ -277,7 +269,7 @@ parameters using the function ``conf_interval2d``:
 
 .. image-sg:: /examples/images/sphx_glr_example_confidence_interval_002.png
    :alt: example confidence interval
-   :srcset: /examples/images/sphx_glr_example_confidence_interval_002.png, /examples/images/sphx_glr_example_confidence_interval_002_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_confidence_interval_002.png, /examples/images/sphx_glr_example_confidence_interval_002_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -287,7 +279,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  9.483 seconds)
+   **Total running time of the script:** ( 0 minutes  9.750 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:
@@ -295,6 +287,8 @@ parameters using the function ``conf_interval2d``:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

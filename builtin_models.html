@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -1784,13 +1781,13 @@ built-in default values. We will simply use:</p>
     Bayesian info crit = -1021.79248
     R-squared          = 0.99045513
 [[Variables]]
-    amplitude:  30.3135620 +/- 0.15712686 (0.52%) (init = 43.62238)
-    center:     9.24277047 +/- 0.00737496 (0.08%) (init = 9.25)
-    sigma:      1.23218359 +/- 0.00737496 (0.60%) (init = 1.35)
-    fwhm:       2.90157056 +/- 0.01736670 (0.60%) == &#39;2.3548200*sigma&#39;
-    height:     9.81457817 +/- 0.05087283 (0.52%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
+    amplitude:  30.3135789 +/- 0.15712752 (0.52%) (init = 43.62238)
+    center:     9.24277046 +/- 0.00737497 (0.08%) (init = 9.25)
+    sigma:      1.23218496 +/- 0.00737506 (0.60%) (init = 1.35)
+    fwhm:       2.90157379 +/- 0.01736695 (0.60%) == &#39;2.3548200*sigma&#39;
+    height:     9.81457271 +/- 0.05087308 (0.52%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
-    C(amplitude, sigma) = 0.577
+    C(amplitude, sigma) = +0.5774
 </pre></div>
 </div>
 </div>
@@ -1813,6 +1810,7 @@ better? To do this, we simply replace <code class="docutils literal notranslate"
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
+
 <span class="n">mod</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1833,17 +1831,17 @@ we try gives results that are worse by comparing the fit statistics:</p>
     # variables        = 3
     chi-square         = 53.7535387
     reduced chi-square = 0.13505914
-    Akaike info crit   = -799.830323
+    Akaike info crit   = -799.830322
     Bayesian info crit = -787.848438
     R-squared          = 0.98289441
 [[Variables]]
-    amplitude:  38.9726601 +/- 0.31386655 (0.81%) (init = 54.52798)
-    center:     9.24438938 +/- 0.00927646 (0.10%) (init = 9.25)
-    sigma:      1.15483308 +/- 0.01315692 (1.14%) (init = 1.35)
-    fwhm:       2.30966615 +/- 0.02631383 (1.14%) == &#39;2.0000000*sigma&#39;
-    height:     10.7421443 +/- 0.08634226 (0.80%) == &#39;0.3183099*amplitude/max(1e-15, sigma)&#39;
+    amplitude:  38.9726380 +/- 0.31386754 (0.81%) (init = 54.52798)
+    center:     9.24439393 +/- 0.00927645 (0.10%) (init = 9.25)
+    sigma:      1.15483177 +/- 0.01315708 (1.14%) (init = 1.35)
+    fwhm:       2.30966354 +/- 0.02631416 (1.14%) == &#39;2.0000000*sigma&#39;
+    height:     10.7421504 +/- 0.08634317 (0.80%) == &#39;0.3183099*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
-    C(amplitude, sigma) = 0.709
+    C(amplitude, sigma) = +0.7087
 </pre></div>
 </div>
 </div>
@@ -1858,6 +1856,7 @@ A Voigt model does a better job. Using <a class="reference internal" href="#lmfi
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
+
 <span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1881,14 +1880,14 @@ A Voigt model does a better job. Using <a class="reference internal" href="#lmfi
     Bayesian info crit = -1312.02427
     R-squared          = 0.99537150
 [[Variables]]
-    amplitude:  35.7553874 +/- 0.13861508 (0.39%) (init = 65.43358)
-    center:     9.24411135 +/- 0.00505496 (0.05%) (init = 9.25)
-    sigma:      0.73015516 +/- 0.00368468 (0.50%) (init = 0.8775)
-    gamma:      0.73015516 +/- 0.00368468 (0.50%) == &#39;sigma&#39;
-    fwhm:       2.62950094 +/- 0.00806917 (0.31%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
-    height:     10.2204046 +/- 0.03009459 (0.29%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real&#39;
+    amplitude:  35.7553799 +/- 0.13861559 (0.39%) (init = 65.43358)
+    center:     9.24411179 +/- 0.00505496 (0.05%) (init = 9.25)
+    sigma:      0.73015485 +/- 0.00368473 (0.50%) (init = 0.8775)
+    gamma:      0.73015485 +/- 0.00368473 (0.50%) == &#39;sigma&#39;
+    fwhm:       2.62949983 +/- 0.01326979 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
+    height:     10.2204068 +/- 0.03959933 (0.39%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
-    C(amplitude, sigma) = 0.651
+    C(amplitude, sigma) = +0.6513
 </pre></div>
 </div>
 </div>
@@ -1929,16 +1928,16 @@ give it a starting value using something like:</p>
     Bayesian info crit = -1420.60017
     R-squared          = 0.99652177
 [[Variables]]
-    amplitude:  34.1914718 +/- 0.17946862 (0.52%) (init = 65.43358)
+    amplitude:  34.1914716 +/- 0.17946974 (0.52%) (init = 65.43358)
     center:     9.24374846 +/- 0.00441904 (0.05%) (init = 9.25)
-    sigma:      0.89518950 +/- 0.01415448 (1.58%) (init = 0.8775)
-    gamma:      0.52540158 +/- 0.01857959 (3.54%) (init = 0.7)
-    fwhm:       2.72573677 +/- 0.01363974 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
-    height:     10.0872197 +/- 0.03482113 (0.35%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real&#39;
+    sigma:      0.89518951 +/- 0.01415479 (1.58%) (init = 0.8775)
+    gamma:      0.52540156 +/- 0.01857994 (3.54%) (init = 0.7)
+    fwhm:       2.72573678 +/- 0.01363994 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
+    height:     10.0872197 +/- 0.03482126 (0.35%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
-    C(sigma, gamma)     = -0.928
-    C(amplitude, gamma) = 0.821
-    C(amplitude, sigma) = -0.651
+    C(sigma, gamma)     = -0.9285
+    C(amplitude, gamma) = +0.8210
+    C(amplitude, sigma) = -0.6512
 </pre></div>
 </div>
 </div>
@@ -2028,24 +2027,24 @@ results, which gives:</p>
     chi-square         = 593.709621
     reduced chi-square = 3.02913072
     Akaike info crit   = 227.700173
-    Bayesian info crit = 244.216698
+    Bayesian info crit = 244.216697
     R-squared          = 0.99897798
 [[Variables]]
-    line_slope:      1.87162034 +/- 0.09318576 (4.98%) (init = 0)
-    line_intercept:  12.0964558 +/- 0.27606016 (2.28%) (init = 11.58574)
-    step_amplitude:  112.858606 +/- 0.65391554 (0.58%) (init = 134.7378)
-    step_center:     3.13494789 +/- 0.00516602 (0.16%) (init = 2.5)
-    step_sigma:      0.67393529 +/- 0.01091154 (1.62%) (init = 1.428571)
+    line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
+    line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
+    step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
+    step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
+    step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(line_slope, step_amplitude)     = -0.879
-    C(step_amplitude, step_sigma)     = 0.564
-    C(line_slope, step_sigma)         = -0.457
-    C(line_intercept, step_center)    = 0.427
-    C(line_slope, line_intercept)     = -0.309
-    C(line_slope, step_center)        = -0.234
-    C(line_intercept, step_sigma)     = -0.137
-    C(line_intercept, step_amplitude) = -0.117
-    C(step_amplitude, step_center)    = 0.109
+    C(line_slope, step_amplitude)     = -0.8791
+    C(step_amplitude, step_sigma)     = +0.5643
+    C(line_slope, step_sigma)         = -0.4569
+    C(line_intercept, step_center)    = +0.4269
+    C(line_slope, line_intercept)     = -0.3093
+    C(line_slope, step_center)        = -0.2338
+    C(line_intercept, step_sigma)     = -0.1372
+    C(line_intercept, step_amplitude) = -0.1173
+    C(step_amplitude, step_center)    = +0.1095
 </pre></div>
 </div>
 </div>
@@ -2081,25 +2080,21 @@ involving a decaying exponential and two Gaussians.</p>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">exp_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 
 <span class="n">gauss1</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g1_&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss1</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
-
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss1</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">125</span><span class="p">),</span>
+                               <span class="n">sigma</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                               <span class="n">amplitude</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="n">gauss2</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g2_&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss2</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
-
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">175</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss2</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">175</span><span class="p">),</span>
+                               <span class="n">sigma</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                               <span class="n">amplitude</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">gauss1</span> <span class="o">+</span> <span class="n">gauss2</span> <span class="o">+</span> <span class="n">exp_mod</span>
 
 <span class="n">init</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">correl_mode</span><span class="o">=</span><span class="s1">&#39;table&#39;</span><span class="p">))</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -2146,44 +2141,44 @@ parameter values.</p>
     Bayesian info crit = 446.036318
     R-squared          = 0.99648654
 [[Variables]]
-    exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
-    exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
-    g1_amplitude:   4257.77319 +/- 42.3833638 (1.00%) (init = 2000)
-    g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
-    g1_sigma:       16.6725753 +/- 0.16048160 (0.96%) (init = 15)
-    g1_fwhm:        39.2609139 +/- 0.37790529 (0.96%) == &#39;2.3548200*g1_sigma&#39;
-    g1_height:      101.880231 +/- 0.59217098 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
-    g2_amplitude:   2493.41770 +/- 36.1694738 (1.45%) (init = 2000)
-    g2_center:      153.270101 +/- 0.19466742 (0.13%) (init = 155)
-    g2_sigma:       13.8069484 +/- 0.18679414 (1.35%) (init = 15)
-    g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455934 +/- 0.61722094 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    exp_amplitude:  99.0183278 +/- 0.53748593 (0.54%) (init = 162.2102)
+    exp_decay:      90.9508853 +/- 1.10310778 (1.21%) (init = 93.24905)
+    g1_amplitude:   4257.77360 +/- 42.3836478 (1.00%) (init = 2000)
+    g1_center:      107.030956 +/- 0.15006851 (0.14%) (init = 105)
+    g1_sigma:       16.6725772 +/- 0.16048381 (0.96%) (init = 15)
+    g1_fwhm:        39.2609181 +/- 0.37791049 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880230 +/- 0.59217173 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_amplitude:   2493.41735 +/- 36.1697789 (1.45%) (init = 2000)
+    g2_center:      153.270102 +/- 0.19466802 (0.13%) (init = 155)
+    g2_sigma:       13.8069464 +/- 0.18679695 (1.35%) (init = 15)
+    g2_fwhm:        32.5128735 +/- 0.43987320 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455941 +/- 0.61722243 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(g1_amplitude, g1_sigma)      = 0.824
-    C(g2_amplitude, g2_sigma)      = 0.815
-    C(exp_amplitude, exp_decay)    = -0.695
-    C(g1_sigma, g2_center)         = 0.684
-    C(g1_center, g2_amplitude)     = -0.669
-    C(g1_center, g2_sigma)         = -0.652
-    C(g1_amplitude, g2_center)     = 0.648
-    C(g1_center, g2_center)        = 0.621
-    C(g1_center, g1_sigma)         = 0.507
-    C(exp_decay, g1_amplitude)     = -0.507
-    C(g1_sigma, g2_amplitude)      = -0.491
-    C(g2_center, g2_sigma)         = -0.489
-    C(g1_sigma, g2_sigma)          = -0.483
-    C(g2_amplitude, g2_center)     = -0.476
-    C(exp_decay, g2_amplitude)     = -0.427
-    C(g1_amplitude, g1_center)     = 0.418
-    C(g1_amplitude, g2_sigma)      = -0.401
-    C(g1_amplitude, g2_amplitude)  = -0.307
-    C(exp_amplitude, g2_amplitude) = 0.282
-    C(exp_decay, g1_sigma)         = -0.252
-    C(exp_decay, g2_sigma)         = -0.233
-    C(exp_amplitude, g2_sigma)     = 0.171
-    C(exp_decay, g2_center)        = -0.151
-    C(exp_amplitude, g1_amplitude) = 0.148
-    C(exp_decay, g1_center)        = 0.105
+    C(g1_amplitude, g1_sigma)      = +0.8243
+    C(g2_amplitude, g2_sigma)      = +0.8154
+    C(exp_amplitude, exp_decay)    = -0.6946
+    C(g1_sigma, g2_center)         = +0.6842
+    C(g1_center, g2_amplitude)     = -0.6689
+    C(g1_center, g2_sigma)         = -0.6520
+    C(g1_amplitude, g2_center)     = +0.6477
+    C(g1_center, g2_center)        = +0.6205
+    C(g1_center, g1_sigma)         = +0.5075
+    C(exp_decay, g1_amplitude)     = -0.5074
+    C(g1_sigma, g2_amplitude)      = -0.4915
+    C(g2_center, g2_sigma)         = -0.4889
+    C(g1_sigma, g2_sigma)          = -0.4826
+    C(g2_amplitude, g2_center)     = -0.4763
+    C(exp_decay, g2_amplitude)     = -0.4270
+    C(g1_amplitude, g1_center)     = +0.4183
+    C(g1_amplitude, g2_sigma)      = -0.4010
+    C(g1_amplitude, g2_amplitude)  = -0.3071
+    C(exp_amplitude, g2_amplitude) = +0.2821
+    C(exp_decay, g1_sigma)         = -0.2520
+    C(exp_decay, g2_sigma)         = -0.2329
+    C(exp_amplitude, g2_sigma)     = +0.1714
+    C(exp_decay, g2_center)        = -0.1514
+    C(exp_amplitude, g1_amplitude) = +0.1478
+    C(exp_decay, g1_center)        = +0.1055
 </pre></div>
 </div>
 </div>
@@ -2205,10 +2200,11 @@ full data range. We can simplify the initial parameter values by using
 this, and by defining an <code class="xref py py-func docutils literal notranslate"><span class="pre">index_of()</span></code> function to limit the data range.
 That is, with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">index_of</span><span class="p">(</span><span class="n">arrval</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return index of array *at or below* value.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return index of array *at or below* value.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">arrval</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">arrval</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
 
 <span class="n">ix1</span> <span class="o">=</span> <span class="n">index_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
 <span class="n">ix2</span> <span class="o">=</span> <span class="n">index_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">135</span><span class="p">)</span>
@@ -2246,44 +2242,44 @@ and without any bounds on parameters at all:</p>
     Bayesian info crit = 446.036318
     R-squared          = 0.99648654
 [[Variables]]
-    exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
-    exp_decay:      90.9508891 +/- 1.10310483 (1.21%) (init = 111.1985)
-    g1_amplitude:   4257.77343 +/- 42.3836426 (1.00%) (init = 3189.648)
-    g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
-    g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
-    g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == &#39;2.3548200*g1_sigma&#39;
-    g1_height:      101.880230 +/- 0.59217233 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
-    g2_amplitude:   2493.41733 +/- 36.1696912 (1.45%) (init = 2818.337)
-    g2_center:      153.270101 +/- 0.19466905 (0.13%) (init = 150)
-    g2_sigma:       13.8069461 +/- 0.18679534 (1.35%) (init = 15)
-    g2_fwhm:        32.5128728 +/- 0.43986940 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455948 +/- 0.61722329 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    exp_amplitude:  99.0183265 +/- 0.53748764 (0.54%) (init = 94.53724)
+    exp_decay:      90.9508884 +/- 1.10310753 (1.21%) (init = 111.1985)
+    g1_amplitude:   4257.77384 +/- 42.3839276 (1.00%) (init = 3189.648)
+    g1_center:      107.030957 +/- 0.15006934 (0.14%) (init = 106.5)
+    g1_sigma:       16.6725783 +/- 0.16048220 (0.96%) (init = 14.5)
+    g1_fwhm:        39.2609209 +/- 0.37790669 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880228 +/- 0.59216965 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_amplitude:   2493.41698 +/- 36.1699974 (1.45%) (init = 2818.337)
+    g2_center:      153.270103 +/- 0.19466966 (0.13%) (init = 150)
+    g2_sigma:       13.8069440 +/- 0.18680331 (1.35%) (init = 15)
+    g2_fwhm:        32.5128679 +/- 0.43988818 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455954 +/- 0.61722288 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(g1_amplitude, g1_sigma)      = 0.824
-    C(g2_amplitude, g2_sigma)      = 0.815
-    C(exp_amplitude, exp_decay)    = -0.695
-    C(g1_sigma, g2_center)         = 0.684
-    C(g1_center, g2_amplitude)     = -0.669
-    C(g1_center, g2_sigma)         = -0.652
-    C(g1_amplitude, g2_center)     = 0.648
-    C(g1_center, g2_center)        = 0.621
-    C(g1_center, g1_sigma)         = 0.507
-    C(exp_decay, g1_amplitude)     = -0.507
-    C(g1_sigma, g2_amplitude)      = -0.491
-    C(g2_center, g2_sigma)         = -0.489
-    C(g1_sigma, g2_sigma)          = -0.483
-    C(g2_amplitude, g2_center)     = -0.476
-    C(exp_decay, g2_amplitude)     = -0.427
-    C(g1_amplitude, g1_center)     = 0.418
-    C(g1_amplitude, g2_sigma)      = -0.401
-    C(g1_amplitude, g2_amplitude)  = -0.307
-    C(exp_amplitude, g2_amplitude) = 0.282
-    C(exp_decay, g1_sigma)         = -0.252
-    C(exp_decay, g2_sigma)         = -0.233
-    C(exp_amplitude, g2_sigma)     = 0.171
-    C(exp_decay, g2_center)        = -0.151
-    C(exp_amplitude, g1_amplitude) = 0.148
-    C(exp_decay, g1_center)        = 0.105
+    C(g1_amplitude, g1_sigma)      = +0.8243
+    C(g2_amplitude, g2_sigma)      = +0.8154
+    C(exp_amplitude, exp_decay)    = -0.6946
+    C(g1_sigma, g2_center)         = +0.6842
+    C(g1_center, g2_amplitude)     = -0.6689
+    C(g1_center, g2_sigma)         = -0.6521
+    C(g1_amplitude, g2_center)     = +0.6477
+    C(g1_center, g2_center)        = +0.6205
+    C(g1_center, g1_sigma)         = +0.5075
+    C(exp_decay, g1_amplitude)     = -0.5074
+    C(g1_sigma, g2_amplitude)      = -0.4914
+    C(g2_center, g2_sigma)         = -0.4890
+    C(g1_sigma, g2_sigma)          = -0.4826
+    C(g2_amplitude, g2_center)     = -0.4763
+    C(exp_decay, g2_amplitude)     = -0.4270
+    C(g1_amplitude, g1_center)     = +0.4183
+    C(g1_amplitude, g2_sigma)      = -0.4011
+    C(g1_amplitude, g2_amplitude)  = -0.3071
+    C(exp_amplitude, g2_amplitude) = +0.2821
+    C(exp_decay, g1_sigma)         = -0.2520
+    C(exp_decay, g2_sigma)         = -0.2329
+    C(exp_amplitude, g2_sigma)     = +0.1714
+    C(exp_decay, g2_center)        = -0.1514
+    C(exp_amplitude, g1_amplitude) = +0.1478
+    C(exp_decay, g1_center)        = +0.1055
 </pre></div>
 </div>
 </div>
@@ -2414,46 +2410,46 @@ for this is to be generous in the bounds, not overly restrictive.</p>
     Bayesian info crit = -1041.58425
     R-squared          = 0.94690612
 [[Variables]]
-    peak_amplitude:  12.2231157 +/- 0.29553757 (2.42%) (init = 8)
-    peak_center:     16.4280869 +/- 0.01091050 (0.07%) (init = 16)
-    peak_sigma:      0.72096413 +/- 0.01336638 (1.85%) (init = 1)
-    peak_fwhm:       1.69774076 +/- 0.03147542 (1.85%) == &#39;2.3548200*peak_sigma&#39;
-    peak_height:     6.76360680 +/- 0.09854040 (1.46%) == &#39;0.3989423*peak_amplitude/max(1e-15, peak_sigma)&#39;
+    peak_amplitude:  12.2231135 +/- 0.29554108 (2.42%) (init = 8)
+    peak_center:     16.4280869 +/- 0.01091051 (0.07%) (init = 16)
+    peak_sigma:      0.72096400 +/- 0.01336667 (1.85%) (init = 1)
+    peak_fwhm:       1.69774046 +/- 0.03147610 (1.85%) == &#39;2.3548200*peak_sigma&#39;
+    peak_height:     6.76360674 +/- 0.09854044 (1.46%) == &#39;0.3989423*peak_amplitude/max(1e-15, peak_sigma)&#39;
     bkg_s0:          3.51175736 +/- 0.04941392 (1.41%) (init = 3.787995)
     bkg_s1:          3.72930068 +/- 0.09558236 (2.56%) (init = 3.959487)
-    bkg_s2:          4.26846493 +/- 0.12650286 (2.96%) (init = 4.384009)
-    bkg_s3:          4.42375494 +/- 0.10170202 (2.30%) (init = 4.431971)
-    bkg_s4:          4.49590439 +/- 0.10615550 (2.36%) (init = 4.243976)
-    bkg_s5:          3.96515330 +/- 0.09336550 (2.35%) (init = 4.115153)
-    bkg_s6:          3.35531872 +/- 0.12669972 (3.78%) (init = 3.965325)
-    bkg_s7:          2.89909670 +/- 0.16190139 (5.58%) (init = 2.788437)
-    bkg_s8:          2.82657013 +/- 0.13445467 (4.76%) (init = 2.984317)
-    bkg_s9:          3.43338644 +/- 0.15987269 (4.66%) (init = 3.383491)
-    bkg_s10:         3.73024856 +/- 0.12096863 (3.24%) (init = 3.791937)
+    bkg_s2:          4.26846495 +/- 0.12650286 (2.96%) (init = 4.384009)
+    bkg_s3:          4.42375490 +/- 0.10170203 (2.30%) (init = 4.431971)
+    bkg_s4:          4.49590448 +/- 0.10615552 (2.36%) (init = 4.243976)
+    bkg_s5:          3.96515315 +/- 0.09336555 (2.35%) (init = 4.115153)
+    bkg_s6:          3.35531899 +/- 0.12669985 (3.78%) (init = 3.965325)
+    bkg_s7:          2.89909752 +/- 0.16190211 (5.58%) (init = 2.788437)
+    bkg_s8:          2.82656963 +/- 0.13445495 (4.76%) (init = 2.984317)
+    bkg_s9:          3.43338680 +/- 0.15987281 (4.66%) (init = 3.383491)
+    bkg_s10:         3.73024843 +/- 0.12096865 (3.24%) (init = 3.791937)
 [[Correlations]] (unreported correlations are &lt; 0.300)
-    C(bkg_s7, bkg_s8)             = -0.819
-    C(peak_amplitude, peak_sigma) = 0.799
-    C(bkg_s8, bkg_s9)             = -0.706
-    C(bkg_s5, bkg_s6)             = -0.695
-    C(peak_amplitude, bkg_s7)     = -0.688
-    C(bkg_s2, bkg_s3)             = -0.667
-    C(bkg_s9, bkg_s10)            = -0.606
-    C(bkg_s3, bkg_s4)             = -0.574
-    C(bkg_s1, bkg_s2)             = -0.565
-    C(bkg_s4, bkg_s5)             = -0.554
-    C(bkg_s7, bkg_s9)             = 0.522
-    C(peak_sigma, bkg_s7)         = -0.519
-    C(peak_amplitude, bkg_s8)     = 0.518
-    C(bkg_s0, bkg_s1)             = 0.445
-    C(peak_sigma, bkg_s8)         = 0.373
-    C(peak_center, bkg_s6)        = 0.360
-    C(bkg_s4, bkg_s6)             = 0.360
-    C(bkg_s0, bkg_s2)             = -0.359
-    C(bkg_s2, bkg_s4)             = 0.350
-    C(bkg_s8, bkg_s10)            = 0.345
-    C(bkg_s6, bkg_s7)             = -0.333
-    C(peak_center, bkg_s7)        = -0.330
-    C(peak_amplitude, bkg_s9)     = -0.321
+    C(bkg_s7, bkg_s8)             = -0.8192
+    C(peak_amplitude, peak_sigma) = +0.7987
+    C(bkg_s8, bkg_s9)             = -0.7063
+    C(bkg_s5, bkg_s6)             = -0.6950
+    C(peak_amplitude, bkg_s7)     = -0.6878
+    C(bkg_s2, bkg_s3)             = -0.6672
+    C(bkg_s9, bkg_s10)            = -0.6060
+    C(bkg_s3, bkg_s4)             = -0.5743
+    C(bkg_s1, bkg_s2)             = -0.5646
+    C(bkg_s4, bkg_s5)             = -0.5542
+    C(bkg_s7, bkg_s9)             = +0.5216
+    C(peak_sigma, bkg_s7)         = -0.5193
+    C(peak_amplitude, bkg_s8)     = +0.5185
+    C(bkg_s0, bkg_s1)             = +0.4448
+    C(peak_sigma, bkg_s8)         = +0.3733
+    C(peak_center, bkg_s6)        = +0.3599
+    C(bkg_s4, bkg_s6)             = +0.3597
+    C(bkg_s0, bkg_s2)             = -0.3595
+    C(bkg_s2, bkg_s4)             = +0.3504
+    C(bkg_s8, bkg_s10)            = +0.3455
+    C(bkg_s6, bkg_s7)             = -0.3332
+    C(peak_center, bkg_s7)        = -0.3301
+    C(peak_amplitude, bkg_s9)     = -0.3206
 </pre></div>
 </div>
 </div>
@@ -2614,8 +2610,8 @@ points to use.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

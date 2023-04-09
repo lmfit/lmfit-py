@@ -27,13 +27,10 @@ params = model.make_params(bkg_amplitude=100, bkg_decay=80,
                            g2_sigma=10)
 
 result = model.fit(y, params, x=x)
-
 print(result.fit_report(min_correl=0.5))
-
 
 comps = result.eval_components(x=x)
 dely = result.eval_uncertainty(sigma=3)
-
 
 fig, axes = plt.subplots(2, 2, figsize=(12.8, 9.6))
 
@@ -49,7 +46,6 @@ axes[0][1].fill_between(x, result.best_fit-dely, result.best_fit+dely,
                         color="#8A8A8A", label=r'3-$\sigma$ band')
 axes[0][1].set_title('data, best-fit, and uncertainty band')
 axes[0][1].legend()
-
 
 axes[1][0].plot(x, result.best_fit, '-', label=r'best fit, 3-$\sigma$ band')
 axes[1][0].fill_between(x,
@@ -76,7 +72,7 @@ axes[1][0].fill_between(x,
                         color="#8A8A8A")
 axes[1][0].set_title('model components with uncertainty bands')
 axes[1][0].legend()
-#
+
 axes[1][1].plot(x, result.best_fit, '-', label='best fit')
 axes[1][1].plot(x, 10*result.dely, label=r'3-$\sigma$ total (x10)')
 axes[1][1].plot(x, 10*result.dely_comps['bkg_'], label=r'3-$\sigma$ background (x10)')
@@ -86,5 +82,4 @@ axes[1][1].set_title('uncertainties for model components')
 axes[1][1].legend()
 
 plt.show()
-
 # <end examples/doc_model_uncertainty2.py>

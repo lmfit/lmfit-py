@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,13 +21,13 @@
 doc_builtinmodels_nistgauss.py
 ==============================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-56
+.. GENERATED FROM PYTHON SOURCE LINES 7-52
 
 
 
 .. image-sg:: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss_001.png
    :alt: builtinmodels nistgauss
-   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss_001.png, /examples/documentation/images/sphx_glr_builtinmodels_nistgauss_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_nistgauss_001.png, /examples/documentation/images/sphx_glr_builtinmodels_nistgauss_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -48,29 +48,31 @@ doc_builtinmodels_nistgauss.py
         Bayesian info crit = 446.036318
         R-squared          = 0.99648654
     [[Variables]]
-        exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
-        exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
-        g1_amplitude:   4257.77319 +/- 42.3833638 (1.00%) (init = 2000)
-        g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
-        g1_sigma:       16.6725753 +/- 0.16048160 (0.96%) (init = 15)
-        g1_fwhm:        39.2609139 +/- 0.37790529 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880231 +/- 0.59217098 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
-        g2_amplitude:   2493.41770 +/- 36.1694738 (1.45%) (init = 2000)
-        g2_center:      153.270101 +/- 0.19466742 (0.13%) (init = 155)
-        g2_sigma:       13.8069484 +/- 0.18679414 (1.35%) (init = 15)
-        g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455934 +/- 0.61722094 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
-    [[Correlations]] (unreported correlations are < 0.500)
-        C(g1_amplitude, g1_sigma)   = 0.824
-        C(g2_amplitude, g2_sigma)   = 0.815
-        C(exp_amplitude, exp_decay) = -0.695
-        C(g1_sigma, g2_center)      = 0.684
-        C(g1_center, g2_amplitude)  = -0.669
-        C(g1_center, g2_sigma)      = -0.652
-        C(g1_amplitude, g2_center)  = 0.648
-        C(g1_center, g2_center)     = 0.621
-        C(g1_center, g1_sigma)      = 0.507
-        C(exp_decay, g1_amplitude)  = -0.507
+        exp_amplitude:  99.0183278 +/- 0.53748593 (0.54%) (init = 162.2102)
+        exp_decay:      90.9508853 +/- 1.10310778 (1.21%) (init = 93.24905)
+        g1_amplitude:   4257.77360 +/- 42.3836478 (1.00%) (init = 2000)
+        g1_center:      107.030956 +/- 0.15006851 (0.14%) (init = 105)
+        g1_sigma:       16.6725772 +/- 0.16048381 (0.96%) (init = 15)
+        g1_fwhm:        39.2609181 +/- 0.37791049 (0.96%) == '2.3548200*g1_sigma'
+        g1_height:      101.880230 +/- 0.59217173 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
+        g2_amplitude:   2493.41735 +/- 36.1697789 (1.45%) (init = 2000)
+        g2_center:      153.270102 +/- 0.19466802 (0.13%) (init = 155)
+        g2_sigma:       13.8069464 +/- 0.18679695 (1.35%) (init = 15)
+        g2_fwhm:        32.5128735 +/- 0.43987320 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455941 +/- 0.61722243 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+    [[Correlations]] 
+      +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+      | Variable      | exp_amplitude | exp_decay     | g1_amplitude  | g1_center     | g1_sigma      | g2_amplitude  | g2_center     | g2_sigma      |
+      +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+      | exp_amplitude | +1.0000       | -0.6946       | +0.1478       | -0.0467       | +0.0218       | +0.2821       | +0.0331       | +0.1714       |
+      | exp_decay     | -0.6946       | +1.0000       | -0.5074       | +0.1055       | -0.2520       | -0.4270       | -0.1514       | -0.2329       |
+      | g1_amplitude  | +0.1478       | -0.5074       | +1.0000       | +0.4183       | +0.8243       | -0.3071       | +0.6477       | -0.4010       |
+      | g1_center     | -0.0467       | +0.1055       | +0.4183       | +1.0000       | +0.5075       | -0.6689       | +0.6205       | -0.6520       |
+      | g1_sigma      | +0.0218       | -0.2520       | +0.8243       | +0.5075       | +1.0000       | -0.4915       | +0.6842       | -0.4826       |
+      | g2_amplitude  | +0.2821       | -0.4270       | -0.3071       | -0.6689       | -0.4915       | +1.0000       | -0.4763       | +0.8154       |
+      | g2_center     | +0.0331       | -0.1514       | +0.6477       | +0.6205       | +0.6842       | -0.4763       | +1.0000       | -0.4889       |
+      | g2_sigma      | +0.1714       | -0.2329       | -0.4010       | -0.6520       | -0.4826       | +0.8154       | -0.4889       | +1.0000       |
+      +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
 
 
 
@@ -95,25 +97,21 @@ doc_builtinmodels_nistgauss.py
     pars = exp_mod.guess(y, x=x)
 
     gauss1 = GaussianModel(prefix='g1_')
-    pars.update(gauss1.make_params())
-
-    pars['g1_center'].set(value=105, min=75, max=125)
-    pars['g1_sigma'].set(value=15, min=3)
-    pars['g1_amplitude'].set(value=2000, min=10)
+    pars.update(gauss1.make_params(center=dict(value=105, min=75, max=125),
+                                   sigma=dict(value=15, min=0),
+                                   amplitude=dict(value=2000, min=0)))
 
     gauss2 = GaussianModel(prefix='g2_')
-    pars.update(gauss2.make_params())
-
-    pars['g2_center'].set(value=155, min=125, max=175)
-    pars['g2_sigma'].set(value=15, min=3)
-    pars['g2_amplitude'].set(value=2000, min=10)
+    pars.update(gauss2.make_params(center=dict(value=155, min=125, max=175),
+                                   sigma=dict(value=15, min=0),
+                                   amplitude=dict(value=2000, min=0)))
 
     mod = gauss1 + gauss2 + exp_mod
 
     init = mod.eval(pars, x=x)
     out = mod.fit(y, pars, x=x)
 
-    print(out.fit_report(min_correl=0.5))
+    print(out.fit_report(correl_mode='table'))
 
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
     axes[0].plot(x, y)
@@ -134,7 +132,7 @@ doc_builtinmodels_nistgauss.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.299 seconds)
+   **Total running time of the script:** ( 0 minutes  0.302 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py:
@@ -142,6 +140,8 @@ doc_builtinmodels_nistgauss.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

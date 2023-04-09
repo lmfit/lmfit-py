@@ -20,7 +20,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodel_thumb.png
-    :alt: doc_model_savemodel.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_savemodel.py`
 
@@ -32,46 +32,12 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult_thumb.png
-    :alt: doc_model_loadmodelresult.py
-
-  :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult2_thumb.png
-    :alt: doc_model_loadmodelresult2.py
-
-  :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult_thumb.png
-    :alt: doc_model_savemodelresult.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_savemodelresult.py`
 
@@ -88,7 +54,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_confidence_basic_thumb.png
-    :alt: doc_confidence_basic.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_confidence_basic.py`
 
@@ -100,18 +66,35 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py">
 
 .. only:: html
 
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodel_thumb.png
-    :alt: doc_model_loadmodel.py
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult_thumb.png
+    :alt:
 
-  :ref:`sphx_glr_examples_documentation_model_loadmodel.py`
+  :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult2_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
     </div>
 
 
@@ -122,7 +105,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_gaussian_thumb.png
-    :alt: doc_model_gaussian.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_gaussian.py`
 
@@ -134,12 +117,29 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodel_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_model_loadmodel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_with_nan_policy_thumb.png
-    :alt: doc_model_with_nan_policy.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py`
 
@@ -156,7 +156,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_stepmodel_thumb.png
-    :alt: doc_builtinmodels_stepmodel.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py`
 
@@ -168,29 +168,12 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_two_components_thumb.png
-    :alt: doc_model_two_components.py
-
-  :ref:`sphx_glr_examples_documentation_model_two_components.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty_thumb.png
-    :alt: doc_model_uncertainty.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_uncertainty.py`
 
@@ -202,52 +185,18 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py">
 
 .. only:: html
 
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult2_thumb.png
-    :alt: doc_model_savemodelresult2.py
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_two_components_thumb.png
+    :alt:
 
-  :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
-    </div>
-
+  :ref:`sphx_glr_examples_documentation_model_two_components.py`
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_model_with_iter_callback_thumb.png
-    :alt: doc_model_with_iter_callback.py
-
-  :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss2_thumb.png
-    :alt: doc_builtinmodels_nistgauss2.py
-
-  :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
+      <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
     </div>
 
 
@@ -258,7 +207,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_fitting_withreport_thumb.png
-    :alt: doc_fitting_withreport.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_fitting_withreport.py`
 
@@ -270,12 +219,63 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult2_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss2_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_with_iter_callback_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_valuesdict_thumb.png
-    :alt: doc_parameters_valuesdict.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py`
 
@@ -287,29 +287,12 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py">
-
-.. only:: html
-
-  .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_basic_thumb.png
-    :alt: doc_parameters_basic.py
-
-  :ref:`sphx_glr_examples_documentation_parameters_basic.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_peakmodels_thumb.png
-    :alt: doc_builtinmodels_peakmodels.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py`
 
@@ -326,7 +309,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss_thumb.png
-    :alt: doc_builtinmodels_nistgauss.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py`
 
@@ -338,12 +321,29 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_basic_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_parameters_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite.py">
 
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_composite_thumb.png
-    :alt: doc_model_composite.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_composite.py`
 
@@ -360,7 +360,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_splinemodel_thumb.png
-    :alt: doc_builtinmodels_splinemodel.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_builtinmodels_splinemodel.py`
 
@@ -377,7 +377,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_confidence_advanced_thumb.png
-    :alt: doc_confidence_advanced.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_confidence_advanced.py`
 
@@ -394,7 +394,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty2_thumb.png
-    :alt: doc_model_uncertainty2.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_model_uncertainty2.py`
 
@@ -411,13 +411,30 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
   .. image:: /examples/documentation/images/thumb/sphx_glr_fitting_emcee_thumb.png
-    :alt: doc_fitting_emcee.py
+    :alt:
 
   :ref:`sphx_glr_examples_documentation_fitting_emcee.py`
 
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">doc_fitting_emcee.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_chi2_maps.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_confidence_chi2_maps_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_confidence_chi2_maps.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_confidence_chi2_maps.py</div>
     </div>
 
 
@@ -430,27 +447,28 @@ Below are all the examples that are part of the lmfit documentation.
    :hidden:
 
    /examples/documentation/model_savemodel
-   /examples/documentation/model_loadmodelresult
-   /examples/documentation/model_loadmodelresult2
    /examples/documentation/model_savemodelresult
    /examples/documentation/confidence_basic
-   /examples/documentation/model_loadmodel
+   /examples/documentation/model_loadmodelresult
+   /examples/documentation/model_loadmodelresult2
    /examples/documentation/model_gaussian
+   /examples/documentation/model_loadmodel
    /examples/documentation/model_with_nan_policy
    /examples/documentation/builtinmodels_stepmodel
-   /examples/documentation/model_two_components
    /examples/documentation/model_uncertainty
-   /examples/documentation/model_savemodelresult2
-   /examples/documentation/model_with_iter_callback
-   /examples/documentation/builtinmodels_nistgauss2
+   /examples/documentation/model_two_components
    /examples/documentation/fitting_withreport
+   /examples/documentation/model_savemodelresult2
+   /examples/documentation/builtinmodels_nistgauss2
+   /examples/documentation/model_with_iter_callback
    /examples/documentation/parameters_valuesdict
-   /examples/documentation/parameters_basic
    /examples/documentation/builtinmodels_peakmodels
    /examples/documentation/builtinmodels_nistgauss
+   /examples/documentation/parameters_basic
    /examples/documentation/model_composite
    /examples/documentation/builtinmodels_splinemodel
    /examples/documentation/confidence_advanced
    /examples/documentation/model_uncertainty2
    /examples/documentation/fitting_emcee
+   /examples/documentation/confidence_chi2_maps
 

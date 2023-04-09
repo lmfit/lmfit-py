@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
@@ -26,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="doc_model_two_components.py" href="model_two_components.html" />
+    <link rel="next" title="doc_model_uncertainty.py" href="model_uncertainty.html" />
     <link rel="prev" title="doc_model_with_nan_policy.py" href="model_with_nan_policy.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -88,7 +85,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="model_two_components.html" title="doc_model_two_components.py"
+          <a href="model_uncertainty.html" title="doc_model_uncertainty.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="model_with_nan_policy.html" title="doc_model_with_nan_policy.py"
@@ -115,8 +112,8 @@
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="model_two_components.html"
-                          title="next chapter">doc_model_two_components.py</a></p>
+    <p class="topless"><a href="model_uncertainty.html"
+                          title="next chapter">doc_model_uncertainty.py</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -138,12 +135,12 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-builtinmodels-stepmodel-py">
 <span id="sphx-glr-examples-documentation-builtinmodels-stepmodel-py"></span><h1>doc_builtinmodels_stepmodel.py<a class="headerlink" href="#doc-builtinmodels-stepmodel-py" title="Permalink to this heading">¶</a></h1>
-<img src="../../_images/sphx_glr_builtinmodels_stepmodel_001.png" srcset="../../_images/sphx_glr_builtinmodels_stepmodel_001.png, ../../_images/sphx_glr_builtinmodels_stepmodel_001_3_0x.png 3.0x" alt="builtinmodels stepmodel" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+<img src="../../_images/sphx_glr_builtinmodels_stepmodel_001.png" srcset="../../_images/sphx_glr_builtinmodels_stepmodel_001.png, ../../_images/sphx_glr_builtinmodels_stepmodel_001_3_00x.png 3.00x" alt="builtinmodels stepmodel" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
     (Model(step, prefix=&#39;step_&#39;, form=&#39;erf&#39;) + Model(linear, prefix=&#39;line_&#39;))
 [[Fit Statistics]]
     # fitting method   = leastsq
@@ -153,24 +150,24 @@ to download the full example code</p>
     chi-square         = 593.709621
     reduced chi-square = 3.02913072
     Akaike info crit   = 227.700173
-    Bayesian info crit = 244.216698
+    Bayesian info crit = 244.216697
     R-squared          = 0.99897798
 [[Variables]]
-    line_slope:      1.87162034 +/- 0.09318576 (4.98%) (init = 0)
-    line_intercept:  12.0964558 +/- 0.27606016 (2.28%) (init = 11.58574)
-    step_amplitude:  112.858606 +/- 0.65391554 (0.58%) (init = 134.7378)
-    step_center:     3.13494789 +/- 0.00516602 (0.16%) (init = 2.5)
-    step_sigma:      0.67393529 +/- 0.01091154 (1.62%) (init = 1.428571)
+    line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
+    line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
+    step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
+    step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
+    step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(line_slope, step_amplitude)     = -0.879
-    C(step_amplitude, step_sigma)     = 0.564
-    C(line_slope, step_sigma)         = -0.457
-    C(line_intercept, step_center)    = 0.427
-    C(line_slope, line_intercept)     = -0.309
-    C(line_slope, step_center)        = -0.234
-    C(line_intercept, step_sigma)     = -0.137
-    C(line_intercept, step_amplitude) = -0.117
-    C(step_amplitude, step_center)    = 0.109
+    C(line_slope, step_amplitude)     = -0.8791
+    C(step_amplitude, step_sigma)     = +0.5643
+    C(line_slope, step_sigma)         = -0.4569
+    C(line_intercept, step_center)    = +0.4269
+    C(line_slope, line_intercept)     = -0.3093
+    C(line_slope, step_center)        = -0.2338
+    C(line_intercept, step_sigma)     = -0.1372
+    C(line_intercept, step_amplitude) = -0.1173
+    C(step_amplitude, step_center)    = +0.1095
 </pre></div>
 </div>
 <div class="line-block">
@@ -200,15 +197,15 @@ to download the full example code</p>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">init_fit</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">init_fit</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 <span class="c1"># &lt;end examples/doc_builtinmodels_stepmodel.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.144 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.146 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-builtinmodels-stepmodel-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/7847bfc96f44c681b8ac1c40073559bb/builtinmodels_stepmodel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_stepmodel.py</span></code></a></p>
@@ -234,7 +231,7 @@ to download the full example code</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="model_two_components.html" title="doc_model_two_components.py"
+          <a href="model_uncertainty.html" title="doc_model_uncertainty.py"
              >next</a> |</li>
         <li class="right" >
           <a href="model_with_nan_policy.html" title="doc_model_with_nan_policy.py"
@@ -253,8 +250,8 @@ to download the full example code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

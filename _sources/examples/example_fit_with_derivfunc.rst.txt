@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_fit_with_derivfunc.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_fit_with_derivfunc.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -169,7 +169,7 @@ both methods:
 
 .. image-sg:: /examples/images/sphx_glr_example_fit_with_derivfunc_001.png
    :alt: example fit with derivfunc
-   :srcset: /examples/images/sphx_glr_example_fit_with_derivfunc_001.png, /examples/images/sphx_glr_example_fit_with_derivfunc_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_fit_with_derivfunc_001.png, /examples/images/sphx_glr_example_fit_with_derivfunc_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -179,7 +179,7 @@ both methods:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.177 seconds)
+   **Total running time of the script:** ( 0 minutes  0.152 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_derivfunc.py:
@@ -187,6 +187,8 @@ both methods:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

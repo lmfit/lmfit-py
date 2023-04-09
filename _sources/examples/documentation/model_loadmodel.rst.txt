@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_model_loadmodel.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_model_loadmodel.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,13 +21,13 @@
 doc_model_loadmodel.py
 ======================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-35
+.. GENERATED FROM PYTHON SOURCE LINES 7-40
 
 
 
 .. image-sg:: /examples/documentation/images/sphx_glr_model_loadmodel_001.png
    :alt: model loadmodel
-   :srcset: /examples/documentation/images/sphx_glr_model_loadmodel_001.png, /examples/documentation/images/sphx_glr_model_loadmodel_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_model_loadmodel_001.png, /examples/documentation/images/sphx_glr_model_loadmodel_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -45,14 +45,14 @@ doc_model_loadmodel.py
         chi-square         = 7.68903767
         reduced chi-square = 0.07845957
         Akaike info crit   = -254.107813
-        Bayesian info crit = -246.262452
+        Bayesian info crit = -246.262451
         R-squared          = 0.97252133
     [[Variables]]
-        amp:    2.32733714 +/- 0.03950804 (1.70%) (init = 3)
-        freq:   0.50098754 +/- 5.7726e-04 (0.12%) (init = 0.52)
-        shift:  0.53604527 +/- 0.03383093 (6.31%) (init = 0)
+        amp:    2.32733694 +/- 0.03950824 (1.70%) (init = 3)
+        freq:   0.50098739 +/- 5.7726e-04 (0.12%) (init = 0.52)
+        shift:  0.53605324 +/- 0.03383110 (6.31%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(freq, shift) = -0.866
+        C(freq, shift) = -0.8663
 
 
 
@@ -64,10 +64,16 @@ doc_model_loadmodel.py
 .. code-block:: default
 
     # <examples/doc_model_loadmodel.py>
+    import os
+    import sys
+
     import matplotlib.pyplot as plt
     import numpy as np
 
     from lmfit.model import load_model
+
+    if not os.path.exists('sinemodel.sav'):
+        os.system(f"{sys.executable} doc_model_savemodel.py")
 
 
     def mysine(x, amp, freq, shift):
@@ -79,10 +85,9 @@ doc_model_loadmodel.py
     y = data[:, 1]
 
     model = load_model('sinemodel.sav', funcdefs={'mysine': mysine})
-    params = model.make_params(amp=3, freq=0.52, shift=0)
-    params['shift'].max = 1
-    params['shift'].min = -1
-    params['amp'].min = 0.0
+    params = model.make_params(amp=dict(value=3, min=0),
+                               freq=0.52,
+                               shift=dict(value=0, min=-1, max=1))
 
     result = model.fit(y, params, x=x)
     print(result.fit_report())
@@ -95,7 +100,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.133 seconds)
+   **Total running time of the script:** ( 0 minutes  0.139 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:
@@ -103,6 +108,8 @@ doc_model_loadmodel.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

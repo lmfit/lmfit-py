@@ -91,6 +91,18 @@ The :class:`Parameters` class
    :ref:`model_saveload_sec` for further discussion.
 
 
+The :func:`create_params` function
+==================================
+
+The :func:`create_params` function is probably the easiest method for making
+:class:`Parameters` objects, as it allows defining Parameter names by keyword
+with values either being the numerical initial value for the Parameter or being
+a dictionary with keyword/value pairs for ``value`` as well as other Parameter
+attribute such as ``min``, ``max``, ``expr``, and so forth.
+
+.. autofunction:: create_params
+
+
 Simple Example
 ==============
 

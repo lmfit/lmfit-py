@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
@@ -103,6 +100,7 @@
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -137,12 +135,12 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="model-selection-using-lmfit-and-emcee">
 <span id="sphx-glr-examples-lmfit-emcee-model-selection-py"></span><h1>Model Selection using lmfit and emcee<a class="headerlink" href="#model-selection-using-lmfit-and-emcee" title="Permalink to this heading">¶</a></h1>
-<p>FIXME: this is a useful examples; however, it doesn’t run correctly anymore as
+<p>FIXME: this is a useful example; however, it doesn’t run correctly anymore as
 the PTSampler was removed in emcee v3…</p>
 <p><cite>lmfit.emcee</cite> can be used to obtain the posterior probability distribution
 of parameters, given a set of experimental data. This notebook shows how it
@@ -166,7 +164,7 @@ can be used for Bayesian model selection.</p>
 </pre></div>
 </div>
 <p>Plot the data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.errorbar.html#matplotlib.pyplot.errorbar" title="matplotlib.pyplot.errorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Define the normalised residual for the data:</p>
@@ -282,9 +280,9 @@ out the MCMC chain to reduce autocorrelation between successive samples.</p>
         <span class="n">log_evidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Log-evidence&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;number of peaks&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s1">&#39;Log-evidence&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s1">&#39;number of peaks&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The Bayes factor is related to the exponential of the difference between the
@@ -355,11 +353,12 @@ possible. For example, you might expect the prior to be Gaussian.</p>
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

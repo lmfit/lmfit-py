@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_fit_with_algebraic_constraint.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_fit_with_algebraic_constraint.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,122 +21,103 @@
 Fit with Algebraic Constraint
 =============================
 
-.. GENERATED FROM PYTHON SOURCE LINES 6-58
+.. GENERATED FROM PYTHON SOURCE LINES 7-8
+
+Example on how to use algebraic constraints using the ``expr`` attribute.
+
+.. GENERATED FROM PYTHON SOURCE LINES 8-45
 
 .. code-block:: default
 
     import matplotlib.pyplot as plt
     from numpy import linspace, random
 
-    from lmfit import Minimizer, Parameters
     from lmfit.lineshapes import gaussian, lorentzian
-    from lmfit.printfuncs import report_fit
-
-
-    def residual(pars, x, sigma=None, data=None):
-        yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
-        yl = lorentzian(x, pars['amp_l'], pars['cen_l'], pars['wid_l'])
-
-        slope = pars['line_slope']
-        offset = pars['line_off']
-        model = yg + yl + offset + x*slope
-
-        if data is None:
-            return model
-        if sigma is None:
-            return model - data
-        return (model - data) / sigma
-
+    from lmfit.models import GaussianModel, LinearModel, LorentzianModel
 
     random.seed(0)
     x = linspace(0.0, 20.0, 601)
 
-    data = (gaussian(x, 21, 8.1, 1.2) +
-            lorentzian(x, 10, 9.6, 2.4) +
-            random.normal(scale=0.23, size=x.size) + x*0.5)
-
-    pfit = Parameters()
-    pfit.add(name='amp_g', value=10)
-    pfit.add(name='cen_g', value=9)
-    pfit.add(name='wid_g', value=1)
-    pfit.add(name='amp_tot', value=20)
-    pfit.add(name='amp_l', expr='amp_tot - amp_g')
-    pfit.add(name='cen_l', expr='1.5+cen_g')
-    pfit.add(name='wid_l', expr='2*wid_g')
-    pfit.add(name='line_slope', value=0.0)
-    pfit.add(name='line_off', value=0.0)
-
-    sigma = 0.021  # estimate of data error (for all data points)
-
-    myfit = Minimizer(residual, pfit, fcn_args=(x,),
-                      fcn_kws={'sigma': sigma, 'data': data})
-
-    result = myfit.leastsq()
-    init = residual(pfit, x)
-    fit = residual(result.params, x)
-
-    report_fit(result)
+    data = (gaussian(x, amplitude=21, center=8.1, sigma=1.2) +
+            lorentzian(x, amplitude=10, center=9.6, sigma=2.4) +
+            0.01 + x*0.05 + random.normal(scale=0.23, size=x.size))
 
 
+    model = GaussianModel(prefix='g_') + LorentzianModel(prefix='l_') + LinearModel(prefix='line_')
 
+    params = model.make_params(g_amplitude=10, g_center=9, g_sigma=1,
+                               line_slope=0, line_intercept=0)
+
+    params.add(name='total_amplitude', value=20)
+    params.set(l_amplitude=dict(expr='total_amplitude - g_amplitude'))
+    params.set(l_center=dict(expr='1.5+g_center'))
+    params.set(l_sigma=dict(expr='2*g_sigma'))
+
+
+    data_uncertainty = 0.021  # estimate of data error (for all data points)
+
+    init = model.eval(params, x=x)
+    result = model.fit(data, params, x=x, weights=1.0/data_uncertainty)
+
+    print(result.fit_report())
+
+    plt.plot(x, data, '+')
+    plt.plot(x, init, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
+    plt.legend()
+    plt.show()
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001.png
+   :alt: example fit with algebraic constraint
+   :srcset: /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001.png, /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001_3_00x.png 3.00x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
 
+    [[Model]]
+        ((Model(gaussian, prefix='g_') + Model(lorentzian, prefix='l_')) + Model(linear, prefix='line_'))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 53
+        # function evals   = 65
         # data points      = 601
         # variables        = 6
         chi-square         = 71878.3055
         reduced chi-square = 120.803875
         Akaike info crit   = 2887.26503
         Bayesian info crit = 2913.65660
+        R-squared          = -22.1967107
     [[Variables]]
-        amp_g:       21.1877704 +/- 0.32191824 (1.52%) (init = 10)
-        cen_g:       8.11125923 +/- 0.01162984 (0.14%) (init = 9)
-        wid_g:       1.20925846 +/- 0.01170853 (0.97%) (init = 1)
-        amp_tot:     30.6003738 +/- 0.36481391 (1.19%) (init = 20)
-        amp_l:       9.41260340 +/- 0.61672681 (6.55%) == 'amp_tot - amp_g'
-        cen_l:       9.61125923 +/- 0.01162984 (0.12%) == '1.5+cen_g'
-        wid_l:       2.41851692 +/- 0.02341706 (0.97%) == '2*wid_g'
-        line_slope:  0.49615727 +/- 0.00170178 (0.34%) (init = 0)
-        line_off:    0.04128591 +/- 0.02448064 (59.30%) (init = 0)
+        g_amplitude:      21.1877635 +/- 0.32192128 (1.52%) (init = 10)
+        g_center:         8.11125903 +/- 0.01162987 (0.14%) (init = 9)
+        g_sigma:          1.20925819 +/- 0.01170853 (0.97%) (init = 1)
+        l_amplitude:      9.41261441 +/- 0.61672968 (6.55%) == 'total_amplitude - g_amplitude'
+        l_center:         9.61125903 +/- 0.01162987 (0.12%) == '1.5+g_center'
+        l_sigma:          2.41851637 +/- 0.02341707 (0.97%) == '2*g_sigma'
+        line_slope:       0.04615727 +/- 0.00170178 (3.69%) (init = 0)
+        line_intercept:   0.05128584 +/- 0.02448063 (47.73%) (init = 0)
+        g_fwhm:           2.84758536 +/- 0.02757149 (0.97%) == '2.3548200*g_sigma'
+        g_height:         6.98998378 +/- 0.05837066 (0.84%) == '0.3989423*g_amplitude/max(1e-15, g_sigma)'
+        l_fwhm:           4.83703275 +/- 0.04683414 (0.97%) == '2.0000000*l_sigma'
+        l_height:         1.23882905 +/- 0.08992735 (7.26%) == '0.3183099*l_amplitude/max(1e-15, l_sigma)'
+        total_amplitude:  30.6003779 +/- 0.36481425 (1.19%) (init = 20)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp_g, wid_g)         = 0.866
-        C(amp_g, cen_g)         = 0.750
-        C(line_slope, line_off) = -0.714
-        C(cen_g, amp_tot)       = -0.695
-        C(cen_g, wid_g)         = 0.623
-        C(amp_g, amp_tot)       = -0.612
-        C(amp_tot, line_off)    = -0.588
-        C(wid_g, amp_tot)       = -0.412
-        C(cen_g, line_off)      = 0.387
-        C(amp_g, line_off)      = 0.183
-        C(amp_g, line_slope)    = 0.183
-        C(wid_g, line_slope)    = 0.174
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 59-63
-
-.. code-block:: default
-
-    plt.plot(x, data, '+')
-    plt.plot(x, init, '--', label='initial fit')
-    plt.plot(x, fit, '-', label='best fit')
-    plt.legend()
-
-
-
-.. image-sg:: /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001.png
-   :alt: example fit with algebraic constraint
-   :srcset: /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001.png, /examples/images/sphx_glr_example_fit_with_algebraic_constraint_001_3_0x.png 3.0x
-   :class: sphx-glr-single-img
-
+        C(g_amplitude, g_sigma)            = +0.8662
+        C(g_amplitude, g_center)           = +0.7496
+        C(line_slope, line_intercept)      = -0.7144
+        C(g_center, total_amplitude)       = -0.6952
+        C(g_center, g_sigma)               = +0.6227
+        C(g_amplitude, total_amplitude)    = -0.6115
+        C(line_intercept, total_amplitude) = -0.5883
+        C(g_sigma, total_amplitude)        = -0.4115
+        C(g_center, line_intercept)        = +0.3868
+        C(g_amplitude, line_intercept)     = +0.1834
+        C(g_amplitude, line_slope)         = +0.1825
+        C(g_sigma, line_slope)             = +0.1739
 
 
 
@@ -144,7 +125,7 @@ Fit with Algebraic Constraint
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.156 seconds)
+   **Total running time of the script:** ( 0 minutes  0.162 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:
@@ -152,6 +133,8 @@ Fit with Algebraic Constraint
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

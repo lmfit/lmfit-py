@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_two_dimensional_peak.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_two_dimensional_peak.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -90,7 +90,7 @@ To plot this, we can interpolate the data onto a grid.
 
 .. image-sg:: /examples/images/sphx_glr_example_two_dimensional_peak_001.png
    :alt: example two dimensional peak
-   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_001.png, /examples/images/sphx_glr_example_two_dimensional_peak_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_001.png, /examples/images/sphx_glr_example_two_dimensional_peak_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -128,17 +128,17 @@ In this case, we can use a built-in model to fit
         Bayesian info crit = 7281.93162
         R-squared          = 0.28378389
     [[Variables]]
-        amplitude:  27.4195803 +/- 0.65062976 (2.37%) (init = 16.51399)
-        centerx:    1.99705424 +/- 0.01405862 (0.70%) (init = 1.940764)
-        centery:   -0.49516154 +/- 0.01907802 (3.85%) (init = -0.5178641)
-        sigmax:     0.54740650 +/- 0.01224971 (2.24%) (init = 1.666582)
-        sigmay:     0.73300716 +/- 0.01617033 (2.21%) (init = 0.8332836)
-        fwhmx:      1.28904376 +/- 0.02884586 (2.24%) == '2.3548200*sigmax'
-        fwhmy:      1.72609992 +/- 0.03807821 (2.21%) == '2.3548200*sigmay'
-        height:     10.8758361 +/- 0.35409545 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
+        amplitude:  27.4195833 +/- 0.65062974 (2.37%) (init = 16.51399)
+        centerx:    1.99705425 +/- 0.01405864 (0.70%) (init = 1.940764)
+        centery:   -0.49516158 +/- 0.01907800 (3.85%) (init = -0.5178641)
+        sigmax:     0.54740777 +/- 0.01224965 (2.24%) (init = 1.666582)
+        sigmay:     0.73300589 +/- 0.01617042 (2.21%) (init = 0.8332836)
+        fwhmx:      1.28904676 +/- 0.02884573 (2.24%) == '2.3548200*sigmax'
+        fwhmy:      1.72609693 +/- 0.03807842 (2.21%) == '2.3548200*sigmay'
+        height:     10.8758308 +/- 0.35409534 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, sigmay) = 0.246
-        C(amplitude, sigmax) = 0.231
+        C(amplitude, sigmay) = +0.2464
+        C(amplitude, sigmax) = +0.2314
 
 
 
@@ -185,7 +185,7 @@ before and make plots of the data, the fit and the difference between the two.
 
 .. image-sg:: /examples/images/sphx_glr_example_two_dimensional_peak_002.png
    :alt: Data, Fit, Data - Fit
-   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_002.png, /examples/images/sphx_glr_example_two_dimensional_peak_002_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_002.png, /examples/images/sphx_glr_example_two_dimensional_peak_002_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -260,7 +260,7 @@ Data can be simulated and plotted in the same way as we did before.
 
 .. image-sg:: /examples/images/sphx_glr_example_two_dimensional_peak_003.png
    :alt: example two dimensional peak
-   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_003.png, /examples/images/sphx_glr_example_two_dimensional_peak_003_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_003.png, /examples/images/sphx_glr_example_two_dimensional_peak_003_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -309,16 +309,16 @@ over a quarter circle.
         Bayesian info crit = 1266.26606
         R-squared          = 0.57742880
     [[Variables]]
-        amplitude:  25.6418094 +/- 0.50569564 (1.97%) (init = 10)
-        centerx:    2.00325828 +/- 0.01163398 (0.58%) (init = 2.051478)
-        centery:   -0.49692535 +/- 0.01680903 (3.38%) (init = -0.478231)
-        sigmax:     0.51074336 +/- 0.01027256 (2.01%) (init = 1)
-        sigmay:     1.11741262 +/- 0.02190756 (1.96%) (init = 2)
-        rotation:   0.48130698 +/- 0.01542122 (3.20%) (init = 0.1)
+        amplitude:  25.6417887 +/- 0.50569636 (1.97%) (init = 10)
+        centerx:    2.00326033 +/- 0.01163397 (0.58%) (init = 2.051478)
+        centery:   -0.49692376 +/- 0.01680902 (3.38%) (init = -0.478231)
+        sigmax:     0.51074241 +/- 0.01027264 (2.01%) (init = 1)
+        sigmay:     1.11741198 +/- 0.02190772 (1.96%) (init = 2)
+        rotation:   0.48130689 +/- 0.01542118 (3.20%) (init = 0.1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(centerx, centery)  = 0.577
-        C(amplitude, sigmax) = 0.334
-        C(amplitude, sigmay) = 0.305
+        C(centerx, centery)  = +0.5767
+        C(amplitude, sigmax) = +0.3342
+        C(amplitude, sigmay) = +0.3046
 
 
 
@@ -362,7 +362,7 @@ The process of making plots to check it worked is the same as before.
 
 .. image-sg:: /examples/images/sphx_glr_example_two_dimensional_peak_004.png
    :alt: Data, Fit, Data - Fit
-   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_004.png, /examples/images/sphx_glr_example_two_dimensional_peak_004_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_two_dimensional_peak_004.png, /examples/images/sphx_glr_example_two_dimensional_peak_004_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -372,7 +372,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  18.865 seconds)
+   **Total running time of the script:** ( 0 minutes  7.427 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:
@@ -380,6 +380,8 @@ The process of making plots to check it worked is the same as before.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

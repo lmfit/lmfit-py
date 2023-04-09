@@ -195,8 +195,10 @@ and then initialize the :class:`Minimizer` class with this parameter set:
 
     from lmfit import Minimizer
 
+
     def userfcn(x, params):
         pass
+
 
     fitter = Minimizer(userfcn, pars)
 

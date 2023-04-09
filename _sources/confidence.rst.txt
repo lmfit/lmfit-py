@@ -106,6 +106,166 @@ parameters and set it manually:
         result.params[p].stderr = abs(result.params[p].value * 0.1)
 
 
+..  _label-confidence-chi2_maps:
+
+Calculating and visualizing maps of :math:`\chi^2`
+--------------------------------------------------
+
+The estimated values for the :math:`1-\sigma` standard error calculated by
+default for each fit include the effects of correlation between pairs of
+variables, but assumes the uncertainties are symmetric. While it doesn't
+exactly say what the values of the :math:`n-\sigma` uncertainties would be, the
+implication is that the :math:`n-\sigma` error is simply :math:`n^2\sigma`.
+
+The :func:`conf_interval` function described above improves on these
+automatically (and quickly) calculated uncertainies by explicitly finding
+:math:`n-\sigma` confidence levels in both directions -- it does not assume
+that the uncertainties are symmetric. This function also takes into account the
+correlations between pairs of variables, but it does not convey this
+information very well.
+
+For even further exploration of the confidence levels of parameter values, it
+can be useful to calculate maps of :math:`\chi^2` values for pairs of
+variables around their best fit values and visualize these as contour plots.
+Typically, pairs of variables will have elliptical contours of constant
+:math:`n-\sigma` level, with highly-correlated pairs of variables having high
+ratios of major and minor axes.
+
+The :func:`conf_interval2d` can calculate 2-d arrays or maps of either
+probability or :math:`\delta \chi^2 = \chi^2 - \chi_{\mathrm{best}}^2` for any
+pair of variables.  Visualizing these can help better understand the nature of
+the uncertainties and correlations between parameters. To illustrate this,
+we'll start with an example fit to data that we deliberately add components not
+accounted for in the model, and with slightly non-Gaussian noise -- a
+constructed but "real-world" example:
+
+.. jupyter-execute::
+
+    # <examples/doc_confidence_chi2_maps.py>
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    from lmfit import conf_interval, conf_interval2d, report_ci
+    from lmfit.lineshapes import gaussian
+    from lmfit.models import GaussianModel, LinearModel
+
+    sigma_levels = [1, 2, 3]
+
+    rng = np.random.default_rng(seed=102)
+
+    #########################
+    # set up data -- deliberately adding imperfections and
+    # a small amount of non-Gaussian noise
+    npts = 501
+    x = np.linspace(1, 100, num=npts)
+    noise = rng.normal(scale=0.3, size=npts) + 0.2*rng.f(3, 9, size=npts)
+    y = (gaussian(x, amplitude=83, center=47., sigma=5.)
+         + 0.02*x + 4 + 0.25*np.cos((x-20)/8.0) + noise)
+
+    mod = GaussianModel() + LinearModel()
+    params = mod.make_params(amplitude=100, center=50, sigma=5,
+                             slope=0, intecept=2)
+    out = mod.fit(y, params, x=x)
+    print(out.fit_report())
+
+    #########################
+    # run conf_intervale, print report
+    sigma_levels = [1, 2, 3]
+    ci = conf_interval(out, out, sigmas=sigma_levels)
+
+    print("## Confidence Report:")
+    report_ci(ci)
+
+The reports show that we obtained a pretty good fit, and that the automated
+estimates of the uncertainties are actually pretty good -- agreeing to the
+second decimal place.  But we also see that some of the uncertainties do become
+noticeably asymmetric at high :math:`n-\sigma` levels.
+
+We'll plot this data and fit, and then further explore these uncertainties
+using :func:`conf_interval2d`:
+
+.. jupyter-execute::
+
+    #########################
+    # plot initial fit
+    colors = ('#2030b0', '#b02030', '#207070')
+    fig, axes = plt.subplots(2, 3, figsize=(15, 9.5))
+
+    axes[0, 0].plot(x, y, 'o', markersize=3, label='data', color=colors[0])
+    axes[0, 0].plot(x, out.best_fit, label='fit', color=colors[1])
+    axes[0, 0].set_xlabel('x')
+    axes[0, 0].set_ylabel('y')
+    axes[0, 0].legend()
+
+    aix, aiy = 0, 0
+    nsamples = 30
+    for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
+                  ('slope', 'intercept'), ('slope', 'center'), ('sigma', 'center')):
+        xpar, ypar = pairs
+        print("Generating chi-square map for ", pairs)
+        c_x, c_y, dchi2_mat = conf_interval2d(out, out, xpar, ypar,
+                                              nsamples, nsamples,
+                                              nsigma=3.5, chi2_out=True)
+        # sigma matrix: sigma increases chi_square
+        # from  chi_square_best
+        # to    chi_square + sigma**2 * reduced_chi_square
+        # so:   sigma = sqrt(dchi2 / reduced_chi_square)
+        sigma_mat = np.sqrt(abs(dchi2_mat)/out.redchi)
+
+        # you could calculate the matrix of probabilities from sigma as:
+        # prob_mat  = np.erf(sigma_mat/np.sqrt(2))
+
+        aix += 1
+        if aix == 2:
+            aix = 0
+            aiy += 1
+        ax = axes[aix, aiy]
+
+        cnt = ax.contour(c_x, c_y, sigma_mat, levels=sigma_levels, colors=colors,
+                         linestyles='-')
+        ax.clabel(cnt, inline=True, fmt="$\sigma=%.0f$", fontsize=13)
+
+        # draw boxes for estimated uncertaties:
+        #  dotted :  scaled stderr from initial fit
+        #  dashed :  values found from conf_interval()
+        xv = out.params[xpar].value
+        xs = out.params[xpar].stderr
+        yv = out.params[ypar].value
+        ys = out.params[ypar].stderr
+
+        cix = ci[xpar]
+        ciy = ci[ypar]
+        nc = len(sigma_levels)
+        for i in sigma_levels:
+            # dotted line: scaled stderr
+            ax.plot((xv-i*xs, xv+i*xs, xv+i*xs, xv-i*xs, xv-i*xs),
+                    (yv-i*ys, yv-i*ys, yv+i*ys, yv+i*ys, yv-i*ys),
+                    linestyle='dotted', color=colors[i-1])
+
+            # dashed line: refined uncertainties from conf_interval
+            xsp, xsm = cix[nc+i][1], cix[nc-i][1]
+            ysp, ysm = ciy[nc+i][1], ciy[nc-i][1]
+            ax.plot((xsm, xsp, xsp, xsm, xsm), (ysm, ysm, ysp, ysp, ysm),
+                    linestyle='dashed', color=colors[i-1])
+
+        ax.set_xlabel(xpar)
+        ax.set_ylabel(ypar)
+        ax.grid(True, color='#d0d0d0')
+    plt.show()
+    # <end examples/doc_confidence_chi2_maps.py>
+
+Here we made contours for the :math:`n-\sigma` levels from the 2-D array of
+:math:`\chi^2` by noting that the :math:`n-\sigma` level will have
+:math:`\chi^2` increased by :math:`n^2\chi_\nu^2` where :math:`\chi_\nu^2` is
+reduced chi-square.
+
+The dotted boxes show both the scaled values of the standard errors from the
+initial fit, and the dashed boxes show the confidence levels from
+:meth:`conf_interval`. You can see that the notion of increasing
+:math:`\chi^2` by :math:`\chi_\nu^2` works very well, and that there is a small
+asymmetry in the uncertainties for the ``amplitude`` and ``sigma`` parameters.
+
+
 ..  _label-confidence-advanced:
 
 An advanced example for evaluating confidence intervals

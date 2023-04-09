@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_fitting_emcee.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_fitting_emcee.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -32,21 +32,21 @@ doc_fitting_emcee.py
 
       .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_001.png
          :alt: fitting emcee
-         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_001.png, /examples/documentation/images/sphx_glr_fitting_emcee_001_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_001.png, /examples/documentation/images/sphx_glr_fitting_emcee_001_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_002.png
          :alt: fitting emcee
-         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_002.png, /examples/documentation/images/sphx_glr_fitting_emcee_002_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_002.png, /examples/documentation/images/sphx_glr_fitting_emcee_002_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_003.png
          :alt: fitting emcee
-         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_003.png, /examples/documentation/images/sphx_glr_fitting_emcee_003_3_0x.png 3.0x
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_003.png, /examples/documentation/images/sphx_glr_fitting_emcee_003_3_00x.png 3.00x
          :class: sphx-glr-multi-img
 
 
@@ -60,10 +60,10 @@ doc_fitting_emcee.py
         t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
         t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.500)
-        C(a2, t2) = 0.988
-        C(a2, t1) = -0.928
-        C(t1, t2) = -0.885
-        C(a1, t1) = -0.609
+        C(a2, t2) = +0.9876
+        C(a2, t1) = -0.9278
+        C(t1, t2) = -0.8852
+        C(a1, t1) = -0.6093
     The chain is shorter than 50 times the integrated autocorrelation time for 5 parameter(s). Use this estimate with caution and run a longer chain!
     N/50 = 20;
     tau: [42.15955322 47.347426   48.71211873 46.7985718  40.89881208]
@@ -77,12 +77,12 @@ doc_fitting_emcee.py
         t2:         11.7836194 +/- 0.47719763 (4.05%) (init = 11.82408)
         __lnsigma: -2.32559226 +/- 0.04542650 (1.95%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) = 0.981
-        C(a2, t1) = -0.938
-        C(t1, t2) = -0.894
-        C(a1, t1) = -0.508
-        C(a1, a2) = 0.214
-        C(a1, t2) = 0.178
+        C(a2, t2) = +0.9811
+        C(a2, t1) = -0.9377
+        C(t1, t2) = -0.8943
+        C(a1, t1) = -0.5076
+        C(a1, a2) = +0.2140
+        C(a1, t2) = +0.1777
 
     Maximum Likelihood Estimation from emcee       
     -------------------------------------------------
@@ -220,7 +220,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.083 seconds)
+   **Total running time of the script:** ( 0 minutes  6.158 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:
@@ -228,6 +228,8 @@ doc_fitting_emcee.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

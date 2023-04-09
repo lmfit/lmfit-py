@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_lmfit_emcee_model_selection.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_lmfit_emcee_model_selection.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,7 +21,7 @@
 Model Selection using lmfit and emcee
 =====================================
 
-FIXME: this is a useful examples; however, it doesn't run correctly anymore as
+FIXME: this is a useful example; however, it doesn't run correctly anymore as
 the PTSampler was removed in emcee v3...
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-13
@@ -296,6 +296,8 @@ possible. For example, you might expect the prior to be Gaussian.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

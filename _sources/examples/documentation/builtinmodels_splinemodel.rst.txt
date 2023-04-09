@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_splinemodel.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_builtinmodels_splinemodel.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -21,13 +21,13 @@
 doc_builtinmodels_splinemodel.py
 ================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-70
+.. GENERATED FROM PYTHON SOURCE LINES 7-68
 
 
 
 .. image-sg:: /examples/documentation/images/sphx_glr_builtinmodels_splinemodel_001.png
    :alt: builtinmodels splinemodel
-   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_splinemodel_001.png, /examples/documentation/images/sphx_glr_builtinmodels_splinemodel_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_splinemodel_001.png, /examples/documentation/images/sphx_glr_builtinmodels_splinemodel_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -48,46 +48,46 @@ doc_builtinmodels_splinemodel.py
         Bayesian info crit = -1041.58425
         R-squared          = 0.94690612
     [[Variables]]
-        peak_amplitude:  12.2231157 +/- 0.29553757 (2.42%) (init = 8)
+        peak_amplitude:  12.2231138 +/- 0.29554074 (2.42%) (init = 8)
         peak_center:     16.4280869 +/- 0.01091050 (0.07%) (init = 16)
-        peak_sigma:      0.72096413 +/- 0.01336638 (1.85%) (init = 1)
-        peak_fwhm:       1.69774076 +/- 0.03147542 (1.85%) == '2.3548200*peak_sigma'
-        peak_height:     6.76360680 +/- 0.09854040 (1.46%) == '0.3989423*peak_amplitude/max(1e-15, peak_sigma)'
+        peak_sigma:      0.72096402 +/- 0.01336666 (1.85%) (init = 1)
+        peak_fwhm:       1.69774050 +/- 0.03147609 (1.85%) == '2.3548200*peak_sigma'
+        peak_height:     6.76360675 +/- 0.09854036 (1.46%) == '0.3989423*peak_amplitude/max(1e-15, peak_sigma)'
         bkg_s0:          3.51175736 +/- 0.04941392 (1.41%) (init = 3.787995)
         bkg_s1:          3.72930068 +/- 0.09558236 (2.56%) (init = 3.959487)
-        bkg_s2:          4.26846493 +/- 0.12650286 (2.96%) (init = 4.384009)
-        bkg_s3:          4.42375494 +/- 0.10170202 (2.30%) (init = 4.431971)
-        bkg_s4:          4.49590439 +/- 0.10615550 (2.36%) (init = 4.243976)
-        bkg_s5:          3.96515330 +/- 0.09336550 (2.35%) (init = 4.115153)
-        bkg_s6:          3.35531872 +/- 0.12669972 (3.78%) (init = 3.965325)
-        bkg_s7:          2.89909670 +/- 0.16190139 (5.58%) (init = 2.788437)
-        bkg_s8:          2.82657013 +/- 0.13445467 (4.76%) (init = 2.984317)
-        bkg_s9:          3.43338644 +/- 0.15987269 (4.66%) (init = 3.383491)
-        bkg_s10:         3.73024856 +/- 0.12096863 (3.24%) (init = 3.791937)
+        bkg_s2:          4.26846495 +/- 0.12650286 (2.96%) (init = 4.384009)
+        bkg_s3:          4.42375491 +/- 0.10170203 (2.30%) (init = 4.431971)
+        bkg_s4:          4.49590447 +/- 0.10615551 (2.36%) (init = 4.243976)
+        bkg_s5:          3.96515316 +/- 0.09336554 (2.35%) (init = 4.115153)
+        bkg_s6:          3.35531898 +/- 0.12669983 (3.78%) (init = 3.965325)
+        bkg_s7:          2.89909737 +/- 0.16190201 (5.58%) (init = 2.788437)
+        bkg_s8:          2.82656972 +/- 0.13445491 (4.76%) (init = 2.984317)
+        bkg_s9:          3.43338674 +/- 0.15987280 (4.66%) (init = 3.383491)
+        bkg_s10:         3.73024845 +/- 0.12096864 (3.24%) (init = 3.791937)
     [[Correlations]] (unreported correlations are < 0.300)
-        C(bkg_s7, bkg_s8)             = -0.819
-        C(peak_amplitude, peak_sigma) = 0.799
-        C(bkg_s8, bkg_s9)             = -0.706
-        C(bkg_s5, bkg_s6)             = -0.695
-        C(peak_amplitude, bkg_s7)     = -0.688
-        C(bkg_s2, bkg_s3)             = -0.667
-        C(bkg_s9, bkg_s10)            = -0.606
-        C(bkg_s3, bkg_s4)             = -0.574
-        C(bkg_s1, bkg_s2)             = -0.565
-        C(bkg_s4, bkg_s5)             = -0.554
-        C(bkg_s7, bkg_s9)             = 0.522
-        C(peak_sigma, bkg_s7)         = -0.519
-        C(peak_amplitude, bkg_s8)     = 0.518
-        C(bkg_s0, bkg_s1)             = 0.445
-        C(peak_sigma, bkg_s8)         = 0.373
-        C(peak_center, bkg_s6)        = 0.360
-        C(bkg_s4, bkg_s6)             = 0.360
-        C(bkg_s0, bkg_s2)             = -0.359
-        C(bkg_s2, bkg_s4)             = 0.350
-        C(bkg_s8, bkg_s10)            = 0.345
-        C(bkg_s6, bkg_s7)             = -0.333
-        C(peak_center, bkg_s7)        = -0.330
-        C(peak_amplitude, bkg_s9)     = -0.321
+        C(bkg_s7, bkg_s8)             = -0.8192
+        C(peak_amplitude, peak_sigma) = +0.7987
+        C(bkg_s8, bkg_s9)             = -0.7063
+        C(bkg_s5, bkg_s6)             = -0.6950
+        C(peak_amplitude, bkg_s7)     = -0.6878
+        C(bkg_s2, bkg_s3)             = -0.6672
+        C(bkg_s9, bkg_s10)            = -0.6060
+        C(bkg_s3, bkg_s4)             = -0.5743
+        C(bkg_s1, bkg_s2)             = -0.5646
+        C(bkg_s4, bkg_s5)             = -0.5542
+        C(bkg_s7, bkg_s9)             = +0.5216
+        C(peak_sigma, bkg_s7)         = -0.5192
+        C(peak_amplitude, bkg_s8)     = +0.5185
+        C(bkg_s0, bkg_s1)             = +0.4448
+        C(peak_sigma, bkg_s8)         = +0.3733
+        C(peak_center, bkg_s6)        = +0.3599
+        C(bkg_s4, bkg_s6)             = +0.3597
+        C(bkg_s0, bkg_s2)             = -0.3595
+        C(bkg_s2, bkg_s4)             = +0.3504
+        C(bkg_s8, bkg_s10)            = +0.3455
+        C(bkg_s6, bkg_s7)             = -0.3332
+        C(peak_center, bkg_s7)        = -0.3301
+        C(peak_amplitude, bkg_s9)     = -0.3206
 
 
 
@@ -111,7 +111,9 @@ doc_builtinmodels_splinemodel.py
     plt.plot(x, y, label='data')
 
     model = GaussianModel(prefix='peak_')
-    params = model.make_params(amplitude=8, center=16, sigma=1)
+    params = model.make_params(amplitude=dict(value=8, min=0),
+                               center=dict(value=16, min=5, max=25),
+                               sigma=dict(value=1, min=0))
 
     # make a background spline with knots evenly spaced over the background,
     # but sort of skipping over where the peak is
@@ -123,10 +125,6 @@ doc_builtinmodels_splinemodel.py
     params.update(bkg.guess(y, x))
 
     model = model + bkg
-
-    params['peak_center'].min = 10
-    params['peak_center'].max = 20
-    params['peak_amplitude'].min = 0
 
     plt.plot(x, model.eval(params, x=x), label='initial')
 
@@ -165,7 +163,7 @@ doc_builtinmodels_splinemodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.282 seconds)
+   **Total running time of the script:** ( 0 minutes  0.290 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_splinemodel.py:
@@ -173,6 +171,8 @@ doc_builtinmodels_splinemodel.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

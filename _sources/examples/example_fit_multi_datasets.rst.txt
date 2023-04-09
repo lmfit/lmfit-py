@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_fit_multi_datasets.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_fit_multi_datasets.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -75,7 +75,7 @@ TODO: this could/should be using the Model interface / built-in models!
 
 Create five simulated Gaussian data sets
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-59
+.. GENERATED FROM PYTHON SOURCE LINES 47-58
 
 .. code-block:: default
 
@@ -83,7 +83,6 @@ Create five simulated Gaussian data sets
     x = np.linspace(-1, 2, 151)
     data = []
     for _ in np.arange(5):
-        params = Parameters()
         amp = 0.60 + 9.50*np.random.rand()
         cen = -0.20 + 1.20*np.random.rand()
         sig = 0.25 + 0.03*np.random.rand()
@@ -98,11 +97,11 @@ Create five simulated Gaussian data sets
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-61
+.. GENERATED FROM PYTHON SOURCE LINES 59-60
 
 Create five sets of fitting parameters, one per data set
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-67
+.. GENERATED FROM PYTHON SOURCE LINES 60-66
 
 .. code-block:: default
 
@@ -119,12 +118,12 @@ Create five sets of fitting parameters, one per data set
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-70
+.. GENERATED FROM PYTHON SOURCE LINES 67-69
 
 Constrain the values of sigma to be the same for all peaks by assigning
 sig_2, ..., sig_5 to be equal to sig_1.
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-73
+.. GENERATED FROM PYTHON SOURCE LINES 69-72
 
 .. code-block:: default
 
@@ -138,11 +137,11 @@ sig_2, ..., sig_5 to be equal to sig_1.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-75
+.. GENERATED FROM PYTHON SOURCE LINES 73-74
 
 Run the global fit and show the fitting result
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-78
+.. GENERATED FROM PYTHON SOURCE LINES 74-77
 
 .. code-block:: default
 
@@ -158,38 +157,38 @@ Run the global fit and show the fitting result
  .. code-block:: none
 
     [[Variables]]
-        amp_1:  6.32742039 +/- 0.02279129 (0.36%) (init = 0.5)
-        cen_1:  0.68049265 +/- 0.00126458 (0.19%) (init = 0.4)
-        sig_1:  0.25755568 +/- 4.9426e-04 (0.19%) (init = 0.3)
-        amp_2:  6.98604785 +/- 0.02296772 (0.33%) (init = 0.5)
+        amp_1:  6.32742010 +/- 0.02279089 (0.36%) (init = 0.5)
+        cen_1:  0.68049261 +/- 0.00126458 (0.19%) (init = 0.4)
+        sig_1:  0.25755570 +/- 4.9426e-04 (0.19%) (init = 0.3)
+        amp_2:  6.98604753 +/- 0.02296733 (0.33%) (init = 0.5)
         cen_2:  0.50433700 +/- 0.00114536 (0.23%) (init = 0.4)
-        sig_2:  0.25755568 +/- 4.9426e-04 (0.19%) == 'sig_1'
-        amp_3:  7.11643543 +/- 0.02300454 (0.32%) (init = 0.5)
-        cen_3: -0.08260273 +/- 0.00112437 (1.36%) (init = 0.4)
-        sig_3:  0.25755568 +/- 4.9426e-04 (0.19%) == 'sig_1'
-        amp_4:  6.10197450 +/- 0.02273463 (0.37%) (init = 0.5)
+        sig_2:  0.25755570 +/- 4.9426e-04 (0.19%) == 'sig_1'
+        amp_3:  7.11643510 +/- 0.02300415 (0.32%) (init = 0.5)
+        cen_3: -0.08260274 +/- 0.00112437 (1.36%) (init = 0.4)
+        sig_3:  0.25755570 +/- 4.9426e-04 (0.19%) == 'sig_1'
+        amp_4:  6.10197422 +/- 0.02273421 (0.37%) (init = 0.5)
         cen_4:  0.07386098 +/- 0.00131130 (1.78%) (init = 0.4)
-        sig_4:  0.25755568 +/- 4.9426e-04 (0.19%) == 'sig_1'
-        amp_5:  9.23910596 +/- 0.02368909 (0.26%) (init = 0.5)
-        cen_5:  0.34443079 +/- 8.6605e-04 (0.25%) (init = 0.4)
-        sig_5:  0.25755568 +/- 4.9426e-04 (0.19%) == 'sig_1'
+        sig_4:  0.25755570 +/- 4.9426e-04 (0.19%) == 'sig_1'
+        amp_5:  9.23910555 +/- 0.02368872 (0.26%) (init = 0.5)
+        cen_5:  0.34443083 +/- 8.6605e-04 (0.25%) (init = 0.4)
+        sig_5:  0.25755570 +/- 4.9426e-04 (0.19%) == 'sig_1'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(sig_1, amp_5) = -0.374
-        C(sig_1, amp_3) = -0.297
-        C(sig_1, amp_2) = -0.292
-        C(amp_1, sig_1) = -0.266
-        C(sig_1, amp_4) = -0.258
-        C(amp_3, amp_5) = 0.111
-        C(amp_2, amp_5) = 0.109
+        C(sig_1, amp_5) = -0.3742
+        C(sig_1, amp_3) = -0.2968
+        C(sig_1, amp_2) = -0.2919
+        C(amp_1, sig_1) = -0.2664
+        C(sig_1, amp_4) = -0.2575
+        C(amp_3, amp_5) = +0.1111
+        C(amp_2, amp_5) = +0.1092
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-80
+.. GENERATED FROM PYTHON SOURCE LINES 78-79
 
 Plot the data sets and fits
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-84
+.. GENERATED FROM PYTHON SOURCE LINES 79-83
 
 .. code-block:: default
 
@@ -202,7 +201,7 @@ Plot the data sets and fits
 
 .. image-sg:: /examples/images/sphx_glr_example_fit_multi_datasets_001.png
    :alt: example fit multi datasets
-   :srcset: /examples/images/sphx_glr_example_fit_multi_datasets_001.png, /examples/images/sphx_glr_example_fit_multi_datasets_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_fit_multi_datasets_001.png, /examples/images/sphx_glr_example_fit_multi_datasets_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -212,7 +211,7 @@ Plot the data sets and fits
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.168 seconds)
+   **Total running time of the script:** ( 0 minutes  0.434 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets.py:
@@ -220,6 +219,8 @@ Plot the data sets and fits
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

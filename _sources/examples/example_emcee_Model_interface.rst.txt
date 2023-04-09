@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_emcee_Model_interface.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_emcee_Model_interface.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -115,7 +115,7 @@ Fit the model using a traditional minimizer, and show the output:
 
 .. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_001.png
    :alt: Model(double_exp)
-   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_001.png, /examples/images/sphx_glr_example_emcee_Model_interface_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_001.png, /examples/images/sphx_glr_example_emcee_Model_interface_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -139,12 +139,12 @@ Fit the model using a traditional minimizer, and show the output:
         a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
         t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) = 0.988
-        C(t1, a2) = -0.928
-        C(t1, t2) = -0.885
-        C(a1, t1) = -0.609
-        C(a1, a2) = 0.297
-        C(a1, t2) = 0.232
+        C(a2, t2) = +0.9876
+        C(t1, a2) = -0.9278
+        C(t1, t2) = -0.8852
+        C(a1, t1) = -0.6093
+        C(a1, a2) = +0.2973
+        C(a1, t2) = +0.2319
 
 
 
@@ -223,12 +223,12 @@ run the MCMC algorithm and show the results:
         t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
         __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) = 0.981
-        C(t1, a2) = -0.937
-        C(t1, t2) = -0.895
-        C(a1, t1) = -0.515
-        C(a1, a2) = 0.220
-        C(a1, t2) = 0.187
+        C(a2, t2) = +0.9810
+        C(t1, a2) = -0.9367
+        C(t1, t2) = -0.8949
+        C(a1, t1) = -0.5154
+        C(a1, a2) = +0.2197
+        C(a1, t2) = +0.1868
 
 
 
@@ -246,7 +246,7 @@ run the MCMC algorithm and show the results:
 
 .. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_002.png
    :alt: Model(double_exp)
-   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_002.png, /examples/images/sphx_glr_example_emcee_Model_interface_002_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_002.png, /examples/images/sphx_glr_example_emcee_Model_interface_002_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -270,7 +270,7 @@ Check the acceptance fraction to see whether ``emcee`` performed well:
 
 .. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_003.png
    :alt: example emcee Model interface
-   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_003.png, /examples/images/sphx_glr_example_emcee_Model_interface_003_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_003.png, /examples/images/sphx_glr_example_emcee_Model_interface_003_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -325,7 +325,7 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
 
 .. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_004.png
    :alt: example emcee Model interface
-   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_004.png, /examples/images/sphx_glr_example_emcee_Model_interface_004_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_004.png, /examples/images/sphx_glr_example_emcee_Model_interface_004_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -358,12 +358,12 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
         t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
         __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) = 0.981
-        C(t1, a2) = -0.937
-        C(t1, t2) = -0.895
-        C(a1, t1) = -0.515
-        C(a1, a2) = 0.220
-        C(a1, t2) = 0.187
+        C(a2, t2) = +0.9810
+        C(t1, a2) = -0.9367
+        C(t1, t2) = -0.8949
+        C(a1, t1) = -0.5154
+        C(a1, a2) = +0.2197
+        C(a1, t2) = +0.1868
 
 
 
@@ -414,7 +414,7 @@ Find the maximum likelihood solution:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  27.561 seconds)
+   **Total running time of the script:** ( 0 minutes  27.513 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:
@@ -422,6 +422,8 @@ Find the maximum likelihood solution:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

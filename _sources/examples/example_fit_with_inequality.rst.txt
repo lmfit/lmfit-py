@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_fit_with_inequality.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_fit_with_inequality.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -35,7 +35,7 @@ See also: https://lmfit.github.io/lmfit-py/constraints.html#using-inequality-con
     import matplotlib.pyplot as plt
     import numpy as np
 
-    from lmfit import Minimizer, Parameters, report_fit
+    from lmfit import Minimizer, create_params, report_fit
     from lmfit.lineshapes import gaussian, lorentzian
 
 
@@ -80,18 +80,14 @@ First, we add a new fitting  parameter ``peak_split``, which can take values
 between 0 and 5. Afterwards, we constrain the value for ``cen_l`` using the
 expression to be ``'peak_split+cen_g'``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-51
+.. GENERATED FROM PYTHON SOURCE LINES 38-47
 
 .. code-block:: default
 
-    pfit = Parameters()
-    pfit.add(name='amp_g', value=10)
-    pfit.add(name='amp_l', value=10)
-    pfit.add(name='cen_g', value=5)
-    pfit.add(name='peak_split', value=2.5, min=0, max=5, vary=True)
-    pfit.add(name='cen_l', expr='peak_split+cen_g')
-    pfit.add(name='wid_g', value=1)
-    pfit.add(name='wid_l', expr='wid_g')
+    pfit = create_params(amp_g=10, cen_g=5, wid_g=1, amp_l=10,
+                         peak_split=dict(value=2.5, min=0, max=5),
+                         cen_l=dict(expr='peak_split+cen_g'),
+                         wid_l=dict(expr='wid_g'))
 
     mini = Minimizer(residual, pfit, fcn_args=(x, data))
     out = mini.leastsq()
@@ -104,12 +100,12 @@ expression to be ``'peak_split+cen_g'``:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-54
+.. GENERATED FROM PYTHON SOURCE LINES 48-50
 
 Performing a fit, here using the ``leastsq`` algorithm, gives the following
 fitting results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-56
+.. GENERATED FROM PYTHON SOURCE LINES 50-52
 
 .. code-block:: default
 
@@ -124,43 +120,44 @@ fitting results:
  .. code-block:: none
 
     [[Variables]]
-        amp_g:       21.2722837 +/- 0.05138760 (0.24%) (init = 10)
-        amp_l:       9.46504191 +/- 0.05445416 (0.58%) (init = 10)
-        cen_g:       6.10496394 +/- 0.00334614 (0.05%) (init = 5)
-        peak_split:  3.52163535 +/- 0.01004618 (0.29%) (init = 2.5)
-        cen_l:       9.62659929 +/- 0.01066173 (0.11%) == 'peak_split+cen_g'
-        wid_g:       1.21434950 +/- 0.00327315 (0.27%) (init = 1)
-        wid_l:       1.21434950 +/- 0.00327315 (0.27%) == 'wid_g'
+        amp_g:       21.2722842 +/- 0.05138772 (0.24%) (init = 10)
+        cen_g:       6.10496396 +/- 0.00334613 (0.05%) (init = 5)
+        wid_g:       1.21434954 +/- 0.00327317 (0.27%) (init = 1)
+        amp_l:       9.46504173 +/- 0.05445415 (0.58%) (init = 10)
+        peak_split:  3.52163544 +/- 0.01004618 (0.29%) (init = 2.5)
+        cen_l:       9.62659940 +/- 0.01066172 (0.11%) == 'peak_split+cen_g'
+        wid_l:       1.21434954 +/- 0.00327317 (0.27%) == 'wid_g'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp_g, wid_g)      = 0.620
-        C(amp_g, peak_split) = 0.380
-        C(peak_split, wid_g) = 0.344
-        C(amp_g, amp_l)      = -0.295
-        C(amp_l, cen_g)      = -0.276
-        C(amp_g, cen_g)      = 0.194
-        C(amp_l, wid_g)      = -0.165
-        C(cen_g, wid_g)      = 0.155
+        C(amp_g, wid_g)      = +0.6199
+        C(amp_g, peak_split) = +0.3796
+        C(wid_g, peak_split) = +0.3445
+        C(amp_g, amp_l)      = -0.2951
+        C(cen_g, amp_l)      = -0.2761
+        C(amp_g, cen_g)      = +0.1936
+        C(wid_g, amp_l)      = -0.1651
+        C(cen_g, wid_g)      = +0.1546
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-58
+.. GENERATED FROM PYTHON SOURCE LINES 53-54
 
 and figure:
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-61
+.. GENERATED FROM PYTHON SOURCE LINES 54-58
 
 .. code-block:: default
 
     plt.plot(x, data, 'o')
     plt.plot(x, best_fit, '--', label='best fit')
     plt.legend()
+    plt.show()
 
 
 
 .. image-sg:: /examples/images/sphx_glr_example_fit_with_inequality_001.png
    :alt: example fit with inequality
-   :srcset: /examples/images/sphx_glr_example_fit_with_inequality_001.png, /examples/images/sphx_glr_example_fit_with_inequality_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_fit_with_inequality_001.png, /examples/images/sphx_glr_example_fit_with_inequality_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -170,7 +167,7 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.173 seconds)
+   **Total running time of the script:** ( 0 minutes  0.156 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:
@@ -178,6 +175,8 @@ and figure:
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

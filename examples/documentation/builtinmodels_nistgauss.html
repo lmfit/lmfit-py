@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
@@ -26,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="doc_model_composite.py" href="model_composite.html" />
+    <link rel="next" title="doc_parameters_basic.py" href="parameters_basic.html" />
     <link rel="prev" title="doc_builtinmodels_peakmodels.py" href="builtinmodels_peakmodels.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -88,7 +85,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="model_composite.html" title="doc_model_composite.py"
+          <a href="parameters_basic.html" title="doc_parameters_basic.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="builtinmodels_peakmodels.html" title="doc_builtinmodels_peakmodels.py"
@@ -115,8 +112,8 @@
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="model_composite.html"
-                          title="next chapter">doc_model_composite.py</a></p>
+    <p class="topless"><a href="parameters_basic.html"
+                          title="next chapter">doc_parameters_basic.py</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -138,12 +135,12 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-builtinmodels-nistgauss-py">
 <span id="sphx-glr-examples-documentation-builtinmodels-nistgauss-py"></span><h1>doc_builtinmodels_nistgauss.py<a class="headerlink" href="#doc-builtinmodels-nistgauss-py" title="Permalink to this heading">¶</a></h1>
-<img src="../../_images/sphx_glr_builtinmodels_nistgauss_001.png" srcset="../../_images/sphx_glr_builtinmodels_nistgauss_001.png, ../../_images/sphx_glr_builtinmodels_nistgauss_001_3_0x.png 3.0x" alt="builtinmodels nistgauss" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+<img src="../../_images/sphx_glr_builtinmodels_nistgauss_001.png" srcset="../../_images/sphx_glr_builtinmodels_nistgauss_001.png, ../../_images/sphx_glr_builtinmodels_nistgauss_001_3_00x.png 3.00x" alt="builtinmodels nistgauss" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
     ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
 [[Fit Statistics]]
     # fitting method   = leastsq
@@ -156,29 +153,31 @@ to download the full example code</p>
     Bayesian info crit = 446.036318
     R-squared          = 0.99648654
 [[Variables]]
-    exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
-    exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
-    g1_amplitude:   4257.77319 +/- 42.3833638 (1.00%) (init = 2000)
-    g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
-    g1_sigma:       16.6725753 +/- 0.16048160 (0.96%) (init = 15)
-    g1_fwhm:        39.2609139 +/- 0.37790529 (0.96%) == &#39;2.3548200*g1_sigma&#39;
-    g1_height:      101.880231 +/- 0.59217098 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
-    g2_amplitude:   2493.41770 +/- 36.1694738 (1.45%) (init = 2000)
-    g2_center:      153.270101 +/- 0.19466742 (0.13%) (init = 155)
-    g2_sigma:       13.8069484 +/- 0.18679414 (1.35%) (init = 15)
-    g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455934 +/- 0.61722094 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
-[[Correlations]] (unreported correlations are &lt; 0.500)
-    C(g1_amplitude, g1_sigma)   = 0.824
-    C(g2_amplitude, g2_sigma)   = 0.815
-    C(exp_amplitude, exp_decay) = -0.695
-    C(g1_sigma, g2_center)      = 0.684
-    C(g1_center, g2_amplitude)  = -0.669
-    C(g1_center, g2_sigma)      = -0.652
-    C(g1_amplitude, g2_center)  = 0.648
-    C(g1_center, g2_center)     = 0.621
-    C(g1_center, g1_sigma)      = 0.507
-    C(exp_decay, g1_amplitude)  = -0.507
+    exp_amplitude:  99.0183278 +/- 0.53748593 (0.54%) (init = 162.2102)
+    exp_decay:      90.9508853 +/- 1.10310778 (1.21%) (init = 93.24905)
+    g1_amplitude:   4257.77360 +/- 42.3836478 (1.00%) (init = 2000)
+    g1_center:      107.030956 +/- 0.15006851 (0.14%) (init = 105)
+    g1_sigma:       16.6725772 +/- 0.16048381 (0.96%) (init = 15)
+    g1_fwhm:        39.2609181 +/- 0.37791049 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880230 +/- 0.59217173 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_amplitude:   2493.41735 +/- 36.1697789 (1.45%) (init = 2000)
+    g2_center:      153.270102 +/- 0.19466802 (0.13%) (init = 155)
+    g2_sigma:       13.8069464 +/- 0.18679695 (1.35%) (init = 15)
+    g2_fwhm:        32.5128735 +/- 0.43987320 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455941 +/- 0.61722243 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+[[Correlations]]
+  +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+  | Variable      | exp_amplitude | exp_decay     | g1_amplitude  | g1_center     | g1_sigma      | g2_amplitude  | g2_center     | g2_sigma      |
+  +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+  | exp_amplitude | +1.0000       | -0.6946       | +0.1478       | -0.0467       | +0.0218       | +0.2821       | +0.0331       | +0.1714       |
+  | exp_decay     | -0.6946       | +1.0000       | -0.5074       | +0.1055       | -0.2520       | -0.4270       | -0.1514       | -0.2329       |
+  | g1_amplitude  | +0.1478       | -0.5074       | +1.0000       | +0.4183       | +0.8243       | -0.3071       | +0.6477       | -0.4010       |
+  | g1_center     | -0.0467       | +0.1055       | +0.4183       | +1.0000       | +0.5075       | -0.6689       | +0.6205       | -0.6520       |
+  | g1_sigma      | +0.0218       | -0.2520       | +0.8243       | +0.5075       | +1.0000       | -0.4915       | +0.6842       | -0.4826       |
+  | g2_amplitude  | +0.2821       | -0.4270       | -0.3071       | -0.6689       | -0.4915       | +1.0000       | -0.4763       | +0.8154       |
+  | g2_center     | +0.0331       | -0.1514       | +0.6477       | +0.6205       | +0.6842       | -0.4763       | +1.0000       | -0.4889       |
+  | g2_sigma      | +0.1714       | -0.2329       | -0.4010       | -0.6520       | -0.4826       | +0.8154       | -0.4889       | +1.0000       |
+  +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
 </pre></div>
 </div>
 <div class="line-block">
@@ -198,27 +197,23 @@ to download the full example code</p>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">exp_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
 
 <span class="n">gauss1</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g1_&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss1</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
-
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss1</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">125</span><span class="p">),</span>
+                               <span class="n">sigma</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                               <span class="n">amplitude</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="n">gauss2</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g2_&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss2</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
-
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">175</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss2</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">175</span><span class="p">),</span>
+                               <span class="n">sigma</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                               <span class="n">amplitude</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">gauss1</span> <span class="o">+</span> <span class="n">gauss2</span> <span class="o">+</span> <span class="n">exp_mod</span>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">init</span></a> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">correl_mode</span><span class="o">=</span><span class="s1">&#39;table&#39;</span><span class="p">))</span>
 
-<span class="n">fig</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">init</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
@@ -231,11 +226,11 @@ to download the full example code</p>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;exp_&#39;</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Exponential component&#39;</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 <span class="c1"># &lt;end examples/doc_builtinmodels_nistgauss.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.299 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.302 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-builtinmodels-nistgauss-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/c0716e59ff0e887536aa2f410ead27c8/builtinmodels_nistgauss.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_nistgauss.py</span></code></a></p>
@@ -261,7 +256,7 @@ to download the full example code</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="model_composite.html" title="doc_model_composite.py"
+          <a href="parameters_basic.html" title="doc_parameters_basic.py"
              >next</a> |</li>
         <li class="right" >
           <a href="builtinmodels_peakmodels.html" title="doc_builtinmodels_peakmodels.py"
@@ -280,8 +275,8 @@ to download the full example code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

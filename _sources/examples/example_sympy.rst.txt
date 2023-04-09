@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_sympy.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_sympy.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -120,7 +120,7 @@ Generate synthetic data with noise and plot the data.
 
 .. image-sg:: /examples/images/sphx_glr_example_sympy_001.png
    :alt: example sympy
-   :srcset: /examples/images/sphx_glr_example_sympy_001.png, /examples/images/sphx_glr_example_sympy_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_sympy_001.png, /examples/images/sphx_glr_example_sympy_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -158,7 +158,7 @@ Next, we will just create a lmfit model from the function and fit the data.
 
 .. image-sg:: /examples/images/sphx_glr_example_sympy_002.png
    :alt: Model(_lambdifygenerated)
-   :srcset: /examples/images/sphx_glr_example_sympy_002.png, /examples/images/sphx_glr_example_sympy_002_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_sympy_002.png, /examples/images/sphx_glr_example_sympy_002_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -189,7 +189,7 @@ reason. Both can be expressed by just substituting the variables.
 
 .. image-sg:: /examples/images/sphx_glr_example_sympy_003.png
    :alt: Model(_lambdifygenerated)
-   :srcset: /examples/images/sphx_glr_example_sympy_003.png, /examples/images/sphx_glr_example_sympy_003_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_sympy_003.png, /examples/images/sphx_glr_example_sympy_003_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -199,7 +199,7 @@ reason. Both can be expressed by just substituting the variables.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.676 seconds)
+   **Total running time of the script:** ( 0 minutes  0.811 seconds)
 
 
 .. _sphx_glr_download_examples_example_sympy.py:
@@ -207,6 +207,8 @@ reason. Both can be expressed by just substituting the variables.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

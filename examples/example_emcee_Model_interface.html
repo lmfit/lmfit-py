@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
@@ -102,6 +99,7 @@
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -136,7 +134,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-emcee-model-interface-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-example-emcee-model-interface-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="emcee-and-the-model-interface">
@@ -174,7 +172,7 @@ to download the full example code</p>
 <span class="n">result</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_emcee_Model_interface_001.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_001.png, ../_images/sphx_glr_example_emcee_Model_interface_001_3_0x.png 3.0x" alt="Model(double_exp)" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
+<img src="../_images/sphx_glr_example_emcee_Model_interface_001.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_001.png, ../_images/sphx_glr_example_emcee_Model_interface_001_3_00x.png 3.00x" alt="Model(double_exp)" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
     # fitting method   = Nelder-Mead
     # function evals   = 609
     # data points      = 250
@@ -190,12 +188,12 @@ to download the full example code</p>
     a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
     t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a2, t2) = 0.988
-    C(t1, a2) = -0.928
-    C(t1, t2) = -0.885
-    C(a1, t1) = -0.609
-    C(a1, a2) = 0.297
-    C(a1, t2) = 0.232
+    C(a2, t2) = +0.9876
+    C(t1, a2) = -0.9278
+    C(t1, t2) = -0.8852
+    C(a1, t1) = -0.6093
+    C(a1, a2) = +0.2973
+    C(a1, t2) = +0.2319
 </pre></div>
 </div>
 <p>Calculate parameter covariance using <code class="docutils literal notranslate"><span class="pre">emcee</span></code>:</p>
@@ -237,26 +235,26 @@ to download the full example code</p>
     t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
     __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a2, t2) = 0.981
-    C(t1, a2) = -0.937
-    C(t1, t2) = -0.895
-    C(a1, t1) = -0.515
-    C(a1, a2) = 0.220
-    C(a1, t2) = 0.187
+    C(a2, t2) = +0.9810
+    C(t1, a2) = -0.9367
+    C(t1, t2) = -0.8949
+    C(a1, t1) = -0.5154
+    C(a1, a2) = +0.2197
+    C(a1, t2) = +0.1868
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result_emcee</span><span class="o">.</span><span class="n">plot_fit</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nelder&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nelder&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_emcee_Model_interface_002.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_002.png, ../_images/sphx_glr_example_emcee_Model_interface_002_3_0x.png 3.0x" alt="Model(double_exp)" class = "sphx-glr-single-img"/><p>Check the acceptance fraction to see whether <code class="docutils literal notranslate"><span class="pre">emcee</span></code> performed well:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result_emcee</span><span class="o">.</span><span class="n">acceptance_fraction</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;acceptance fraction&#39;</span><span class="p">)</span>
+<img src="../_images/sphx_glr_example_emcee_Model_interface_002.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_002.png, ../_images/sphx_glr_example_emcee_Model_interface_002_3_00x.png 3.00x" alt="Model(double_exp)" class = "sphx-glr-single-img"/><p>Check the acceptance fraction to see whether <code class="docutils literal notranslate"><span class="pre">emcee</span></code> performed well:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result_emcee</span><span class="o">.</span><span class="n">acceptance_fraction</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s1">&#39;acceptance fraction&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_emcee_Model_interface_003.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_003.png, ../_images/sphx_glr_example_emcee_Model_interface_003_3_0x.png 3.0x" alt="example emcee Model interface" class = "sphx-glr-single-img"/><p>Try to compute the autocorrelation time:</p>
+<img src="../_images/sphx_glr_example_emcee_Model_interface_003.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_003.png, ../_images/sphx_glr_example_emcee_Model_interface_003_3_00x.png 3.00x" alt="example emcee Model interface" class = "sphx-glr-single-img"/><p>Try to compute the autocorrelation time:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result_emcee</span><span class="p">,</span> <span class="s2">&quot;acor&quot;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Autocorrelation time for the parameters:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------&quot;</span><span class="p">)</span>
@@ -273,11 +271,11 @@ t2 = 84.745
 </pre></div>
 </div>
 <p>Plot the parameter covariances returned by <code class="docutils literal notranslate"><span class="pre">emcee</span></code> using <code class="docutils literal notranslate"><span class="pre">corner</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emcee_corner</span> <span class="o">=</span> <span class="n">corner</span><span class="o">.</span><span class="n">corner</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result_emcee</span><span class="o">.</span><span class="n">flatchain</span></a><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">var_names</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">emcee_corner</span></a> <span class="o">=</span> <span class="n">corner</span><span class="o">.</span><span class="n">corner</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result_emcee</span><span class="o">.</span><span class="n">flatchain</span></a><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">var_names</span><span class="p">,</span>
                              <span class="n">truths</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_emcee_Model_interface_004.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_004.png, ../_images/sphx_glr_example_emcee_Model_interface_004_3_0x.png 3.0x" alt="example emcee Model interface" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">median of posterior probability distribution&quot;</span><span class="p">)</span>
+<img src="../_images/sphx_glr_example_emcee_Model_interface_004.png" srcset="../_images/sphx_glr_example_emcee_Model_interface_004.png, ../_images/sphx_glr_example_emcee_Model_interface_004_3_00x.png 3.00x" alt="example emcee Model interface" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">median of posterior probability distribution&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------&#39;</span><span class="p">)</span>
 <span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
@@ -291,12 +289,12 @@ t2 = 84.745
     t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
     __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a2, t2) = 0.981
-    C(t1, a2) = -0.937
-    C(t1, t2) = -0.895
-    C(a1, t1) = -0.515
-    C(a1, a2) = 0.220
-    C(a1, t2) = 0.187
+    C(a2, t2) = +0.9810
+    C(t1, a2) = -0.9367
+    C(t1, t2) = -0.8949
+    C(a1, t1) = -0.5154
+    C(a1, a2) = +0.2197
+    C(a1, t2) = +0.1868
 </pre></div>
 </div>
 <p>Find the maximum likelihood solution:</p>
@@ -309,8 +307,8 @@ t2 = 84.745
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mle_soln</span></a><span class="p">[</span><span class="n">ix</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.percentile.html#numpy.percentile" title="numpy.percentile" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">percentile</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result_emcee</span><span class="o">.</span><span class="n">flatchain</span></a><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">15.9</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.2</span><span class="p">,</span> <span class="mf">97.7</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">1 sigma spread = </span><span class="si">{</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2 sigma spread = </span><span class="si">{</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">1 sigma spread = </span><span class="si">{</span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2 sigma spread = </span><span class="si">{</span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quantiles</span></a><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum Likelihood Estimation (MLE):
@@ -326,7 +324,7 @@ __lnsigma: -2.336
 2 sigma spread = 0.291
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  27.561 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  27.513 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-emcee-model-interface-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/03a011d59481b4216e391c3137bd067d/example_emcee_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_emcee_Model_interface.py</span></code></a></p>
@@ -366,11 +364,12 @@ __lnsigma: -2.336
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -132,6 +129,10 @@
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.load"><code class="docutils literal notranslate"><span class="pre">Parameters.load()</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-create-params-function">The <code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code> function</a><ul>
+<li><a class="reference internal" href="#lmfit.parameter.create_params"><code class="docutils literal notranslate"><span class="pre">create_params()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#simple-example">Simple Example</a></li>
@@ -273,7 +274,7 @@ See <a class="reference internal" href="constraints.html#constraints-chapter"><s
 feature.</p>
 <span class="target" id="index-0"></span><dl class="py method">
 <dt class="sig sig-object py" id="lmfit.parameter.Parameter.set">
-<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter.set" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_init_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set or update Parameter attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -288,6 +289,7 @@ feature.</p>
 fit. To remove a constraint you must supply an empty string.</p></li>
 <li><p><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Step size for grid points in the <cite>brute</cite> method. To remove the
 step size you must use <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>is_init_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to set value as <cite>init_value</cite>, when setting value.</p></li>
 </ul>
 </dd>
 </dl>
@@ -567,6 +569,45 @@ recovered with the <code class="xref py py-meth docutils literal notranslate"><s
 <a class="reference internal" href="model.html#model-saveload-sec"><span class="std std-ref">Saving and Loading Models</span></a> for further discussion.</p>
 </div>
 </section>
+<section id="the-create-params-function">
+<h2>The <a class="reference internal" href="#lmfit.parameter.create_params" title="lmfit.parameter.create_params"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code></a> function<a class="headerlink" href="#the-create-params-function" title="Permalink to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="#lmfit.parameter.create_params" title="lmfit.parameter.create_params"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code></a> function is probably the easiest method for making
+<a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> objects, as it allows defining Parameter names by keyword
+with values either being the numerical initial value for the Parameter or being
+a dictionary with keyword/value pairs for <code class="docutils literal notranslate"><span class="pre">value</span></code> as well as other Parameter
+attribute such as <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">expr</span></code>, and so forth.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lmfit.parameter.create_params">
+<span class="sig-name descname"><span class="pre">create_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.create_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create lmfit.Parameters instance and set initial values and attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kws</strong> – keywords are parameter names, value are dictionaries of Parameter
+values and attributes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parameters instance</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li><p>keyword arguments will be used to create parameter names.</p></li>
+<li><p>values can either be numbers (floats or integers) to set the parameter
+value, or can be dictionaries with any of the following keywords:
+<code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">vary</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">expr</span></code>, <code class="docutils literal notranslate"><span class="pre">brute_step</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">is_init_value</span></code> to set those parameter attributes.</p></li>
+<li><p>for each parameter,  <code class="docutils literal notranslate"><span class="pre">is_init_value</span></code> controls whether to set
+<code class="docutils literal notranslate"><span class="pre">init_value</span></code> when setting <code class="docutils literal notranslate"><span class="pre">value</span></code>, and defaults to True.</p></li>
+</ol>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+<span class="go">                           sigma={&#39;value&#39;: 3, &#39;min&#39;:0},</span>
+<span class="go">                           fwhm={&#39;expr&#39;: &#39;2.0*sigma&#39;})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 <section id="simple-example">
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this heading">¶</a></h2>
 <p>A basic example making use of <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> and the
@@ -577,7 +618,7 @@ might look like this:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_parameters_basic.py&gt;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">report_fit</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">report_fit</span>
 
 <span class="c1"># create data to be fitted</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
@@ -588,7 +629,7 @@ might look like this:</p>
 
 <span class="c1"># define objective function: returns the array to be minimized</span>
 <span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
     <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span>
@@ -603,6 +644,12 @@ might look like this:</p>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+<span class="c1"># ... or use</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                       <span class="n">decay</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                       <span class="n">omega</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                       <span class="n">shift</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="c1"># do fit, here with the default leastsq algorithm</span>
 <span class="n">minner</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">fcn2min</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
@@ -635,7 +682,7 @@ which would make the objective function <code class="docutils literal notranslat
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">])</span>
@@ -681,8 +728,8 @@ which would make the objective function <code class="docutils literal notranslat
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

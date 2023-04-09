@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -27,7 +27,7 @@ doc_builtinmodels_stepmodel.py
 
 .. image-sg:: /examples/documentation/images/sphx_glr_builtinmodels_stepmodel_001.png
    :alt: builtinmodels stepmodel
-   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_stepmodel_001.png, /examples/documentation/images/sphx_glr_builtinmodels_stepmodel_001_3_0x.png 3.0x
+   :srcset: /examples/documentation/images/sphx_glr_builtinmodels_stepmodel_001.png, /examples/documentation/images/sphx_glr_builtinmodels_stepmodel_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -45,24 +45,24 @@ doc_builtinmodels_stepmodel.py
         chi-square         = 593.709621
         reduced chi-square = 3.02913072
         Akaike info crit   = 227.700173
-        Bayesian info crit = 244.216698
+        Bayesian info crit = 244.216697
         R-squared          = 0.99897798
     [[Variables]]
-        line_slope:      1.87162034 +/- 0.09318576 (4.98%) (init = 0)
-        line_intercept:  12.0964558 +/- 0.27606016 (2.28%) (init = 11.58574)
-        step_amplitude:  112.858606 +/- 0.65391554 (0.58%) (init = 134.7378)
-        step_center:     3.13494789 +/- 0.00516602 (0.16%) (init = 2.5)
-        step_sigma:      0.67393529 +/- 0.01091154 (1.62%) (init = 1.428571)
+        line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
+        line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
+        step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
+        step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
+        step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(line_slope, step_amplitude)     = -0.879
-        C(step_amplitude, step_sigma)     = 0.564
-        C(line_slope, step_sigma)         = -0.457
-        C(line_intercept, step_center)    = 0.427
-        C(line_slope, line_intercept)     = -0.309
-        C(line_slope, step_center)        = -0.234
-        C(line_intercept, step_sigma)     = -0.137
-        C(line_intercept, step_amplitude) = -0.117
-        C(step_amplitude, step_center)    = 0.109
+        C(line_slope, step_amplitude)     = -0.8791
+        C(step_amplitude, step_sigma)     = +0.5643
+        C(line_slope, step_sigma)         = -0.4569
+        C(line_intercept, step_center)    = +0.4269
+        C(line_slope, line_intercept)     = -0.3093
+        C(line_slope, step_center)        = -0.2338
+        C(line_intercept, step_sigma)     = -0.1372
+        C(line_intercept, step_amplitude) = -0.1173
+        C(step_amplitude, step_center)    = +0.1095
 
 
 
@@ -107,7 +107,7 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.144 seconds)
+   **Total running time of the script:** ( 0 minutes  0.146 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
@@ -115,6 +115,8 @@ doc_builtinmodels_stepmodel.py
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

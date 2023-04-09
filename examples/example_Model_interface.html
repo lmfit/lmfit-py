@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
@@ -102,6 +99,7 @@
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -136,7 +134,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-model-interface-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-examples-example-model-interface-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="fit-using-the-model-interface">
@@ -176,14 +174,14 @@ defined, and a least-squared regression is performed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 7.146693291458741, &#39;tau&#39;: 2.8980288904274483}
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 7.146693193035321, &#39;tau&#39;: 2.8980289807074064}
 </pre></div>
 </div>
 <p>and use these best-fit parameters for plotting with the <code class="docutils literal notranslate"><span class="pre">plot</span></code> function:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_Model_interface_001.png" srcset="../_images/sphx_glr_example_Model_interface_001.png, ../_images/sphx_glr_example_Model_interface_001_3_0x.png 3.0x" alt="Model(decay)" class = "sphx-glr-single-img"/><p>We can review the best-fit <cite>Parameters</cite> by accessing <cite>result.params</cite>:</p>
+<img src="../_images/sphx_glr_example_Model_interface_001.png" srcset="../_images/sphx_glr_example_Model_interface_001.png, ../_images/sphx_glr_example_Model_interface_001_3_00x.png 3.00x" alt="Model(decay)" class = "sphx-glr-single-img"/><p>We can review the best-fit <cite>Parameters</cite> by accessing <cite>result.params</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -206,10 +204,10 @@ build the <code class="docutils literal notranslate"><span class="pre">Parameter
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.14669329 +/- 0.09130442 (1.28%) (init = 10)
-    tau:  2.89802889 +/- 0.06299097 (2.17%) (init = 1)
+    N:    7.14669319 +/- 0.09130428 (1.28%) (init = 10)
+    tau:  2.89802898 +/- 0.06299118 (2.17%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.753
+    C(N, tau) = -0.7533
 </pre></div>
 </div>
 <p>By building <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects explicitly, you can specify bounds
@@ -222,28 +220,24 @@ build the <code class="docutils literal notranslate"><span class="pre">Parameter
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7 (fixed)
-    tau:  2.97663124 +/- 0.04347450 (1.46%) (init = 1)
+    tau:  2.97663118 +/- 0.04347476 (1.46%) (init = 1)
 </pre></div>
 </div>
 <p><strong>Defining Parameters in Advance</strong></p>
 <p>Passing parameters to <code class="docutils literal notranslate"><span class="pre">fit</span></code> can become unwieldy. As an alternative, you
 can extract the parameters from <code class="docutils literal notranslate"><span class="pre">model</span></code> like so, set them individually,
 and pass them to <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
-
-<span class="n">params</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a><span class="p">)</span>
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
-    tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
+    N:    7.14669316 +/- 0.09130423 (1.28%) (init = 10)
+    tau:  2.89802901 +/- 0.06299127 (2.17%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.753
+    C(N, tau) = -0.7533
 </pre></div>
 </div>
 <p>Keyword arguments override <code class="docutils literal notranslate"><span class="pre">params</span></code>, resetting <code class="docutils literal notranslate"><span class="pre">value</span></code> and all other
@@ -253,10 +247,10 @@ properties (<code class="docutils literal notranslate"><span class="pre">min</sp
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
-    tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
+    N:    7.14669316 +/- 0.09130423 (1.28%) (init = 10)
+    tau:  2.89802901 +/- 0.06299127 (2.17%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.753
+    C(N, tau) = -0.7533
 </pre></div>
 </div>
 <p>The input parameters are not modified by <code class="docutils literal notranslate"><span class="pre">fit</span></code>. They can be reused,
@@ -282,10 +276,10 @@ of the fit in term of <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    6.98535246 +/- 0.28002506 (4.01%) (init = 10)
-    tau:  2.97268207 +/- 0.11134751 (3.75%) (init = 1)
+    N:    6.98535179 +/- 0.28002384 (4.01%) (init = 10)
+    tau:  2.97268236 +/- 0.11134755 (3.75%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.931
+    C(N, tau) = -0.9311
 </pre></div>
 </div>
 <p><em>Handling Missing Data</em></p>
@@ -301,10 +295,10 @@ You can choose to <code class="docutils literal notranslate"><span class="pre">o
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.15448808 +/- 0.09181826 (1.28%) (init = 10)
-    tau:  2.89285076 +/- 0.06305979 (2.18%) (init = 1)
+    N:    7.15448795 +/- 0.09181809 (1.28%) (init = 10)
+    tau:  2.89285089 +/- 0.06306004 (2.18%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.754
+    C(N, tau) = -0.7542
 </pre></div>
 </div>
 <p>If you don’t want to ignore missing values, you can set the model to raise
@@ -333,10 +327,10 @@ automatically aligned to the correct section of <code class="docutils literal no
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.10725873 +/- 0.24259174 (3.41%) (init = 10)
-    tau:  2.92503558 +/- 0.13481756 (4.61%) (init = 1)
+    N:    7.10725864 +/- 0.24259071 (3.41%) (init = 10)
+    tau:  2.92503564 +/- 0.13481789 (4.61%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.932
+    C(N, tau) = -0.9320
 </pre></div>
 </div>
 <p>Data with missing entries and an unequal length still aligns properly.</p>
@@ -347,13 +341,13 @@ automatically aligned to the correct section of <code class="docutils literal no
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.11270203 +/- 0.24334999 (3.42%) (init = 10)
-    tau:  2.92065221 +/- 0.13488198 (4.62%) (init = 1)
+    N:    7.11270194 +/- 0.24334895 (3.42%) (init = 10)
+    tau:  2.92065227 +/- 0.13488230 (4.62%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.932
+    C(N, tau) = -0.9320
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.262 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.246 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-model-interface-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8b2fe0a32f4790de5b0465c00682a37b/example_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_Model_interface.py</span></code></a></p>
@@ -393,11 +387,12 @@ automatically aligned to the correct section of <code class="docutils literal no
     <li><a href="../bounds.html">bounds</a> |</li>
     <li><a href="../constraints.html">constraints</a> ]</li>
 
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

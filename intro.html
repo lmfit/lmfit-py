@@ -16,9 +16,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -171,7 +168,7 @@ sine wave, and so write an objective function like this:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -216,38 +213,42 @@ including:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li><p>The user has to keep track of the order of the variables, and their
-meaning – <code class="docutils literal notranslate"><span class="pre">variables[0]</span></code> is the <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">variables[2]</span></code> is
-the <code class="docutils literal notranslate"><span class="pre">frequency</span></code>, and so on, although there is no intrinsic meaning
-to this order.</p></li>
-<li><p>If the user wants to fix a particular variable (<em>not</em> vary it in the
-fit), the residual function has to be altered to have fewer variables,
-and have the corresponding constant value passed in some other way.
-While reasonable for simple cases, this quickly becomes a significant
-work for more complex models, and greatly complicates modeling for
-people not intimately familiar with the details of the fitting code.</p></li>
-<li><p>There is no simple, robust way to put bounds on values for the
-variables, or enforce mathematical relationships between the
-variables. In fact, the optimization methods that do provide
-bounds, require bounds to be set for all variables with separate
-arrays that are in the same arbitrary order as variable values.
-Again, this is acceptable for small or one-off cases, but becomes
-painful if the fitting model needs to change.</p></li>
+meaning – <code class="docutils literal notranslate"><span class="pre">variables[0]</span></code> is the <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">variables[2]</span></code> is the
+<code class="docutils literal notranslate"><span class="pre">frequency</span></code>, and so on, although there is no intrinsic meaning to this
+order.</p></li>
+<li><p>If the user wants to fix a particular variable (<em>not</em> vary it in the fit),
+the residual function has to be altered to have fewer variables, and have
+the corresponding constant value passed in some other way. While
+reasonable for simple cases, this quickly becomes a significant work for
+more complex models, and greatly complicates modeling for people not
+intimately familiar with the details of the fitting code.</p></li>
+<li><p>There is no simple, robust way to put bounds on values for the variables,
+or enforce mathematical relationships between the variables. While some
+optimization methods in SciPy do provide bounds, they require bounds to
+be set for all variables with separate arrays that are in the same
+arbitrary order as variable values. Again, this is acceptable for small
+or one-off cases, but becomes painful if the fitting model needs to
+change.</p></li>
+<li><p>In some cases, constraints can be placed on Parameter values, but this is
+a pretty opaque and complex process.</p></li>
 </ol>
 </div></blockquote>
-<p>These shortcomings are due to the use of traditional arrays to hold the
-variables, which matches closely the implementation of the underlying
-Fortran code, but does not fit very well with Python’s rich selection of
-objects and data structures. The key concept in lmfit is to define and use
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects instead of plain floating point numbers as the
-variables for the fit. Using <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects (or the closely
-related <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> – a dictionary of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects),
-allows one to:</p>
+<p>While these shortcomings can be worked around with some work, they are all
+essentially due to the use of arrays or lists to hold the variables.
+This closely matches the implementation of the underlying Fortran code, but
+does not fit very well with Python’s rich selection of objects and data
+structures. The key concept in lmfit is to define and use <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code>
+objects instead of plain floating point numbers as the variables for the
+fit. Using <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects (or the closely related
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> – a dictionary of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects), allows one
+to do the following:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li><p>forget about the order of variables and refer to Parameters
 by meaningful names.</p></li>
 <li><p>place bounds on Parameters as attributes, without worrying about
-preserving the order of arrays for variables and boundaries.</p></li>
+preserving the order of arrays for variables and boundaries, and without
+relying on the solver to support bounds itself.</p></li>
 <li><p>fix Parameters, without having to rewrite the objective function.</p></li>
 <li><p>place algebraic constraints on Parameters.</p></li>
 </ol>
@@ -285,11 +286,32 @@ for the decaying sine wave as:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>At first look, we simply replaced a list of values with a dictionary,
-accessed by name – not a huge improvement. But each of the named
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> object holds additional
-attributes to modify the value during the fit. For example, Parameters can
-be fixed or bounded. This can be done during definition:</p>
+<p>At first look, we simply replaced a list of values with a dictionary, so that
+we can access Parameters by name. Just by itself, this is better as it allows
+separation of the objective function from the code using it.</p>
+<p>Note that creation of Parameters here could also be done as:</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>where keyword/value pairs set Parameter names and their initial values.</p>
+<p>Either when using <code class="xref py py-func docutils literal notranslate"><span class="pre">create_param()</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code>, the resulting
+<code class="docutils literal notranslate"><span class="pre">params</span></code> object is an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code>, which acts like a
+dictionary, with keys being the Parameter name and values being individual
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects. These <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> objects hold the value
+and several other attributes that control how a Parameter acts. For example,
+Parameters can be fixed or bounded; setting attributes to control this
+behavior can be done during definition, as with:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
@@ -303,10 +325,26 @@ be fixed or bounded. This can be done during definition:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
-<code class="docutils literal notranslate"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter’s value. It can also
-be done later by setting the corresponding attributes after they have been
-created:</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
+<code class="docutils literal notranslate"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter’s value. The same thing
+can be accomplished by providing a dictionary of attribute values to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code>:</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                       <span class="n">decay</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.007</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                       <span class="n">phase</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                       <span class="n">frequency</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p>Parameter attributes can also be modified after they have been created:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
@@ -317,20 +355,19 @@ created:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>Importantly, our objective function remains unchanged. This means the
-objective function can simply express the parametrized phenomenon to be
-modeled, and is separate from the choice of parameters to be varied in the
-fit.</p>
+<p>Importantly, our objective function remains unchanged. This means the objective
+function can simply express the parametrized phenomenon to be calculated,
+accessing Parameter values by name and separating the choice of parameters to
+be varied in the fit.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">params</span></code> object can be copied and modified to make many user-level
-changes to the model and fitting process. Of course, most of the
-information about how your data is modeled goes into the objective
-function, but the approach here allows some external control; that is,
-control by the <strong>user</strong> performing the fit, instead of by the author of the
-objective function.</p>
-<p>Finally, in addition to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> approach to fitting data,
-lmfit allows switching optimization methods without changing the objective
-function, provides tools for generating fitting reports, and provides a
-better determination of Parameters confidence levels.</p>
+changes to the model and fitting process. Of course, most of the information
+about how your data is modeled goes into the objective function, but the
+approach here allows some external control; that is, control by the <strong>user</strong>
+performing the fit, instead of by the author of the objective function.</p>
+<p>Finally, in addition to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> approach to fitting data, lmfit
+allows switching optimization methods without changing the objective function,
+provides tools for generating fitting reports, and provides a better
+determination of Parameters confidence levels.</p>
 </section>
 
 
@@ -364,8 +401,8 @@ better determination of Parameters confidence levels.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

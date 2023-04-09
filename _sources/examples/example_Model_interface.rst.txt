@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_example_Model_interface.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_example_Model_interface.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -124,7 +124,7 @@ We can immediately see the best-fit values:
 
  .. code-block:: none
 
-    {'N': 7.146693291458741, 'tau': 2.8980288904274483}
+    {'N': 7.146693193035321, 'tau': 2.8980289807074064}
 
 
 
@@ -144,7 +144,7 @@ and use these best-fit parameters for plotting with the ``plot`` function:
 
 .. image-sg:: /examples/images/sphx_glr_example_Model_interface_001.png
    :alt: Model(decay)
-   :srcset: /examples/images/sphx_glr_example_Model_interface_001.png, /examples/images/sphx_glr_example_Model_interface_001_3_0x.png 3.0x
+   :srcset: /examples/images/sphx_glr_example_Model_interface_001.png, /examples/images/sphx_glr_example_Model_interface_001_3_00x.png 3.00x
    :class: sphx-glr-single-img
 
 
@@ -208,10 +208,10 @@ build the ``Parameter`` objects explicitly; the following is equivalent.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.14669329 +/- 0.09130442 (1.28%) (init = 10)
-        tau:  2.89802889 +/- 0.06299097 (2.17%) (init = 1)
+        N:    7.14669319 +/- 0.09130428 (1.28%) (init = 10)
+        tau:  2.89802898 +/- 0.06299118 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.753
+        C(N, tau) = -0.7533
 
 
 
@@ -240,7 +240,7 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
     [[Variables]]
         N:    7 (fixed)
-        tau:  2.97663124 +/- 0.04347450 (1.46%) (init = 1)
+        tau:  2.97663118 +/- 0.04347476 (1.46%) (init = 1)
 
 
 
@@ -253,15 +253,11 @@ Passing parameters to ``fit`` can become unwieldy. As an alternative, you
 can extract the parameters from ``model`` like so, set them individually,
 and pass them to ``fit``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-92
+.. GENERATED FROM PYTHON SOURCE LINES 83-88
 
 .. code-block:: default
 
-    params = model.make_params()
-
-    params['N'].value = 10
-    params['tau'].value = 1
-    params['tau'].min = 0
+    params = model.make_params(N=10, tau={'value': 1, 'min': 0})
 
     result = model.fit(data, params, t=t)
     report_fit(result.params)
@@ -275,20 +271,20 @@ and pass them to ``fit``.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
-        tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
+        N:    7.14669316 +/- 0.09130423 (1.28%) (init = 10)
+        tau:  2.89802901 +/- 0.06299127 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.753
+        C(N, tau) = -0.7533
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-95
+.. GENERATED FROM PYTHON SOURCE LINES 89-91
 
 Keyword arguments override ``params``, resetting ``value`` and all other
 properties (``min``, ``max``, ``vary``).
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-98
+.. GENERATED FROM PYTHON SOURCE LINES 91-94
 
 .. code-block:: default
 
@@ -304,21 +300,21 @@ properties (``min``, ``max``, ``vary``).
  .. code-block:: none
 
     [[Variables]]
-        N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
-        tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
+        N:    7.14669316 +/- 0.09130423 (1.28%) (init = 10)
+        tau:  2.89802901 +/- 0.06299127 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.753
+        C(N, tau) = -0.7533
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-102
+.. GENERATED FROM PYTHON SOURCE LINES 95-98
 
 The input parameters are not modified by ``fit``. They can be reused,
 retaining the same initial value. If you want to use the result of one fit
 as the initial guess for the next, simply pass ``params=result.params``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-111
+.. GENERATED FROM PYTHON SOURCE LINES 100-107
 
 #TODO/FIXME: not sure if there ever way a "helpful exception", but currently
 #it raises a ``ValueError: The input contains nan values``.
@@ -328,7 +324,7 @@ as the initial guess for the next, simply pass ``params=result.params``.
 #All this implicit magic makes it very easy for the user to neglect to set a
 #parameter. The ``fit`` function checks for this and raises a helpful exception.
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-114
+.. GENERATED FROM PYTHON SOURCE LINES 107-110
 
 .. code-block:: default
 
@@ -342,20 +338,20 @@ as the initial guess for the next, simply pass ``params=result.params``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-118
+.. GENERATED FROM PYTHON SOURCE LINES 111-114
 
 #An *extra* parameter that cannot be matched to the model function will
 #throw a ``UserWarning``, but it will not raise, leaving open the possibility
 #of unforeseen extensions calling for some parameters.
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-124
+.. GENERATED FROM PYTHON SOURCE LINES 116-120
 
 *Weighted Fits*
 
 Use the ``sigma`` argument to perform a weighted fit. If you prefer to think
 of the fit in term of ``weights``, ``sigma=1/weights``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-128
+.. GENERATED FROM PYTHON SOURCE LINES 120-124
 
 .. code-block:: default
 
@@ -372,15 +368,15 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.98535246 +/- 0.28002506 (4.01%) (init = 10)
-        tau:  2.97268207 +/- 0.11134751 (3.75%) (init = 1)
+        N:    6.98535179 +/- 0.28002384 (4.01%) (init = 10)
+        tau:  2.97268236 +/- 0.11134755 (3.75%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.931
+        C(N, tau) = -0.9311
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-134
+.. GENERATED FROM PYTHON SOURCE LINES 125-130
 
 *Handling Missing Data*
 
@@ -388,7 +384,7 @@ By default, attempting to fit data that includes a ``NaN``, which
 conventionally indicates a "missing" observation, raises a lengthy exception.
 You can choose to ``omit`` (i.e., skip over) missing values instead.
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-141
+.. GENERATED FROM PYTHON SOURCE LINES 130-137
 
 .. code-block:: default
 
@@ -408,15 +404,15 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.15448808 +/- 0.09181826 (1.28%) (init = 10)
-        tau:  2.89285076 +/- 0.06305979 (2.18%) (init = 1)
+        N:    7.15448795 +/- 0.09181809 (1.28%) (init = 10)
+        tau:  2.89285089 +/- 0.06306004 (2.18%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.754
+        C(N, tau) = -0.7542
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 142-154
+.. GENERATED FROM PYTHON SOURCE LINES 138-150
 
 If you don't want to ignore missing values, you can set the model to raise
 proactively, checking for missing values before attempting the fit.
@@ -431,7 +427,7 @@ raises an exception when present.
 Null-checking  relies on ``pandas.isnull`` if it is available. If pandas
 cannot be imported, it silently falls back on ``numpy.isnan``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-167
+.. GENERATED FROM PYTHON SOURCE LINES 152-163
 
 *Data Alignment*
 
@@ -445,7 +441,7 @@ handle pandas objects out of the box, using its data alignment features.
 Here I take just a slice of the ``data`` and fit it to the full ``t``. It is
 automatically aligned to the correct section of ``t`` using Series' index.
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-173
+.. GENERATED FROM PYTHON SOURCE LINES 163-169
 
 .. code-block:: default
 
@@ -464,19 +460,19 @@ automatically aligned to the correct section of ``t`` using Series' index.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.10725873 +/- 0.24259174 (3.41%) (init = 10)
-        tau:  2.92503558 +/- 0.13481756 (4.61%) (init = 1)
+        N:    7.10725864 +/- 0.24259071 (3.41%) (init = 10)
+        tau:  2.92503564 +/- 0.13481789 (4.61%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.932
+        C(N, tau) = -0.9320
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-175
+.. GENERATED FROM PYTHON SOURCE LINES 170-171
 
 Data with missing entries and an unequal length still aligns properly.
 
-.. GENERATED FROM PYTHON SOURCE LINES 175-179
+.. GENERATED FROM PYTHON SOURCE LINES 171-175
 
 .. code-block:: default
 
@@ -493,10 +489,10 @@ Data with missing entries and an unequal length still aligns properly.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.11270203 +/- 0.24334999 (3.42%) (init = 10)
-        tau:  2.92065221 +/- 0.13488198 (4.62%) (init = 1)
+        N:    7.11270194 +/- 0.24334895 (3.42%) (init = 10)
+        tau:  2.92065227 +/- 0.13488230 (4.62%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.932
+        C(N, tau) = -0.9320
 
 
 
@@ -504,7 +500,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.262 seconds)
+   **Total running time of the script:** ( 0 minutes  0.246 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:
@@ -512,6 +508,8 @@ Data with missing entries and an unequal length still aligns properly.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python
