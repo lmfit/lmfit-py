@@ -26,6 +26,7 @@ html:  gallery
 debug:  gallery
 	cp sphinx/ext_mathjax.py extensions.py
 	$(SPHINXBUILD) -b html $(SPHINX_OUTPUT) $(SPHINX_DEBUGOPTS) . $(BUILDDIR)/html
+	./filter_spurious_link_from_html.py
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
 
@@ -37,6 +38,7 @@ examples/index.rst:
 htmlzip: html
 	cp sphinx/ext_mathjax.py extensions.py
 	$(SPHINXBUILD) -b html $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/lmfit_doc
+	./filter_spurious_link_from_html.py
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 
 epub: gallery
