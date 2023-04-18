@@ -135,9 +135,9 @@ Fit the model using a traditional minimizer, and show the output:
         R-squared          = 0.94237407
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
-        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
-        t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
+        t1:  1.30993186 +/- 0.13449653 (10.27%) (init = 3)
+        a2: -4.33525597 +/- 0.11765821 (2.71%) (init = 4)
+        t2:  11.8240752 +/- 0.47172598 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) = +0.9876
         C(t1, a2) = -0.9278
@@ -414,7 +414,7 @@ Find the maximum likelihood solution:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  27.513 seconds)
+   **Total running time of the script:** ( 0 minutes  35.405 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:

@@ -154,8 +154,8 @@ Perform the fits and show fitting results and plot:
     [[Variables]]
         offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
         omega:   3.98700854 +/- 0.02121810 (0.53%) (init = 3.3)
-        amp:     1.80252618 +/- 0.19022409 (10.55%) (init = 2.5)
-        decay:   5.76284509 +/- 1.00452610 (17.43%) (init = 1)
+        amp:     1.80252620 +/- 0.19022409 (10.55%) (init = 2.5)
+        decay:   5.76284501 +/- 1.00452608 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.7434
 
@@ -185,7 +185,7 @@ Perform the fits and show fitting results and plot:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.262 seconds)
+   **Total running time of the script:** ( 0 minutes  0.518 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:

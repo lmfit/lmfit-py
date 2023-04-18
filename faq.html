@@ -20,7 +20,7 @@
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -392,19 +392,19 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 13
+    # function evals   = 40
     # data points      = 101
     # variables        = 4
-    chi-square         = 3.52969396
-    reduced chi-square = 0.03638860
-    Akaike info crit   = -330.744844
-    Bayesian info crit = -320.284362
-    R-squared          = 0.99999005
+    chi-square         = 3.82581164
+    reduced chi-square = 0.03944136
+    Akaike info crit   = -322.608338
+    Bayesian info crit = -312.147856
+    R-squared          = 0.99998922
 [[Variables]]
-    x0:  22.0000000 +/- 1.7474e-05 (0.00%) (init = 22)
-    a:   2.04993043 +/- 0.03945152 (1.92%) (init = 1)
-    b:   0.01998912 +/- 7.6970e-06 (0.04%) (init = 1)
-    c:   9.27971093 +/- 0.04066973 (0.44%) (init = 1)
+    x0:  21.9999768 +/- 1.8569e-05 (0.00%) (init = 22)
+    a:   2.02368943 +/- 0.04107305 (2.03%) (init = 1)
+    b:   0.01999818 +/- 8.0133e-06 (0.04%) (init = 1)
+    c:   9.30733909 +/- 0.04234134 (0.45%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(a, b)  = -0.8368
     C(x0, a) = +0.1871
@@ -464,23 +464,24 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 62
+    # function evals   = 60
     # data points      = 101
     # variables        = 4
-    chi-square         = 1.10485546
-    reduced chi-square = 0.01139026
-    Akaike info crit   = -448.056005
-    Bayesian info crit = -437.595523
-    R-squared          = 0.99999688
+    chi-square         = 1.07667115
+    reduced chi-square = 0.01109970
+    Akaike info crit   = -450.665897
+    Bayesian info crit = -440.205415
+    R-squared          = 0.99999696
 [[Variables]]
-    x0:  19.0099844 +/- 0.48393807 (2.55%) (init = 22)
-    a:   1.98166183 +/- 0.02106320 (1.06%) (init = 1)
-    b:   0.02000027 +/- 4.1785e-06 (0.02%) (init = 1)
-    c:   9.23667900 +/- 0.02474817 (0.27%) (init = 1)
+    x0:  19.1065819 +/- 0.45803758 (2.40%) (init = 22)
+    a:   2.01225934 +/- 0.02093194 (1.04%) (init = 1)
+    b:   0.01999449 +/- 4.1425e-06 (0.02%) (init = 1)
+    c:   9.23329437 +/- 0.02418277 (0.26%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8257
-    C(x0, c) = -0.1630
-    C(x0, a) = +0.1181
+    C(a, b)  = -0.8273
+    C(x0, a) = +0.1544
+    C(x0, b) = -0.1235
+    C(x0, c) = -0.1073
 </pre></div>
 </div>
 </div>

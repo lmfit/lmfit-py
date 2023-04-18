@@ -58,8 +58,8 @@ doc_builtinmodels_nistgauss2.py
         g2_amplitude:   2493.41698 +/- 36.1699974 (1.45%) (init = 2818.337)
         g2_center:      153.270103 +/- 0.19466966 (0.13%) (init = 150)
         g2_sigma:       13.8069440 +/- 0.18680331 (1.35%) (init = 15)
-        g2_fwhm:        32.5128679 +/- 0.43988818 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455954 +/- 0.61722288 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+        g2_fwhm:        32.5128679 +/- 0.43988817 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455954 +/- 0.61722287 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are < 0.500)
         C(g1_amplitude, g1_sigma)   = +0.8243
         C(g2_amplitude, g2_sigma)   = +0.8154
@@ -128,7 +128,7 @@ doc_builtinmodels_nistgauss2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.159 seconds)
+   **Total running time of the script:** ( 0 minutes  0.270 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py:

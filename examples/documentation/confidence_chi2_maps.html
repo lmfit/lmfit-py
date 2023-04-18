@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>doc_confidence_chi2_maps.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="doc_fitting_emcee.py" href="fitting_emcee.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="../../contents.html">Contents</a></li>
+    <li><a href="../index.html">Examples</a></li>
+    <li><a href="../../installation.html">Installation</a></li>
+    <li><a href="../../faq.html">FAQ</a></li>
+    <li><a href="../../support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="../../index.html">
+      <img src="../../_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fitting_emcee.html" title="doc_fitting_emcee.py"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="fitting_emcee.html"
+                          title="previous chapter">doc_fitting_emcee.py</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-confidence-chi2-maps-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="doc-confidence-chi2-maps-py">
+<span id="sphx-glr-examples-documentation-confidence-chi2-maps-py"></span><h1>doc_confidence_chi2_maps.py<a class="headerlink" href="#doc-confidence-chi2-maps-py" title="Permalink to this heading">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_confidence_chi2_maps.py&gt;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">conf_interval</span><span class="p">,</span> <span class="n">conf_interval2d</span><span class="p">,</span> <span class="n">report_ci</span>
+<span class="kn">from</span> <span class="nn">lmfit.lineshapes</span> <span class="kn">import</span> <span class="n">gaussian</span>
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span><span class="p">,</span> <span class="n">LinearModel</span>
+
+<span class="n">sigma_levels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rng</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng" title="numpy.random.default_rng" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span></a><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">102</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>set up data – deliberately adding imperfections and
+a small amount of non-Gaussian noise</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">npts</span> <span class="o">=</span> <span class="mi">501</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rng</span></a><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rng</span></a><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="p">(</span><span class="n">gaussian</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">83</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">47.</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">5.</span><span class="p">)</span>
+     <span class="o">+</span> <span class="mf">0.02</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">cos</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">-</span><span class="mi">20</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise</span></a><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span> <span class="o">+</span> <span class="n">LinearModel</span><span class="p">()</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                         <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">intecept</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">correl_mode</span><span class="o">=</span><span class="s1">&#39;table&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    (Model(gaussian) + Model(linear))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 31
+    # data points      = 501
+    # variables        = 5
+    chi-square         = 103.861381
+    reduced chi-square = 0.20939794
+    Akaike info crit   = -778.348033
+    Bayesian info crit = -757.265003
+    R-squared          = 0.93782756
+[[Variables]]
+    amplitude:  78.8171374 +/- 1.21910939 (1.55%) (init = 100)
+    center:     47.0751649 +/- 0.07576660 (0.16%) (init = 50)
+    sigma:      4.93298753 +/- 0.07984021 (1.62%) (init = 5)
+    slope:      0.01839006 +/- 7.1957e-04 (3.91%) (init = 0)
+    intercept:  4.39234411 +/- 0.04420227 (1.01%) (init = 0)
+    fwhm:       11.6162977 +/- 0.18800933 (1.62%) == &#39;2.3548200*sigma&#39;
+    height:     6.37412722 +/- 0.08603873 (1.35%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
+[[Correlations]]
+  +-----------+-----------+-----------+-----------+-----------+-----------+
+  | Variable  | amplitude | center    | sigma     | slope     | intercept |
+  +-----------+-----------+-----------+-----------+-----------+-----------+
+  | amplitude | +1.0000   | -0.0074   | +0.6371   | +0.0721   | -0.3373   |
+  | center    | -0.0074   | +1.0000   | -0.0048   | -0.1026   | +0.0864   |
+  | sigma     | +0.6371   | -0.0048   | +1.0000   | +0.0459   | -0.2149   |
+  | slope     | +0.0721   | -0.1026   | +0.0459   | +1.0000   | -0.8421   |
+  | intercept | -0.3373   | +0.0864   | -0.2149   | -0.8421   | +1.0000   |
+  +-----------+-----------+-----------+-----------+-----------+-----------+
+</pre></div>
+</div>
+<p>run conf_intervale, print report</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ci</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigma_levels</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;## Confidence Report:&quot;</span><span class="p">)</span>
+<span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>## Confidence Report:
+              99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
+ amplitude:  -3.62610  -2.41983  -1.21237  78.81714  +1.22111  +2.45479  +3.70515
+ center   :  -0.22849  -0.15214  -0.07584  47.07516  +0.07587  +0.15225  +0.22873
+ sigma    :  -0.23335  -0.15640  -0.07870   4.93299  +0.08000  +0.16158  +0.24509
+ slope    :  -0.00217  -0.00144  -0.00072   0.01839  +0.00072  +0.00144  +0.00217
+ intercept:  -0.13326  -0.08860  -0.04423   4.39234  +0.04421  +0.08854  +0.13312
+</pre></div>
+</div>
+<p>plot initial fit</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#2030b0&#39;</span><span class="p">,</span> <span class="s1">&#39;#b02030&#39;</span><span class="p">,</span> <span class="s1">&#39;#207070&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">9.5</span><span class="p">))</span>
+
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="n">aix</span><span class="p">,</span> <span class="n">aiy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">nsamples</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">explicitly_calculate_sigma</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">for</span> <span class="n">pairs</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;intercept&#39;</span><span class="p">,</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;intercept&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">)):</span>
+
+    <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span> <span class="o">=</span> <span class="n">pairs</span>
+    <span class="k">if</span> <span class="n">explicitly_calculate_sigma</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating chi-square map for &quot;</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
+                                             <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
+                                             <span class="n">chi2_out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># explicitly calculate sigma matrix: sigma increases chi_square</span>
+        <span class="c1"># from  chi_square_best</span>
+        <span class="c1"># to    chi_square + sigma**2 * reduced_chi_square</span>
+        <span class="c1"># so:   sigma = sqrt((chi2-chi2_best)/ reduced_chi_square)</span>
+        <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">chi2_min</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_mat</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">chi2_min</span></a><span class="p">)</span><span class="o">/</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">out</span><span class="o">.</span><span class="n">redchi</span></a><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating sigma map for &quot;</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+        <span class="c1"># or, you could just calculate the matrix of probabilities as:</span>
+        <span class="c1"># print(&quot;Generating chi-square map for &quot;, pairs)</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_mat</span></a> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
+                                              <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
+
+    <span class="n">aix</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">aix</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">aix</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">aiy</span> <span class="o">+=</span> <span class="mi">1</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="n">aix</span><span class="p">,</span> <span class="n">aiy</span><span class="p">]</span>
+
+    <a href="https://matplotlib.org/stable/api/contour_api.html#matplotlib.contour.QuadContourSet" title="matplotlib.contour.QuadContourSet" class="sphx-glr-backref-module-matplotlib-contour sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cnt</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contour.html#matplotlib.axes.Axes.contour" title="matplotlib.axes.Axes.contour" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">contour</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_mat</span></a><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">sigma_levels</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+                     <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.clabel.html#matplotlib.axes.Axes.clabel" title="matplotlib.axes.Axes.clabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">clabel</span></a><span class="p">(</span><a href="https://matplotlib.org/stable/api/contour_api.html#matplotlib.contour.QuadContourSet" title="matplotlib.contour.QuadContourSet" class="sphx-glr-backref-module-matplotlib-contour sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cnt</span></a><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\sigma=</span><span class="si">%.0f</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+
+    <span class="c1"># draw boxes for estimated uncertaties:</span>
+    <span class="c1">#  dotted :  scaled stderr from initial fit</span>
+    <span class="c1">#  dashed :  values found from conf_interval()</span>
+    <span class="n">xv</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">xpar</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">xpar</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span>
+    <span class="n">yv</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ypar</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ypar</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span>
+
+    <span class="n">cix</span> <span class="o">=</span> <span class="n">ci</span><span class="p">[</span><span class="n">xpar</span><span class="p">]</span>
+    <span class="n">ciy</span> <span class="o">=</span> <span class="n">ci</span><span class="p">[</span><span class="n">ypar</span><span class="p">]</span>
+
+    <span class="n">nc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sigma_levels</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sigma_levels</span><span class="p">:</span>
+        <span class="c1"># dotted line: scaled stderr</span>
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">((</span><span class="n">xv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a><span class="p">,</span> <span class="n">xv</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a><span class="p">,</span> <span class="n">xv</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a><span class="p">,</span> <span class="n">xv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a><span class="p">,</span> <span class="n">xv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xs</span></a><span class="p">),</span>
+                <span class="p">(</span><span class="n">yv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a><span class="p">,</span> <span class="n">yv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a><span class="p">,</span> <span class="n">yv</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a><span class="p">,</span> <span class="n">yv</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a><span class="p">,</span> <span class="n">yv</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ys</span></a><span class="p">),</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># dashed line: refined uncertainties from conf_interval</span>
+        <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsm</span></a> <span class="o">=</span> <span class="n">cix</span><span class="p">[</span><span class="n">nc</span><span class="o">+</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cix</span><span class="p">[</span><span class="n">nc</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysm</span></a> <span class="o">=</span> <span class="n">ciy</span><span class="p">[</span><span class="n">nc</span><span class="o">+</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">ciy</span><span class="p">[</span><span class="n">nc</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsm</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsm</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">xsm</span></a><span class="p">),</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysm</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysm</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysp</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">ysm</span></a><span class="p">),</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="matplotlib.axes.Axes.set_xlabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="n">xpar</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html#matplotlib.axes.Axes.set_ylabel" title="matplotlib.axes.Axes.set_ylabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="n">ypar</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.grid.html#matplotlib.axes.Axes.grid" title="matplotlib.axes.Axes.grid" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">grid</span></a><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#d0d0d0&#39;</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+<span class="c1"># &lt;end examples/doc_confidence_chi2_maps.py&gt;</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_confidence_chi2_maps_001.png" srcset="../../_images/sphx_glr_confidence_chi2_maps_001.png, ../../_images/sphx_glr_confidence_chi2_maps_001_3_00x.png 3.00x" alt="confidence chi2 maps" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;sigma&#39;, &#39;amplitude&#39;)
+Generating chi-square map for  (&#39;intercept&#39;, &#39;amplitude&#39;)
+Generating chi-square map for  (&#39;slope&#39;, &#39;intercept&#39;)
+Generating chi-square map for  (&#39;slope&#39;, &#39;center&#39;)
+Generating chi-square map for  (&#39;sigma&#39;, &#39;center&#39;)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  4.966 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-confidence-chi2-maps-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/d1ffe34d09156ef9424e7c30100a6e12/confidence_chi2_maps.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">confidence_chi2_maps.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/369abf849fe70dd637ab7e8a52ca329a/confidence_chi2_maps.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">confidence_chi2_maps.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fitting_emcee.html" title="doc_fitting_emcee.py"
+             >previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
