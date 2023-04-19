@@ -965,6 +965,9 @@ class Minimizer:
 
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
+        if method == 'L-BFGS-B':
+            fmin_kws['options']['maxfun'] = 2*self.max_nfev
+
         # fmin_kws = dict(method=method, options={'maxfun': 2*self.max_nfev})
         fmin_kws.update(self.kws)
 
