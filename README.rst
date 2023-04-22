@@ -44,7 +44,7 @@ install with ``pip install lmfit``.
 
 For questions, comments, and suggestions, please use the `LMfit google mailing
 list`_ or `Github discussions`_.  For software issues and bugs, use `Github
-Issues`, but please read `Contributing.md <.github/CONTRIBUTING.md>`_ before
+Issues`_, but please read `Contributing.md <.github/CONTRIBUTING.md>`_ before
 creating an Issue.
 
 
