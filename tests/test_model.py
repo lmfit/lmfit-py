@@ -1,7 +1,6 @@
 """Tests for the Model, CompositeModel, and ModelResult classes."""
 
 import functools
-import sys
 import unittest
 import warnings
 
@@ -1263,8 +1262,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         msg = 'The model function generated NaN values and the fit aborted!'
         self.assertRaisesRegex(ValueError, msg, result)
 
-    @pytest.mark.skipif(sys.version_info.major == 2,
-                        reason="cannot use wrapped functions with Python 2")
     def test_wrapped_model_func(self):
         x = np.linspace(-1, 1, 51)
         y = 2.0*x + 3 + 0.0003 * x*x

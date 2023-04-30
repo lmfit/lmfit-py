@@ -1,5 +1,4 @@
 """Tests for the AMPGO global minimization algorithm."""
-import sys
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -100,8 +99,6 @@ def test_ampgo_invalid_tabustrategy(minimizer_Alpine02):
         minimizer_Alpine02.minimize(method='ampgo', **kws)
 
 
-@pytest.mark.skipif(sys.version_info.major == 2,
-                    reason="does not throw an exception in Python 2")
 def test_ampgo_local_opts(minimizer_Alpine02):
     """Test AMPGO algorithm, pass local_opts to solver."""
     # use local_opts to pass maxfun to the local optimizer: providing a string
