@@ -1402,3 +1402,37 @@ class TestExpression(CommonTests, unittest.TestCase):
 
         data_components = comp_model.eval_components(x=x)
         self.assertIn('exp', data_components)
+
+
+def test_make_params_valuetypes():
+    mod = lmfit.models.SineModel()
+
+    pars = mod.make_params(amplitude=1, frequency=1, shift=-0.2)
+
+    pars = mod.make_params(amplitude={'value': 0.9, 'min': 0},
+                           frequency=1.03,
+                           shift={'value': -0.2, 'vary': False})
+
+    val_i32 = np.arange(10, dtype=np.int32)
+    val_i64 = np.arange(10, dtype=np.int64)
+    # np.longdouble equals to np.float128 on Linux and macOS, np.float64 on Windows
+    val_ld = np.arange(10, dtype=np.longdouble)/3.0
+    val_c128 = np.arange(10, dtype=np.complex128)/3.0
+
+    pars = mod.make_params(amplitude=val_i64[2],
+                           frequency=val_i32[3],
+                           shift=-val_ld[4])
+
+    pars = mod.make_params(amplitude=val_c128[2],
+                           frequency=val_i32[3],
+                           shift=-val_ld[4])
+
+    assert pars is not None
+    with pytest.raises(ValueError):
+        pars = mod.make_params(amplitude='a string', frequency=2, shift=7)
+
+    with pytest.raises(TypeError):
+        pars = mod.make_params(amplitude={'v': 3}, frequency=2, shift=7)
+
+    with pytest.raises(TypeError):
+        pars = mod.make_params(amplitude={}, frequency=2, shift=7)
