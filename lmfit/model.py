@@ -665,9 +665,15 @@ class Model:
         params = Parameters()
 
         def setpar(par, val):
-            if isinstance(val, (float, int)):
-                val = {'value': val}
-            par.set(**val)
+            # val is expected to be float-like or a dict: must have 'value' or 'expr' key
+            if isinstance(val, dict):
+                dval = val
+            else:
+                dval = {'value': float(val)}
+            if len(dval) < 1 or not ('value' in dval or 'expr' in dval):
+                raise TypeError(f'Invalid parameter value for {par}: {val}')
+
+            par.set(**dval)
 
         # make sure that all named parameters are in params
         for name in self.param_names:
