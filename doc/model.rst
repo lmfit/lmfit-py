@@ -916,6 +916,15 @@ and ``bic``.
 
    Boolean value of whether fit succeeded.
 
+.. attribute:: userargs
+
+   positional arguments passed to :meth:`Model.fit`, a tuple of (``y``, ``weights``)
+
+.. attribute:: userkws
+
+   keyword arguments passed to :meth:`Model.fit`, a dict, which will have independent data arrays such as ``x``.
+
+
 .. attribute:: weights
 
    numpy.ndarray (or ``None``) of weighting values to be used in fit. If not
