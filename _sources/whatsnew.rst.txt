@@ -11,6 +11,19 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_121_label:
+
+Version 1.2.1 Release Notes (May 02, 2023)
+=================================================
+
+Bug fixes/enhancements:
+
+- fixed bug in ``Model.make_params()`` for initial parameter values that were
+  not recognized as floats such as ``np.Int64``.  (Issue #871; PR #872)
+
+- explicitly set ``maxfun`` for ``l-bfgs-b`` method when setting
+  ``maxiter``. (Issue #864; Discussion #865; PR #866)
+
 .. _whatsnew_120_label:
 
 Version 1.2.0 Release Notes (April 05, 2023)

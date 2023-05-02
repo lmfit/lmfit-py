@@ -20,7 +20,7 @@
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -392,23 +392,21 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 40
+    # function evals   = 16
     # data points      = 101
     # variables        = 4
-    chi-square         = 3.82581164
-    reduced chi-square = 0.03944136
-    Akaike info crit   = -322.608338
-    Bayesian info crit = -312.147856
-    R-squared          = 0.99998922
+    chi-square         = 9.40341871
+    reduced chi-square = 0.09694246
+    Akaike info crit   = -231.778767
+    Bayesian info crit = -221.318285
+    R-squared          = 0.99997348
+##  Warning: uncertainties could not be estimated:
+    x0:  at initial value
 [[Variables]]
-    x0:  21.9999768 +/- 1.8569e-05 (0.00%) (init = 22)
-    a:   2.02368943 +/- 0.04107305 (2.03%) (init = 1)
-    b:   0.01999818 +/- 8.0133e-06 (0.04%) (init = 1)
-    c:   9.30733909 +/- 0.04234134 (0.45%) (init = 1)
-[[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8368
-    C(x0, a) = +0.1871
-    C(x0, b) = -0.1508
+    x0:  22.0000000 (init = 22)
+    a:   2.01731852 (init = 1)
+    b:   0.01999677 (init = 1)
+    c:   9.44652468 (init = 1)
 </pre></div>
 </div>
 </div>
@@ -464,24 +462,24 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 60
+    # function evals   = 86
     # data points      = 101
     # variables        = 4
-    chi-square         = 1.07667115
-    reduced chi-square = 0.01109970
-    Akaike info crit   = -450.665897
-    Bayesian info crit = -440.205415
-    R-squared          = 0.99999696
+    chi-square         = 0.99993370
+    reduced chi-square = 0.01030859
+    Akaike info crit   = -458.133869
+    Bayesian info crit = -447.673386
+    R-squared          = 0.99999718
 [[Variables]]
-    x0:  19.1065819 +/- 0.45803758 (2.40%) (init = 22)
-    a:   2.01225934 +/- 0.02093194 (1.04%) (init = 1)
-    b:   0.01999449 +/- 4.1425e-06 (0.02%) (init = 1)
-    c:   9.23329437 +/- 0.02418277 (0.26%) (init = 1)
+    x0:  18.9961214 +/- 0.46150482 (2.43%) (init = 22)
+    a:   1.99969360 +/- 0.02006397 (1.00%) (init = 1)
+    b:   0.02000420 +/- 3.9784e-06 (0.02%) (init = 1)
+    c:   9.21569510 +/- 0.02349832 (0.25%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8273
-    C(x0, a) = +0.1544
-    C(x0, b) = -0.1235
-    C(x0, c) = -0.1073
+    C(a, b)  = -0.8260
+    C(x0, c) = -0.1487
+    C(x0, a) = +0.1302
+    C(x0, b) = -0.1039
 </pre></div>
 </div>
 </div>
@@ -524,7 +522,7 @@ transition for example.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
     </div>
   </body>
 </html>
