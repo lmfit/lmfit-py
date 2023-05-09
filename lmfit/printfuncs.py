@@ -249,7 +249,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     def stat_row(label, val, val2=''):
         add(f'<tr><td>{label}</td><td>{val}</td><td>{val2}</td></tr>')
 
-    add('<h2>Fit Statistics</h2>')
+    add('<b>Fit Statistics</b>')
     add('<table>')
     stat_row('fitting method', result.method)
     stat_row('# function evals', result.nfev)
@@ -262,7 +262,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     if hasattr(result, 'rsquared'):
         stat_row('R-squared', gformat(result.rsquared))
     add('</table>')
-    add('<h2>Variables</h2>')
+    add('<b>Variables</b>')
     add(params_html_table(result.params))
     if show_correl:
         correls = []
@@ -280,7 +280,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
             sort_correls = sorted(correls, key=lambda val: abs(val[2]))
             sort_correls.reverse()
             extra = f'(unreported correlations are < {min_correl:.3f})'
-            add(f'<h2>Correlations {extra}</h2>')
+            add(f'<b>Correlations {extra}</b>')
             add('<table>')
             for name1, name2, val in sort_correls:
                 stat_row(name1, name2, f"{val:+.4f}")
