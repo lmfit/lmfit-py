@@ -9,8 +9,10 @@ import warnings
 
 from asteval import valid_symbol_name
 import numpy as np
+from scipy.linalg import LinAlgError
 from scipy.special import erf
 from scipy.stats import t
+import uncertainties
 
 import lmfit
 
@@ -1885,6 +1887,25 @@ class ModelResult(Minimizer):
         self.init_fit = self.model.eval(self.init_params, **self.userkws)
         self.result = MinimizerResult()
         self.result.params = self.params
+
+        self.uvars = None
+        if self.errorbars and self.covar is not None:
+            self.uvars = {}
+            vbest = []
+            for ivar, name in enumerate(self.var_names):
+                par = self.params[name]
+                vbest.append(par.value)
+                if getattr(par, 'sdterr', None) is None:
+                    par.stderr = np.sqrt(self.covar[ivar, ivar])
+                self.uvars[name] = uncertainties.ufloat(par.value, par.stderr)
+
+            try:
+                corr_uvars = uncertainties.correlated_values(vbest, self.covar)
+                for name, cuv in zip(self.var_names, corr_uvars):
+                    self.uvars[name] = cuv
+            except (LinAlgError, ValueError):
+                pass
+
         self.init_vals = list(self.init_values.items())
         return self
 
