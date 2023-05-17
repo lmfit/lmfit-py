@@ -5,6 +5,7 @@ import sys
 import warnings
 
 import numpy as np
+import uncertainties
 
 try:
     import dill
@@ -57,6 +58,8 @@ def encode4js(obj):
         return dict(__class__='PDataFrame', value=obj.to_json())
     if isinstance(obj, Series):
         return dict(__class__='PSeries', value=obj.to_json())
+    if isinstance(obj, uncertainties.core.AffineScalarFunc):
+        return dict(__class__='UFloat', val=obj.nominal_value, err=obj.std_dev)
     if isinstance(obj, np.ndarray):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
@@ -104,7 +107,6 @@ def decode4js(obj):
     classname = obj.pop('__class__', None)
     if classname is None:
         return obj
-
     if classname == 'Complex':
         out = obj['value'][0] + 1j*obj['value'][1]
     elif classname in ('List', 'Tuple'):
@@ -128,6 +130,8 @@ def decode4js(obj):
         out = read_json(obj['value'])
     elif classname == 'PSeries' and read_json is not None:
         out = read_json(obj['value'], typ='series')
+    elif classname == 'UFloat':
+        out = uncertainties.ufloat(obj['val'], obj['err'])
     elif classname == 'Callable':
         out = obj['__name__']
         try:
