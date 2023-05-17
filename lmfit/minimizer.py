@@ -850,6 +850,7 @@ class Minimizer:
                                self.result.var_names])
 
         has_expr = False
+        self.result.uvars = {}
         for par in self.result.params.values():
             par.stderr, par.correl = 0, None
             has_expr = has_expr or par.expr is not None
@@ -857,6 +858,8 @@ class Minimizer:
         for ivar, name in enumerate(self.result.var_names):
             par = self.result.params[name]
             par.stderr = np.sqrt(self.result.covar[ivar, ivar])
+            uval = uncertainties.ufloat(par.value, par.stderr, tag=name)
+            self.result.uvars[name] = uval
             par.correl = {}
             try:
                 self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
@@ -867,21 +870,24 @@ class Minimizer:
             except ZeroDivisionError:
                 self.result.errorbars = False
 
-        if has_expr:
-            try:
-                uvars = uncertainties.correlated_values(vbest, self.result.covar)
-            except (LinAlgError, ValueError):
-                uvars = None
+        try:
+            corr_uvars = uncertainties.correlated_values(vbest, self.result.covar)
+        except (LinAlgError, ValueError):
+            corr_uvars = None
 
+        if corr_uvars is not None:
+            for name, cuv in zip(self.result.var_names, corr_uvars):
+                self.result.uvars[name] = cuv
+
+        if has_expr and corr_uvars is not None:
             # for uncertainties on constrained parameters, use the calculated
             # "correlated_values", evaluate the uncertainties on the constrained
             # parameters and reset the Parameters to best-fit value
-            if uvars is not None:
-                for par in self.result.params.values():
-                    eval_stderr(par, uvars, self.result.var_names, self.result.params)
-                # restore nominal values
-                for v, name in zip(uvars, self.result.var_names):
-                    self.result.params[name].value = v.nominal_value
+            for par in self.result.params.values():
+                eval_stderr(par, corr_uvars, self.result.var_names, self.result.params)
+            # restore nominal values
+            for v, name in zip(corr_uvars, self.result.var_names):
+                self.result.params[name].value = v.nominal_value
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
@@ -1059,6 +1065,7 @@ class Minimizer:
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertainties/correlations
+        self.result.uvars = None
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.x)
