@@ -1213,8 +1213,8 @@ class CompositeModel(Model):
         """function that is called just after fit, can be overloaded by
         subclasses to add non-fitting 'calculated parameters'
         """
-        self.left.post_fit(fitresult.params)
-        self.right.post_fit(fitresult.params)
+        self.left.post_fit(fitresult)
+        self.right.post_fit(fitresult)
 
     @property
     def param_names(self):
