@@ -36,7 +36,6 @@ from scipy.sparse import issparse
 from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
-import uncertainties
 
 from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
@@ -86,53 +85,6 @@ def thisfuncname():
         return inspect.stack()[1].function
     except AttributeError:
         return inspect.stack()[1][3]
-
-
-def asteval_with_uncertainties(*vals, **kwargs):
-    """Calculate object value, given values for variables.
-
-    This is used by the uncertainties package to calculate the
-    uncertainty in an object even with a complicated expression.
-
-    """
-    _obj = kwargs.get('_obj', None)
-    _pars = kwargs.get('_pars', None)
-    _names = kwargs.get('_names', None)
-    _asteval = _pars._asteval
-    if (_obj is None or _pars is None or _names is None or
-            _asteval is None or _obj._expr_ast is None):
-        return 0
-    for val, name in zip(vals, _names):
-        _asteval.symtable[name] = val
-
-    # re-evaluate all constraint parameters to
-    # force the propagation of uncertainties
-    [p._getval() for p in _pars.values()]
-    return _asteval.eval(_obj._expr_ast)
-
-
-wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
-
-
-def eval_stderr(obj, uvars, _names, _pars):
-    """Evaluate uncertainty and set ``.stderr`` for a parameter `obj`.
-
-    Given the uncertain values `uvars` (list of `uncertainties.ufloats`),
-    a list of parameter names that matches `uvars`, and a dictionary of
-    parameter objects, keyed by name.
-
-    This uses the uncertainties package wrapped function to evaluate the
-    uncertainty for an arbitrary expression (in ``obj._expr_ast``) of
-    parameters.
-
-    """
-    if not isinstance(obj, Parameter) or getattr(obj, '_expr_ast', None) is None:
-        return
-    uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
-    try:
-        obj.stderr = uval.std_dev
-    except Exception:
-        obj.stderr = 0
 
 
 class MinimizerException(Exception):
@@ -846,20 +798,11 @@ class Minimizer:
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
-        vbest = np.atleast_1d([self.result.params[name].value for name in
-                               self.result.var_names])
-
-        has_expr = False
-        self.result.uvars = {}
         for par in self.result.params.values():
             par.stderr, par.correl = 0, None
-            has_expr = has_expr or par.expr is not None
-
         for ivar, name in enumerate(self.result.var_names):
             par = self.result.params[name]
             par.stderr = np.sqrt(self.result.covar[ivar, ivar])
-            uval = uncertainties.ufloat(par.value, par.stderr, tag=name)
-            self.result.uvars[name] = uval
             par.correl = {}
             try:
                 self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
@@ -869,25 +812,8 @@ class Minimizer:
                                              (par.stderr * np.sqrt(self.result.covar[jvar, jvar])))
             except ZeroDivisionError:
                 self.result.errorbars = False
-
-        try:
-            corr_uvars = uncertainties.correlated_values(vbest, self.result.covar)
-        except (LinAlgError, ValueError):
-            corr_uvars = None
-
-        if corr_uvars is not None:
-            for name, cuv in zip(self.result.var_names, corr_uvars):
-                self.result.uvars[name] = cuv
-
-        if has_expr and corr_uvars is not None:
-            # for uncertainties on constrained parameters, use the calculated
-            # "correlated_values", evaluate the uncertainties on the constrained
-            # parameters and reset the Parameters to best-fit value
-            for par in self.result.params.values():
-                eval_stderr(par, corr_uvars, self.result.var_names, self.result.params)
-            # restore nominal values
-            for v, name in zip(corr_uvars, self.result.var_names):
-                self.result.params[name].value = v.nominal_value
+        if self.result.errorbars:
+            self.result.uvars = self.result.params.create_uvars(covar=self.result.covar)
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
