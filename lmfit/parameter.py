@@ -535,11 +535,12 @@ class Parameters(dict):
             # parameters and reset the Parameters to best-fit value
             wrap_ueval = uwrap(asteval_with_uncertainties)
             for par in self.values():
-                if hasattr(par, '_expr_ast'):
+                if getattr(par, '_expr_ast', None) is not None:
                     try:
-                        uval = wrap_ueval(*corr_uvars, obj=par, pars=self, names=vnames)
+                        uval = wrap_ueval(*corr_uvars, obj=par,
+                                          pars=self, names=vnames)
                         par.stderr = uval.std_dev
-                        uvars[par.name] = ufloat(par.value, par.stderr)
+                        uvars[par.name] = uval
                     except Exception:
                         par.stderr = 0
         return uvars
