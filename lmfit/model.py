@@ -867,6 +867,12 @@ class Model:
             params[name].value = val
         return out
 
+    def post_fit(self, fitresult):
+        """function that is called just after fit, can be overloaded by
+        subclasses to add non-fitting 'calculated parameters'
+        """
+        pass
+
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function args for all functions."""
         args = {}
@@ -1203,6 +1209,13 @@ class CompositeModel(Model):
         out.update(self.right.eval_components(**kwargs))
         return out
 
+    def post_fit(self, fitresult):
+        """function that is called just after fit, can be overloaded by
+        subclasses to add non-fitting 'calculated parameters'
+        """
+        self.left.post_fit(fitresult.params)
+        self.right.post_fit(fitresult.params)
+
     @property
     def param_names(self):
         """Return parameter names for composite model."""
@@ -1445,6 +1458,8 @@ class ModelResult(Minimizer):
         self.userkws.update(kwargs)
         self.init_fit = self.model.eval(params=self.params, **self.userkws)
         _ret = self.minimize(method=self.method)
+        self.model.post_fit(_ret)
+        _ret.params.create_uvars(covar=_ret.covar)
 
         for attr in dir(_ret):
             if not attr.startswith('_'):
