@@ -522,6 +522,13 @@ class GaussianModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
+#     def post_fit(self, result):
+#         addpar = result.params.add
+#         prefix = self.prefix
+#
+#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr(self))
+#         addpar(name=f'{prefix}height', expr=height_expr(self))
+
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
@@ -575,6 +582,20 @@ class Gaussian2dModel(Model):
         expr = fmt.format(tiny=tiny, factor=self.height_factor, prefix=self.prefix)
         self.set_param_hint('height', expr=expr)
 
+#     def post_fit(self, result):
+#         addpar = result.params.add
+#         prefix = self.prefix
+#         result.params.add(name=f'{prefix}fwhm', expr=fwhm_expr(self))
+#         result.params.add(name=f'{prefix}height', expr=height_expr(self))
+#
+#         expr = fwhm_expr(self)
+#         addpar('{prefix}fwhmx', expr=expr.replace('sigma', 'sigmax'))
+#         addpar('{prefix}fwhmy', expr=expr.replace('sigma', 'sigmay'))
+#         fmt = ("{factor:.7f}*{prefix:s}amplitude/(max({tiny}, {prefix:s}sigmax)"
+#                + "*max({tiny}, {prefix:s}sigmay))")
+#         expr = fmt.format(tiny=tiny, factor=self.height_factor, prefix=prefix)
+#         addpar(f'{prefix}height', expr=expr)
+
     def guess(self, data, x, y, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak2d(self, data, x, y, negative)
@@ -619,6 +640,12 @@ class LorentzianModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
+
+#     def post_fit(self, result):
+#         addpar = result.params.add
+#         prefix = self.prefix
+#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr(self))
+#         addpar(name=f'{prefix}height', expr=height_expr(self))
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -676,6 +703,14 @@ class SplitLorentzianModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr.format(pre=self.prefix))
         self.set_param_hint('height', expr=height_expr.format(np.pi, tiny, pre=self.prefix))
 
+#     def post_fit(self, result):
+#         fwhm_expr = '{pre:s}sigma+{pre:s}sigma_r'
+#         height_expr = '2*{pre:s}amplitude/{0:.7f}/max({1:.7f}, ({pre:s}sigma+{pre:s}sigma_r))'
+#         addpar = result.params.add
+#         prefix = self.prefix
+#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr.format(pre=prefix))
+#         addpar(name=f'{prefix}height', expr=height_expr.format(np.pi, tiny, pre=prefix))
+
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -732,14 +767,23 @@ class VoigtModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr=f'{self.prefix}sigma')
-
         fexpr = ("1.0692*{pre:s}gamma+" +
                  "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
         hexpr = ("({pre:s}amplitude/(max({0}, {pre:s}sigma*sqrt(2*pi))))*"
                  "wofz((1j*{pre:s}gamma)/(max({0}, {pre:s}sigma*sqrt(2)))).real")
-
         self.set_param_hint('fwhm', expr=fexpr.format(pre=self.prefix))
         self.set_param_hint('height', expr=hexpr.format(tiny, pre=self.prefix))
+
+#     def post_fit(self, result):
+#         fexpr = ("1.0692*{pre:s}gamma+" +
+#                  "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
+#         hexpr = ("({pre:s}amplitude/(max({0}, {pre:s}sigma*sqrt(2*pi))))*"
+#                  "wofz((1j*{pre:s}gamma)/(max({0}, {pre:s}sigma*sqrt(2)))).real")
+#
+#         addpar = result.params.add
+#         prefix = self.prefix
+#         addpar(name=f'{prefix}fwhm', expr=fexpr.format(pre=prefix))
+#         addpar(name=f'{prefix}height', expr=hexpr.format(tiny, pre=prefix))
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -795,7 +839,19 @@ class PseudoVoigtModel(Model):
                "max({0}, ({prefix:s}sigma*sqrt(pi/log(2))))+"
                "({prefix:s}fraction*{prefix:s}amplitude)/"
                "max({0}, (pi*{prefix:s}sigma)))")
+
         self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
+
+#     def post_fit(self, result):
+#         addpar = result.params.add
+#         prefix = self.prefix
+#         hexpr = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
+#                  "max({0}, ({prefix:s}sigma*sqrt(pi/log(2))))+"
+#                  "({prefix:s}fraction*{prefix:s}amplitude)/"
+#                  "max({0}, (pi*{prefix:s}sigma)))")
+#
+#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr(self))
+#         addpar(name=f'{prefix}height', expr=hexpr.format(tiny, prefix=prefix))
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
