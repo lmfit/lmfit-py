@@ -204,47 +204,54 @@ class MinimizerResult:
 
     Attributes
     ----------
+    residual : numpy.ndarray
+        Residual array :math:`{\rm Resid_i}`. Return value of the objective
+        function when using the best-fit values of the parameters.
     params : Parameters
-        The best-fit parameters resulting from the fit.
-    status : int
-        Termination status of the optimizer. Its value depends on the
-        underlying solver. Refer to `message` for details.
+        The best-fit Parameters resulting from the fit.
+    uvars : dict
+        Dictionary of uncertainties ufloats from Parameters
     var_names : list
-        Ordered list of variable parameter names used in optimization, and
-        useful for understanding the values in :attr:`init_vals` and
-        :attr:`covar`.
-    covar : numpy.ndarray
+        list of variable Parameter names used in optimization in the
+        same order as the values in :attr:`init_vals` and :attr:`covar`.
+    covar : numpy.ndarray or None
         Covariance matrix from minimization, with rows and columns
-        corresponding to :attr:`var_names`.
+        corresponding to :attr:`var_names`.  If uncertainties cannot
+        be determined, this value will be ``None``.
     init_vals : list
         List of initial values for variable parameters using
         :attr:`var_names`.
     init_values : dict
         Dictionary of initial values for variable parameters.
-    nfev : int
-        Number of function evaluations.
+    aborted : bool
+        Whether the fit was aborted.
+    status : int
+        Termination status of the optimizer. Its value depends on the
+        underlying solver. Refer to `message` for details.
     success : bool
-        True if the fit succeeded, otherwise False.
+        True if the fit succeeded, otherwise False. This is an optimistic
+        view of success, meaning that the method finished without error.
     errorbars : bool
-        True if uncertainties were estimated, otherwise False.
+        whether uncertainties were estimated for variable Parameters.
     message : str
         Message about fit success.
-    call_kws : dict
-        Keyword arguments sent to underlying solver.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`'leastsq'`
         method only).
     lmdif_message : str
         Message from :scipydoc:`optimize.leastsq` (`'leastsq'` method only).
+    call_kws : dict
+        Keyword arguments sent to underlying solver.
+    flatchain : pandas.DataFrame
+        A flatchain view of the sampling chain from the `emcee` method.
+    nfev : int
+        Number of function evaluations.
     nvarys : int
         Number of variables in fit: :math:`N_{\rm varys}`.
     ndata : int
         Number of data points: :math:`N`.
     nfree : int
         Degrees of freedom in fit: :math:`N - N_{\rm varys}`.
-    residual : numpy.ndarray
-        Residual array :math:`{\rm Resid_i}`. Return value of the objective
-        function when using the best-fit values of the parameters.
     chisqr : float
         Chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`.
     redchi : float
@@ -256,8 +263,6 @@ class MinimizerResult:
     bic : float
         Bayesian Information Criterion statistic:
         :math:`N \ln(\chi^2/N) + \ln(N) N_{\rm varys}`.
-    flatchain : pandas.DataFrame
-        A flatchain view of the sampling chain from the `emcee` method.
 
     Methods
     -------

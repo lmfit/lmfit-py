@@ -484,11 +484,10 @@ class Parameters(dict):
         return {p.name: p.value for p in self.values()}
 
     def create_uvars(self, covar=None):
-        """
-        create uncertainties ufloats values for Parameters using values and stderr.
-        This will also propagate uncertainties to Parameters with constraint
-        expressions, setting the uncertainty values and including those in the
-        returned ufloat dictionary.
+        """Return a dict of uncertainties ufloats from the current Parameter
+        values and stderr, and an optionally-supplied covariance matrix.
+        Uncertainties in Parameters with constraint expressions will be
+        calculated, propagating uncertaintes (and including correlations)
 
         Parameters
         ----------
@@ -497,15 +496,15 @@ class Parameters(dict):
 
         Returns
         -------
-        dict with keys of Parameter names and values of UFloats from
-           the uncertainties package.
+        dict with keys of Parameter names and values of uncertainties.ufloats.
 
         Notes
         -----
-        1.  if covar is provide, it must correspond to the existing variable
-            Parameters.  If given, the uncertainties UFloats returned will take
-            these correlations into account when combining values.
-
+        1.  if covar is provide, it must correspond to the existing *variable*
+            Parameters.  If covar is given, the returned uncertainties ufloats
+            will take the correlations into account when combining values.
+        2.  See the uncertainties package documentation
+            (https://pythonhosted.org/uncertainties) for more details.
         """
         uvars = {}
         has_expr = False
