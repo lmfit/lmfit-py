@@ -10,10 +10,10 @@ import pytest
 from scipy import __version__ as scipy_version
 
 import lmfit
-from lmfit import Model, models
+from lmfit import Model, Parameters, models
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import get_reducer, propagate_err
-from lmfit.models import PseudoVoigtModel
+from lmfit.models import GaussianModel, PseudoVoigtModel
 
 
 @pytest.fixture()
@@ -337,6 +337,36 @@ def test__parse_params_inspect_signature():
 
     assert isinstance(mod.def_vals, dict)
     assert_allclose(mod.def_vals['c'], 10)
+
+
+def test_make_params_withprefixs():
+    # tests Github Issue #893
+    gmod1 = GaussianModel(prefix='p1_')
+    gmod2 = GaussianModel(prefix='p2_')
+
+    model = gmod1 + gmod2
+
+    pars_1a = gmod1.make_params(p1_amplitude=10, p1_center=600, p1_sigma=3)
+    pars_1b = gmod1.make_params(amplitude=10, center=600, sigma=3)
+
+    pars_2a = gmod2.make_params(p2_amplitude=30, p2_center=730, p2_sigma=4)
+    pars_2b = gmod2.make_params(amplitude=30, center=730, sigma=4)
+
+    pars_a = Parameters()
+    pars_a.update(pars_1a)
+    pars_a.update(pars_2a)
+
+    pars_b = Parameters()
+    pars_b.update(pars_1b)
+    pars_b.update(pars_2b)
+
+    pars_c = model.make_params()
+
+    for pname in ('p1_amplitude', 'p1_center', 'p1_sigma',
+                  'p2_amplitude', 'p2_center', 'p2_sigma'):
+        assert pname in pars_a
+        assert pname in pars_b
+        assert pname in pars_c
 
 
 def test__parse_params_forbidden_variable_names():
