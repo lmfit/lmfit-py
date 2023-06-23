@@ -1605,9 +1605,12 @@ class Minimizer:
         # Note: scipy.optimize.least_squares is actually returning the
         # "last evaluation", which is not necessarily the "best result"; so we
         # do that here for consistency
+        result.nfev -= 2
         if not result.aborted:
-            result.nfev -= 1
             result.residual = self.__residual(ret.x, False)
+        else:
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         if not result.aborted:
