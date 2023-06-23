@@ -1600,16 +1600,17 @@ class Minimizer:
                                 **least_squares_kws)
             result.residual = ret.fun
         except AbortFitException:
-            pass
+            ret = None
+            result.aborted = True
 
         # Note: scipy.optimize.least_squares is actually returning the
         # "last evaluation", which is not necessarily the "best result"; so we
         # do that here for consistency
-        result.nfev -= 1
         if not result.aborted:
-            result.residual = self.__residual(ret.x, False)
-        else:
             result.nfev -= 1
+            result.residual = self.__residual(ret.x, False)
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
             _best = result.last_internal_values
             result.residual = self.__residual(_best, False)
         result._calculate_statistics()
