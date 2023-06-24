@@ -700,7 +700,7 @@ class Model:
             if basename in kwargs:
                 setpar(par, kwargs[basename])
             if name in kwargs:
-                setpar(par, kwargs[basename])
+                setpar(par, kwargs[name])
             params.add(par)
             if verbose:
                 print(f' - Adding parameter "{name}"')
