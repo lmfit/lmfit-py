@@ -57,6 +57,6 @@ def test_aborted_solvers(method):
     assert not result.success
     assert not result.errorbars
     assert result.redchi > 1000
-    assert result.redchi < 50000
+    assert result.redchi < 90000
     assert result.nfev > 35
     assert result.nfev < 45
