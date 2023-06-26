@@ -410,7 +410,8 @@ def test_coercion_of_input_data(peakdata, input_dtype):
                 * np.exp(-(xarr-center)**2 / max(1.e-15, (2*sigma**2))))
 
     for coerce_farray in True, False:
-        if not lmfit.minimizer.HAS_PANDAS and 'pandas' in input_dtype:
+        if (input_dtype in ('pandas-real', 'pandas-complex')
+           and not lmfit.minimizer.HAS_PANDAS):
             return
 
         if not coerce_farray and input_dtype in ('list', 'tuple'):
