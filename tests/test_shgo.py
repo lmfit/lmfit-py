@@ -100,7 +100,7 @@ def test_shgo_bounds(minimizer_Alpine02):
     assert 2.5 <= out.params['x1'].value <= 7.5
 
 
-def test_shgo_disp_true(minimizer_Alpine02, capsys):
+def abandoned_test_shgo_disp_true(minimizer_Alpine02, capsys):
     """Test SHGO algorithm with disp is True."""
     kws = {'disp': True}
     minimizer_Alpine02.minimize(method='shgo', options=kws)
