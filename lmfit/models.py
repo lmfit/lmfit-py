@@ -204,8 +204,8 @@ class ComplexConstantModel(Model):
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = self.make_params()
-        pars[f'{self.prefix}re'].set(value=data.real.mean())
-        pars[f'{self.prefix}im'].set(value=data.imag.mean())
+        pars[f'{self.prefix}re'].set(value=np.real(data).mean())
+        pars[f'{self.prefix}im'].set(value=np.imag(data).mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -736,7 +736,7 @@ class VoigtModel(Model):
         fexpr = ("1.0692*{pre:s}gamma+" +
                  "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
         hexpr = ("({pre:s}amplitude/(max({0}, {pre:s}sigma*sqrt(2*pi))))*"
-                 "wofz((1j*{pre:s}gamma)/(max({0}, {pre:s}sigma*sqrt(2)))).real")
+                 "real(wofz((1j*{pre:s}gamma)/(max({0}, {pre:s}sigma*sqrt(2)))))")
 
         self.set_param_hint('fwhm', expr=fexpr.format(pre=self.prefix))
         self.set_param_hint('height', expr=hexpr.format(tiny, pre=self.prefix))
