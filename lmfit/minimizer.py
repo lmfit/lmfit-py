@@ -964,9 +964,15 @@ class Minimizer:
         params = result.params
 
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
+
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
         if method == 'L-BFGS-B':
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
+        elif method == 'COBYLA':
+            # for this method, we explicitly let the solver reach
+            # the users max nfev, and do not abort in _residual.
+            fmin_kws['options']['maxiter'] = self.max_nfev
+            self.max_nfev = 5*self.max_nfev
 
         # fmin_kws = dict(method=method, options={'maxfun': 2*self.max_nfev})
         fmin_kws.update(self.kws)
@@ -1813,6 +1819,10 @@ class Minimizer:
             result.message = ret.message
             result.residual = self.__residual(ret.x)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
@@ -1992,7 +2002,10 @@ class Minimizer:
             result.residual = self.__residual(result.brute_x0,
                                               apply_bounds_transformation=False)
             result.nfev = len(result.brute_Jout.ravel())
-
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         return result
@@ -2115,6 +2128,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
@@ -2193,7 +2210,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.shgo_x, False)
             result.nfev -= 1
-
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertainties/correlations
@@ -2274,6 +2294,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.da_x, False)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
