@@ -5,7 +5,7 @@ import unittest
 import warnings
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_almost_equal
 import pytest
 from scipy import __version__ as scipy_version
 
@@ -1140,7 +1140,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         _m = m1 + m2  # noqa: F841
 
         param_values = {name: p.value for name, p in params.items()}
-        self.assertTrue(param_values['m1_intercept'] < -0.0)
+        assert_almost_equal(param_values['m1_intercept'], 0.)
         self.assertEqual(param_values['m2_amplitude'], 1)
 
     def test_weird_param_hints(self):
