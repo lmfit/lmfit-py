@@ -952,8 +952,8 @@ class Model:
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy=None, calc_covar=True, coerce_farray=True,
-            max_nfev=None, **kwargs):
+            nan_policy=None, calc_covar=True, max_nfev=None,
+            coerce_farray=True, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -984,14 +984,14 @@ class Model:
             Whether to calculate the covariance matrix (default is True)
             for solvers other than `'leastsq'` and `'least_squares'`.
             Requires the ``numdifftools`` package to be installed.
+        max_nfev : int or None, optional
+            Maximum number of function evaluations (default is None). The
+            default value depends on the fitting method.
         coerce_farray : bool, optional
             Whether to coerce data and independent data to be ndarrays
             with dtype of float64 (or complex128).  If set to False, data
             and independent data are not coerced at all, but the output of
             the model function will be. (default is True)
-        max_nfev : int or None, optional
-            Maximum number of function evaluations (default is None). The
-            default value depends on the fitting method.
         **kwargs : optional
             Arguments to pass to the model function, possibly overriding
             parameters.
