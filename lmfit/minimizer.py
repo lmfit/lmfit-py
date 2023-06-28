@@ -2436,12 +2436,11 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     arr : array_like
         Input array to consider.
     nan_policy : {'raise', 'propagate', 'omit'}, optional
-        One of:
+        policy for handling NaN values. One of:
 
         `'raise'` - raise a `ValueError` if `arr` contains NaN (default)
         `'propagate'` - propagate NaN
         `'omit'` - filter NaN from input array
-
     handle_inf : bool, optional
         Whether to apply the `nan_policy` to +/-Inf (default is True).
     ravel : bool, optional
@@ -2508,7 +2507,12 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     return arr
 
 
-_nan_policy = coerce_float64
+# coerce_float64 replaces _nan_policy.  That was never part of the public API,
+# but we'll have it raise a DeprecationWarning for a while.
+# This change happened in June, 2023, v 1.2.1, so this function can removed
+# sometime in 2024, or after v 1.3.
+def _nan_policy(arr, nan_policy='raise', handle_inf=True, **kws):
+    raise DeprecationWarning('`_nan_policy` has been replaced with coerce_float64`')
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
