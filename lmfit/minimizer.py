@@ -558,8 +558,7 @@ class Minimizer:
             self.result.success = False
             raise AbortFitException("fit aborted by user.")
         else:
-            return _nan_policy(np.asfarray(out).ravel(),
-                               nan_policy=self.nan_policy)
+            return coerce_float64(out, nan_policy=self.nan_policy)
 
     def __jacobian(self, fvars):
         """Return analytical jacobian to be used with Levenberg-Marquardt.
@@ -581,7 +580,7 @@ class Minimizer:
         # compute the jacobian for "internal" unbounded variables,
         # then rescale for bounded "external" variables.
         jac = self.jacfcn(pars, *self.userargs, **self.userkws)
-        jac = _nan_policy(jac, nan_policy=self.nan_policy)
+        jac = coerce_float64(jac, nan_policy=self.nan_policy, ravel=False)
 
         if self.col_deriv:
             jac = (jac.transpose()*grad_scale).transpose()
@@ -901,9 +900,15 @@ class Minimizer:
         params = result.params
 
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
+
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
         if method == 'L-BFGS-B':
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
+        elif method == 'COBYLA':
+            # for this method, we explicitly let the solver reach
+            # the users max nfev, and do not abort in _residual.
+            fmin_kws['options']['maxiter'] = self.max_nfev
+            self.max_nfev = 5*self.max_nfev
 
         # fmin_kws = dict(method=method, options={'maxfun': 2*self.max_nfev})
         fmin_kws.update(self.kws)
@@ -1073,9 +1078,8 @@ class Minimizer:
             self._lastpos = theta
             raise AbortFitException("fit aborted by user.")
         else:
-            out = _nan_policy(np.asarray(out).ravel(),
-                              nan_policy=self.nan_policy)
-        lnprob = np.asarray(out).ravel()
+            out = coerce_float64(out, nan_policy=self.nan_policy)
+        lnprob = coerce_float64(out, nan_policy=self.nan_policy)
         if len(lnprob) == 0:
             lnprob = np.array([-1.e100])
         if lnprob.size > 1:
@@ -1444,8 +1448,8 @@ class Minimizer:
 
         # Calculate the residual with the "best fit" parameters
         out = self.userfcn(params, *self.userargs, **self.userkws)
-        result.residual = _nan_policy(out, nan_policy=self.nan_policy,
-                                      handle_inf=False)
+        result.residual = coerce_float64(out, nan_policy=self.nan_policy,
+                                         handle_inf=False)
 
         # If uncertainty was automatically estimated, weight the residual properly
         if not is_weighted and result.residual.size > 1 and '__lnsigma' in params:
@@ -1538,7 +1542,8 @@ class Minimizer:
                                 **least_squares_kws)
             result.residual = ret.fun
         except AbortFitException:
-            pass
+            ret = None
+            result.aborted = True
 
         # Note: scipy.optimize.least_squares is actually returning the
         # "last evaluation", which is not necessarily the "best result"; so we
@@ -1546,6 +1551,10 @@ class Minimizer:
         if not result.aborted:
             result.nfev -= 1
             result.residual = self.__residual(ret.x, False)
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         if not result.aborted:
@@ -1746,6 +1755,10 @@ class Minimizer:
             result.message = ret.message
             result.residual = self.__residual(ret.x)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
@@ -1925,7 +1938,10 @@ class Minimizer:
             result.residual = self.__residual(result.brute_x0,
                                               apply_bounds_transformation=False)
             result.nfev = len(result.brute_Jout.ravel())
-
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         return result
@@ -2048,6 +2064,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
@@ -2126,7 +2146,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.shgo_x, False)
             result.nfev -= 1
-
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertainties/correlations
@@ -2207,6 +2230,10 @@ class Minimizer:
 
             result.residual = self.__residual(result.da_x, False)
             result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
 
         result._calculate_statistics()
 
@@ -2336,35 +2363,51 @@ def _make_random_gen(seed):
                      ' instance')
 
 
-def _nan_policy(arr, nan_policy='raise', handle_inf=True):
-    """Specify behaviour when array contains ``numpy.nan`` or ``numpy.inf``.
+def coerce_float64(arr, nan_policy='raise', handle_inf=True,
+                   ravel=True, ravel_order='C'):
+    """coerce array-like objects to be a float64 ndarrays, usually forcing to 1D arrays.
+
+    also handles behaviour when array contains ``numpy.nan`` or ``numpy.inf``.
 
     Parameters
     ----------
     arr : array_like
         Input array to consider.
     nan_policy : {'raise', 'propagate', 'omit'}, optional
-        One of:
+        policy for handling NaN values. One of:
 
         `'raise'` - raise a `ValueError` if `arr` contains NaN (default)
         `'propagate'` - propagate NaN
         `'omit'` - filter NaN from input array
-
     handle_inf : bool, optional
-        Whether to apply the `nan_policy` to +/- infinity (default is
-        True).
+        Whether to apply the `nan_policy` to +/-Inf (default is True).
+    ravel : bool, optional
+        Whether to force to be 1D array (default is True).
+    ravel_order : str, optional
+        array ordering to assume when unravelling array (default is 'C')
 
     Returns
     -------
-    array_like
-        Result of `arr` after applying the `nan_policy`.
+    array
+        ndarray of type np.float64, possibly after applying the `nan_policy`,
+        and usually raveling to 1-D array
 
     Notes
     -----
-    This function is copied, then modified, from
-    scipy/stats/stats.py/_contains_nan
+    Parts of this function are based on scipy/stats/stats.py/_contains_nan
 
+    support for 'array-like` objects is from numpy `asfarray`, which includes
+    lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
+    Python objects
     """
+    if np.iscomplexobj(arr):
+        arr = np.asfarray(arr, dtype=np.complex128).view(np.float64)
+    else:
+        arr = np.asfarray(arr, dtype=np.float64)
+
+    if ravel:
+        arr = arr.ravel(order=ravel_order)
+
     if nan_policy not in ('propagate', 'omit', 'raise'):
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
 
@@ -2400,6 +2443,15 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
                    'for more information.')
             raise ValueError(msg)
     return arr
+
+
+# coerce_float64 replaces _nan_policy.  That was never part of the public API,
+# but we'll have it raise a DeprecationWarning for a while.
+# This change happened in June, 2023, v 1.2.1, so this function can removed
+# sometime in 2024, or after v 1.3.
+def _nan_policy(arr, nan_policy='raise', handle_inf=True, **kws):
+    warnings.warn('`_nan_policy` has been replaced with coerce_float64`', DeprecationWarning)
+    return coerce_float64(arr, nan_policy=nan_policy, handle_inf=handle_inf, **kws)
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
