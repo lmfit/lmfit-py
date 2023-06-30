@@ -609,55 +609,60 @@ to be an abstract representation for data, but when you do a fit with
 :meth:`Model.fit`, you really need to pass in values for the data to be modeled
 and the independent data used to calculate that data.
 
-The mathematical solvers used by ``lmfit`` all work exclusively with
-1-dimensional numpy arrays of datatype (dtype) ``float64``.  The value of the
-calculation ``(model-data)*weights`` using the calculation of your model
-function, and the data and weights you pass in *will be coerced* to an
-1-dimensional ndarray with dtype ``float64`` when it is passed to the solver.
 
-If the data you pass to :meth:`Model.fit` is not an ndarray of dtype
-``float64`` but is instead a tuples of numbers, a list of numbers, or a
-``pandas.Series``, it will be coerced into an ndarray.  If your data is a list,
-tuple, or Series of complex numbers, it *will be coerced* to an ndarray with
-dtype ``complex128``.
+As discussed in :ref:`fit-data-label`, the mathematical solvers used by
+``lmfit`` all work exclusively with 1-dimensional numpy arrays of datatype
+(dtype) "float64".  The value of the calculation ``(model-data)*weights`` using
+the calculation of your model function, and the data and weights you pass in
+**will always be coerced** to an 1-dimensional ndarray with dtype "float64"
+when it is passed to the solver.  If it cannot be coerced, an error will occur
+and the fit will be aborted.
 
-If your data is a numpy array of dtype ``float32``, it *will not be coerced* to
-``float64``, as we assume this was an intentional choice.  That may make all of
-the calculations done in your model function be in single-precision which may
-make fits less sensitive, but the values will be converted to ``float64``
-before being sent to the solver, so the fit should work.
+That coercion will usually work for "array like" data that is not already a
+float64 ndarray.  But, depending on the model function, the calculations within
+the model function may not always work well for some "array like" data types
+- especially independent data that are in list of numbers and ndarrays of type
+"float32" or "int16" or less precision.
 
-The independent data for models using ``Model`` are meant to be truly
+
+To be clear, independent data for models using ``Model`` are meant to be truly
 independent, and not **not** required to be strictly numerical or objects that
-are easily converted to arrays of numbers.  That is, independent data for a
-model could be a dictionary, an instance of a user-defined class, or other type
-of structured data.  You can use independent data any way you want in your
-model function.
-
+are easily converted to arrays of numbers.  The could, for example, be a
+dictionary, an instance of a user-defined class, or other type of structured
+data.  You can use independent data any way you want in your model function.
 But, as with almost all the examples given here, independent data is often also
-a 1-dimensonal array of values, say ``x``, and a simple view of the fit would be
-to plot the data as ``y`` as a function of ``x``.  Again, this is not required, but
-it is very common.  Because of this very common usage, if your independent data
-is a tuple or list of numbers or ``pandas.Series``, it *will be coerced* to be
-an ndarray of dtype ``float64``.  But as with the primary data, if your
-independent data is an ndarray of some different dtype (``float32``,
-``uint16``, etc), it *will not be coerced* to ``float64``, as we assume this
-was intentional.
+a 1-dimensional array of values, say ``x``, and a simple view of the fit would
+be to plot the data as ``y`` as a function of ``x``.  Again, this is not
+required, but it is very common, especially for novice users.
 
-.. note::
+By default, all data and independent data passed to :meth:`Model.fit` that is
+"array like" - a list or tuple of numbers, a ``pandas.Series``, and
+``h5py.Dataset``, or any object that has an ``__array__()`` method -- will be
+converted to a "float64" ndarray before the fit begins.  If the array-like data
+is complex, it will be converted to a "complex128" ndarray, which will always
+work too.  This conversion before the fit begins ensures that the model
+function sees only "float64 ndarrays", and nearly guarantees that data type
+conversion will not cause problems for the fit.  But it also means that if you
+have passed a ``pandas.Series`` as data or independent data, not all of the
+methods or attributes of that ``Series`` will be available by default within
+the model function.
 
-  Data and independent data that are tuples or lists of numbers, or
-  ``panda.Series`` will be coerced to an ndarray of dtype ``float64`` before
-  passing to the model function.  Data with other dtypes (or independent data
-  of other object types such as dicts) will not be coerced to ``float64``.
+.. versionadded:: 1.2.2
 
+This coercion can be turned of with the ``coerce_farray`` option to
+:meth:`Model.fit`.  When set to ``False``, neither the data nor the independent
+data will be coerced from their original data type, and the user will be
+responsible to arrange for the calculation and return value from the model
+function to be allow a proper and accurate conversion to a "float64" ndarray.
+
+See also :ref:`fit-data-label` for general advise and recommendations on
+types of data to use when fitting data.
 
 .. _model_saveload_sec:
 
 Saving and Loading Models
 -------------------------
 
-.. versionadded:: 0.9.8
 
 It is sometimes desirable to save a :class:`Model` for later use outside of
 the code used to define the model. Lmfit provides a :func:`save_model`
@@ -899,7 +904,7 @@ and ``bic``.
 
 .. attribute:: rsquared
 
-   Floating point :math:`R^2` statisic, defined for data :math:`y` and best-fit model :math:`f` as
+   Floating point :math:`R^2` statistic, defined for data :math:`y` and best-fit model :math:`f` as
 
 .. math::
    :nowrap:
@@ -992,8 +997,6 @@ model can be calculated and used:
 
 Saving and Loading ModelResults
 -------------------------------
-
-.. versionadded:: 0.9.8
 
 As with saving models (see section :ref:`model_saveload_sec`), it is
 sometimes desirable to save a :class:`ModelResult`, either for later use or
