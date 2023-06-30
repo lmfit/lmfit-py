@@ -2513,7 +2513,7 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
 # sometime in 2024, or after v 1.3.
 def _nan_policy(arr, nan_policy='raise', handle_inf=True, **kws):
     warnings.warn('`_nan_policy` has been replaced with coerce_float64`', DeprecationWarning)
-    return coerce_float64(arr, nan_policy='raise', handle_inf=True, **kws)
+    return coerce_float64(arr, nan_policy=nan_policy, handle_inf=handle_inf, **kws)
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
