@@ -190,6 +190,20 @@ def propagate_err(z, dz, option):
     return err
 
 
+def coerce_arraylike(x):
+    """
+    coerce lists, tuples, and pandas Series, hdf5 Groups, etc to an
+    ndarray float64 or complex128, but leave other data structures
+    and objects unchanged
+    """
+    if isinstance(x, (list, tuple, Series)) or hasattr(x, '__array__'):
+        if np.isrealobj(x):
+            return np.asfarray(x)
+        if np.iscomplexobj(x):
+            return np.asfarray(x, dtype=np.complex128)
+    return x
+
+
 class Model:
     """Create a model from a user-supplied model function."""
 
@@ -811,7 +825,7 @@ class Model:
                     weights = (weights + 1j * weights).ravel().view(float)
         if weights is not None:
             diff *= weights
-        return np.asarray(diff).ravel()  # for compatibility with pandas.Series
+        return diff
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
@@ -938,7 +952,8 @@ class Model:
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy=None, calc_covar=True, max_nfev=None, **kwargs):
+            nan_policy=None, calc_covar=True, max_nfev=None,
+            coerce_farray=True, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -972,6 +987,11 @@ class Model:
         max_nfev : int or None, optional
             Maximum number of function evaluations (default is None). The
             default value depends on the fitting method.
+        coerce_farray : bool, optional
+            Whether to coerce data and independent data to be ndarrays
+            with dtype of float64 (or complex128).  If set to False, data
+            and independent data are not coerced at all, but the output of
+            the model function will be. (default is True)
         **kwargs : optional
             Arguments to pass to the model function, possibly overriding
             parameters.
@@ -1060,25 +1080,12 @@ class Model:
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        def coerce_arraylike(x):
-            """
-            coerce lists, tuples, and pandas Series to float64 or complex128,
-            but leave other ndarrays of different dtypes and objects unchanged
-            """
-            if isinstance(x, (list, tuple, Series)):
-                if np.isrealobj(x):
-                    return np.asfarray(x)
-                elif np.iscomplexobj(x):
-                    return np.asarray(x, dtype='complex128')
-            return x
-
-        # coerce data and independent variable(s) that are 'array-like' (list,
-        # tuples, pandas Series) to float64/complex128. Note: this will not
-        # alter the dtype of data or independent variables that are already
-        # ndarrays but with dtype other than float64/complex128.
-        data = coerce_arraylike(data)
-        for var in self.independent_vars:
-            kwargs[var] = coerce_arraylike(kwargs[var])
+        if coerce_farray:
+            # coerce data and independent variable(s) that are 'array-like' (list,
+            # tuples, pandas Series) to float64/complex128.
+            data = coerce_arraylike(data)
+            for var in self.independent_vars:
+                kwargs[var] = coerce_arraylike(kwargs[var])
 
         if fit_kws is None:
             fit_kws = {}
@@ -1454,7 +1461,8 @@ class ModelResult(Minimizer):
                     pass
 
         if self.data is not None and len(self.data) > 1:
-            sstot = ((self.data - self.data.mean())**2).sum()
+            dat = coerce_arraylike(self.data)
+            sstot = ((dat - dat.mean())**2).sum()
             if isinstance(self.residual, np.ndarray) and len(self.residual) > 1:
                 self.rsquared = 1.0 - (self.residual**2).sum()/max(tiny, sstot)
 

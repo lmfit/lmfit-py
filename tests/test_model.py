@@ -387,45 +387,78 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
-input_dtypes = [(np.int32, np.int32), (np.float32, np.float32),
-                (np.complex64, np.complex64), ('list', np.float64),
-                ('tuple', np.float64), ('pandas-real', np.float64),
-                ('pandas-complex', np.complex128)]
-
-
-@pytest.mark.parametrize('input_dtype, expected_dtype', input_dtypes)
-def test_coercion_of_input_data(peakdata, input_dtype, expected_dtype):
+@pytest.mark.parametrize('input_dtype', (np.int16, np.int32, np.float32,
+                                         np.complex64, np.complex128, 'list',
+                                         'tuple', 'pandas-real',
+                                         'pandas-complex'))
+def test_coercion_of_input_data(peakdata, input_dtype):
     """Test for coercion of 'data' and 'independent_vars'.
 
-    - 'data' should become 'float64' or 'complex128'
-    - dtype for 'indepdendent_vars' is only changed when the input is a list,
-        tuple, numpy.ndarray, or pandas.Series
+    'data' and `independent_vars` should be coerced to 'float64' or 'complex128'
+
+    unless told not be coerced by setting ``coerce_farray=False``.
+
+    # - dtype for 'indepdendent_vars' is only changed when the input is a list,
+    #    tuple, numpy.ndarray, or pandas.Series
 
     """
     x, y = peakdata
-    model = lmfit.Model(gaussian)
-    pars = model.make_params()
 
-    if (not lmfit.minimizer.HAS_PANDAS and input_dtype in ['pandas-real',
-                                                           'pandas-complex']):
-        return
+    def gaussian_lists(x, amplitude=1.0, center=0.0, sigma=1.0):
+        xarr = np.array(x, dtype=np.float64)
+        return ((amplitude/(max(1.e-15, np.sqrt(2*np.pi)*sigma)))
+                * np.exp(-(xarr-center)**2 / max(1.e-15, (2*sigma**2))))
 
-    elif input_dtype == 'pandas-real':
-        result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
-                           x=lmfit.model.Series(x, dtype=np.float32))
-    elif input_dtype == 'pandas-complex':
-        result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
-                           x=lmfit.model.Series(x, dtype=np.complex64))
-    elif input_dtype == 'list':
-        result = model.fit(y.tolist(), pars, x=x.tolist())
-    elif input_dtype == 'tuple':
-        result = model.fit(tuple(y), pars, x=tuple(x))
-    else:
-        result = model.fit(np.asarray(y, dtype=input_dtype), pars,
-                           x=np.asarray(x, dtype=input_dtype))
+    for coerce_farray in True, False:
+        if (input_dtype in ('pandas-real', 'pandas-complex')
+           and not lmfit.minimizer.HAS_PANDAS):
+            return
 
-    assert result.__dict__['userkws']['x'].dtype == expected_dtype
-    assert result.__dict__['userargs'][0].dtype == expected_dtype
+        if not coerce_farray and input_dtype in ('list', 'tuple'):
+            model = lmfit.Model(gaussian_lists)
+        else:
+            model = lmfit.Model(gaussian)
+
+        pars = model.make_params(amplitude=5, center=10, sigma=2)
+
+        if input_dtype == 'pandas-real':
+            result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
+                               x=lmfit.model.Series(x, dtype=np.float32),
+                               coerce_farray=coerce_farray)
+
+            expected_dtype = np.float64 if coerce_farray else np.float32
+
+        elif input_dtype == 'pandas-complex':
+            result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
+                               x=lmfit.model.Series(x, dtype=np.complex64),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.complex128 if coerce_farray else np.complex64
+
+        elif input_dtype == 'list':
+            result = model.fit(y.tolist(), pars, x=x.tolist(),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64 if coerce_farray else list
+
+        elif input_dtype == 'tuple':
+            result = model.fit(tuple(y), pars, x=tuple(x),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64 if coerce_farray else tuple
+
+        else:
+            result = model.fit(np.asarray(y, dtype=input_dtype), pars,
+                               x=np.asarray(x, dtype=input_dtype),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64
+            if input_dtype in (np.complex64, np.complex128):
+                expected_dtype = np.complex128
+            expected_dtype = expected_dtype if coerce_farray else input_dtype
+
+        if not coerce_farray and input_dtype in ('list', 'tuple'):
+            assert isinstance(result.userkws['x'], (list, tuple))
+            assert isinstance(result.userargs[0], (list, tuple))
+        else:
+            assert result.userkws['x'].dtype == expected_dtype
+            assert result.userargs[0].dtype == expected_dtype
 
 
 def test_figure_default_title(peakdata):

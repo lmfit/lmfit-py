@@ -11,7 +11,6 @@ As shown in the previous chapter, a simple fit can be performed with the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
 
-
 The :func:`minimize` function
 =============================
 
@@ -121,6 +120,70 @@ but putting this directly in the function with:
 is also a reasonable approach. Similarly, one could place bounds on the
 ``decay`` parameter to take values only between ``-pi/2`` and ``pi/2``.
 
+..  _fit-data-label:
+
+Types of Data to Use for Fitting
+===================================
+
+Minimization methods assume that data is numerical.  For all the fitting
+methods supported by lmfit, data and fitting parameters are also assumed to
+be continuous variables.  As the routines make heavy use of numpy and scipy,
+the most natural data to use in fitting is then numpy nd-arrays.  In fact, many
+of the underlying fitting algorithms - including the default :meth:`leastsq`
+method - **require** the values in the residual array used for the
+minimization to be a 1-dimensional numpy array with data type (`dtype`) of
+"float64": a 64-bit representation of a floating point number (sometimes called
+a "double precision float").
+
+Python is generally forgiving about data types, and in the scientific Python
+community there is a concept of an object being "array like" which essentially
+means that the can usually be coerced or interpreted as a numpy array, often
+with that object having an ``__array__()`` method specially designed for that
+conversion.  Important examples of objects that can be considered "array like"
+include Lists and Tuples that contain only numbers, pandas Series, and HDF5
+Datasets. Many objects from data-processing libraries like dask, xarray, zarr,
+and more are also "array like".
+
+Lmfit tries to be accommodating in the data that can be used in the fitting
+process. When using :class:`Minimizer`, the data you pass in as extra arrays for the
+calculation of the residual array will not be altered, and can be used in your
+objective function in whatever form you send.  Usually, "array like" data will
+work, but some care may be needed.  In the example above, if ``x`` was not a
+numpy array but a list of numbers, this would give an error message like::
+
+   TypeError: unsupported operand type(s) for /: 'list' and 'float'
+
+or::
+
+  TypeError: can't multiply sequence by non-int of type 'float'
+
+because a list of numbers is only sometimes "array like".
+
+Sending in a "more array-like" object like a pandas Series will avoid many
+(though maybe not all!) such exceptions, but the resulting calculation returned
+from the function would then also be a pandas Series.  Lmfit :meth:`minimize` will
+always coerce the return value from the objective function into a 1-D numpy
+array with ``dtype`` of "float64".  This will usually "just work", but there
+may be exceptions.
+
+When in doubt, or if running it trouble, converting data to float64 numpy
+arrays before being used in a fit is recommended.  If using complex data or
+functions, a ``dtype`` of "complex128" will also always work, and will be
+converted to "float64" with ``ndaarray.view("float64")``.  Numpy arrays of other
+``dtype`` (say, "int16" or "float32") should be used with caution.  In
+particular, "float32" data should be avoided: Multiplying a "float32" array and
+a Python float will result in a "float32" array for example.  As fitting
+variables may have small changes made to them, the results may be at or below
+"float32" precision, which will cause the fit to give up.  For integer data,
+results are more sometimes promoted to "float64", but many numpy ufuncs (say,
+``numpy.exp()``) will promote only to "float32", so care is still needed.
+
+
+See also :ref:`model_data_coercion_section` for discussion of data passed in for
+curve-fitting.
+
+
+
 ..  _fit-methods-label:
 
 Choosing Different Fitting Methods
@@ -191,7 +254,7 @@ uncertainties and correlations if ``calc_covar`` is ``True`` (default).
  | Optimization             |                                                                  |
  +--------------------------+------------------------------------------------------------------+
  | Simplicial Homology      |  ``shgo``                                                        |
- | Global Ooptimization     |                                                                  |
+ | Global Optimization      |                                                                  |
  +--------------------------+------------------------------------------------------------------+
  | Dual Annealing           |  ``dual_annealing``                                              |
  +--------------------------+------------------------------------------------------------------+
@@ -224,8 +287,6 @@ uncertainties and correlations if ``calc_covar`` is ``True`` (default).
 :class:`MinimizerResult` -- the optimization result
 ===================================================
 
-.. versionadded:: 0.9.0
-
 An optimization with :func:`minimize` or :meth:`Minimizer.minimize`
 will return a :class:`MinimizerResult` object. This is an otherwise
 plain container object (that is, with no methods of its own) that
@@ -247,7 +308,6 @@ with ``results`` being a ``MinimizerResult`` object. Note that the method
 for customizing the output (e.g., column width, numeric format, etcetera).
 
 .. autoclass:: MinimizerResult
-
 
 
 Goodness-of-Fit Statistics
@@ -544,7 +604,7 @@ parameters. It may be able to refine your estimate of the most likely values
 for a set of parameters, but it will not iteratively find a good solution to
 the minimization problem. To use this method effectively, you should first
 use another minimization method and then use this method to explore the
-parameter space around thosee best-fit values.
+parameter space around those best-fit values.
 
 To illustrate this, we'll use an example problem of fitting data to function
 of a double exponential decay, including a modest amount of Gaussian noise to
