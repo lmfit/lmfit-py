@@ -2512,7 +2512,8 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
 # This change happened in June, 2023, v 1.2.1, so this function can removed
 # sometime in 2024, or after v 1.3.
 def _nan_policy(arr, nan_policy='raise', handle_inf=True, **kws):
-    raise DeprecationWarning('`_nan_policy` has been replaced with coerce_float64`')
+    warnings.warn('`_nan_policy` has been replaced with coerce_float64`', DeprecationWarning)
+    return coerce_float64(arr, nan_policy='raise', handle_inf=True, **kws)
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
