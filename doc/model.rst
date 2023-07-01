@@ -240,6 +240,12 @@ function as a fitting model.
 
 .. automethod:: Model.print_param_hints
 
+   See :ref:`model_param_hints_section`.
+
+..  automethod:: Model.post_fit
+
+   See :ref:`modelresult_uvars_postfit_section`.
+
 
 :class:`Model` class Attributes
 -------------------------------
@@ -990,7 +996,6 @@ Fit Statistics
 
 
 
-
 .. _eval_uncertainty_sec:
 
 Calculating uncertainties in the model function
@@ -1045,6 +1050,54 @@ An example script shows how the uncertainties in components of a composite
 model can be calculated and used:
 
 .. jupyter-execute:: ../examples/doc_model_uncertainty2.py
+
+
+
+.. _modelresult_uvars_postfit_section:
+
+Using uncertainties in the fitted parameters for post-fit calculations
+--------------------------------------------------------------------------
+
+.. versionadded:: 1.2.2
+
+.. _uncertainties package:   https://pythonhosted.org/uncertainties/
+
+As with the previous section, after a fit is complete, you may want to do some
+further calculations with the resulting Parameter values.  Since these
+Parameters will have not only best-fit values but also usually have
+uncertainties, it is desirable for subsequent calculations to be able to
+propagate those uncertainties to any resulting calculated value.  In addition,
+it is common for Parameters to have finite - and sometimes large -
+correlations which should be taken into account in such calculations.
+
+The :attr:`ModelResult.uvars` will be a dictionary with keys for all variable
+Parameters and values that are ``uvalues`` from the `uncertainties package`_.
+When used in mathematical calculations with basic Python operators or numpy
+functions, these ``uvalues`` will automatically propagate their uncertainties
+to the resulting calculation, and taking into account the full covariance
+matrix describing the correlation between values.
+
+This readily allows "derived Parameters" to be evaluated just after the fit.
+In fact, it might be useful to have a Model always do such a calculation just
+after the fit.  The :meth:`Model.post_fit` method allows exactly that: you can
+overwrite this otherwise empty method for any Model.  It takes one argument:
+the :class:`ModelResult` instance just after the actual fit has run (and before
+:meth:`Model.fit` returns) and can be used to add Parameters or do other
+post-fit processing.
+
+The following example script shows two different methods for calculating a centroid
+value for two peaks, either by doing the calculation directly after the fit
+with the ``result.uvars`` or by capturing this in a :meth:`Model.post_fit`
+method that would be run for all instances of that model.  It also demonstrates
+that taking correlations between Parameters into account when performing
+calculations can have a noticeable influence on the resulting uncertainties.
+
+
+.. jupyter-execute:: ../examples/doc_uvars_params.py
+
+
+Note that the :meth:`Model.post_fit` does not need to be limited to this
+use case of adding derived Parameters.
 
 
 .. _modelresult_saveload_sec:
