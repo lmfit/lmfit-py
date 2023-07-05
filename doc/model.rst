@@ -240,6 +240,12 @@ function as a fitting model.
 
 .. automethod:: Model.print_param_hints
 
+   See :ref:`model_param_hints_section`.
+
+..  automethod:: Model.post_fit
+
+   See :ref:`modelresult_uvars_postfit_section`.
+
 
 :class:`Model` class Attributes
 -------------------------------
@@ -770,40 +776,72 @@ and ``bic``.
 .. automethod:: ModelResult.plot_residuals
 
 
+.. method:: ModelResult.iter_cb
+
+   Optional callable function, to be called at each fit iteration. This
+   must take take arguments of ``(params, iter, resid, *args, **kws)``, where
+   ``params`` will have the current parameter values, ``iter`` the
+   iteration, ``resid`` the current residual array, and ``*args`` and
+   ``**kws`` as passed to the objective function. See :ref:`fit-itercb-label`.
+
+.. method:: ModelResult.jacfcn
+
+   Optional callable function, to be called to calculate Jacobian array.
+
+
 :class:`ModelResult` attributes
 -------------------------------
 
-.. attribute:: aic
+A :class:`ModelResult` will take all of the attributes of
+:class:`MinimizerResult`, and several more. Here, we arrange them into
+categories.
 
-   Floating point best-fit Akaike Information Criterion statistic
-   (see :ref:`fit-results-label`).
+
+Parameters and Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. attribute:: best_values
+
+   Dictionary with parameter names as keys, and best-fit values as values.
+
+.. attribute:: init_params
+
+   Initial parameters, as passed to :meth:`Model.fit`.
+
+.. attribute:: init_values
+
+   Dictionary with parameter names as keys, and initial values as values.
+
+.. attribute:: init_vals
+
+   list of values for the variable parameters.
+
+.. attribute::  params
+
+   Parameters used in fit; will contain the best-fit values.
+
+.. attribute:: uvars
+
+   Dictionary of ``uncertainties`` ufloats from Parameters.
+
+.. attribute::   var_names
+
+   List of variable Parameter names used in optimization in the
+   same order as the values in :attr:`init_vals` and :attr:`covar`.
+
+Fit Arrays and Model
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. attribute:: best_fit
 
    numpy.ndarray result of model function, evaluated at provided
    independent variables and with best-fit parameters.
 
-.. attribute:: best_values
-
-   Dictionary with parameter names as keys, and best-fit values as values.
-
-.. attribute:: bic
-
-   Floating point best-fit Bayesian Information Criterion statistic
-   (see :ref:`fit-results-label`).
-
-.. attribute:: chisqr
-
-   Floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
-
-.. attribute:: ci_out
-
-   Confidence interval data (see :ref:`confidence_chapter`) or ``None`` if
-   the confidence intervals have not been calculated.
 
 .. attribute:: covar
 
    numpy.ndarray (square) covariance matrix returned from fit.
+
 
 .. attribute:: data
 
@@ -820,38 +858,46 @@ and ``bic``.
    components, from :meth:`ModelResult.eval_uncertainty` (see
    :ref:`eval_uncertainty_sec`).
 
-.. attribute:: errorbars
-
-   Boolean for whether error bars were estimated by fit.
-
-.. attribute::  ier
-
-   Integer returned code from :scipydoc:`optimize.leastsq`.
-
 .. attribute:: init_fit
 
    numpy.ndarray result of model function, evaluated at provided
    independent variables and with initial parameters.
 
-.. attribute:: init_params
+.. attribute::  residual
 
-   Initial parameters.
+   numpy.ndarray for residual.
 
-.. attribute:: init_values
+.. attribute:: weights
 
-   Dictionary with parameter names as keys, and initial values as values.
+   numpy.ndarray (or ``None``) of weighting values to be used in fit. If not
+   ``None``, it will be used as a multiplicative factor of the residual
+   array, so that ``weights*(data - fit)`` is minimized in the
+   least-squares sense.
 
-.. attribute:: iter_cb
+.. attribute:: components
 
-   Optional callable function, to be called at each fit iteration. This
-   must take take arguments of ``(params, iter, resid, *args, **kws)``, where
-   ``params`` will have the current parameter values, ``iter`` the
-   iteration, ``resid`` the current residual array, and ``*args`` and
-   ``**kws`` as passed to the objective function. See :ref:`fit-itercb-label`.
+   List of components of the :class:`Model`.
 
-.. attribute:: jacfcn
 
-   Optional callable function, to be called to calculate Jacobian array.
+
+Fit Status
+~~~~~~~~~~~~~~~~~~~
+
+.. attribute:: aborted
+
+   Whether the fit was aborted.
+
+.. attribute:: errorbars
+
+   Boolean for whether error bars were estimated by fit.
+
+.. attribute:: flatchain
+
+   A ``pandas.DataFrame`` view of the sampling chain if the ``emcee`` method is uses.
+
+.. attribute::  ier
+
+   Integer returned code from :scipydoc:`optimize.leastsq`.
 
 .. attribute::  lmdif_message
 
@@ -874,6 +920,43 @@ and ``bic``.
 
    Instance of :class:`Model` used for model.
 
+.. attribute::  scale_covar
+
+   Boolean flag for whether to automatically scale covariance matrix.
+
+
+.. attribute:: userargs
+
+   positional arguments passed to :meth:`Model.fit`, a tuple of (``y``, ``weights``)
+
+.. attribute:: userkws
+
+   keyword arguments passed to :meth:`Model.fit`, a dict, which will have independent data arrays such as ``x``.
+
+
+
+Fit Statistics
+~~~~~~~~~~~~~~~~~~~
+
+.. attribute:: aic
+
+   Floating point best-fit Akaike Information Criterion statistic
+   (see :ref:`fit-results-label`).
+
+.. attribute:: bic
+
+   Floating point best-fit Bayesian Information Criterion statistic
+   (see :ref:`fit-results-label`).
+
+.. attribute:: chisqr
+
+   Floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
+
+.. attribute:: ci_out
+
+   Confidence interval data (see :ref:`confidence_chapter`) or ``None`` if
+   the confidence intervals have not been calculated.
+
 .. attribute::  ndata
 
    Integer number of data points.
@@ -890,17 +973,10 @@ and ``bic``.
 
    Integer number of independent, freely varying variables in fit.
 
-.. attribute::  params
-
-   Parameters used in fit; will contain the best-fit values.
 
 .. attribute::  redchi
 
    Floating point reduced chi-square statistic (see :ref:`fit-results-label`).
-
-.. attribute::  residual
-
-   numpy.ndarray for residual.
 
 .. attribute:: rsquared
 
@@ -913,29 +989,12 @@ and ``bic``.
      R^2 &=&  1 - \frac{\sum_i (y_i - f_i)^2}{\sum_i (y_i - \bar{y})^2}
     \end{eqnarray*}
 
-.. attribute::  scale_covar
-
-   Boolean flag for whether to automatically scale covariance matrix.
-
 .. attribute:: success
 
-   Boolean value of whether fit succeeded.
-
-.. attribute:: userargs
-
-   positional arguments passed to :meth:`Model.fit`, a tuple of (``y``, ``weights``)
-
-.. attribute:: userkws
-
-   keyword arguments passed to :meth:`Model.fit`, a dict, which will have independent data arrays such as ``x``.
+   Boolean value of whether fit succeeded. This is an optimistic
+   view of success, meaning that the method finished without error.
 
 
-.. attribute:: weights
-
-   numpy.ndarray (or ``None``) of weighting values to be used in fit. If not
-   ``None``, it will be used as a multiplicative factor of the residual
-   array, so that ``weights*(data - fit)`` is minimized in the
-   least-squares sense.
 
 .. _eval_uncertainty_sec:
 
@@ -991,6 +1050,54 @@ An example script shows how the uncertainties in components of a composite
 model can be calculated and used:
 
 .. jupyter-execute:: ../examples/doc_model_uncertainty2.py
+
+
+
+.. _modelresult_uvars_postfit_section:
+
+Using uncertainties in the fitted parameters for post-fit calculations
+--------------------------------------------------------------------------
+
+.. versionadded:: 1.2.2
+
+.. _uncertainties package:   https://pythonhosted.org/uncertainties/
+
+As with the previous section, after a fit is complete, you may want to do some
+further calculations with the resulting Parameter values.  Since these
+Parameters will have not only best-fit values but also usually have
+uncertainties, it is desirable for subsequent calculations to be able to
+propagate those uncertainties to any resulting calculated value.  In addition,
+it is common for Parameters to have finite - and sometimes large -
+correlations which should be taken into account in such calculations.
+
+The :attr:`ModelResult.uvars` will be a dictionary with keys for all variable
+Parameters and values that are ``uvalues`` from the `uncertainties package`_.
+When used in mathematical calculations with basic Python operators or numpy
+functions, these ``uvalues`` will automatically propagate their uncertainties
+to the resulting calculation, and taking into account the full covariance
+matrix describing the correlation between values.
+
+This readily allows "derived Parameters" to be evaluated just after the fit.
+In fact, it might be useful to have a Model always do such a calculation just
+after the fit.  The :meth:`Model.post_fit` method allows exactly that: you can
+overwrite this otherwise empty method for any Model.  It takes one argument:
+the :class:`ModelResult` instance just after the actual fit has run (and before
+:meth:`Model.fit` returns) and can be used to add Parameters or do other
+post-fit processing.
+
+The following example script shows two different methods for calculating a centroid
+value for two peaks, either by doing the calculation directly after the fit
+with the ``result.uvars`` or by capturing this in a :meth:`Model.post_fit`
+method that would be run for all instances of that model.  It also demonstrates
+that taking correlations between Parameters into account when performing
+calculations can have a noticeable influence on the resulting uncertainties.
+
+
+.. jupyter-execute:: ../examples/doc_uvars_params.py
+
+
+Note that the :meth:`Model.post_fit` does not need to be limited to this
+use case of adding derived Parameters.
 
 
 .. _modelresult_saveload_sec:

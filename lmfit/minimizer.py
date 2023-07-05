@@ -36,7 +36,6 @@ from scipy.sparse import issparse
 from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
-import uncertainties
 
 from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
@@ -86,53 +85,6 @@ def thisfuncname():
         return inspect.stack()[1].function
     except AttributeError:
         return inspect.stack()[1][3]
-
-
-def asteval_with_uncertainties(*vals, **kwargs):
-    """Calculate object value, given values for variables.
-
-    This is used by the uncertainties package to calculate the
-    uncertainty in an object even with a complicated expression.
-
-    """
-    _obj = kwargs.get('_obj', None)
-    _pars = kwargs.get('_pars', None)
-    _names = kwargs.get('_names', None)
-    _asteval = _pars._asteval
-    if (_obj is None or _pars is None or _names is None or
-            _asteval is None or _obj._expr_ast is None):
-        return 0
-    for val, name in zip(vals, _names):
-        _asteval.symtable[name] = val
-
-    # re-evaluate all constraint parameters to
-    # force the propagation of uncertainties
-    [p._getval() for p in _pars.values()]
-    return _asteval.eval(_obj._expr_ast)
-
-
-wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
-
-
-def eval_stderr(obj, uvars, _names, _pars):
-    """Evaluate uncertainty and set ``.stderr`` for a parameter `obj`.
-
-    Given the uncertain values `uvars` (list of `uncertainties.ufloats`),
-    a list of parameter names that matches `uvars`, and a dictionary of
-    parameter objects, keyed by name.
-
-    This uses the uncertainties package wrapped function to evaluate the
-    uncertainty for an arbitrary expression (in ``obj._expr_ast``) of
-    parameters.
-
-    """
-    if not isinstance(obj, Parameter) or getattr(obj, '_expr_ast', None) is None:
-        return
-    uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
-    try:
-        obj.stderr = uval.std_dev
-    except Exception:
-        obj.stderr = 0
 
 
 class MinimizerException(Exception):
@@ -252,47 +204,54 @@ class MinimizerResult:
 
     Attributes
     ----------
+    residual : numpy.ndarray
+        Residual array :math:`{\rm Resid_i}`. Return value of the objective
+        function when using the best-fit values of the parameters.
     params : Parameters
-        The best-fit parameters resulting from the fit.
-    status : int
-        Termination status of the optimizer. Its value depends on the
-        underlying solver. Refer to `message` for details.
+        The best-fit Parameters resulting from the fit.
+    uvars : dict
+        Dictionary of uncertainties ufloats from Parameters
     var_names : list
-        Ordered list of variable parameter names used in optimization, and
-        useful for understanding the values in :attr:`init_vals` and
-        :attr:`covar`.
-    covar : numpy.ndarray
+        list of variable Parameter names used in optimization in the
+        same order as the values in :attr:`init_vals` and :attr:`covar`.
+    covar : numpy.ndarray or None
         Covariance matrix from minimization, with rows and columns
-        corresponding to :attr:`var_names`.
+        corresponding to :attr:`var_names`.  If uncertainties cannot
+        be determined, this value will be ``None``.
     init_vals : list
         List of initial values for variable parameters using
         :attr:`var_names`.
     init_values : dict
         Dictionary of initial values for variable parameters.
-    nfev : int
-        Number of function evaluations.
+    aborted : bool
+        Whether the fit was aborted.
+    status : int
+        Termination status of the optimizer. Its value depends on the
+        underlying solver. Refer to `message` for details.
     success : bool
-        True if the fit succeeded, otherwise False.
+        True if the fit succeeded, otherwise False. This is an optimistic
+        view of success, meaning that the method finished without error.
     errorbars : bool
-        True if uncertainties were estimated, otherwise False.
+        whether uncertainties were estimated for variable Parameters.
     message : str
         Message about fit success.
-    call_kws : dict
-        Keyword arguments sent to underlying solver.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`'leastsq'`
         method only).
     lmdif_message : str
         Message from :scipydoc:`optimize.leastsq` (`'leastsq'` method only).
+    call_kws : dict
+        Keyword arguments sent to underlying solver.
+    flatchain : pandas.DataFrame
+        A flatchain view of the sampling chain from the `emcee` method.
+    nfev : int
+        Number of function evaluations.
     nvarys : int
         Number of variables in fit: :math:`N_{\rm varys}`.
     ndata : int
         Number of data points: :math:`N`.
     nfree : int
         Degrees of freedom in fit: :math:`N - N_{\rm varys}`.
-    residual : numpy.ndarray
-        Residual array :math:`{\rm Resid_i}`. Return value of the objective
-        function when using the best-fit values of the parameters.
     chisqr : float
         Chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`.
     redchi : float
@@ -304,8 +263,6 @@ class MinimizerResult:
     bic : float
         Bayesian Information Criterion statistic:
         :math:`N \ln(\chi^2/N) + \ln(N) N_{\rm varys}`.
-    flatchain : pandas.DataFrame
-        A flatchain view of the sampling chain from the `emcee` method.
 
     Methods
     -------
@@ -845,14 +802,8 @@ class Minimizer:
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
-        vbest = np.atleast_1d([self.result.params[name].value for name in
-                               self.result.var_names])
-
-        has_expr = False
         for par in self.result.params.values():
             par.stderr, par.correl = 0, None
-            has_expr = has_expr or par.expr is not None
-
         for ivar, name in enumerate(self.result.var_names):
             par = self.result.params[name]
             par.stderr = np.sqrt(self.result.covar[ivar, ivar])
@@ -865,22 +816,8 @@ class Minimizer:
                                              (par.stderr * np.sqrt(self.result.covar[jvar, jvar])))
             except ZeroDivisionError:
                 self.result.errorbars = False
-
-        if has_expr:
-            try:
-                uvars = uncertainties.correlated_values(vbest, self.result.covar)
-            except (LinAlgError, ValueError):
-                uvars = None
-
-            # for uncertainties on constrained parameters, use the calculated
-            # "correlated_values", evaluate the uncertainties on the constrained
-            # parameters and reset the Parameters to best-fit value
-            if uvars is not None:
-                for par in self.result.params.values():
-                    eval_stderr(par, uvars, self.result.var_names, self.result.params)
-                # restore nominal values
-                for v, name in zip(uvars, self.result.var_names):
-                    self.result.params[name].value = v.nominal_value
+        if self.result.errorbars:
+            self.result.uvars = self.result.params.create_uvars(covar=self.result.covar)
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
@@ -1064,6 +1001,7 @@ class Minimizer:
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertainties/correlations
+        self.result.uvars = None
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.x)

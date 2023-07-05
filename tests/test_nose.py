@@ -11,7 +11,7 @@ from uncertainties import ufloat
 from lmfit import Minimizer, Parameters, minimize
 from lmfit.lineshapes import gaussian
 from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
-                             _nan_policy)
+                             coerce_float64)
 from lmfit.models import SineModel
 
 try:
@@ -419,7 +419,7 @@ class CommonMinimizerTest(unittest.TestCase):
         for para, true_para in zip(out.params.values(), self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
 
-    def test_nan_policy(self):
+    def test_coerce_float64(self):
         # check that an error is raised if there are nan in
         # the data returned by userfcn
         self.data[0] = np.nan
@@ -444,17 +444,17 @@ class CommonMinimizerTest(unittest.TestCase):
         for para, true_para in zip(res.params.values(), self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=0.15)
 
-    def test_nan_policy_function(self):
+    def test_coerce_float64_function(self):
         a = np.array([0, 1, 2, 3, np.nan])
-        pytest.raises(ValueError, _nan_policy, a)
-        assert np.isnan(_nan_policy(a, nan_policy='propagate')[-1])
-        assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
+        pytest.raises(ValueError, coerce_float64, a)
+        assert np.isnan(coerce_float64(a, nan_policy='propagate')[-1])
+        assert_equal(coerce_float64(a, nan_policy='omit'), [0, 1, 2, 3])
 
         a[-1] = np.inf
-        pytest.raises(ValueError, _nan_policy, a)
-        assert np.isposinf(_nan_policy(a, nan_policy='propagate')[-1])
-        assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
-        assert_equal(_nan_policy(a, handle_inf=False), a)
+        pytest.raises(ValueError, coerce_float64, a)
+        assert np.isposinf(coerce_float64(a, nan_policy='propagate')[-1])
+        assert_equal(coerce_float64(a, nan_policy='omit'), [0, 1, 2, 3])
+        assert_equal(coerce_float64(a, handle_inf=False), a)
 
     def test_emcee(self):
         # test emcee

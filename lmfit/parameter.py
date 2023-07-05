@@ -5,13 +5,18 @@ import json
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
+from scipy.linalg import LinAlgError
 import scipy.special
+from uncertainties import correlated_values, ufloat
+from uncertainties import wrap as uwrap
 
 from .jsonutils import decode4js, encode4js
 from .lineshapes import tiny
 from .printfuncs import params_html_table
 
-SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma, 'loggammafcn': scipy.special.loggamma, 'betalnfnc': scipy.special.betaln}
+SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma,
+                   'loggammafcn': scipy.special.loggamma,
+                   'betalnfnc': scipy.special.betaln}
 for fnc_name in ('erf', 'erfc', 'wofz'):
     SCIPY_FUNCTIONS[fnc_name] = getattr(scipy.special, fnc_name)
 
@@ -20,6 +25,23 @@ def check_ast_errors(expr_eval):
     """Check for errors derived from asteval."""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
+
+
+def asteval_with_uncertainties(*vals, obj=None, pars=None, names=None, **kwargs):
+    """Calculate object value, given values for variables.
+
+    This is used by the uncertainties package to calculate the
+    uncertainty in an object even with a complicated expression.
+    """
+    _asteval = getattr(pars, '_asteval', None)
+    if obj is None or pars is None or names is None or _asteval is None:
+        return 0
+    for val, name in zip(vals, names):
+        _asteval.symtable[name] = val
+
+    # re-evaluate constraint parameters topropagate uncertainties
+    [p._getval() for p in pars.values()]
+    return _asteval.eval(obj._expr_ast)
 
 
 class Parameters(dict):
@@ -36,7 +58,7 @@ class Parameters(dict):
 
     All values of a Parameters() instance must be Parameter objects.
 
-    A Parameters() instance includes an `asteval` Interpreter used for
+    A Parameters(xs) instance includes an `asteval` Interpreter used for
     evaluation of constrained Parameters.
 
     Parameters() support copying and pickling, and have methods to convert
@@ -278,14 +300,11 @@ class Parameters(dict):
         Parameters
         ----------
         oneline : bool, optional
-            If True prints a one-line parameters representation (default
-            is False).
+            If True prints a one-line parameters representation [False]
         colwidth : int, optional
-            Column width for all columns specified in `columns` (default
-            is 8).
+            Column width for all columns specified in `columns` [8]
         precision : int, optional
-            Number of digits to be printed after floating point (default
-            is 4).
+            Number of digits to be printed after floating point [4]
         fmt : {'g', 'e', 'f'}, optional
             Single-character numeric formatter. Valid values are: `'g'`
             floating point and exponential (default), `'e'` exponential,
@@ -463,6 +482,67 @@ class Parameters(dict):
 
         """
         return {p.name: p.value for p in self.values()}
+
+    def create_uvars(self, covar=None):
+        """Return a dict of uncertainties ufloats from the current Parameter
+        values and stderr, and an optionally-supplied covariance matrix.
+        Uncertainties in Parameters with constraint expressions will be
+        calculated, propagating uncertaintes (and including correlations)
+
+        Parameters
+        ----------
+        covar : optional
+              Nvar x Nvar covariance matrix from fit
+
+        Returns
+        -------
+        dict with keys of Parameter names and values of uncertainties.ufloats.
+
+        Notes
+        -----
+        1.  if covar is provide, it must correspond to the existing *variable*
+            Parameters.  If covar is given, the returned uncertainties ufloats
+            will take the correlations into account when combining values.
+        2.  See the uncertainties package documentation
+            (https://pythonhosted.org/uncertainties) for more details.
+        """
+        uvars = {}
+        has_expr = False
+        vnames, vbest, vindex = [], [], -1
+        for par in self.values():
+            has_expr = has_expr or par.expr is not None
+            if par.vary:
+                vindex += 1
+                vnames.append(par.name)
+                vbest.append(par.value)
+                if getattr(par, 'sdterr', None) is None and covar is not None:
+                    par.stderr = sqrt(covar[vindex, vindex])
+            uvars[par.name] = ufloat(par.value, getattr(par, 'sdterr', 0.0))
+
+        corr_uvars = None
+        if covar is not None:
+            try:
+                corr_uvars = correlated_values(vbest, covar)
+                for name, cuv in zip(vnames, corr_uvars):
+                    uvars[name] = cuv
+            except (LinAlgError, ValueError):
+                pass
+
+        if has_expr and corr_uvars is not None:
+            # for uncertainties on constrained parameters, use the calculated
+            # correlated values, evaluate the uncertainties on the constrained
+            # parameters and reset the Parameters to best-fit value
+            wrap_ueval = uwrap(asteval_with_uncertainties)
+            for par in self.values():
+                if getattr(par, '_expr_ast', None) is not None:
+                    try:
+                        uval = wrap_ueval(*corr_uvars, obj=par,
+                                          pars=self, names=vnames)
+                        par.stderr = uval.std_dev
+                        uvars[par.name] = uval
+                    except Exception:
+                        par.stderr = 0
+        return uvars
 
     def dumps(self, **kws):
         """Represent Parameters as a JSON string.
