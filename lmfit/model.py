@@ -927,7 +927,7 @@ class Model:
         values may be Python `float`, `int`, or  `complex` values.
 
         """
-        return self.func(**self.make_funcargs(params, kwargs))
+        return coerce_arraylike(self.func(**self.make_funcargs(params, kwargs)))
 
     @property
     def components(self):
