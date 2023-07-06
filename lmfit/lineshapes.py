@@ -106,7 +106,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     """Return a 1-dimensional Voigt function.
 
     voigt(x, amplitude, center, sigma, gamma) =
-        amplitude*wofz(z).real / (sigma*s2pi)
+        amplitude*real(wofz(z)) / (sigma*s2pi)
 
     For more information, see: https://en.wikipedia.org/wiki/Voigt_profile
 
@@ -114,7 +114,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     if gamma is None:
         gamma = sigma
     z = (x-center + 1j*gamma) / max(tiny, (sigma*s2))
-    return amplitude*wofz(z).real / max(tiny, (sigma*s2pi))
+    return amplitude*real(wofz(z)) / max(tiny, (sigma*s2pi))
 
 
 def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):

@@ -190,6 +190,20 @@ def propagate_err(z, dz, option):
     return err
 
 
+def coerce_arraylike(x):
+    """
+    coerce lists, tuples, and pandas Series, hdf5 Groups, etc to an
+    ndarray float64 or complex128, but leave other data structures
+    and objects unchanged
+    """
+    if isinstance(x, (list, tuple, Series)) or hasattr(x, '__array__'):
+        if np.isrealobj(x):
+            return np.asfarray(x)
+        if np.iscomplexobj(x):
+            return np.asfarray(x, dtype=np.complex128)
+    return x
+
+
 class Model:
     """Create a model from a user-supplied model function."""
 
@@ -700,7 +714,7 @@ class Model:
             if basename in kwargs:
                 setpar(par, kwargs[basename])
             if name in kwargs:
-                setpar(par, kwargs[basename])
+                setpar(par, kwargs[name])
             params.add(par)
             if verbose:
                 print(f' - Adding parameter "{name}"')
@@ -811,7 +825,7 @@ class Model:
                     weights = (weights + 1j * weights).ravel().view(float)
         if weights is not None:
             diff *= weights
-        return np.asarray(diff).ravel()  # for compatibility with pandas.Series
+        return diff
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
@@ -867,6 +881,12 @@ class Model:
             params[name].value = val
         return out
 
+    def post_fit(self, fitresult):
+        """function that is called just after fit, can be overloaded by
+        subclasses to add non-fitting 'calculated parameters'
+        """
+        pass
+
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function args for all functions."""
         args = {}
@@ -907,7 +927,7 @@ class Model:
         values may be Python `float`, `int`, or  `complex` values.
 
         """
-        return self.func(**self.make_funcargs(params, kwargs))
+        return coerce_arraylike(self.func(**self.make_funcargs(params, kwargs)))
 
     @property
     def components(self):
@@ -938,7 +958,8 @@ class Model:
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy=None, calc_covar=True, max_nfev=None, **kwargs):
+            nan_policy=None, calc_covar=True, max_nfev=None,
+            coerce_farray=True, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -972,6 +993,11 @@ class Model:
         max_nfev : int or None, optional
             Maximum number of function evaluations (default is None). The
             default value depends on the fitting method.
+        coerce_farray : bool, optional
+            Whether to coerce data and independent data to be ndarrays
+            with dtype of float64 (or complex128).  If set to False, data
+            and independent data are not coerced at all, but the output of
+            the model function will be. (default is True)
         **kwargs : optional
             Arguments to pass to the model function, possibly overriding
             parameters.
@@ -1060,25 +1086,12 @@ class Model:
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        def coerce_arraylike(x):
-            """
-            coerce lists, tuples, and pandas Series to float64 or complex128,
-            but leave other ndarrays of different dtypes and objects unchanged
-            """
-            if isinstance(x, (list, tuple, Series)):
-                if np.isrealobj(x):
-                    return np.asfarray(x)
-                elif np.iscomplexobj(x):
-                    return np.asarray(x, dtype='complex128')
-            return x
-
-        # coerce data and independent variable(s) that are 'array-like' (list,
-        # tuples, pandas Series) to float64/complex128. Note: this will not
-        # alter the dtype of data or independent variables that are already
-        # ndarrays but with dtype other than float64/complex128.
-        data = coerce_arraylike(data)
-        for var in self.independent_vars:
-            kwargs[var] = coerce_arraylike(kwargs[var])
+        if coerce_farray:
+            # coerce data and independent variable(s) that are 'array-like' (list,
+            # tuples, pandas Series) to float64/complex128.
+            data = coerce_arraylike(data)
+            for var in self.independent_vars:
+                kwargs[var] = coerce_arraylike(kwargs[var])
 
         if fit_kws is None:
             fit_kws = {}
@@ -1202,6 +1215,13 @@ class CompositeModel(Model):
         out = dict(self.left.eval_components(**kwargs))
         out.update(self.right.eval_components(**kwargs))
         return out
+
+    def post_fit(self, fitresult):
+        """function that is called just after fit, can be overloaded by
+        subclasses to add non-fitting 'calculated parameters'
+        """
+        self.left.post_fit(fitresult)
+        self.right.post_fit(fitresult)
 
     @property
     def param_names(self):
@@ -1445,6 +1465,8 @@ class ModelResult(Minimizer):
         self.userkws.update(kwargs)
         self.init_fit = self.model.eval(params=self.params, **self.userkws)
         _ret = self.minimize(method=self.method)
+        self.model.post_fit(_ret)
+        _ret.params.create_uvars(covar=_ret.covar)
 
         for attr in dir(_ret):
             if not attr.startswith('_'):
@@ -1454,7 +1476,8 @@ class ModelResult(Minimizer):
                     pass
 
         if self.data is not None and len(self.data) > 1:
-            sstot = ((self.data - self.data.mean())**2).sum()
+            dat = coerce_arraylike(self.data)
+            sstot = ((dat - dat.mean())**2).sum()
             if isinstance(self.residual, np.ndarray) and len(self.residual) > 1:
                 self.rsquared = 1.0 - (self.residual**2).sum()/max(tiny, sstot)
 
@@ -1562,18 +1585,20 @@ class ModelResult(Minimizer):
 
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
-        ndata = self.model.eval(params, **userkws).size
+        feval = self.model.eval(params, **userkws)
+        ndata = len(feval.view('float64'))        # allows feval to be complex
         covar = self.covar
         if any(p.stderr is None for p in params.values()):
             return np.zeros(ndata)
 
-        fjac = {'0': np.zeros((nvarys, ndata))}  # '0' signify 'Full', an invalid prefix
-        df2 = {'0': np.zeros(ndata)}
+        # '0' would be an invalid prefix, here signifying 'Full'
+        fjac = {'0': np.zeros((nvarys, ndata), dtype='float64')}
+        df2 = {'0': np.zeros(ndata, dtype='float64')}
 
         for comp in self.components:
             label = comp.prefix if len(comp.prefix) > 1 else comp._name
-            fjac[label] = np.zeros((nvarys, ndata))
-            df2[label] = np.zeros(ndata)
+            fjac[label] = np.zeros((nvarys, ndata), dtype='float64')
+            df2[label] = np.zeros(ndata, dtype='float64')
 
         # find derivative by hand!
         pars = params.copy()
@@ -1591,7 +1616,8 @@ class ModelResult(Minimizer):
 
             pars[pname].value = val0
             for key in fjac:
-                fjac[key][i] = (res1[key] - res2[key]) / (2*dval)
+                fjac[key][i] = (res1[key].view('float64')
+                                - res2[key].view('float64')) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
@@ -1604,6 +1630,12 @@ class ModelResult(Minimizer):
             prob = erf(sigma/np.sqrt(2))
 
         scale = t.ppf((prob+1)/2.0, self.ndata-nvarys)
+
+        # for complex data, convert back to real/imag pairs
+        if feval.dtype in ('complex64', 'complex128'):
+            for key in fjac:
+                df2[key] = df2[key][0::2] + 1j * df2[key][1::2]
+
         self.dely = scale * np.sqrt(df2.pop('0'))
 
         self.dely_comps = {}
@@ -1885,6 +1917,10 @@ class ModelResult(Minimizer):
         self.init_fit = self.model.eval(self.init_params, **self.userkws)
         self.result = MinimizerResult()
         self.result.params = self.params
+
+        if self.errorbars and self.covar is not None:
+            self.uvars = self.result.params.create_uvars(covar=self.covar)
+
         self.init_vals = list(self.init_values.items())
         return self
 

@@ -5,15 +5,15 @@ import unittest
 import warnings
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_almost_equal
 import pytest
 from scipy import __version__ as scipy_version
 
 import lmfit
-from lmfit import Model, models
+from lmfit import Model, Parameters, models
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import get_reducer, propagate_err
-from lmfit.models import PseudoVoigtModel
+from lmfit.models import GaussianModel, PseudoVoigtModel
 
 
 @pytest.fixture()
@@ -339,6 +339,36 @@ def test__parse_params_inspect_signature():
     assert_allclose(mod.def_vals['c'], 10)
 
 
+def test_make_params_withprefixs():
+    # tests Github Issue #893
+    gmod1 = GaussianModel(prefix='p1_')
+    gmod2 = GaussianModel(prefix='p2_')
+
+    model = gmod1 + gmod2
+
+    pars_1a = gmod1.make_params(p1_amplitude=10, p1_center=600, p1_sigma=3)
+    pars_1b = gmod1.make_params(amplitude=10, center=600, sigma=3)
+
+    pars_2a = gmod2.make_params(p2_amplitude=30, p2_center=730, p2_sigma=4)
+    pars_2b = gmod2.make_params(amplitude=30, center=730, sigma=4)
+
+    pars_a = Parameters()
+    pars_a.update(pars_1a)
+    pars_a.update(pars_2a)
+
+    pars_b = Parameters()
+    pars_b.update(pars_1b)
+    pars_b.update(pars_2b)
+
+    pars_c = model.make_params()
+
+    for pname in ('p1_amplitude', 'p1_center', 'p1_sigma',
+                  'p2_amplitude', 'p2_center', 'p2_sigma'):
+        assert pname in pars_a
+        assert pname in pars_b
+        assert pname in pars_c
+
+
 def test__parse_params_forbidden_variable_names():
     """Tests for _parse_params function using invalid variable names."""
 
@@ -357,45 +387,78 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
-input_dtypes = [(np.int32, np.int32), (np.float32, np.float32),
-                (np.complex64, np.complex64), ('list', np.float64),
-                ('tuple', np.float64), ('pandas-real', np.float64),
-                ('pandas-complex', np.complex128)]
-
-
-@pytest.mark.parametrize('input_dtype, expected_dtype', input_dtypes)
-def test_coercion_of_input_data(peakdata, input_dtype, expected_dtype):
+@pytest.mark.parametrize('input_dtype', (np.int16, np.int32, np.float32,
+                                         np.complex64, np.complex128, 'list',
+                                         'tuple', 'pandas-real',
+                                         'pandas-complex'))
+def test_coercion_of_input_data(peakdata, input_dtype):
     """Test for coercion of 'data' and 'independent_vars'.
 
-    - 'data' should become 'float64' or 'complex128'
-    - dtype for 'indepdendent_vars' is only changed when the input is a list,
-        tuple, numpy.ndarray, or pandas.Series
+    'data' and `independent_vars` should be coerced to 'float64' or 'complex128'
+
+    unless told not be coerced by setting ``coerce_farray=False``.
+
+    # - dtype for 'indepdendent_vars' is only changed when the input is a list,
+    #    tuple, numpy.ndarray, or pandas.Series
 
     """
     x, y = peakdata
-    model = lmfit.Model(gaussian)
-    pars = model.make_params()
 
-    if (not lmfit.minimizer.HAS_PANDAS and input_dtype in ['pandas-real',
-                                                           'pandas-complex']):
-        return
+    def gaussian_lists(x, amplitude=1.0, center=0.0, sigma=1.0):
+        xarr = np.array(x, dtype=np.float64)
+        return ((amplitude/(max(1.e-15, np.sqrt(2*np.pi)*sigma)))
+                * np.exp(-(xarr-center)**2 / max(1.e-15, (2*sigma**2))))
 
-    elif input_dtype == 'pandas-real':
-        result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
-                           x=lmfit.model.Series(x, dtype=np.float32))
-    elif input_dtype == 'pandas-complex':
-        result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
-                           x=lmfit.model.Series(x, dtype=np.complex64))
-    elif input_dtype == 'list':
-        result = model.fit(y.tolist(), pars, x=x.tolist())
-    elif input_dtype == 'tuple':
-        result = model.fit(tuple(y), pars, x=tuple(x))
-    else:
-        result = model.fit(np.asarray(y, dtype=input_dtype), pars,
-                           x=np.asarray(x, dtype=input_dtype))
+    for coerce_farray in True, False:
+        if (input_dtype in ('pandas-real', 'pandas-complex')
+           and not lmfit.minimizer.HAS_PANDAS):
+            return
 
-    assert result.__dict__['userkws']['x'].dtype == expected_dtype
-    assert result.__dict__['userargs'][0].dtype == expected_dtype
+        if not coerce_farray and input_dtype in ('list', 'tuple'):
+            model = lmfit.Model(gaussian_lists)
+        else:
+            model = lmfit.Model(gaussian)
+
+        pars = model.make_params(amplitude=5, center=10, sigma=2)
+
+        if input_dtype == 'pandas-real':
+            result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
+                               x=lmfit.model.Series(x, dtype=np.float32),
+                               coerce_farray=coerce_farray)
+
+            expected_dtype = np.float64 if coerce_farray else np.float32
+
+        elif input_dtype == 'pandas-complex':
+            result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
+                               x=lmfit.model.Series(x, dtype=np.complex64),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.complex128 if coerce_farray else np.complex64
+
+        elif input_dtype == 'list':
+            result = model.fit(y.tolist(), pars, x=x.tolist(),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64 if coerce_farray else list
+
+        elif input_dtype == 'tuple':
+            result = model.fit(tuple(y), pars, x=tuple(x),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64 if coerce_farray else tuple
+
+        else:
+            result = model.fit(np.asarray(y, dtype=input_dtype), pars,
+                               x=np.asarray(x, dtype=input_dtype),
+                               coerce_farray=coerce_farray)
+            expected_dtype = np.float64
+            if input_dtype in (np.complex64, np.complex128):
+                expected_dtype = np.complex128
+            expected_dtype = expected_dtype if coerce_farray else input_dtype
+
+        if not coerce_farray and input_dtype in ('list', 'tuple'):
+            assert isinstance(result.userkws['x'], (list, tuple))
+            assert isinstance(result.userargs[0], (list, tuple))
+        else:
+            assert result.userkws['x'].dtype == expected_dtype
+            assert result.userargs[0].dtype == expected_dtype
 
 
 def test_figure_default_title(peakdata):
@@ -1077,7 +1140,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         _m = m1 + m2  # noqa: F841
 
         param_values = {name: p.value for name, p in params.items()}
-        self.assertTrue(param_values['m1_intercept'] < -0.0)
+        assert_almost_equal(param_values['m1_intercept'], 0.)
         self.assertEqual(param_values['m2_amplitude'], 1)
 
     def test_weird_param_hints(self):
@@ -1433,3 +1496,42 @@ def test_make_params_valuetypes():
 
     with pytest.raises(TypeError):
         pars = mod.make_params(amplitude={}, frequency=2, shift=7)
+
+
+def test_complex_model_eval_uncertainty():
+    """Github #900"""
+    def cmplx(f, omega, areal, aimag, off, sigma):
+        return (areal*np.cos(f*omega + off) + 1j*aimag*np.sin(f*omega + off))*np.exp(-f/sigma)
+
+    f = np.linspace(0, 10, 501)
+    dat = cmplx(f, 4, 10, 5, 0.2, 4.5) + (0.1 + 0.2j)*np.random.normal(scale=0.25, size=len(f))
+    mod = Model(cmplx)
+    params = mod.make_params(omega=5, areal=5, aimag=5,
+                             off={'value': 0.5, 'min': -2, 'max': 2},
+                             sigma={'value': 3, 'min': 1.e-5, 'max': 1000})
+
+    result = mod.fit(dat, params=params, f=f)
+    dfit = result.eval_uncertainty()
+    assert len(dfit) == len(f)
+    assert dfit.dtype == 'complex128'
+
+
+def test_compositemodel_returning_list():
+    """Github #875"""
+    def lin1(x, k):
+        return [k*x1 for x1 in x]
+
+    def lin2(x, k):
+        return [k*x1 for x1 in x]
+
+    y = np.linspace(0, 100, 100)
+    x = np.linspace(0, 100, 100)
+
+    Model1 = Model(lin1, independent_vars=["x"], prefix="m1_")
+    Model2 = Model(lin2, independent_vars=["x"], prefix="m2_")
+    ModelSum = Model1 + Model2
+    pars = Parameters()
+    pars.add('m1_k', value=0.5)
+    pars.add('m2_k', value=0.5)
+    result = ModelSum.fit(y, pars, x=x)
+    assert len(result.best_fit) == len(x)

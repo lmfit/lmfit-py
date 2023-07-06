@@ -70,6 +70,8 @@ The :class:`Parameters` class
 
     .. automethod:: valuesdict
 
+    .. automethod:: create_uvars
+
     .. automethod:: dumps
 
     .. automethod:: dump
