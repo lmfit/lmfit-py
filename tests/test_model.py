@@ -1496,3 +1496,42 @@ def test_make_params_valuetypes():
 
     with pytest.raises(TypeError):
         pars = mod.make_params(amplitude={}, frequency=2, shift=7)
+
+
+def test_complex_model_eval_uncertainty():
+    """Github #900"""
+    def cmplx(f, omega, areal, aimag, off, sigma):
+        return (areal*np.cos(f*omega + off) + 1j*aimag*np.sin(f*omega + off))*np.exp(-f/sigma)
+
+    f = np.linspace(0, 10, 501)
+    dat = cmplx(f, 4, 10, 5, 0.2, 4.5) + (0.1 + 0.2j)*np.random.normal(scale=0.25, size=len(f))
+    mod = Model(cmplx)
+    params = mod.make_params(omega=5, areal=5, aimag=5,
+                             off={'value': 0.5, 'min': -2, 'max': 2},
+                             sigma={'value': 3, 'min': 1.e-5, 'max': 1000})
+
+    result = mod.fit(dat, params=params, f=f)
+    dfit = result.eval_uncertainty()
+    assert len(dfit) == len(f)
+    assert dfit.dtype == 'complex128'
+
+
+def test_compositemodel_returning_list():
+    """Github #875"""
+    def lin1(x, k):
+        return [k*x1 for x1 in x]
+
+    def lin2(x, k):
+        return [k*x1 for x1 in x]
+
+    y = np.linspace(0, 100, 100)
+    x = np.linspace(0, 100, 100)
+
+    Model1 = Model(lin1, independent_vars=["x"], prefix="m1_")
+    Model2 = Model(lin2, independent_vars=["x"], prefix="m2_")
+    ModelSum = Model1 + Model2
+    pars = Parameters()
+    pars.add('m1_k', value=0.5)
+    pars.add('m2_k', value=0.5)
+    result = ModelSum.fit(y, pars, x=x)
+    assert len(result.best_fit) == len(x)
