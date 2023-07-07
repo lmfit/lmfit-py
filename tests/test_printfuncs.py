@@ -142,9 +142,8 @@ def test_reports_created(fitresult):
 
     html_report = fitresult._repr_html_()
     assert len(html_report) > 1000
-    for header in report_headers:
-        header_title = header.replace('[', '').replace(']', '').strip()
-        assert header_title in html_report
+    for header in ('Model', 'Fit Statistics', 'Parameters', 'Correlations'):
+        assert header in html_report
 
 
 def test_fitreports_init_values(fitresult):
