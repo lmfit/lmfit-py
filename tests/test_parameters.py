@@ -383,7 +383,7 @@ def test_parameters__repr_html_(parameters):
     repr_html = pars._repr_html_()
 
     assert isinstance(repr_html, str)
-    assert '<table><tr><th> name </th><th> value </th>' in repr_html
+    assert '<table class="jp-toc-ignore"><caption>Parameters</caption>' in repr_html
 
 
 def test_parameters_add():
