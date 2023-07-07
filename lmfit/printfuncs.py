@@ -224,6 +224,26 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     return '\n'.join(buff)
 
 
+def lcol(s, cat='td'):
+    "html left column"
+    return f"<{cat} style='text-align:left'>{s}</{cat}>"
+
+
+def rcol(s, cat='td'):
+    "html right column"
+    return f"<{cat} style='text-align:right'>{s}</{cat}>"
+
+
+def trow(columns, cat='td'):
+    "html row"
+    nlast = len(columns)-1
+    rows = []
+    for i, col in enumerate(columns):
+        cform = rcol if i == nlast else lcol
+        rows.append(cform(col, cat=cat))
+    return rows
+
+
 def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     """Generate a report of the fitting result as an HTML table.
 
@@ -246,8 +266,12 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     html = []
     add = html.append
 
-    def stat_row(label, val, val2=''):
-        add(f"<tr><td align='left'>{label}</td><td>{val}</td><td>{val2}</td></tr>")
+    def stat_row(label, val, val2=None, cat='td'):
+        if val2 is None:
+            rows = trow([label, val], cat=cat)
+        else:
+            rows = trow([label, val, val2], cat=cat)
+        add(f"<tr>{''.join(rows)}</tr>")
 
     add('<table class="jp-toc-ignore">')
     add('<caption class="jp-toc-ignore">Fit Statistics</caption>')
@@ -281,6 +305,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
             extra = f'(unreported values are < {min_correl:.3f})'
             add('<table class="jp-toc-ignore">')
             add(f'<caption>Correlations {extra}</caption>')
+            stat_row('Parameter1', 'Parameter 2', 'Correlation', cat='th')
             for name1, name2, val in sort_correls:
                 stat_row(name1, name2, f"{val:+.4f}")
             add('</table>')
@@ -344,10 +369,7 @@ def params_html_table(params):
     html = []
     add = html.append
 
-    def cell(x, cat='td'):
-        return add(f'<{cat}> {x} </{cat}>')
-
-    add('<table class="jp-toc-ignore"><caption>Parameters</caption><tr>')
+    add('<table class="jp-toc-ignore"><caption>Parameters</caption>')
     headers = ['name', 'value']
     if has_err:
         headers.extend(['standard error', 'relative error'])
@@ -356,9 +378,9 @@ def params_html_table(params):
         headers.append('expression')
     if has_brute:
         headers.append('brute step')
-    for h in headers:
-        cell(h, cat='th')
-    add('</tr>')
+
+    hrow = trow(headers, cat='th')
+    add(f"<tr>{''.join(hrow)}</tr>")
 
     for par in params.values():
         rows = [par.name, gformat(par.value)]
@@ -385,10 +407,8 @@ def params_html_table(params):
                 brute_step = gformat(par.brute_step)
             rows.append(brute_step)
 
-        add('<tr>')
-        for r in rows:
-            cell(r)
-        add('</tr>')
+        hrow = trow(rows, cat='td')
+        add(f"<tr>{''.join(hrow)}</tr>")
     add('</table>')
     return ''.join(html)
 
