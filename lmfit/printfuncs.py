@@ -247,10 +247,10 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     add = html.append
 
     def stat_row(label, val, val2=''):
-        add(f'<tr><td>{label}</td><td>{val}</td><td>{val2}</td></tr>')
+        add(f"<tr><td align='left'>{label}</td><td>{val}</td><td>{val2}</td></tr>")
 
-    add('<b>Fit Statistics</b>')
-    add('<table>')
+    add('<table class="jp-toc-ignore">')
+    add('<caption class="jp-toc-ignore">Fit Statistics</caption>')
     stat_row('fitting method', result.method)
     stat_row('# function evals', result.nfev)
     stat_row('# data points', result.ndata)
@@ -262,7 +262,6 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     if hasattr(result, 'rsquared'):
         stat_row('R-squared', gformat(result.rsquared))
     add('</table>')
-    add('<b>Variables</b>')
     add(params_html_table(result.params))
     if show_correl:
         correls = []
@@ -279,9 +278,9 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
         if len(correls) > 0:
             sort_correls = sorted(correls, key=lambda val: abs(val[2]))
             sort_correls.reverse()
-            extra = f'(unreported correlations are < {min_correl:.3f})'
-            add(f'<b>Correlations {extra}</b>')
-            add('<table>')
+            extra = f'(unreported values are < {min_correl:.3f})'
+            add('<table class="jp-toc-ignore">')
+            add(f'<caption>Correlations {extra}</caption>')
             for name1, name2, val in sort_correls:
                 stat_row(name1, name2, f"{val:+.4f}")
             add('</table>')
@@ -348,7 +347,7 @@ def params_html_table(params):
     def cell(x, cat='td'):
         return add(f'<{cat}> {x} </{cat}>')
 
-    add('<table><tr>')
+    add('<table class="jp-toc-ignore"><caption>Parameters</caption><tr>')
     headers = ['name', 'value']
     if has_err:
         headers.extend(['standard error', 'relative error'])
