@@ -339,8 +339,9 @@ class MinimizerResult:
 
     def _repr_html_(self, show_correl=True, min_correl=0.1):
         """Return a HTML representation of parameters data."""
-        return fitreport_html_table(self, show_correl=show_correl,
-                                    min_correl=min_correl)
+        report = fitreport_html_table(self, show_correl=show_correl,
+                                      min_correl=min_correl)
+        return f"<h2>Fit Result</h2> {report}"
 
 
 class Minimizer:

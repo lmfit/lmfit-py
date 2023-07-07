@@ -1725,7 +1725,7 @@ class ModelResult(Minimizer):
         report = fitreport_html_table(self, show_correl=show_correl,
                                       min_correl=min_correl)
         modname = self.model._reprstring(long=True)
-        return f"<b> Model</b> {modname} {report}"
+        return f"<h2>Fit Result</h2> <p>Model: {modname}</p> {report}"
 
     def summary(self):
         """Return a dictionary with statistics and attributes of a ModelResult.
