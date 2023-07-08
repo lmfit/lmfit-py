@@ -20,7 +20,7 @@ New features:
 
 - add ``ModelResult.uvars`` output to a ``ModelResult`` after a successful fit
   that contains ``ufloats`` from the ``uncertainties`` package which can be
-  used for downstream calculations that propagate the uncertaintes (and
+  used for downstream calculations that propagate the uncertainties (and
   correlations) of the variable Parameters. (PR #888)
 
 - Outputs of residual functions, including ``Model._residual``, are more
@@ -30,9 +30,9 @@ New features:
   1-dimensional. (PR #899)
 
 - ``Model.fit`` now takes a ``coerce_farray`` option, defaulting to ``True`` to
-  control whether to input data and independent variable that are "array-like"
-  are coerced to ndarrays of dataype Float64 or Complex128.  If set to
-  ``False`` then inpendent data that "array-like" (``pandas.Series``, int32
+  control whether to input data and independent variables that are "array-like"
+  are coerced to ndarrays of datatype Float64 or Complex128.  If set to
+  ``False`` then independent data that "array-like" (``pandas.Series``, int32
   arrays, etc) will be sent to the model function unaltered. The user may then
   use other features of these objects, but may also need to explicitly coerce
   the datatype of the result the change described above about coercing the
@@ -41,16 +41,16 @@ New features:
 Bug fixes/enhancements:
 
 - fixed bug in ``Model.make_params()`` for non-composite models that use a
-  prefx (Discussion #892; Issue #893; PR #895)
+  prefix (Discussion #892; Issue #893; PR #895)
 
 - fixed bug with aborted fits for several methods having incorrect or invalid
   fit statistics. (Discussion #894; Issue #896; PR #897)
 
-- ``Model.eval_uncertainty`` now correctly calclutes complex (rea/imaginary pairs)
+- ``Model.eval_uncertainty`` now correctly calculates complex (real/imaginary pairs)
   uncertainties for Models that generate complex results. (Issue #900; PR #901)
 
 - ``Model.eval`` now returns and array-like value. This adds to the coercion
-  features, and fixes a bug for composite models that return lists (Issue #875; PR #901)
+  features above and fixes a bug for composite models that return lists (Issue #875; PR #901)
 
 - the HTML representation for a ``ModelResult`` or ``MinimizerResult`` are
   improved, and create fewer entries in the Table of Contents for Jupyter lab.
