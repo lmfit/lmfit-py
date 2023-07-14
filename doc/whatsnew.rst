@@ -24,7 +24,7 @@ New features:
   correlations) of the variable Parameters. (PR #888)
 
 - Outputs of residual functions, including ``Model._residual``, are more
-  explicitly coerced to 1d-arrays of dataype Float64.  This decreases the
+  explicitly coerced to 1d-arrays of datatype Float64.  This decreases the
   expectation for the user-supplied code to return ndarrays, and increases the
   tolerance for more "array-like" objects or ndarrays that are not Float64 or
   1-dimensional. (PR #899)
@@ -88,7 +88,7 @@ New features:
 Bug fixes/enhancements:
 
 - fix bug when setting ``param.vary=True`` for a constrained parameter (Issue #859; PR #860)
-- fix bug in reported uncertainties for constrained parameters by better propating uncertainties (Issue #855; PR #856)
+- fix bug in reported uncertainties for constrained parameters by better propagating uncertainties (Issue #855; PR #856)
 - Coercing of user input data and independent data for ``Model`` to float64 ndarrays is somewhat less aggressive and
   will not increase the precision of numpy ndarrays (see :ref:`model_data_coercion_section` for details). The resulting
   calculation from a model or objective function is more aggressively coerced to float64.  (Issue #850; PR #853)

@@ -96,6 +96,8 @@ The :class:`Parameters` class
 The :func:`create_params` function
 ==================================
 
+.. versionadded:: 1.2.0
+
 The :func:`create_params` function is probably the easiest method for making
 :class:`Parameters` objects, as it allows defining Parameter names by keyword
 with values either being the numerical initial value for the Parameter or being
