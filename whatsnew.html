@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -107,6 +107,7 @@
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-1-2-2-release-notes-july-14-2023">Version 1.2.2 Release Notes (July 14, 2023)</a></li>
 <li><a class="reference internal" href="#version-1-2-1-release-notes-may-02-2023">Version 1.2.1 Release Notes (May 02, 2023)</a></li>
 <li><a class="reference internal" href="#version-1-2-0-release-notes-april-05-2023">Version 1.2.0 Release Notes (April 05, 2023)</a></li>
 <li><a class="reference internal" href="#version-1-1-0-release-notes-november-27-2022">Version 1.1.0 Release Notes (November 27, 2022)</a></li>
@@ -169,6 +170,43 @@
 significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<section id="version-1-2-2-release-notes-july-14-2023">
+<span id="whatsnew-122-label"></span><h2>Version 1.2.2 Release Notes (July 14, 2023)<a class="headerlink" href="#version-1-2-2-release-notes-july-14-2023" title="Permalink to this heading">¶</a></h2>
+<p>New features:</p>
+<ul class="simple">
+<li><p>add <code class="docutils literal notranslate"><span class="pre">ModelResult.uvars</span></code> output to a <code class="docutils literal notranslate"><span class="pre">ModelResult</span></code> after a successful fit
+that contains <code class="docutils literal notranslate"><span class="pre">ufloats</span></code> from the <code class="docutils literal notranslate"><span class="pre">uncertainties</span></code> package which can be
+used for downstream calculations that propagate the uncertainties (and
+correlations) of the variable Parameters. (PR #888)</p></li>
+<li><p>Outputs of residual functions, including <code class="docutils literal notranslate"><span class="pre">Model._residual</span></code>, are more
+explicitly coerced to 1d-arrays of datatype Float64.  This decreases the
+expectation for the user-supplied code to return ndarrays, and increases the
+tolerance for more “array-like” objects or ndarrays that are not Float64 or
+1-dimensional. (PR #899)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Model.fit</span></code> now takes a <code class="docutils literal notranslate"><span class="pre">coerce_farray</span></code> option, defaulting to <code class="docutils literal notranslate"><span class="pre">True</span></code> to
+control whether to input data and independent variables that are “array-like”
+are coerced to ndarrays of datatype Float64 or Complex128.  If set to
+<code class="docutils literal notranslate"><span class="pre">False</span></code> then independent data that “array-like” (<code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, int32
+arrays, etc) will be sent to the model function unaltered. The user may then
+use other features of these objects, but may also need to explicitly coerce
+the datatype of the result the change described above about coercing the
+result causes problems. (Discussion #873; PR #899)</p></li>
+</ul>
+<p>Bug fixes/enhancements:</p>
+<ul class="simple">
+<li><p>fixed bug in <code class="docutils literal notranslate"><span class="pre">Model.make_params()</span></code> for non-composite models that use a
+prefix (Discussion #892; Issue #893; PR #895)</p></li>
+<li><p>fixed bug with aborted fits for several methods having incorrect or invalid
+fit statistics. (Discussion #894; Issue #896; PR #897)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Model.eval_uncertainty</span></code> now correctly calculates complex (real/imaginary pairs)
+uncertainties for Models that generate complex results. (Issue #900; PR #901)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Model.eval</span></code> now returns and array-like value. This adds to the coercion
+features above and fixes a bug for composite models that return lists (Issue #875; PR #901)</p></li>
+<li><p>the HTML representation for a <code class="docutils literal notranslate"><span class="pre">ModelResult</span></code> or <code class="docutils literal notranslate"><span class="pre">MinimizerResult</span></code> are
+improved, and create fewer entries in the Table of Contents for Jupyter lab.
+(Issue #884; PR #883; PR #902)</p></li>
+</ul>
+</section>
 <section id="version-1-2-1-release-notes-may-02-2023">
 <span id="whatsnew-121-label"></span><h2>Version 1.2.1 Release Notes (May 02, 2023)<a class="headerlink" href="#version-1-2-1-release-notes-may-02-2023" title="Permalink to this heading">¶</a></h2>
 <p>Bug fixes/enhancements:</p>
@@ -192,7 +230,7 @@ not recognized as floats such as <code class="docutils literal notranslate"><spa
 <p>Bug fixes/enhancements:</p>
 <ul class="simple">
 <li><p>fix bug when setting <code class="docutils literal notranslate"><span class="pre">param.vary=True</span></code> for a constrained parameter (Issue #859; PR #860)</p></li>
-<li><p>fix bug in reported uncertainties for constrained parameters by better propating uncertainties (Issue #855; PR #856)</p></li>
+<li><p>fix bug in reported uncertainties for constrained parameters by better propagating uncertainties (Issue #855; PR #856)</p></li>
 <li><p>Coercing of user input data and independent data for <code class="docutils literal notranslate"><span class="pre">Model</span></code> to float64 ndarrays is somewhat less aggressive and
 will not increase the precision of numpy ndarrays (see <a class="reference internal" href="model.html#model-data-coercion-section"><span class="std std-ref">Data Types for data  and independent data with Model</span></a> for details). The resulting
 calculation from a model or objective function is more aggressively coerced to float64.  (Issue #850; PR #853)</p></li>
@@ -661,7 +699,7 @@ track of changes made while adjusting parameters and re-running fits.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

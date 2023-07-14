@@ -125,7 +125,7 @@ fitting results:
         wid_g:       1.21434954 +/- 0.00327317 (0.27%) (init = 1)
         amp_l:       9.46504173 +/- 0.05445415 (0.58%) (init = 10)
         peak_split:  3.52163544 +/- 0.01004618 (0.29%) (init = 2.5)
-        cen_l:       9.62659940 +/- 0.01066172 (0.11%) == 'peak_split+cen_g'
+        cen_l:       9.62659935 +/- 0.01066172 (0.11%) == 'peak_split+cen_g'
         wid_l:       1.21434954 +/- 0.00327317 (0.27%) == 'wid_g'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp_g, wid_g)      = +0.6199
@@ -167,7 +167,7 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.159 seconds)
+   **Total running time of the script:** ( 0 minutes  0.157 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:

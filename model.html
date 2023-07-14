@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Modeling Data and Curve Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -118,6 +118,7 @@
 <li><a class="reference internal" href="#lmfit.model.Model.make_params"><code class="docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.Model.set_param_hint"><code class="docutils literal notranslate"><span class="pre">Model.set_param_hint()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.Model.print_param_hints"><code class="docutils literal notranslate"><span class="pre">Model.print_param_hints()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.Model.post_fit"><code class="docutils literal notranslate"><span class="pre">Model.post_fit()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#model-class-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> class Attributes</a><ul>
@@ -165,47 +166,66 @@
 <li><a class="reference internal" href="#lmfit.model.ModelResult.plot"><code class="docutils literal notranslate"><span class="pre">ModelResult.plot()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit"><code class="docutils literal notranslate"><span class="pre">ModelResult.plot_fit()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals"><code class="docutils literal notranslate"><span class="pre">ModelResult.plot_residuals()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.ModelResult.iter_cb"><code class="docutils literal notranslate"><span class="pre">ModelResult.iter_cb()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.ModelResult.jacfcn"><code class="docutils literal notranslate"><span class="pre">ModelResult.jacfcn()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#modelresult-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code> attributes</a><ul>
-<li><a class="reference internal" href="#lmfit.model.aic"><code class="docutils literal notranslate"><span class="pre">aic</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.best_fit"><code class="docutils literal notranslate"><span class="pre">best_fit</span></code></a></li>
+<li><a class="reference internal" href="#parameters-and-variables">Parameters and Variables</a><ul>
 <li><a class="reference internal" href="#lmfit.model.best_values"><code class="docutils literal notranslate"><span class="pre">best_values</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.bic"><code class="docutils literal notranslate"><span class="pre">bic</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.chisqr"><code class="docutils literal notranslate"><span class="pre">chisqr</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.ci_out"><code class="docutils literal notranslate"><span class="pre">ci_out</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.init_params"><code class="docutils literal notranslate"><span class="pre">init_params</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.init_values"><code class="docutils literal notranslate"><span class="pre">init_values</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.init_vals"><code class="docutils literal notranslate"><span class="pre">init_vals</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.params"><code class="docutils literal notranslate"><span class="pre">params</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.uvars"><code class="docutils literal notranslate"><span class="pre">uvars</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.var_names"><code class="docutils literal notranslate"><span class="pre">var_names</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fit-arrays-and-model">Fit Arrays and Model</a><ul>
+<li><a class="reference internal" href="#lmfit.model.best_fit"><code class="docutils literal notranslate"><span class="pre">best_fit</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.covar"><code class="docutils literal notranslate"><span class="pre">covar</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.data"><code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.dely"><code class="docutils literal notranslate"><span class="pre">dely</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.dely_comps"><code class="docutils literal notranslate"><span class="pre">dely_comps</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.errorbars"><code class="docutils literal notranslate"><span class="pre">errorbars</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.ier"><code class="docutils literal notranslate"><span class="pre">ier</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.init_fit"><code class="docutils literal notranslate"><span class="pre">init_fit</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.init_params"><code class="docutils literal notranslate"><span class="pre">init_params</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.init_values"><code class="docutils literal notranslate"><span class="pre">init_values</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.iter_cb"><code class="docutils literal notranslate"><span class="pre">iter_cb</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.jacfcn"><code class="docutils literal notranslate"><span class="pre">jacfcn</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.residual"><code class="docutils literal notranslate"><span class="pre">residual</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.weights"><code class="docutils literal notranslate"><span class="pre">weights</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.components"><code class="docutils literal notranslate"><span class="pre">components</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fit-status">Fit Status</a><ul>
+<li><a class="reference internal" href="#lmfit.model.aborted"><code class="docutils literal notranslate"><span class="pre">aborted</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.errorbars"><code class="docutils literal notranslate"><span class="pre">errorbars</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.flatchain"><code class="docutils literal notranslate"><span class="pre">flatchain</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.ier"><code class="docutils literal notranslate"><span class="pre">ier</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.lmdif_message"><code class="docutils literal notranslate"><span class="pre">lmdif_message</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.message"><code class="docutils literal notranslate"><span class="pre">message</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.method"><code class="docutils literal notranslate"><span class="pre">method</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.call_kws"><code class="docutils literal notranslate"><span class="pre">call_kws</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.model"><code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.scale_covar"><code class="docutils literal notranslate"><span class="pre">scale_covar</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.userargs"><code class="docutils literal notranslate"><span class="pre">userargs</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.userkws"><code class="docutils literal notranslate"><span class="pre">userkws</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fit-statistics">Fit Statistics</a><ul>
+<li><a class="reference internal" href="#lmfit.model.aic"><code class="docutils literal notranslate"><span class="pre">aic</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.bic"><code class="docutils literal notranslate"><span class="pre">bic</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.chisqr"><code class="docutils literal notranslate"><span class="pre">chisqr</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.model.ci_out"><code class="docutils literal notranslate"><span class="pre">ci_out</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.ndata"><code class="docutils literal notranslate"><span class="pre">ndata</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.nfev"><code class="docutils literal notranslate"><span class="pre">nfev</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.nfree"><code class="docutils literal notranslate"><span class="pre">nfree</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.nvarys"><code class="docutils literal notranslate"><span class="pre">nvarys</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.params"><code class="docutils literal notranslate"><span class="pre">params</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.redchi"><code class="docutils literal notranslate"><span class="pre">redchi</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.residual"><code class="docutils literal notranslate"><span class="pre">residual</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.rsquared"><code class="docutils literal notranslate"><span class="pre">rsquared</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.scale_covar"><code class="docutils literal notranslate"><span class="pre">scale_covar</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.success"><code class="docutils literal notranslate"><span class="pre">success</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.userargs"><code class="docutils literal notranslate"><span class="pre">userargs</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.userkws"><code class="docutils literal notranslate"><span class="pre">userkws</span></code></a></li>
-<li><a class="reference internal" href="#lmfit.model.weights"><code class="docutils literal notranslate"><span class="pre">weights</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#calculating-uncertainties-in-the-model-function">Calculating uncertainties in the model function</a></li>
+<li><a class="reference internal" href="#using-uncertainties-in-the-fitted-parameters-for-post-fit-calculations">Using uncertainties in the fitted parameters for post-fit calculations</a></li>
 <li><a class="reference internal" href="#saving-and-loading-modelresults">Saving and Loading ModelResults</a><ul>
 <li><a class="reference internal" href="#lmfit.model.save_modelresult"><code class="docutils literal notranslate"><span class="pre">save_modelresult()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.model.load_modelresult"><code class="docutils literal notranslate"><span class="pre">load_modelresult()</span></code></a></li>
@@ -613,7 +633,7 @@ variables and parameters:</p>
 <dd class="field-even"><p>Value of model given the parameters and other arguments.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.11)">complex</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.11)">complex</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -632,7 +652,7 @@ values may be Python <cite>float</cite>, <cite>int</cite>, or  <cite>complex</ci
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lmfit.model.Model.fit">
-<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leastsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leastsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coerce_farray</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to the data using the supplied Parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -655,6 +675,10 @@ for solvers other than <cite>‘leastsq’</cite> and <cite>‘least_squares’<
 Requires the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package to be installed.</p></li>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations (default is None). The
 default value depends on the fitting method.</p></li>
+<li><p><strong>coerce_farray</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to coerce data and independent data to be ndarrays
+with dtype of float64 (or complex128).  If set to False, data
+and independent data are not coerced at all, but the output of
+the model function will be. (default is True)</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Arguments to pass to the model function, possibly overriding
 parameters.</p></li>
 </ul>
@@ -829,6 +853,15 @@ the fit.</p>
 <dd class="field-odd"><p><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Width of each column, except for first and last columns.</p>
 </dd>
 </dl>
+<p>See <a class="reference internal" href="#model-param-hints-section"><span class="std std-ref">Using parameter hints</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lmfit.model.Model.post_fit">
+<span class="sig-prename descclassname"><span class="pre">Model.</span></span><span class="sig-name descname"><span class="pre">post_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fitresult</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.post_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>function that is called just after fit, can be overloaded by
+subclasses to add non-fitting ‘calculated parameters’</p>
+<p>See <a class="reference internal" href="#modelresult-uvars-postfit-section"><span class="std std-ref">Using uncertainties in the fitted parameters for post-fit calculations</span></a>.</p>
 </dd></dl>
 
 </section>
@@ -857,7 +890,7 @@ The choices are:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">'propagate'</span></code>: Do not check for NaNs or missing values. The fit will
 try to ignore them.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'omit'</span></code>: Remove NaNs or missing observations in data. If pandas is
-installed, <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.isnull.html#pandas.isnull" title="(in pandas v2.0.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.isnull()</span></code></a> is used, otherwise
+installed, <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.isnull.html#pandas.isnull" title="(in pandas v2.0.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.isnull()</span></code></a> is used, otherwise
 <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.isnan()</span></code> is used.</p></li>
 </ul>
 </div></blockquote>
@@ -1275,49 +1308,51 @@ variable(s) you specify to best match the data you provide.  The model is meant
 to be an abstract representation for data, but when you do a fit with
 <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>, you really need to pass in values for the data to be modeled
 and the independent data used to calculate that data.</p>
-<p>The mathematical solvers used by <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> all work exclusively with
-1-dimensional numpy arrays of datatype (dtype) <code class="docutils literal notranslate"><span class="pre">float64</span></code>.  The value of the
-calculation <code class="docutils literal notranslate"><span class="pre">(model-data)*weights</span></code> using the calculation of your model
-function, and the data and weights you pass in <em>will be coerced</em> to an
-1-dimensional ndarray with dtype <code class="docutils literal notranslate"><span class="pre">float64</span></code> when it is passed to the solver.</p>
-<p>If the data you pass to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> is not an ndarray of dtype
-<code class="docutils literal notranslate"><span class="pre">float64</span></code> but is instead a tuples of numbers, a list of numbers, or a
-<code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, it will be coerced into an ndarray.  If your data is a list,
-tuple, or Series of complex numbers, it <em>will be coerced</em> to an ndarray with
-dtype <code class="docutils literal notranslate"><span class="pre">complex128</span></code>.</p>
-<p>If your data is a numpy array of dtype <code class="docutils literal notranslate"><span class="pre">float32</span></code>, it <em>will not be coerced</em> to
-<code class="docutils literal notranslate"><span class="pre">float64</span></code>, as we assume this was an intentional choice.  That may make all of
-the calculations done in your model function be in single-precision which may
-make fits less sensitive, but the values will be converted to <code class="docutils literal notranslate"><span class="pre">float64</span></code>
-before being sent to the solver, so the fit should work.</p>
-<p>The independent data for models using <code class="docutils literal notranslate"><span class="pre">Model</span></code> are meant to be truly
+<p>As discussed in <a class="reference internal" href="fitting.html#fit-data-label"><span class="std std-ref">Types of Data to Use for Fitting</span></a>, the mathematical solvers used by
+<code class="docutils literal notranslate"><span class="pre">lmfit</span></code> all work exclusively with 1-dimensional numpy arrays of datatype
+(dtype) “float64”.  The value of the calculation <code class="docutils literal notranslate"><span class="pre">(model-data)*weights</span></code> using
+the calculation of your model function, and the data and weights you pass in
+<strong>will always be coerced</strong> to an 1-dimensional ndarray with dtype “float64”
+when it is passed to the solver.  If it cannot be coerced, an error will occur
+and the fit will be aborted.</p>
+<p>That coercion will usually work for “array like” data that is not already a
+float64 ndarray.  But, depending on the model function, the calculations within
+the model function may not always work well for some “array like” data types
+- especially independent data that are in list of numbers and ndarrays of type
+“float32” or “int16” or less precision.</p>
+<p>To be clear, independent data for models using <code class="docutils literal notranslate"><span class="pre">Model</span></code> are meant to be truly
 independent, and not <strong>not</strong> required to be strictly numerical or objects that
-are easily converted to arrays of numbers.  That is, independent data for a
-model could be a dictionary, an instance of a user-defined class, or other type
-of structured data.  You can use independent data any way you want in your
-model function.</p>
-<p>But, as with almost all the examples given here, independent data is often also
-a 1-dimensonal array of values, say <code class="docutils literal notranslate"><span class="pre">x</span></code>, and a simple view of the fit would be
-to plot the data as <code class="docutils literal notranslate"><span class="pre">y</span></code> as a function of <code class="docutils literal notranslate"><span class="pre">x</span></code>.  Again, this is not required, but
-it is very common.  Because of this very common usage, if your independent data
-is a tuple or list of numbers or <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, it <em>will be coerced</em> to be
-an ndarray of dtype <code class="docutils literal notranslate"><span class="pre">float64</span></code>.  But as with the primary data, if your
-independent data is an ndarray of some different dtype (<code class="docutils literal notranslate"><span class="pre">float32</span></code>,
-<code class="docutils literal notranslate"><span class="pre">uint16</span></code>, etc), it <em>will not be coerced</em> to <code class="docutils literal notranslate"><span class="pre">float64</span></code>, as we assume this
-was intentional.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Data and independent data that are tuples or lists of numbers, or
-<code class="docutils literal notranslate"><span class="pre">panda.Series</span></code> will be coerced to an ndarray of dtype <code class="docutils literal notranslate"><span class="pre">float64</span></code> before
-passing to the model function.  Data with other dtypes (or independent data
-of other object types such as dicts) will not be coerced to <code class="docutils literal notranslate"><span class="pre">float64</span></code>.</p>
+are easily converted to arrays of numbers.  The could, for example, be a
+dictionary, an instance of a user-defined class, or other type of structured
+data.  You can use independent data any way you want in your model function.
+But, as with almost all the examples given here, independent data is often also
+a 1-dimensional array of values, say <code class="docutils literal notranslate"><span class="pre">x</span></code>, and a simple view of the fit would
+be to plot the data as <code class="docutils literal notranslate"><span class="pre">y</span></code> as a function of <code class="docutils literal notranslate"><span class="pre">x</span></code>.  Again, this is not
+required, but it is very common, especially for novice users.</p>
+<p>By default, all data and independent data passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> that is
+“array like” - a list or tuple of numbers, a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">h5py.Dataset</span></code>, or any object that has an <code class="docutils literal notranslate"><span class="pre">__array__()</span></code> method – will be
+converted to a “float64” ndarray before the fit begins.  If the array-like data
+is complex, it will be converted to a “complex128” ndarray, which will always
+work too.  This conversion before the fit begins ensures that the model
+function sees only “float64 ndarrays”, and nearly guarantees that data type
+conversion will not cause problems for the fit.  But it also means that if you
+have passed a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code> as data or independent data, not all of the
+methods or attributes of that <code class="docutils literal notranslate"><span class="pre">Series</span></code> will be available by default within
+the model function.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.2.</span></p>
 </div>
+<p>This coercion can be turned of with the <code class="docutils literal notranslate"><span class="pre">coerce_farray</span></code> option to
+<a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>.  When set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, neither the data nor the independent
+data will be coerced from their original data type, and the user will be
+responsible to arrange for the calculation and return value from the model
+function to be allow a proper and accurate conversion to a “float64” ndarray.</p>
+<p>See also <a class="reference internal" href="fitting.html#fit-data-label"><span class="std std-ref">Types of Data to Use for Fitting</span></a> for general advise and recommendations on
+types of data to use when fitting data.</p>
 </section>
 <section id="saving-and-loading-models">
 <span id="model-saveload-sec"></span><h3>Saving and Loading Models<a class="headerlink" href="#saving-and-loading-models" title="Permalink to this heading">¶</a></h3>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.8.</span></p>
-</div>
 <p>It is sometimes desirable to save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> for later use outside of
 the code used to define the model. Lmfit provides a <a class="reference internal" href="#lmfit.model.save_model" title="lmfit.model.save_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_model()</span></code></a>
 function that will save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> to a file. There is also a
@@ -1522,7 +1557,7 @@ default value depends on the fitting method.</p></li>
 <dd class="field-even"><p>Array or value for the evaluated model.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.11)">complex</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.11)">complex</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1683,7 +1718,7 @@ uncertainties in the best-fit parameters.</p>
 <dd class="field-even"><p>Uncertainty at each value of the model.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1730,11 +1765,11 @@ the initial conditions for the fit, pass the argument
 <li><p><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</p></li>
 <li><p><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</p></li>
 <li><p><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated
 not only at data points, but refined to contain <cite>numpoints</cite>
 points in total.</p></li>
-<li><p><strong>fig</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.1)"><em>matplotlib.figure.Figure</em></a><em>, </em><em>optional</em>) – The figure to plot on. The default is None, which means use
+<li><p><strong>fig</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.2)"><em>matplotlib.figure.Figure</em></a><em>, </em><em>optional</em>) – The figure to plot on. The default is None, which means use
 the current pyplot figure or create one if there is none.</p></li>
 <li><p><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for data points.</p></li>
 <li><p><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for fitted curve.</p></li>
@@ -1752,7 +1787,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.1)">matplotlib.figure.Figure</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.2)">matplotlib.figure.Figure</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1788,14 +1823,14 @@ errorbars will also be plotted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.2)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</p></li>
 <li><p><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</p></li>
 <li><p><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</p></li>
 <li><p><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</p></li>
 <li><p><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</p></li>
 <li><p><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated
 not only at data points, but refined to contain <cite>numpoints</cite>
 points in total.</p></li>
@@ -1813,7 +1848,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)">matplotlib.axes.Axes</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.2)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1846,10 +1881,10 @@ will also be plotted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.2)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</p></li>
 <li><p><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for data points.</p></li>
 <li><p><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for fitted curve.</p></li>
 <li><p><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if a new one is created.</p></li>
@@ -1860,7 +1895,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)">matplotlib.axes.Axes</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.2)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1884,23 +1919,30 @@ weights are in this case.</p>
 <p>If <cite>ax</cite> is None then <cite>matplotlib.pyplot.gca(**ax_kws)</cite> is called.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="lmfit.model.ModelResult.iter_cb">
+<span class="sig-prename descclassname"><span class="pre">ModelResult.</span></span><span class="sig-name descname"><span class="pre">iter_cb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.iter_cb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional callable function, to be called at each fit iteration. This
+must take take arguments of <code class="docutils literal notranslate"><span class="pre">(params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws)</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">params</span></code> will have the current parameter values, <code class="docutils literal notranslate"><span class="pre">iter</span></code> the
+iteration, <code class="docutils literal notranslate"><span class="pre">resid</span></code> the current residual array, and <code class="docutils literal notranslate"><span class="pre">*args</span></code> and
+<code class="docutils literal notranslate"><span class="pre">**kws</span></code> as passed to the objective function. See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lmfit.model.ModelResult.jacfcn">
+<span class="sig-prename descclassname"><span class="pre">ModelResult.</span></span><span class="sig-name descname"><span class="pre">jacfcn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.jacfcn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional callable function, to be called to calculate Jacobian array.</p>
+</dd></dl>
+
 </section>
 <section id="modelresult-attributes">
 <h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> attributes<a class="headerlink" href="#modelresult-attributes" title="Permalink to this heading">¶</a></h3>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.aic">
-<span class="sig-name descname"><span class="pre">aic</span></span><a class="headerlink" href="#lmfit.model.aic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Floating point best-fit Akaike Information Criterion statistic
-(see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.best_fit">
-<span class="sig-name descname"><span class="pre">best_fit</span></span><a class="headerlink" href="#lmfit.model.best_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>numpy.ndarray result of model function, evaluated at provided
-independent variables and with best-fit parameters.</p>
-</dd></dl>
-
+<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> will take all of the attributes of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code>, and several more. Here, we arrange them into
+categories.</p>
+<section id="parameters-and-variables">
+<h4>Parameters and Variables<a class="headerlink" href="#parameters-and-variables" title="Permalink to this heading">¶</a></h4>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.best_values">
 <span class="sig-name descname"><span class="pre">best_values</span></span><a class="headerlink" href="#lmfit.model.best_values" title="Permalink to this definition">¶</a></dt>
@@ -1908,23 +1950,50 @@ independent variables and with best-fit parameters.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.bic">
-<span class="sig-name descname"><span class="pre">bic</span></span><a class="headerlink" href="#lmfit.model.bic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Floating point best-fit Bayesian Information Criterion statistic
-(see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
+<dt class="sig sig-object py" id="lmfit.model.init_params">
+<span class="sig-name descname"><span class="pre">init_params</span></span><a class="headerlink" href="#lmfit.model.init_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial parameters, as passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.chisqr">
-<span class="sig-name descname"><span class="pre">chisqr</span></span><a class="headerlink" href="#lmfit.model.chisqr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Floating point best-fit chi-square statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
+<dt class="sig sig-object py" id="lmfit.model.init_values">
+<span class="sig-name descname"><span class="pre">init_values</span></span><a class="headerlink" href="#lmfit.model.init_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary with parameter names as keys, and initial values as values.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.ci_out">
-<span class="sig-name descname"><span class="pre">ci_out</span></span><a class="headerlink" href="#lmfit.model.ci_out" title="Permalink to this definition">¶</a></dt>
-<dd><p>Confidence interval data (see <a class="reference internal" href="confidence.html#confidence-chapter"><span class="std std-ref">Calculation of confidence intervals</span></a>) or <code class="docutils literal notranslate"><span class="pre">None</span></code> if
-the confidence intervals have not been calculated.</p>
+<dt class="sig sig-object py" id="lmfit.model.init_vals">
+<span class="sig-name descname"><span class="pre">init_vals</span></span><a class="headerlink" href="#lmfit.model.init_vals" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of values for the variable parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#lmfit.model.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters used in fit; will contain the best-fit values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.uvars">
+<span class="sig-name descname"><span class="pre">uvars</span></span><a class="headerlink" href="#lmfit.model.uvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of <code class="docutils literal notranslate"><span class="pre">uncertainties</span></code> ufloats from Parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.var_names">
+<span class="sig-name descname"><span class="pre">var_names</span></span><a class="headerlink" href="#lmfit.model.var_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of variable Parameter names used in optimization in the
+same order as the values in <a class="reference internal" href="#lmfit.model.init_vals" title="lmfit.model.init_vals"><code class="xref py py-attr docutils literal notranslate"><span class="pre">init_vals</span></code></a> and <a class="reference internal" href="#lmfit.model.covar" title="lmfit.model.covar"><code class="xref py py-attr docutils literal notranslate"><span class="pre">covar</span></code></a>.</p>
+</dd></dl>
+
+</section>
+<section id="fit-arrays-and-model">
+<h4>Fit Arrays and Model<a class="headerlink" href="#fit-arrays-and-model" title="Permalink to this heading">¶</a></h4>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.best_fit">
+<span class="sig-name descname"><span class="pre">best_fit</span></span><a class="headerlink" href="#lmfit.model.best_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>numpy.ndarray result of model function, evaluated at provided
+independent variables and with best-fit parameters.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1955,18 +2024,6 @@ components, from <a class="reference internal" href="#lmfit.model.ModelResult.ev
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.errorbars">
-<span class="sig-name descname"><span class="pre">errorbars</span></span><a class="headerlink" href="#lmfit.model.errorbars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean for whether error bars were estimated by fit.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.ier">
-<span class="sig-name descname"><span class="pre">ier</span></span><a class="headerlink" href="#lmfit.model.ier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Integer returned code from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.init_fit">
 <span class="sig-name descname"><span class="pre">init_fit</span></span><a class="headerlink" href="#lmfit.model.init_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray result of model function, evaluated at provided
@@ -1974,31 +2031,51 @@ independent variables and with initial parameters.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.init_params">
-<span class="sig-name descname"><span class="pre">init_params</span></span><a class="headerlink" href="#lmfit.model.init_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initial parameters.</p>
+<dt class="sig sig-object py" id="lmfit.model.residual">
+<span class="sig-name descname"><span class="pre">residual</span></span><a class="headerlink" href="#lmfit.model.residual" title="Permalink to this definition">¶</a></dt>
+<dd><p>numpy.ndarray for residual.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.init_values">
-<span class="sig-name descname"><span class="pre">init_values</span></span><a class="headerlink" href="#lmfit.model.init_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary with parameter names as keys, and initial values as values.</p>
+<dt class="sig sig-object py" id="lmfit.model.weights">
+<span class="sig-name descname"><span class="pre">weights</span></span><a class="headerlink" href="#lmfit.model.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>numpy.ndarray (or <code class="docutils literal notranslate"><span class="pre">None</span></code>) of weighting values to be used in fit. If not
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, it will be used as a multiplicative factor of the residual
+array, so that <code class="docutils literal notranslate"><span class="pre">weights*(data</span> <span class="pre">-</span> <span class="pre">fit)</span></code> is minimized in the
+least-squares sense.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.iter_cb">
-<span class="sig-name descname"><span class="pre">iter_cb</span></span><a class="headerlink" href="#lmfit.model.iter_cb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optional callable function, to be called at each fit iteration. This
-must take take arguments of <code class="docutils literal notranslate"><span class="pre">(params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws)</span></code>, where
-<code class="docutils literal notranslate"><span class="pre">params</span></code> will have the current parameter values, <code class="docutils literal notranslate"><span class="pre">iter</span></code> the
-iteration, <code class="docutils literal notranslate"><span class="pre">resid</span></code> the current residual array, and <code class="docutils literal notranslate"><span class="pre">*args</span></code> and
-<code class="docutils literal notranslate"><span class="pre">**kws</span></code> as passed to the objective function. See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
+<dt class="sig sig-object py" id="lmfit.model.components">
+<span class="sig-name descname"><span class="pre">components</span></span><a class="headerlink" href="#lmfit.model.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of components of the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>.</p>
+</dd></dl>
+
+</section>
+<section id="fit-status">
+<h4>Fit Status<a class="headerlink" href="#fit-status" title="Permalink to this heading">¶</a></h4>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.aborted">
+<span class="sig-name descname"><span class="pre">aborted</span></span><a class="headerlink" href="#lmfit.model.aborted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the fit was aborted.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.jacfcn">
-<span class="sig-name descname"><span class="pre">jacfcn</span></span><a class="headerlink" href="#lmfit.model.jacfcn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optional callable function, to be called to calculate Jacobian array.</p>
+<dt class="sig sig-object py" id="lmfit.model.errorbars">
+<span class="sig-name descname"><span class="pre">errorbars</span></span><a class="headerlink" href="#lmfit.model.errorbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean for whether error bars were estimated by fit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.flatchain">
+<span class="sig-name descname"><span class="pre">flatchain</span></span><a class="headerlink" href="#lmfit.model.flatchain" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> view of the sampling chain if the <code class="docutils literal notranslate"><span class="pre">emcee</span></code> method is uses.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.ier">
+<span class="sig-name descname"><span class="pre">ier</span></span><a class="headerlink" href="#lmfit.model.ier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer returned code from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2033,6 +2110,54 @@ iteration, <code class="docutils literal notranslate"><span class="pre">resid</s
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.scale_covar">
+<span class="sig-name descname"><span class="pre">scale_covar</span></span><a class="headerlink" href="#lmfit.model.scale_covar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean flag for whether to automatically scale covariance matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.userargs">
+<span class="sig-name descname"><span class="pre">userargs</span></span><a class="headerlink" href="#lmfit.model.userargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>positional arguments passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>, a tuple of (<code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">weights</span></code>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.userkws">
+<span class="sig-name descname"><span class="pre">userkws</span></span><a class="headerlink" href="#lmfit.model.userkws" title="Permalink to this definition">¶</a></dt>
+<dd><p>keyword arguments passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>, a dict, which will have independent data arrays such as <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd></dl>
+
+</section>
+<section id="fit-statistics">
+<h4>Fit Statistics<a class="headerlink" href="#fit-statistics" title="Permalink to this heading">¶</a></h4>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.aic">
+<span class="sig-name descname"><span class="pre">aic</span></span><a class="headerlink" href="#lmfit.model.aic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Floating point best-fit Akaike Information Criterion statistic
+(see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><a class="headerlink" href="#lmfit.model.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Floating point best-fit Bayesian Information Criterion statistic
+(see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.chisqr">
+<span class="sig-name descname"><span class="pre">chisqr</span></span><a class="headerlink" href="#lmfit.model.chisqr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Floating point best-fit chi-square statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lmfit.model.ci_out">
+<span class="sig-name descname"><span class="pre">ci_out</span></span><a class="headerlink" href="#lmfit.model.ci_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Confidence interval data (see <a class="reference internal" href="confidence.html#confidence-chapter"><span class="std std-ref">Calculation of confidence intervals</span></a>) or <code class="docutils literal notranslate"><span class="pre">None</span></code> if
+the confidence intervals have not been calculated.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.ndata">
 <span class="sig-name descname"><span class="pre">ndata</span></span><a class="headerlink" href="#lmfit.model.ndata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer number of data points.</p>
@@ -2057,65 +2182,28 @@ iteration, <code class="docutils literal notranslate"><span class="pre">resid</s
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.params">
-<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#lmfit.model.params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameters used in fit; will contain the best-fit values.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.redchi">
 <span class="sig-name descname"><span class="pre">redchi</span></span><a class="headerlink" href="#lmfit.model.redchi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Floating point reduced chi-square statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.residual">
-<span class="sig-name descname"><span class="pre">residual</span></span><a class="headerlink" href="#lmfit.model.residual" title="Permalink to this definition">¶</a></dt>
-<dd><p>numpy.ndarray for residual.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.rsquared">
 <span class="sig-name descname"><span class="pre">rsquared</span></span><a class="headerlink" href="#lmfit.model.rsquared" title="Permalink to this definition">¶</a></dt>
-<dd><p>Floating point <span class="math notranslate nohighlight">\(R^2\)</span> statisic, defined for data <span class="math notranslate nohighlight">\(y\)</span> and best-fit model <span class="math notranslate nohighlight">\(f\)</span> as</p>
+<dd><p>Floating point <span class="math notranslate nohighlight">\(R^2\)</span> statistic, defined for data <span class="math notranslate nohighlight">\(y\)</span> and best-fit model <span class="math notranslate nohighlight">\(f\)</span> as</p>
 </dd></dl>
 
 <div class="math notranslate nohighlight">
 \begin{eqnarray*}
   R^2 &amp;=&amp;  1 - \frac{\sum_i (y_i - f_i)^2}{\sum_i (y_i - \bar{y})^2}
  \end{eqnarray*}</div><dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.scale_covar">
-<span class="sig-name descname"><span class="pre">scale_covar</span></span><a class="headerlink" href="#lmfit.model.scale_covar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean flag for whether to automatically scale covariance matrix.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.success">
 <span class="sig-name descname"><span class="pre">success</span></span><a class="headerlink" href="#lmfit.model.success" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean value of whether fit succeeded.</p>
+<dd><p>Boolean value of whether fit succeeded. This is an optimistic
+view of success, meaning that the method finished without error.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.userargs">
-<span class="sig-name descname"><span class="pre">userargs</span></span><a class="headerlink" href="#lmfit.model.userargs" title="Permalink to this definition">¶</a></dt>
-<dd><p>positional arguments passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>, a tuple of (<code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">weights</span></code>)</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.userkws">
-<span class="sig-name descname"><span class="pre">userkws</span></span><a class="headerlink" href="#lmfit.model.userkws" title="Permalink to this definition">¶</a></dt>
-<dd><p>keyword arguments passed to <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>, a dict, which will have independent data arrays such as <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lmfit.model.weights">
-<span class="sig-name descname"><span class="pre">weights</span></span><a class="headerlink" href="#lmfit.model.weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>numpy.ndarray (or <code class="docutils literal notranslate"><span class="pre">None</span></code>) of weighting values to be used in fit. If not
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, it will be used as a multiplicative factor of the residual
-array, so that <code class="docutils literal notranslate"><span class="pre">weights*(data</span> <span class="pre">-</span> <span class="pre">fit)</span></code> is minimized in the
-least-squares sense.</p>
-</dd></dl>
-
+</section>
 </section>
 <section id="calculating-uncertainties-in-the-model-function">
 <span id="eval-uncertainty-sec"></span><h3>Calculating uncertainties in the model function<a class="headerlink" href="#calculating-uncertainties-in-the-model-function" title="Permalink to this heading">¶</a></h3>
@@ -2285,11 +2373,245 @@ model can be calculated and used:</p>
 <img alt="_images/model_31_1.svg" src="_images/model_31_1.svg" /></div>
 </div>
 </section>
+<section id="using-uncertainties-in-the-fitted-parameters-for-post-fit-calculations">
+<span id="modelresult-uvars-postfit-section"></span><h3>Using uncertainties in the fitted parameters for post-fit calculations<a class="headerlink" href="#using-uncertainties-in-the-fitted-parameters-for-post-fit-calculations" title="Permalink to this heading">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.2.</span></p>
+</div>
+<p>As with the previous section, after a fit is complete, you may want to do some
+further calculations with the resulting Parameter values.  Since these
+Parameters will have not only best-fit values but also usually have
+uncertainties, it is desirable for subsequent calculations to be able to
+propagate those uncertainties to any resulting calculated value.  In addition,
+it is common for Parameters to have finite - and sometimes large -
+correlations which should be taken into account in such calculations.</p>
+<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">ModelResult.uvars</span></code> will be a dictionary with keys for all variable
+Parameters and values that are <code class="docutils literal notranslate"><span class="pre">uvalues</span></code> from the <a class="reference external" href="https://pythonhosted.org/uncertainties/">uncertainties package</a>.
+When used in mathematical calculations with basic Python operators or numpy
+functions, these <code class="docutils literal notranslate"><span class="pre">uvalues</span></code> will automatically propagate their uncertainties
+to the resulting calculation, and taking into account the full covariance
+matrix describing the correlation between values.</p>
+<p>This readily allows “derived Parameters” to be evaluated just after the fit.
+In fact, it might be useful to have a Model always do such a calculation just
+after the fit.  The <a class="reference internal" href="#lmfit.model.Model.post_fit" title="lmfit.model.Model.post_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.post_fit()</span></code></a> method allows exactly that: you can
+overwrite this otherwise empty method for any Model.  It takes one argument:
+the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> instance just after the actual fit has run (and before
+<a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> returns) and can be used to add Parameters or do other
+post-fit processing.</p>
+<p>The following example script shows two different methods for calculating a centroid
+value for two peaks, either by doing the calculation directly after the fit
+with the <code class="docutils literal notranslate"><span class="pre">result.uvars</span></code> or by capturing this in a <a class="reference internal" href="#lmfit.model.Model.post_fit" title="lmfit.model.Model.post_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.post_fit()</span></code></a>
+method that would be run for all instances of that model.  It also demonstrates
+that taking correlations between Parameters into account when performing
+calculations can have a noticeable influence on the resulting uncertainties.</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_uvars_params.py&gt;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
+
+<span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;NIST_Gauss2.dat&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">bkg</span> <span class="o">=</span> <span class="n">ExponentialModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;exp_&#39;</span><span class="p">)</span>
+<span class="n">gauss1</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g1_&#39;</span><span class="p">)</span>
+<span class="n">gauss2</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g2_&#39;</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">gauss1</span> <span class="o">+</span> <span class="n">gauss2</span> <span class="o">+</span> <span class="n">bkg</span>
+
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">g1_center</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="n">g1_amplitude</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">g1_sigma</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                       <span class="n">g2_center</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="n">g2_amplitude</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">g2_sigma</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                       <span class="n">exp_amplitude</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">exp_decay</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="c1"># Area and Centroid of the combined peaks</span>
+<span class="c1"># option 1: from output uncertainties values</span>
+
+<span class="n">uvar_g1amp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span>
+<span class="n">uvar_g2amp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span>
+<span class="n">uvar_g1cen</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g1_center&#39;</span><span class="p">]</span>
+<span class="n">uvar_g2cen</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g2_center&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Peak Area: &quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak1: </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">+/-</span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak2: </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">+/-</span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sum  : </span><span class="si">{</span><span class="p">(</span><span class="n">uvar_g1amp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">uvar_g2amp</span><span class="p">)</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">area_quadrature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Correlation of peak1 and peak2 areas:            </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">correl</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stderr Quadrature sum for peak1 and peak2 area2: </span><span class="si">{</span><span class="n">area_quadrature</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stderr of peak1 + peak2 area, with correlation:  </span><span class="si">{</span><span class="p">(</span><span class="n">uvar_g1amp</span><span class="o">+</span><span class="n">uvar_g2amp</span><span class="p">)</span><span class="o">.</span><span class="n">std_dev</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Peak Centroid: &quot;</span><span class="p">)</span>
+
+<span class="n">centroid</span> <span class="o">=</span> <span class="p">(</span><span class="n">uvar_g1amp</span> <span class="o">*</span> <span class="n">uvar_g1cen</span> <span class="o">+</span> <span class="n">uvar_g2amp</span> <span class="o">*</span> <span class="n">uvar_g2cen</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">uvar_g1amp</span> <span class="o">+</span> <span class="n">uvar_g2amp</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak Centroid: </span><span class="si">{</span><span class="n">centroid</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># option 2: define corresponding variables after fit</span>
+
+
+<span class="k">def</span> <span class="nf">post_fit</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="s2">&quot;example post fit function&quot;</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_area&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;g1_amplitude + g2_amplitude&#39;</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_centroid&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;</span><span class="p">)</span>
+
+
+<span class="n">mod</span><span class="o">.</span><span class="n">post_fit</span> <span class="o">=</span> <span class="n">post_fit</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="c1"># option 3: define corresponding variables before fit</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;g1_amplitude + g2_amplitude&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;centroid&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># &lt;end examples/doc_uvars_params.py&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+### Peak Area: 
+Peak1: 4257.77390+/-42.38380
+Peak2: 2493.41716+/-36.16971
+Sum  : 6751.19106+/-46.50802
+Correlation of peak1 and peak2 areas:            -0.30712
+Stderr Quadrature sum for peak1 and peak2 area2: 55.71924
+Stderr of peak1 + peak2 area, with correlation:  46.50802
+### Peak Centroid: 
+Peak Centroid: 124.10846+/-0.14074
+[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    area:           6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    centroid:       124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the <a class="reference internal" href="#lmfit.model.Model.post_fit" title="lmfit.model.Model.post_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.post_fit()</span></code></a> does not need to be limited to this
+use case of adding derived Parameters.</p>
+</section>
 <section id="saving-and-loading-modelresults">
 <span id="modelresult-saveload-sec"></span><h3>Saving and Loading ModelResults<a class="headerlink" href="#saving-and-loading-modelresults" title="Permalink to this heading">¶</a></h3>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.8.</span></p>
-</div>
 <p>As with saving models (see section <a class="reference internal" href="#model-saveload-sec"><span class="std std-ref">Saving and Loading Models</span></a>), it is
 sometimes desirable to save a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a>, either for later use or
 to organize and compare different fit results. Lmfit provides a
@@ -2539,7 +2861,7 @@ we could define a linear function:</p>
 <p>and shows the plot on the left.</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_40_0.svg" src="_images/model_40_0.svg" /></div>
+<img alt="_images/model_41_0.svg" src="_images/model_41_0.svg" /></div>
 </div>
 <p>On the left, data is shown in blue dots, the total fit is shown in solid
 green line, and the initial fit is shown as a orange dashed line. The figure
@@ -2734,7 +3056,7 @@ binary operator. A full script using this technique is here:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
-    (Model(jump) &lt;function convolve at 0x17d7d68c0&gt; Model(gaussian))
+    (Model(jump) &lt;function convolve at 0x15d0c93f0&gt; Model(gaussian))
 [[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 33
@@ -2760,7 +3082,7 @@ binary operator. A full script using this technique is here:</p>
 <p>and shows the plots:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_48_0.svg" src="_images/model_48_0.svg" /></div>
+<img alt="_images/model_49_0.svg" src="_images/model_49_0.svg" /></div>
 </div>
 <p>Using composite models with built-in or custom operators allows you to
 build complex models from testable sub-components.</p>
@@ -2799,7 +3121,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

@@ -70,6 +70,8 @@ The :class:`Parameters` class
 
     .. automethod:: valuesdict
 
+    .. automethod:: create_uvars
+
     .. automethod:: dumps
 
     .. automethod:: dump
@@ -93,6 +95,8 @@ The :class:`Parameters` class
 
 The :func:`create_params` function
 ==================================
+
+.. versionadded:: 1.2.0
 
 The :func:`create_params` function is probably the easiest method for making
 :class:`Parameters` objects, as it allows defining Parameter names by keyword

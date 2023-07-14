@@ -51,8 +51,8 @@ doc_model_with_nan_policy.py
         amplitude:  8.82064881 +/- 0.11686114 (1.32%) (init = 5)
         center:     5.65906365 +/- 0.01055590 (0.19%) (init = 6)
         sigma:      0.69165307 +/- 0.01060640 (1.53%) (init = 1)
-        fwhm:       1.62871849 +/- 0.02497615 (1.53%) == '2.3548200*sigma'
-        height:     5.08770952 +/- 0.06488251 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
+        fwhm:       1.62871847 +/- 0.02497615 (1.53%) == '2.3548200*sigma'
+        height:     5.08770959 +/- 0.06488251 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigma) = +0.6105
 
@@ -102,7 +102,7 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.147 seconds)
+   **Total running time of the script:** ( 0 minutes  0.145 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:

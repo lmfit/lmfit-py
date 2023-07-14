@@ -389,6 +389,23 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_uvars_params.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_uvars_params_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_uvars_params.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_uvars_params.py</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty2.py">
 
 .. only:: html
@@ -468,6 +485,7 @@ Below are all the examples that are part of the lmfit documentation.
    /examples/documentation/model_composite
    /examples/documentation/builtinmodels_splinemodel
    /examples/documentation/confidence_advanced
+   /examples/documentation/uvars_params
    /examples/documentation/model_uncertainty2
    /examples/documentation/fitting_emcee
    /examples/documentation/confidence_chi2_maps

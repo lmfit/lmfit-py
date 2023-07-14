@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Parameter and Parameters &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -122,6 +122,7 @@
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.add_many"><code class="docutils literal notranslate"><span class="pre">Parameters.add_many()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.pretty_print"><code class="docutils literal notranslate"><span class="pre">Parameters.pretty_print()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.valuesdict"><code class="docutils literal notranslate"><span class="pre">Parameters.valuesdict()</span></code></a></li>
+<li><a class="reference internal" href="#lmfit.parameter.Parameters.create_uvars"><code class="docutils literal notranslate"><span class="pre">Parameters.create_uvars()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.dumps"><code class="docutils literal notranslate"><span class="pre">Parameters.dumps()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.dump"><code class="docutils literal notranslate"><span class="pre">Parameters.dump()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.parameter.Parameters.eval"><code class="docutils literal notranslate"><span class="pre">Parameters.eval()</span></code></a></li>
@@ -334,7 +335,7 @@ argument to the objective function.</p>
 symbol names, so that the name must match <code class="docutils literal notranslate"><span class="pre">[a-z_][a-z0-9_]*</span></code> and
 cannot be a Python reserved word.</p>
 <p>All values of a Parameters() instance must be Parameter objects.</p>
-<p>A Parameters() instance includes an <cite>asteval</cite> Interpreter used for
+<p>A Parameters(xs) instance includes an <cite>asteval</cite> Interpreter used for
 evaluation of constrained Parameters.</p>
 <p>Parameters() support copying and pickling, and have methods to convert
 to and from serializations using json strings.</p>
@@ -416,12 +417,9 @@ least a <cite>name</cite>. The order in each tuple must be
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>oneline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – If True prints a one-line parameters representation (default
-is False).</p></li>
-<li><p><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Column width for all columns specified in <cite>columns</cite> (default
-is 8).</p></li>
-<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of digits to be printed after floating point (default
-is 4).</p></li>
+<li><p><strong>oneline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – If True prints a one-line parameters representation [False]</p></li>
+<li><p><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Column width for all columns specified in <cite>columns</cite> [8]</p></li>
+<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of digits to be printed after floating point [4]</p></li>
 <li><p><strong>fmt</strong> (<em>{'g'</em><em>, </em><em>'e'</em><em>, </em><em>'f'}</em><em>, </em><em>optional</em>) – Single-character numeric formatter. Valid values are: <cite>‘g’</cite>
 floating point and exponential (default), <cite>‘e’</cite> exponential,
 or <cite>‘f’</cite> floating point.</p></li>
@@ -445,6 +443,31 @@ Parameter.</p>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lmfit.parameter.Parameters.create_uvars">
+<span class="sig-name descname"><span class="pre">create_uvars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.create_uvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict of uncertainties ufloats from the current Parameter
+values and stderr, and an optionally-supplied covariance matrix.
+Uncertainties in Parameters with constraint expressions will be
+calculated, propagating uncertaintes (and including correlations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>covar</strong> (<em>optional</em>) – Nvar x Nvar covariance matrix from fit</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict with keys of Parameter names and values of uncertainties.ufloats.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li><p>if covar is provide, it must correspond to the existing <em>variable</em>
+Parameters.  If covar is given, the returned uncertainties ufloats
+will take the correlations into account when combining values.</p></li>
+<li><p>See the uncertainties package documentation
+(<a class="reference external" href="https://pythonhosted.org/uncertainties">https://pythonhosted.org/uncertainties</a>) for more details.</p></li>
+</ol>
 </dd></dl>
 
 <dl class="py method">
@@ -571,6 +594,9 @@ recovered with the <code class="xref py py-meth docutils literal notranslate"><s
 </section>
 <section id="the-create-params-function">
 <h2>The <a class="reference internal" href="#lmfit.parameter.create_params" title="lmfit.parameter.create_params"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code></a> function<a class="headerlink" href="#the-create-params-function" title="Permalink to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
+</div>
 <p>The <a class="reference internal" href="#lmfit.parameter.create_params" title="lmfit.parameter.create_params"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_params()</span></code></a> function is probably the easiest method for making
 <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> objects, as it allows defining Parameter names by keyword
 with values either being the numerical initial value for the Parameter or being
@@ -729,7 +755,7 @@ which would make the objective function <code class="docutils literal notranslat
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

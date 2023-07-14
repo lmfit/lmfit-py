@@ -134,8 +134,8 @@ In this case, we can use a built-in model to fit
         sigmax:     0.54740777 +/- 0.01224965 (2.24%) (init = 1.666582)
         sigmay:     0.73300589 +/- 0.01617042 (2.21%) (init = 0.8332836)
         fwhmx:      1.28904676 +/- 0.02884573 (2.24%) == '2.3548200*sigmax'
-        fwhmy:      1.72609693 +/- 0.03807842 (2.21%) == '2.3548200*sigmay'
-        height:     10.8758308 +/- 0.35409534 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
+        fwhmy:      1.72609691 +/- 0.03807842 (2.21%) == '2.3548200*sigmay'
+        height:     10.8758310 +/- 0.35409534 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigmay) = +0.2464
         C(amplitude, sigmax) = +0.2314
@@ -372,7 +372,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.972 seconds)
+   **Total running time of the script:** ( 0 minutes  2.089 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:
