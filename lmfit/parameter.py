@@ -509,6 +509,7 @@ class Parameters(dict):
         uvars = {}
         has_expr = False
         vnames, vbest, vindex = [], [], -1
+        savevals = self.valuesdict()
         for par in self.values():
             has_expr = has_expr or par.expr is not None
             if par.vary:
@@ -542,6 +543,9 @@ class Parameters(dict):
                         uvars[par.name] = uval
                     except Exception:
                         par.stderr = 0
+        # restore all param values to saved best values
+        for parname, param in self.items():
+            param.value = savevals[parname]
         return uvars
 
     def dumps(self, **kws):
