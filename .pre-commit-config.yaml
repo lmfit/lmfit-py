@@ -2,7 +2,7 @@ exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.7.0
+    rev: v3.11.0
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -23,7 +23,7 @@ repos:
         args: [--remove]
 
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-deprecated, flake8-mutable]
