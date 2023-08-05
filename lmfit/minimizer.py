@@ -561,8 +561,9 @@ class Minimizer:
         else:
             return coerce_float64(out, nan_policy=self.nan_policy)
 
-    def __jacobian(self, fvars):
-        """Return analytical jacobian to be used with Levenberg-Marquardt.
+    def __jacobian(self, fvars, **unused):
+        """Return analytical jacobian to be used with Trust Region 
+        Reflective, Levenberg-Marquardt, or dogleg.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 by M Newville to apply gradient scaling for
@@ -1533,6 +1534,10 @@ class Minimizer:
 
         least_squares_kws.update(self.kws)
         least_squares_kws.update(kws)
+
+        self.jacfcn = least_squares_kws['jac']
+        if callable(least_squares_kws['jac']):
+            least_squares_kws['jac'] = self.__jacobian
 
         least_squares_kws['kwargs'].update({'apply_bounds_transformation': False})
         result.call_kws = least_squares_kws
