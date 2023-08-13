@@ -1595,7 +1595,7 @@ class ModelResult(Minimizer):
         fjac = {'0': np.zeros((nvarys, ndata), dtype='float64')}
         df2 = {'0': np.zeros(ndata, dtype='float64')}
 
-        for comp in self.components:
+        for comp in self.model.components:
             label = comp.prefix if len(comp.prefix) > 1 else comp._name
             fjac[label] = np.zeros((nvarys, ndata), dtype='float64')
             df2[label] = np.zeros(ndata, dtype='float64')

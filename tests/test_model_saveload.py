@@ -230,6 +230,32 @@ def test_saveload_modelresult_roundtrip(method):
     assert_allclose(result3.params['b'], 0.22, rtol=1.0e-2)
 
 
+def test_saveload_modelresult_eval_uncertainty():
+    """Test for ModelResult.loads() and eval_uncertainty
+    GH Issue #909
+
+    """
+    savefile = 'modres_x.txt'
+    x = np.linspace(-10, 10, 201)
+    amp, cen, wid = 3.4, 1.8, 0.5
+
+    y = amp * np.exp(-(x-cen)**2 / (2*wid**2)) / (np.sqrt(2*np.pi)*wid)
+    y += np.random.normal(size=x.size, scale=0.01)
+
+    gmod = GaussianModel()
+    result = gmod.fit(y, x=x, amplitude=5, center=2, sigma=1)
+    save_modelresult(result, savefile)
+    time.sleep(0.25)
+
+    result2 = load_modelresult(savefile)
+
+    dymod = result2.eval_uncertainty()
+
+    assert len(dymod) == len(x)
+    assert dymod.sum() > 0.
+    os.unlink(savefile)
+
+
 def test_saveload_modelresult_expression_model():
     """Test for ModelResult.loads()/dumps() for ExpressionModel.
 
