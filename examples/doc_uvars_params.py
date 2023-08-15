@@ -24,10 +24,10 @@ print(out.fit_report(min_correl=0.5))
 # Area and Centroid of the combined peaks
 # option 1: from output uncertainties values
 
-uvar_g1amp = out.uvars['g1_amplitude']
-uvar_g2amp = out.uvars['g2_amplitude']
-uvar_g1cen = out.uvars['g1_center']
-uvar_g2cen = out.uvars['g2_center']
+uvar_g1amp = out.params.uvars['g1_amplitude']
+uvar_g2amp = out.params.uvars['g2_amplitude']
+uvar_g1cen = out.params.uvars['g1_center']
+uvar_g2cen = out.params.uvars['g2_center']
 
 print("### Peak Area: ")
 print(f"Peak1: {out.params['g1_amplitude'].value:.5f}+/-{out.params['g1_amplitude'].stderr:.5f}")
