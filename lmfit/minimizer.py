@@ -818,7 +818,8 @@ class Minimizer:
             except ZeroDivisionError:
                 self.result.errorbars = False
         if self.result.errorbars:
-            self.result.uvars = self.result.params.create_uvars(covar=self.result.covar)
+            self.result.params.uvars = self.result.params.create_uvars(covar=self.result.covar)
+            self.result.uvars = self.result.params.uvars    # preserve for back compat for some time? (August, 2023)
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
