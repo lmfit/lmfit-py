@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 
+from lmfit import create_params, minimize
 from lmfit.models import ExponentialModel, GaussianModel
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
@@ -96,3 +97,36 @@ def test_uvars_calc_post_fit_method():
 
     assert post_area.stderr > 43
     assert post_area.stderr < 48
+
+
+def test_uvars_with_minimize():
+    "test that uvars is an attribute of params GH #911"
+    def residual(pars, x, data=None):
+        """Model a decaying sine wave and subtract data."""
+        vals = pars.valuesdict()
+        amp = vals['amp']
+        per = vals['period']
+        shift = vals['shift']
+        decay = vals['decay']
+
+        if abs(shift) > np.pi/2:
+            shift = shift - np.sign(shift)*np.pi
+        model = amp * np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
+        if data is None:
+            return model
+        return model - data
+
+    p_true = create_params(amp=14.0, period=5.46, shift=0.123, decay=0.032)
+    np.random.seed(0)
+    x = np.linspace(0.0, 250., 1001)
+    noise = np.random.normal(scale=0.7215, size=x.size)
+    data = residual(p_true, x) + noise
+
+    fit_params = create_params(amp=13, period=2, shift=0, decay=0.02)
+    out = minimize(residual, fit_params, args=(x,), kws={'data': data})
+
+    assert hasattr(out, 'uvars')
+    assert out.uvars['amp'].nominal_value > 10
+    assert out.uvars['amp'].nominal_value < 20
+    assert out.uvars['amp'].std_dev > 0.05
+    assert out.uvars['amp'].std_dev < 0.50
