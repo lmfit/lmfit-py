@@ -330,6 +330,18 @@ Goodness-of-Fit Statistics
 +----------------------+----------------------------------------------------------------------------+
 |    nfree             | degrees of freedom in fit: :math:`N - N_{\rm varys}`                       |
 +----------------------+----------------------------------------------------------------------------+
+|    aborted           | boolean of whether the fit has been aborted.                               |
++----------------------+----------------------------------------------------------------------------+
+|    success           | boolean for a minimal test of whether the fit finished successfully        |
++----------------------+----------------------------------------------------------------------------+
+|    errorbars         | boolean of whether error bars and unccertainty were estimated              |
++----------------------+----------------------------------------------------------------------------+
+|    ier               | integer flag describing message from ``leastsq``.                          |
++----------------------+----------------------------------------------------------------------------+
+|    message           | simple message from ``leastsq``                                            |
++----------------------+----------------------------------------------------------------------------+
+|    method            | name of fitting methods                                                    |
++----------------------+----------------------------------------------------------------------------+
 |    residual          | residual array, returned by the objective function: :math:`\{\rm Resid_i\}`|
 +----------------------+----------------------------------------------------------------------------+
 |    chisqr            | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
@@ -340,11 +352,17 @@ Goodness-of-Fit Statistics
 +----------------------+----------------------------------------------------------------------------+
 |    bic               | Bayesian Information Criterion statistic (see below)                       |
 +----------------------+----------------------------------------------------------------------------+
+|    params            | best-fit parameters after fit, with uncertainties is available             |
++----------------------+----------------------------------------------------------------------------+
 |    var_names         | ordered list of variable parameter names used for init_vals and covar      |
 +----------------------+----------------------------------------------------------------------------+
 |    covar             | covariance matrix (with rows/columns using var_names)                      |
 +----------------------+----------------------------------------------------------------------------+
 |    init_vals         | list of initial values for variable parameters                             |
++----------------------+----------------------------------------------------------------------------+
+|    init_values       | dictionary of initial values for variable Parameters.                      |
++----------------------+----------------------------------------------------------------------------+
+|    uvars             | dictionary of uncertainties uvalues for all Parameters.                    |
 +----------------------+----------------------------------------------------------------------------+
 |    call_kws          | dict of keyword arguments sent to underlying solver                        |
 +----------------------+----------------------------------------------------------------------------+
@@ -424,15 +442,25 @@ these statistics.
 Uncertainties in Variable Parameters, and their Correlations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _uncertainties:   https://github.com/lebigot/uncertainties/
+
 As mentioned above, when a fit is complete the uncertainties for fitted
-Parameters as well as the correlations between pairs of Parameters are
-usually calculated. This happens automatically either when using the
-default :meth:`leastsq` method, the :meth:`least_squares` method, or for
-most other fitting methods if the highly-recommended ``numdifftools``
-package is available. The estimated standard error (the :math:`1\sigma`
-uncertainty) for each variable Parameter will be contained in the
-:attr:`stderr`, while the :attr:`correl` attribute for each Parameter will
-contain a dictionary of the correlation with each other variable Parameter.
+Parameters as well as the correlations between pairs of Parameters are usually
+calculated. This happens automatically either when using the default
+:meth:`leastsq` method, the :meth:`least_squares` method, or for most other
+fitting methods if the highly-recommended ``numdifftools`` package is
+available. The estimated standard error (the :math:`1\sigma` uncertainty) for
+each variable Parameter will be contained in the :attr:`stderr`, while the
+:attr:`correl` attribute for each Parameter will contain a dictionary of the
+correlation with each other variable Parameter.  These updated parameters with
+uncertainty and correlation information will be placed in
+``MinimizerResult.params``, so that you may access the best fit value, standard
+error and correlation. For a successful fit for which uncertainties and
+correlations can be calculated, the ``MinimizerResult`` will also have a
+``uvars`` attribute that is a dictionary with keynames for each Parameter
+(includnig constraints) and values of ``Ufloats`` from the `uncertainties`_
+package using the best fit values, the standard error and the correlation
+between Parameters.
 
 These estimates of the uncertainties are done by inverting the Hessian
 matrix which represents the second derivative of fit quality for each
