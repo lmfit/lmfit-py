@@ -1970,7 +1970,8 @@ categories.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.params">
 <span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#lmfit.model.params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameters used in fit; will contain the best-fit values.</p>
+<dd><p>Parameters used in fit; will contain the best-fit values and uncertainties
+if available.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3056,7 +3057,7 @@ binary operator. A full script using this technique is here:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
-    (Model(jump) &lt;function convolve at 0x15d0c93f0&gt; Model(gaussian))
+    (Model(jump) &lt;function convolve at 0x15a961090&gt; Model(gaussian))
 [[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 33
@@ -3121,7 +3122,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>

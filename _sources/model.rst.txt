@@ -818,7 +818,8 @@ Parameters and Variables
 
 .. attribute::  params
 
-   Parameters used in fit; will contain the best-fit values.
+   Parameters used in fit; will contain the best-fit values and uncertainties
+   if available.
 
 .. attribute:: uvars
 

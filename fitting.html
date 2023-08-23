@@ -961,6 +961,24 @@ are all attributes of the <a class="reference internal" href="#lmfit.minimizer.M
 <tr class="row-odd"><td><p>nfree</p></td>
 <td><p>degrees of freedom in fit: <span class="math notranslate nohighlight">\(N - N_{\rm varys}\)</span></p></td>
 </tr>
+<tr class="row-even"><td><p>aborted</p></td>
+<td><p>boolean of whether the fit has been aborted.</p></td>
+</tr>
+<tr class="row-odd"><td><p>success</p></td>
+<td><p>boolean for a minimal test of whether the fit finished successfully</p></td>
+</tr>
+<tr class="row-even"><td><p>errorbars</p></td>
+<td><p>boolean of whether error bars and unccertainty were estimated</p></td>
+</tr>
+<tr class="row-odd"><td><p>ier</p></td>
+<td><p>integer flag describing message from <code class="docutils literal notranslate"><span class="pre">leastsq</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>message</p></td>
+<td><p>simple message from <code class="docutils literal notranslate"><span class="pre">leastsq</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>method</p></td>
+<td><p>name of fitting methods</p></td>
+</tr>
 <tr class="row-even"><td><p>residual</p></td>
 <td><p>residual array, returned by the objective function: <span class="math notranslate nohighlight">\(\{\rm Resid_i\}\)</span></p></td>
 </tr>
@@ -976,16 +994,25 @@ are all attributes of the <a class="reference internal" href="#lmfit.minimizer.M
 <tr class="row-even"><td><p>bic</p></td>
 <td><p>Bayesian Information Criterion statistic (see below)</p></td>
 </tr>
-<tr class="row-odd"><td><p>var_names</p></td>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>best-fit parameters after fit, with uncertainties is available</p></td>
+</tr>
+<tr class="row-even"><td><p>var_names</p></td>
 <td><p>ordered list of variable parameter names used for init_vals and covar</p></td>
 </tr>
-<tr class="row-even"><td><p>covar</p></td>
+<tr class="row-odd"><td><p>covar</p></td>
 <td><p>covariance matrix (with rows/columns using var_names)</p></td>
 </tr>
-<tr class="row-odd"><td><p>init_vals</p></td>
+<tr class="row-even"><td><p>init_vals</p></td>
 <td><p>list of initial values for variable parameters</p></td>
 </tr>
-<tr class="row-even"><td><p>call_kws</p></td>
+<tr class="row-odd"><td><p>init_values</p></td>
+<td><p>dictionary of initial values for variable Parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p>uvars</p></td>
+<td><p>dictionary of uncertainties uvalues for all Parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>call_kws</p></td>
 <td><p>dict of keyword arguments sent to underlying solver</p></td>
 </tr>
 </tbody>
@@ -1044,14 +1071,22 @@ these statistics.</p>
 <section id="uncertainties-in-variable-parameters-and-their-correlations">
 <h3>Uncertainties in Variable Parameters, and their Correlations<a class="headerlink" href="#uncertainties-in-variable-parameters-and-their-correlations" title="Permalink to this heading">¶</a></h3>
 <p>As mentioned above, when a fit is complete the uncertainties for fitted
-Parameters as well as the correlations between pairs of Parameters are
-usually calculated. This happens automatically either when using the
-default <code class="xref py py-meth docutils literal notranslate"><span class="pre">leastsq()</span></code> method, the <code class="xref py py-meth docutils literal notranslate"><span class="pre">least_squares()</span></code> method, or for
-most other fitting methods if the highly-recommended <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code>
-package is available. The estimated standard error (the <span class="math notranslate nohighlight">\(1\sigma\)</span>
-uncertainty) for each variable Parameter will be contained in the
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">stderr</span></code>, while the <code class="xref py py-attr docutils literal notranslate"><span class="pre">correl</span></code> attribute for each Parameter will
-contain a dictionary of the correlation with each other variable Parameter.</p>
+Parameters as well as the correlations between pairs of Parameters are usually
+calculated. This happens automatically either when using the default
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">leastsq()</span></code> method, the <code class="xref py py-meth docutils literal notranslate"><span class="pre">least_squares()</span></code> method, or for most other
+fitting methods if the highly-recommended <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package is
+available. The estimated standard error (the <span class="math notranslate nohighlight">\(1\sigma\)</span> uncertainty) for
+each variable Parameter will be contained in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">stderr</span></code>, while the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">correl</span></code> attribute for each Parameter will contain a dictionary of the
+correlation with each other variable Parameter.  These updated parameters with
+uncertainty and correlation information will be placed in
+<code class="docutils literal notranslate"><span class="pre">MinimizerResult.params</span></code>, so that you may access the best fit value, standard
+error and correlation. For a successful fit for which uncertainties and
+correlations can be calculated, the <code class="docutils literal notranslate"><span class="pre">MinimizerResult</span></code> will also have a
+<code class="docutils literal notranslate"><span class="pre">uvars</span></code> attribute that is a dictionary with keynames for each Parameter
+(includnig constraints) and values of <code class="docutils literal notranslate"><span class="pre">Ufloats</span></code> from the <a class="reference external" href="https://github.com/lebigot/uncertainties/">uncertainties</a>
+package using the best fit values, the standard error and the correlation
+between Parameters.</p>
 <p>These estimates of the uncertainties are done by inverting the Hessian
 matrix which represents the second derivative of fit quality for each
 variable parameter. There are situations for which the uncertainties cannot
@@ -2352,7 +2387,7 @@ calculate the 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</sp
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     </div>
   </body>
 </html>
