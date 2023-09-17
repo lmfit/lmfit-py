@@ -3,6 +3,7 @@
 from base64 import b64decode, b64encode
 import sys
 import warnings
+from io import StringIO
 
 import numpy as np
 import uncertainties
@@ -127,9 +128,9 @@ def decode4js(obj):
             out = np.fromiter(obj['value'], dtype=obj['__dtype__'])
         out.shape = obj['__shape__']
     elif classname == 'PDataFrame' and read_json is not None:
-        out = read_json(obj['value'])
+        out = read_json(StringIO(obj['value']))
     elif classname == 'PSeries' and read_json is not None:
-        out = read_json(obj['value'], typ='series')
+        out = read_json(StringIO(obj['value']), typ='series')
     elif classname == 'UFloat':
         out = uncertainties.ufloat(obj['val'], obj['err'])
     elif classname == 'Callable':
