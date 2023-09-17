@@ -1,9 +1,9 @@
 """JSON utilities."""
 
 from base64 import b64decode, b64encode
+from io import StringIO
 import sys
 import warnings
-from io import StringIO
 
 import numpy as np
 import uncertainties
