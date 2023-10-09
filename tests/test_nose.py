@@ -547,7 +547,7 @@ class CommonMinimizerTest(unittest.TestCase):
         # attribute
         assert hasattr(self.mini, '_lastpos')
 
-        # now try and re-use sampler
+        # now try and reuse sampler
         out2 = self.mini.emcee(steps=10, reuse_sampler=True)
         assert out2.chain.shape == (35, 20, 4)
 
