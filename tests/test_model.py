@@ -1535,3 +1535,20 @@ def test_compositemodel_returning_list():
     pars.add('m2_k', value=0.5)
     result = ModelSum.fit(y, pars, x=x)
     assert len(result.best_fit) == len(x)
+
+
+def test_rsquared_with_weights():
+    """Github #921"""
+    def func(x, k=1, b=0):
+        return k*x+b
+
+    x = np.array([1, 2, 3, 4])
+    y = np.array([1.1, 1.9, 3.05, 3.95])
+    yerr = np.array([0.03, 0.04, 0.01, 0.02])
+
+    mod = Model(func)
+    params = mod.make_params()
+    result = mod.fit(y, params, x=x, weights=1.0/yerr)
+
+    assert result.rsquared < 1.00
+    assert result.rsquared > 0.95
