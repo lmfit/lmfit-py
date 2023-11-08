@@ -1475,15 +1475,16 @@ class ModelResult(Minimizer):
                 except AttributeError:
                     pass
 
-        if self.data is not None and len(self.data) > 1:
-            dat = coerce_arraylike(self.data)
-            sstot = ((dat - dat.mean())**2).sum()
-            if isinstance(self.residual, np.ndarray) and len(self.residual) > 1:
-                self.rsquared = 1.0 - (self.residual**2).sum()/max(tiny, sstot)
-
         self.init_values = self.model._make_all_args(self.init_params)
         self.best_values = self.model._make_all_args(_ret.params)
         self.best_fit = self.model.eval(params=_ret.params, **self.userkws)
+        if (self.data is not None and len(self.data) > 1
+           and isinstance(self.best_fit, np.ndarray)
+           and len(self.best_fit) > 1):
+            dat = coerce_arraylike(self.data)
+            resid = ((dat - self.best_fit)**2).sum()
+            sstot = ((dat - dat.mean())**2).sum()
+            self.rsquared = 1.0 - resid/max(tiny, sstot)
 
     def eval(self, params=None, **kwargs):
         """Evaluate model function.
