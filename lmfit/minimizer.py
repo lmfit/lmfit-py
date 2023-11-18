@@ -22,7 +22,6 @@ import numbers
 import warnings
 
 import numpy as np
-from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -1735,12 +1734,8 @@ class Minimizer:
         basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
                                 minimizer_kwargs=None, take_step=None,
                                 accept_test=None, callback=None, interval=50,
-                                disp=False, niter_success=None, seed=None)
-
-        # FIXME: update when SciPy requirement is >= 1.8
-        if int(scipy_version.split('.')[1]) >= 8:
-            basinhopping_kws.update({'target_accept_rate': 0.5,
-                                     'stepwise_factor': 0.9})
+                                disp=False, niter_success=None, seed=None,
+                                target_accept_rate=0.5, stepwise_factor=0.9)
 
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
@@ -2118,13 +2113,9 @@ class Minimizer:
 
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
+        shgo_kws = dict(constraints=None, n=None, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
                         sampling_method='simplicial')
-
-        # FIXME: update when SciPy requirement is >= 1.7
-        if int(scipy_version.split('.')[1]) >= 7:
-            shgo_kws['n'] = None
 
         shgo_kws.update(self.kws)
         shgo_kws.update(kws)
@@ -2196,18 +2187,13 @@ class Minimizer:
         result.method = 'dual_annealing'
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        da_kws = dict(maxiter=1000, local_search_options={},
-                      initial_temp=5230.0, restart_temp_ratio=2e-05,
-                      visit=2.62, accept=-5.0, maxfun=2*self.max_nfev,
-                      seed=None, no_local_search=False, callback=None, x0=None)
+        da_kws = dict(maxiter=1000, minimizer_kwargs=None, initial_temp=5230.0,
+                      restart_temp_ratio=2e-05, visit=2.62, accept=-5.0,
+                      maxfun=2*self.max_nfev, seed=None, no_local_search=False,
+                      callback=None, x0=None)
 
         da_kws.update(self.kws)
         da_kws.update(kws)
-
-        # FIXME: update when SciPy requirement is >= 1.8
-        # ``local_search_options`` deprecated in favor of ``minimizer_kwargs``
-        if int(scipy_version.split('.')[1]) >= 8:
-            da_kws.update({'minimizer_kwargs': da_kws.pop('local_search_options')})
 
         varying = np.asarray([par.vary for par in self.params.values()])
         bounds = np.asarray([(par.min, par.max) for par in

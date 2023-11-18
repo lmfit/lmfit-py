@@ -3,7 +3,6 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-from scipy import __version__ as scipy_version
 
 import lmfit
 from lmfit._ampgo import ampgo, tunnel
@@ -60,15 +59,7 @@ def test_ampgo_local_solver(minimizer_Alpine02):
     """Test AMPGO algorithm with local solver."""
     kws = {'local': 'Nelder-Mead'}
 
-    # bounds in Nelder-Mead are supported since SciPy v1.7.0
-    # FIXME: clean this up after we require SciPy >= 1.7.0
-    if int(scipy_version.split('.')[1]) < 7:
-        msg = r'Method Nelder-Mead cannot handle constraints nor bounds'
-        with pytest.warns(RuntimeWarning, match=msg):
-            out = minimizer_Alpine02.minimize(method='ampgo', **kws)
-    else:
-        out = minimizer_Alpine02.minimize(method='ampgo', **kws)
-
+    out = minimizer_Alpine02.minimize(method='ampgo', **kws)
     out_x = np.array([out.params['x0'].value, out.params['x1'].value])
 
     assert 'ampgo' and 'Nelder-Mead' in out.method
