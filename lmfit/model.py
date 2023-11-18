@@ -1047,9 +1047,9 @@ class Model:
                 params[name].set(value=p)
             del kwargs[name]
 
-        # All remaining kwargs should correspond to independent variables.
+        # Check for spurious kwargs.
         for name in kwargs:
-            if name not in self.independent_vars:
+            if name not in self._func_allargs:
                 warnings.warn(f"The keyword argument {name} does not " +
                               "match any arguments of the model function. " +
                               "It will be ignored.", UserWarning)
