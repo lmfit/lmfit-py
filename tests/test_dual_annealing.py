@@ -3,7 +3,6 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import scipy
-from scipy import __version__ as scipy_version
 
 import lmfit
 
@@ -53,13 +52,6 @@ def test_da_Alpine02(minimizer_Alpine02):
     assert_allclose(min(out_x), min(global_optimum), rtol=1e-3)
     assert_allclose(max(out_x), max(global_optimum), rtol=1e-3)
     assert out.method == 'dual_annealing'
-
-    # FIXME: update when SciPy requirement is >= 1.8
-    # ``local_search_options`` deprecated in favor of ``minimizer_kwargs``
-    if int(scipy_version.split('.')[1]) >= 8:
-        assert 'minimizer_kwargs' in out.call_kws
-    else:
-        assert 'local_search_options' in out.call_kws
 
 
 def test_da_bounds(minimizer_Alpine02):

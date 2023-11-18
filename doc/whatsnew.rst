@@ -11,10 +11,24 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_130_label:
+
+Version 1.3.0 Release Notes (TBD)
+=================================
+
+New features:
+
+Bug fixes/enhancements:
+
+Maintenance/Deprecations:
+
+- drop support for Python 3.7 that reached EOL on 2023-06-27 (PR #927)
+
+
 .. _whatsnew_122_label:
 
 Version 1.2.2 Release Notes (July 14, 2023)
-=================================================
+===========================================
 
 New features:
 
@@ -56,13 +70,10 @@ Bug fixes/enhancements:
   improved, and create fewer entries in the Table of Contents for Jupyter lab.
   (Issue #884; PR #883; PR #902)
 
-
-
-
 .. _whatsnew_121_label:
 
 Version 1.2.1 Release Notes (May 02, 2023)
-=================================================
+==========================================
 
 Bug fixes/enhancements:
 
@@ -75,7 +86,7 @@ Bug fixes/enhancements:
 .. _whatsnew_120_label:
 
 Version 1.2.0 Release Notes (April 05, 2023)
-=================================================
+============================================
 
 New features:
 
@@ -110,7 +121,7 @@ Bug fixes/enhancements:
 .. _whatsnew_110_label:
 
 Version 1.1.0 Release Notes (November 27, 2022)
-=================================================
+===============================================
 
 New features:
 
