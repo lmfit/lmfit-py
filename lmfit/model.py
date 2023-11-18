@@ -520,11 +520,12 @@ class Model:
         if self.independent_vars is None:
             self.independent_vars = [pos_args[0]]
 
-        # default param names: all positional args
-        # except independent variables
         self.def_vals = {}
         might_be_param = []
         if self._param_root_names is None:
+            # default param names: all positional args
+            # and keyword args with numerical default values,
+            # except independent variables
             self._param_root_names = pos_args[:]
             for key, val in kw_args.items():
                 if (not isinstance(val, bool) and
@@ -536,6 +537,13 @@ class Model:
             for p in self.independent_vars:
                 if p in self._param_root_names:
                     self._param_root_names.remove(p)
+        else:
+            # still use default values of keyword args
+            for p in self._param_root_names:
+                if (p in kw_args and
+                    (not isinstance(kw_args[p], bool) and
+                     isinstance(kw_args[p], (float, int)))):
+                    self.def_vals[p] = kw_args[p]
 
         new_opts = {}
         for opt, val in self.opts.items():

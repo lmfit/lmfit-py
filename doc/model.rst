@@ -313,9 +313,10 @@ more than one independent variable.
 If not specified, Parameters are constructed from all positional arguments
 and all keyword arguments that have a default value that is numerical, except
 the independent variable, of course. Importantly, the Parameters can be
-modified after creation. In fact, you will have to do this because none of the
-parameters have valid initial values. In addition, one can place bounds and
-constraints on Parameters, or fix their values.
+modified after creation. In fact, you may have to do this because none of the
+parameters constructed from positional arguments have valid initial values.
+In addition, one can place bounds and constraints on Parameters, or fix their
+values.
 
 
 Explicitly specifying ``independent_vars``
