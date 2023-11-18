@@ -2079,7 +2079,7 @@ class ModelResult(Minimizer):
             ax.plot(x_array, reduce_complex(self.data),
                     datafmt, label='data', **data_kws)
 
-        y_eval = self.model.eval(self.params, **{independent_var: x_array_dense})
+        y_eval = self.eval(self.params, **{independent_var: x_array_dense})
         if isinstance(self.model, (lmfit.models.ConstantModel,
                                    lmfit.models.ComplexConstantModel)):
             y_eval *= np.ones(x_array_dense.size)
