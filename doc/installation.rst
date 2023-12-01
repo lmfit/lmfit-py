@@ -57,7 +57,7 @@ the Python packages `sphinxcontrib-svg2pdfconverter`_ and `cairosvg`_ are also r
 as well as the LaTex package `Latexmk`_ (which is included by default in some
 LaTex distributions).
 
-Please refer to ``setup.cfg`` under ``options.extras_require`` for a list of all
+Please refer to ``pyproject.toml`` under ``project.optional-dependencies`` for a list of all
 dependencies that are needed if you want to participate in the development of lmfit.
 You can install all these dependencies automatically by doing ``pip install lmfit[all]``,
 or select only a subset (e.g., ``dev```, ``doc``, or ``test``).

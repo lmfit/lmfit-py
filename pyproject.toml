@@ -2,6 +2,142 @@
 requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "lmfit"
+dynamic = ["version"]
+dependencies = [
+    "asteval>=0.9.28",
+    "numpy>=1.19",
+    "scipy>=1.6",
+    "uncertainties>=3.1.4",
+]
+requires-python = ">= 3.8"
+authors = [
+    {name = "LMFit Development Team", email = "matt.newville@gmail.com"},
+]
+description = "Least-Squares Minimization with Bounds and Constraints"
+readme = "README.rst"
+license = {file = "LICENSE"}
+keywords = ["curve-fitting, least-squares minimization"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.urls]
+Homepage = "https://lmfit.github.io//lmfit-py/"
+Documentation = "https://lmfit.github.io/lmfit-py/"
+Changelog = "https://lmfit.github.io/lmfit-py/whatsnew.html"
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "check-wheel-contents",
+    "flake8-pyproject",
+    "pre-commit",
+    "twine",
+]
+doc = [
+    "cairosvg",
+    "corner",
+    "dill",
+    "emcee>=3.0.0",
+    "ipykernel",
+    "jupyter_sphinx>=0.2.4",
+    "matplotlib",
+    "numdifftools",
+    "pandas",
+    "Pillow",
+    "pycairo;platform_system=='Windows'",
+    "Sphinx",
+    "sphinx-gallery>=0.10",
+    "sphinxcontrib-svg2pdfconverter",
+    "sympy",
+]
+test = [
+    "coverage",
+    "flaky",
+    "pytest",
+    "pytest-cov",
+]
+all = ["lmfit[dev, doc, test]"]
+
+[tool.setuptools.packages.find]
+include = ["lmfit"]
+
 [tool.setuptools_scm]
 write_to = "lmfit/version.py"
 version_scheme = "post-release"
+
+[tool.isort]
+skip = [
+    "lmfit/__init__.py",
+    "doc/conf.py",
+]
+known_third_party = [
+    "asteval",
+    "dill" ,
+    "emcee",
+    "IPython",
+    "matplotlib",
+    "numdifftools",
+    "numpy",
+    "NISTModels",
+    "pandas",
+    "pytest",
+    "scipy",
+    "uncertainties",
+]
+known_first_party = [
+    "lmfit",
+    "lmfit_testutils",
+]
+force_sort_within_sections = "True"
+
+[tool.rstcheck]
+report_level = "WARNING"
+ignore_substitutions = [
+    "release"
+]
+ignore_roles = [
+    "scipydoc",
+    "numpydoc",
+]
+ignore_directives = [
+    "autoclass",
+    "autodoc",
+    "autofunction",
+    "automethod",
+    "jupyter-execute",
+    "math",
+]
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=lmfit --cov-report html"
+
+[tool.flake8]
+ignore = [
+    "E121", "E123", "E126", "E226",
+    "W503", "W504", "E501", "E731",
+]
+exclude = [
+    "doc/conf.py",
+    "lmfit/__init__.py",
+]
