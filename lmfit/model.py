@@ -1891,7 +1891,7 @@ class ModelResult(Minimizer):
                 _par = Parameter(name='')
                 _par.__setstate__(parstate)
                 state['params'].append(_par)
-            _params = Parameters()
+            _params = Parameters(usersyms=funcdefs)
             _params.__setstate__(state)
             setattr(self, target, _params)
 
