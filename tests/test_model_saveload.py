@@ -254,8 +254,10 @@ def test_saveload_modelresult_roundtrip_user_expr_function():
     result2 = ModelResult(model, Parameters())
     result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc, 'expr_func': expr_func})
 
+    assert result1.userfcn == result2.userfcn
     assert result1.params == result2.params
     assert result1.init_params == result2.init_params
+    assert set(result1.params._asteval.symtable) == set(result2.params._asteval.symtable)
 
 
 def test_saveload_modelresult_eval_uncertainty():
