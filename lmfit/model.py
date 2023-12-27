@@ -145,7 +145,7 @@ def propagate_err(z, dz, option):
     if option not in ['real', 'imag', 'abs', 'angle']:
         raise ValueError(f"Invalid option ('{option}') for function 'propagate_err'.")
 
-    if z.shape != dz.shape:
+    if isinstance(dz, np.ndarray) and z.shape != dz.shape:
         raise ValueError(f"shape of z: {z.shape} != shape of dz: {dz.shape}")
 
     # Check the main vector for complex. Do nothing if real.
@@ -1531,7 +1531,7 @@ class ModelResult(Minimizer):
             params = self.params
         return self.model.eval_components(params=params, **userkws)
 
-    def eval_uncertainty(self, params=None, sigma=1, **kwargs):
+    def eval_uncertainty(self, params=None, sigma=1, dscale=0.01, **kwargs):
         """Evaluate the uncertainty of the *model function*.
 
         This can be used to give confidence bands for the model from the
@@ -1543,6 +1543,8 @@ class ModelResult(Minimizer):
             Parameters, defaults to ModelResult.params.
         sigma : float, optional
             Confidence level, i.e. how many sigma (default is 1).
+        dscale : float, optional
+            scale for derivative steps (default is 0.01)
         **kwargs : optional
             Values of options, independent variables, etcetera.
 
@@ -1563,7 +1565,9 @@ class ModelResult(Minimizer):
            < 1, it is interpreted as the probability itself. That is,
            ``sigma=1`` and ``sigma=0.6827`` will give the same results,
            within precision errors.
-        3. Also sets attributes of `dely` for the uncertainty of the model
+        3. The derivatives are calculated by stepping each Parameter from its best value to
+           to +/- stderr*dscale, where dscale can be passed in and defaults to 0.01.
+        4. Also sets attributes of `dely` for the uncertainty of the model
            (which will be the same as the array returned by this method) and
            `dely_comps`, a dictionary of `dely` for each component.
 
@@ -1605,8 +1609,9 @@ class ModelResult(Minimizer):
         pars = params.copy()
         for i in range(nvarys):
             pname = self.var_names[i]
-            val0 = pars[pname].value
-            dval = pars[pname].stderr/3.0
+            val0 = params[pname].value
+            dval = params[pname].stderr*dscale
+
             pars[pname].value = val0 + dval
             res1 = {'0': self.model.eval(pars, **userkws)}
             res1.update(self.model.eval_components(params=pars, **userkws))
@@ -2070,7 +2075,6 @@ class ModelResult(Minimizer):
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
-
         if yerr is not None:
             ax.errorbar(x_array, reduce_complex(self.data),
                         yerr=propagate_err(self.data, yerr, parse_complex),
