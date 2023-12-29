@@ -1567,10 +1567,12 @@ class ModelResult(Minimizer):
            within precision errors.
         3. The derivatives are calculated by stepping each Parameter from its best value to
            to +/- stderr*dscale, where dscale can be passed in and defaults to 0.01.
-        4. Also sets attributes of `dely` for the uncertainty of the model
+        4. sets attributes of `dely` for the uncertainty of the model
            (which will be the same as the array returned by this method) and
            `dely_comps`, a dictionary of `dely` for each component.
-
+        5. sets the attribute of `dely_predicted` for the 'predicted interval', the sigma-scaled
+           quadrature sum of the uncertainty interval dely and reduced chi-square.  This should
+           give an idea of the expected range in the data.
 
         Examples
         --------
@@ -1642,7 +1644,9 @@ class ModelResult(Minimizer):
             for key in fjac:
                 df2[key] = df2[key][0::2] + 1j * df2[key][1::2]
 
-        self.dely = scale * np.sqrt(df2.pop('0'))
+        df2_total = df2.pop('0')
+        self.dely = scale * np.sqrt(df2_total)
+        self.dely_predicted = scale * np.sqrt(df2_total + self.redchi)
 
         self.dely_comps = {}
         for key in df2:
