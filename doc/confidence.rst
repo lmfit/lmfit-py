@@ -223,7 +223,7 @@ using :func:`conf_interval2d`:
 
         cnt = ax.contour(c_x, c_y, sigma_mat, levels=sigma_levels, colors=colors,
                          linestyles='-')
-        ax.clabel(cnt, inline=True, fmt="$\sigma=%.0f$", fontsize=13)
+        ax.clabel(cnt, inline=True, fmt=r"$\sigma=%.0f$", fontsize=13)
 
         # draw boxes for estimated uncertaties:
         #  dotted :  scaled stderr from initial fit
