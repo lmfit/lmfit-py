@@ -1068,7 +1068,7 @@ interval" -- the expected range for data matching the model, and hold this in
 ``result.dely_predicted``.  An example script showing both confidence and
 predicted intervals is shown below:
 
-.. jupyter-execute:: ../examples/doc_model_uncertainty_pred.ipynb
+.. jupyter-execute:: ../examples/doc_model_uncertainty_pred.py
 
 
 .. _modelresult_uvars_postfit_section:
