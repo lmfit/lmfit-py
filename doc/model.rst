@@ -850,14 +850,22 @@ Fit Arrays and Model
 
 .. attribute:: dely
 
-   numpy.ndarray of estimated uncertainties in the ``y`` values of the model
-   from :meth:`ModelResult.eval_uncertainty`  (see :ref:`eval_uncertainty_sec`).
+   numpy.ndarray of estimated uncertainties or *confidence interval* in the
+   ``y`` values of the model from :meth:`ModelResult.eval_uncertainty` (see
+   :ref:`eval_uncertainty_sec`).
 
 .. attribute:: dely_comps
 
    a dictionary of estimated uncertainties in the ``y`` values of the model
    components, from :meth:`ModelResult.eval_uncertainty` (see
    :ref:`eval_uncertainty_sec`).
+
+.. attribute:: dely_predicted
+
+   numpy.ndarray of estimated expected uncertainties in the data or *predicted
+   interval* in the ``y`` values of the model from
+   :meth:`ModelResult.eval_uncertainty` (see :ref:`eval_uncertainty_sec`).
+
 
 .. attribute:: init_fit
 
@@ -1052,6 +1060,15 @@ model can be calculated and used:
 
 .. jupyter-execute:: ../examples/doc_model_uncertainty2.py
 
+.. versionadded:: 1.2.3
+
+In addition to the "confidence interval" ``result.dely``, the
+:meth:`ModelResult.eval_uncertainty` method will also estimate the "predicted
+interval" -- the expected range for data matching the model, and hold this in
+``result.dely_predicted``.  An example script showing both confidence and
+predicted intervals is shown below:
+
+.. jupyter-execute:: ../examples/doc_model_uncertainty_pred.ipynb
 
 
 .. _modelresult_uvars_postfit_section:
