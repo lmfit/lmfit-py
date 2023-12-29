@@ -230,6 +230,36 @@ def test_saveload_modelresult_roundtrip(method):
     assert_allclose(result3.params['b'], 0.22, rtol=1.0e-2)
 
 
+def test_saveload_modelresult_roundtrip_user_expr_function():
+    """Test for modelresult.loads()/dumps() for a model with user defined expr function."""
+
+    def mfunc(x, a, b):
+        return a * (x-b)
+
+    def expr_func(x):
+        return 3 * x
+
+    model = Model(mfunc)
+    params = Parameters(usersyms={"expr_func": expr_func})
+    params.add("a", min=.01, max=1)
+    params.add("b", min=.01, max=3.1)
+    params.add("c", expr="expr_func(a)")
+
+    np.random.seed(2020)
+    xx = np.linspace(-5, 5, 201)
+    yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=xx.size)
+
+    result1 = model.fit(yy, params=params, x=xx)
+
+    result2 = ModelResult(model, Parameters())
+    result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc, 'expr_func': expr_func})
+
+    assert result1.userfcn == result2.userfcn
+    assert result1.params == result2.params
+    assert result1.init_params == result2.init_params
+    assert set(result1.params._asteval.symtable) == set(result2.params._asteval.symtable)
+
+
 def test_saveload_modelresult_eval_uncertainty():
     """Test for ModelResult.loads() and eval_uncertainty
     GH Issue #909

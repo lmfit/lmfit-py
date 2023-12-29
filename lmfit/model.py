@@ -1861,7 +1861,7 @@ class ModelResult(Minimizer):
         funcdefs : dict, optional
             Dictionary of custom function names and definitions.
         **kws : optional
-            Keyword arguments that are passed to `json.dumps`.
+            Keyword arguments that are passed to `json.loads`.
 
         Returns
         -------
@@ -1885,13 +1885,16 @@ class ModelResult(Minimizer):
         self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
 
         # params
+        if funcdefs:
+            # Remove model function so as not pass it into the _asteval.symtable
+            funcdefs.pop(self.model.func.__name__, None)
         for target in ('params', 'init_params'):
             state = {'unique_symbols': modres['unique_symbols'], 'params': []}
             for parstate in modres['params']:
                 _par = Parameter(name='')
                 _par.__setstate__(parstate)
                 state['params'].append(_par)
-            _params = Parameters()
+            _params = Parameters(usersyms=funcdefs)
             _params.__setstate__(state)
             setattr(self, target, _params)
 
