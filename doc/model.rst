@@ -1028,7 +1028,7 @@ That is, adding:
 
     dely = result.eval_uncertainty(sigma=3)
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
-                     label='3-$\sigma$ uncertainty band')
+                     label=r'3-$\sigma$ uncertainty band')
 
 to the example fit to the Gaussian at the beginning of this chapter will
 give 3-:math:`\sigma` bands for the best-fit Gaussian, and produce the
@@ -1041,7 +1041,7 @@ figure below.
     plt.plot(x, result.init_fit, '--', label='initial fit')
     plt.plot(x, result.best_fit, '-', label='best fit')
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
-                     label='3-$\sigma$ uncertainty band')
+                     label=r'3-$\sigma$ uncertainty band')
     plt.legend()
     plt.show()
 
@@ -1061,6 +1061,8 @@ model can be calculated and used:
 .. jupyter-execute:: ../examples/doc_model_uncertainty2.py
 
 .. versionadded:: 1.2.3
+
+
 
 In addition to the "confidence interval" ``result.dely``, the
 :meth:`ModelResult.eval_uncertainty` method will also estimate the "predicted
