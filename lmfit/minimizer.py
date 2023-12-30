@@ -906,11 +906,9 @@ class Minimizer:
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
         elif method == 'COBYLA':
             # for this method, we explicitly let the solver reach
-            # the users max nfev, and do not abort in _residual.
+            # the users max nfev, and do not abort in _residual
             fmin_kws['options']['maxiter'] = self.max_nfev
             self.max_nfev = 5*self.max_nfev
-
-        # fmin_kws = dict(method=method, options={'maxfun': 2*self.max_nfev})
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
