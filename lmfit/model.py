@@ -682,6 +682,8 @@ class Model:
             # val is expected to be float-like or a dict: must have 'value' or 'expr' key
             if isinstance(val, dict):
                 dval = val
+            elif np.iscomplex(val) or isinstance(val, complex):
+                dval = {'value': val.real}
             else:
                 dval = {'value': float(val)}
             if len(dval) < 1 or not ('value' in dval or 'expr' in dval):
@@ -1808,12 +1810,11 @@ class ModelResult(Minimizer):
         loads, json.dumps
 
         """
-        out = {'__class__': 'lmfit.ModelResult', '__version__': '1',
+        out = {'__class__': 'lmfit.ModelResult', '__version__': '2',
                'model': encode4js(self.model._get_state())}
-        pasteval = self.params._asteval
-        out['params'] = [p.__getstate__() for p in self.params.values()]
-        out['unique_symbols'] = {key: encode4js(pasteval.symtable[key])
-                                 for key in pasteval.user_defined_symbols()}
+
+        for attr in ('params', 'init_params'):
+            out[attr] = getattr(self, attr).dumps()
 
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
                      'ci_out', 'col_deriv', 'covar', 'errorbars', 'flatchain',
@@ -1828,7 +1829,6 @@ class ModelResult(Minimizer):
                 continue
             if isinstance(val, np.bool_):
                 val = bool(val)
-
             out[attr] = encode4js(val)
 
         val = out.get('message', '')
@@ -1896,19 +1896,28 @@ class ModelResult(Minimizer):
         if funcdefs:
             # Remove model function so as not pass it into the _asteval.symtable
             funcdefs.pop(self.model.func.__name__, None)
-        # params
-        if funcdefs:
-            # Remove model function so as not pass it into the _asteval.symtable
-            funcdefs.pop(self.model.func.__name__, None)
-        for target in ('params', 'init_params'):
-            state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-            for parstate in modres['params']:
-                _par = Parameter(name='')
-                _par.__setstate__(parstate)
-                state['params'].append(_par)
-            _params = Parameters(usersyms=funcdefs)
-            _params.__setstate__(state)
-            setattr(self, target, _params)
+
+        # how params are saved was changed with version 2:
+        modres_vers = modres.get('__version__', '1')
+        if modres_vers == '1':
+            for target in ('params', 'init_params'):
+                state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+                for parstate in modres['params']:
+                    _par = Parameter(name='')
+                    _par.__setstate__(parstate)
+                    state['params'].append(_par)
+                _params = Parameters(usersyms=funcdefs)
+                _params.__setstate__(state)
+                setattr(self, target, _params)
+
+        elif modres_vers == '2':
+            for target in ('params', 'init_params'):
+                _pars = Parameters()
+                _pars.loads(modres[target])
+                if funcdefs:
+                    for key, val in funcdefs.items():
+                        _pars._asteval.symtable[key] = val
+                setattr(self, target, _pars)
 
         for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
                      'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
@@ -1930,6 +1939,7 @@ class ModelResult(Minimizer):
             if par is not None:
                 par.correl = par.stderr = None
                 par.value = par.init_value = self.init_values[parname]
+
         self.init_fit = self.model.eval(self.init_params, **self.userkws)
         self.result = MinimizerResult()
         self.result.params = self.params
