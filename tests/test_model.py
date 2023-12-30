@@ -1079,6 +1079,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_composite_plotting(self):
         # test that a composite model has non-empty best_values
         import matplotlib
+        try:
+            matplotlib.pyplot.close('all')
+        except ValueError:
+            pass
         matplotlib.use('Agg')
 
         model1 = models.GaussianModel(prefix='g1_')

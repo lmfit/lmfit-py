@@ -106,6 +106,8 @@ def decode4js(obj):
         return obj
     out = obj
     classname = obj.pop('__class__', None)
+    if classname is None and isinstance(obj, dict):
+        classname = 'dict'
     if classname is None:
         return obj
     if classname == 'Complex':
