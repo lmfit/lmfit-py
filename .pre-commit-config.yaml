@@ -23,13 +23,13 @@ repos:
         args: [--remove]
 
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+    rev: 7.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-deprecated, flake8-mutable, Flake8-pyproject]
 
 -   repo: https://github.com/PyCQA/isort/
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
     -   id: isort
 
