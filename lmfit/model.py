@@ -815,11 +815,11 @@ class Model:
 
         diff = model - data
 
-        if diff.dtype == complex:
+        if diff.dtype is complex:
             # data/model are complex
             diff = diff.ravel().view(float)
             if weights is not None:
-                if weights.dtype == complex:
+                if weights.dtype is complex:
                     # weights are complex
                     weights = weights.ravel().view(float)
                 else:
