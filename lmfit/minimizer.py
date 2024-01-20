@@ -1382,7 +1382,7 @@ class Minimizer:
         # a ValueError. Note, you can't initialise with a position if you are
         # reusing the sampler.
         if pos is not None and not reuse_sampler:
-            tpos = np.asfarray(pos)
+            tpos = np.asarray(pos, dtype=np.float64)
             if p0.shape == tpos.shape:
                 pass
             # trying to initialise with a previous chain
@@ -2379,16 +2379,16 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
 
     Notes
     -----
-    Parts of this function are based on scipy/stats/stats.py/_contains_nan
+    Parts of this fudtype=np.float64nction are based on scipy/stats/stats.py/_contains_nan
 
-    support for 'array-like` objects is from numpy `asfarray`, which includes
+    support for 'array-like` objects is from numpy `asarray`, which includes
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects
     """
     if np.iscomplexobj(arr):
-        arr = np.asfarray(arr, dtype=np.complex128).view(np.float64)
+        arr = np.asarray(arr, dtype=np.complex128).view(np.float64)
     else:
-        arr = np.asfarray(arr, dtype=np.float64)
+        arr = np.asarray(arr, dtype=np.float64)
 
     if ravel:
         arr = arr.ravel(order=ravel_order)

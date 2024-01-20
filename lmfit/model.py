@@ -198,9 +198,9 @@ def coerce_arraylike(x):
     """
     if isinstance(x, (list, tuple, Series)) or hasattr(x, '__array__'):
         if np.isrealobj(x):
-            return np.asfarray(x)
+            return np.asarray(x, dtype=np.float64)
         if np.iscomplexobj(x):
-            return np.asfarray(x, dtype=np.complex128)
+            return np.asarray(x, dtype=np.complex128)
     return x
 
 
