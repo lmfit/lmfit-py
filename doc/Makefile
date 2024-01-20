@@ -76,6 +76,7 @@ clean:
 	-rm -rf examples/*
 	-rm -rf ../examples/documentation
 	-rm -rf __pycache__
+	-rm -rf sg_execution_times.rst
 
 dirhtml:  gallery
 	$(SPHINXBUILD) -b dirhtml $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/dirhtml

@@ -7,6 +7,7 @@ examples/documentation
 doc/*.pdf
 doc/*.dat
 doc/*.csv
+doc/sg_execution_times.rst
 doc/extensions.py
 build
 dist
