@@ -20,6 +20,7 @@ ALLSPHINXOPTS   = $(SPHINX_OUTPUT) $(SPHINXOPTS) .
 html:  gallery
 	cp sphinx/ext_mathjax.py extensions.py
 	$(SPHINXBUILD) -b html $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/html
+	./filter_spurious_link_from_html.py
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
 
