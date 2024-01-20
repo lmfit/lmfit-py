@@ -1546,7 +1546,7 @@ class ModelResult(Minimizer):
         sigma : float, optional
             Confidence level, i.e. how many sigma (default is 1).
         dscale : float, optional
-            scale for derivative steps (default is 0.01)
+            Scale for derivative steps (default is 0.01).
         **kwargs : optional
             Values of options, independent variables, etcetera.
 
@@ -1568,12 +1568,12 @@ class ModelResult(Minimizer):
            ``sigma=1`` and ``sigma=0.6827`` will give the same results,
            within precision errors.
         3. The derivatives are calculated by stepping each Parameter from its best value to
-           to +/- stderr*dscale, where dscale can be passed in and defaults to 0.01.
-        4. sets attributes of `dely` for the uncertainty of the model
+           to +/- stderr*dscale, where `dscale` can be passed in and defaults to 0.01.
+        4. Sets attributes of `dely` for the uncertainty of the model
            (which will be the same as the array returned by this method) and
            `dely_comps`, a dictionary of `dely` for each component.
-        5. sets the attribute of `dely_predicted` for the 'predicted interval', the sigma-scaled
-           quadrature sum of the uncertainty interval dely and reduced chi-square.  This should
+        5. Sets the attribute of `dely_predicted` for the 'predicted interval', the sigma-scaled
+           quadrature sum of the uncertainty interval `dely` and reduced chi-square. This should
            give an idea of the expected range in the data.
 
         Examples

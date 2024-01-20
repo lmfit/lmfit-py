@@ -242,7 +242,7 @@ function as a fitting model.
 
    See :ref:`model_param_hints_section`.
 
-..  automethod:: Model.post_fit
+.. automethod:: Model.post_fit
 
    See :ref:`modelresult_uvars_postfit_section`.
 
@@ -407,6 +407,7 @@ because it has a boolean default value. In some sense,
 However, because it has a default value it is not required to be given for
 each model evaluation or fit, as independent variables are.
 
+
 Defining a ``prefix`` for the Parameters
 ----------------------------------------
 
@@ -547,6 +548,7 @@ initial values for parameters. The methods can be combined, so that you
 can set parameter hints but then change the initial value explicitly with
 :meth:`Model.fit`.
 
+
 .. _model_param_hints_section:
 
 Using parameter hints
@@ -604,24 +606,24 @@ of:
 With that definition, the value (and uncertainty) of the ``fwhm`` parameter
 will be reported in the output of any fit done with that model.
 
+
 .. _model_data_coercion_section:
 
 Data Types for data  and independent data with ``Model``
--------------------------------------------------------------
+--------------------------------------------------------
 
 The model as defined by your model function will use the independent
-variable(s) you specify to best match the data you provide.  The model is meant
+variable(s) you specify to best match the data you provide. The model is meant
 to be an abstract representation for data, but when you do a fit with
 :meth:`Model.fit`, you really need to pass in values for the data to be modeled
 and the independent data used to calculate that data.
 
-
 As discussed in :ref:`fit-data-label`, the mathematical solvers used by
 ``lmfit`` all work exclusively with 1-dimensional numpy arrays of datatype
-(dtype) "float64".  The value of the calculation ``(model-data)*weights`` using
+(dtype) "float64". The value of the calculation ``(model-data)*weights`` using
 the calculation of your model function, and the data and weights you pass in
 **will always be coerced** to an 1-dimensional ndarray with dtype "float64"
-when it is passed to the solver.  If it cannot be coerced, an error will occur
+when it is passed to the solver. If it cannot be coerced, an error will occur
 and the fit will be aborted.
 
 That coercion will usually work for "array like" data that is not already a
@@ -630,25 +632,24 @@ the model function may not always work well for some "array like" data types
 - especially independent data that are in list of numbers and ndarrays of type
 "float32" or "int16" or less precision.
 
-
 To be clear, independent data for models using ``Model`` are meant to be truly
 independent, and not **not** required to be strictly numerical or objects that
-are easily converted to arrays of numbers.  The could, for example, be a
+are easily converted to arrays of numbers. The could, for example, be a
 dictionary, an instance of a user-defined class, or other type of structured
-data.  You can use independent data any way you want in your model function.
+data. You can use independent data any way you want in your model function.
 But, as with almost all the examples given here, independent data is often also
 a 1-dimensional array of values, say ``x``, and a simple view of the fit would
-be to plot the data as ``y`` as a function of ``x``.  Again, this is not
+be to plot the data as ``y`` as a function of ``x``. Again, this is not
 required, but it is very common, especially for novice users.
 
 By default, all data and independent data passed to :meth:`Model.fit` that is
 "array like" - a list or tuple of numbers, a ``pandas.Series``, and
 ``h5py.Dataset``, or any object that has an ``__array__()`` method -- will be
-converted to a "float64" ndarray before the fit begins.  If the array-like data
+converted to a "float64" ndarray before the fit begins. If the array-like data
 is complex, it will be converted to a "complex128" ndarray, which will always
-work too.  This conversion before the fit begins ensures that the model
+work too. This conversion before the fit begins ensures that the model
 function sees only "float64 ndarrays", and nearly guarantees that data type
-conversion will not cause problems for the fit.  But it also means that if you
+conversion will not cause problems for the fit. But it also means that if you
 have passed a ``pandas.Series`` as data or independent data, not all of the
 methods or attributes of that ``Series`` will be available by default within
 the model function.
@@ -668,7 +669,6 @@ types of data to use when fitting data.
 
 Saving and Loading Models
 -------------------------
-
 
 It is sometimes desirable to save a :class:`Model` for later use outside of
 the code used to define the model. Lmfit provides a :func:`save_model`
@@ -719,6 +719,7 @@ To load that later, one might do:
     :hide-output:
 
 See also :ref:`modelresult_saveload_sec`.
+
 
 The :class:`ModelResult` class
 ==============================
@@ -775,7 +776,6 @@ and ``bic``.
 
 .. automethod:: ModelResult.plot_residuals
 
-
 .. method:: ModelResult.iter_cb
 
    Optional callable function, to be called at each fit iteration. This
@@ -798,7 +798,7 @@ categories.
 
 
 Parameters and Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. attribute:: best_values
 
@@ -830,19 +830,18 @@ Parameters and Variables
    List of variable Parameter names used in optimization in the
    same order as the values in :attr:`init_vals` and :attr:`covar`.
 
+
 Fit Arrays and Model
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. attribute:: best_fit
 
    numpy.ndarray result of model function, evaluated at provided
    independent variables and with best-fit parameters.
 
-
 .. attribute:: covar
 
    numpy.ndarray (square) covariance matrix returned from fit.
-
 
 .. attribute:: data
 
@@ -866,7 +865,6 @@ Fit Arrays and Model
    interval* in the ``y`` values of the model from
    :meth:`ModelResult.eval_uncertainty` (see :ref:`eval_uncertainty_sec`).
 
-
 .. attribute:: init_fit
 
    numpy.ndarray result of model function, evaluated at provided
@@ -888,9 +886,8 @@ Fit Arrays and Model
    List of components of the :class:`Model`.
 
 
-
 Fit Status
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
 
 .. attribute:: aborted
 
@@ -943,9 +940,8 @@ Fit Status
    keyword arguments passed to :meth:`Model.fit`, a dict, which will have independent data arrays such as ``x``.
 
 
-
 Fit Statistics
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 .. attribute:: aic
 
@@ -982,7 +978,6 @@ Fit Statistics
 
    Integer number of independent, freely varying variables in fit.
 
-
 .. attribute::  redchi
 
    Floating point reduced chi-square statistic (see :ref:`fit-results-label`).
@@ -1002,7 +997,6 @@ Fit Statistics
 
    Boolean value of whether fit succeeded. This is an optimistic
    view of success, meaning that the method finished without error.
-
 
 
 .. _eval_uncertainty_sec:
@@ -1062,12 +1056,10 @@ model can be calculated and used:
 
 .. versionadded:: 1.2.3
 
-
-
 In addition to the "confidence interval" ``result.dely``, the
 :meth:`ModelResult.eval_uncertainty` method will also estimate the "predicted
 interval" -- the expected range for data matching the model, and hold this in
-``result.dely_predicted``.  An example script showing both confidence and
+``result.dely_predicted``. An example script showing both confidence and
 predicted intervals is shown below:
 
 .. jupyter-execute:: ../examples/doc_model_uncertainty_pred.py
@@ -1076,7 +1068,7 @@ predicted intervals is shown below:
 .. _modelresult_uvars_postfit_section:
 
 Using uncertainties in the fitted parameters for post-fit calculations
---------------------------------------------------------------------------
+----------------------------------------------------------------------
 
 .. versionadded:: 1.2.2
 
@@ -1154,6 +1146,7 @@ To load that later, one might do:
     :hide-output:
 
 .. index:: Composite models
+
 
 .. _composite_models_section:
 
