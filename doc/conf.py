@@ -36,7 +36,7 @@ autoclass_content = 'both'
 # shpinx.ext.intersphinx settings
 intersphinx_mapping = {'py': ('https://docs.python.org/3', None),
                        'numpy': ('https://numpy.org/doc/stable/', None),
-                       'scipy': ('https://matplotlib.org/stable/', None),
+                       'scipy': ('https://docs.scipy.org/doc/scipy/', None),
                        'matplotlib': ('https://matplotlib.org/stable/', None),
                        'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
                        'sympy': ('https://docs.sympy.org/latest/', None),

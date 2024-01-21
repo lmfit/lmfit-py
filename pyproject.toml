@@ -58,7 +58,6 @@ doc = [
     "jupyter_sphinx>=0.2.4",
     "matplotlib",
     "numdifftools",
-    "numexpr",
     "pandas",
     "Pillow",
     "pycairo;platform_system=='Windows'",

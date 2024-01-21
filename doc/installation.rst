@@ -100,7 +100,7 @@ and install using::
 to install the required build dependencies and then do::
 
    python -m build
-   pip install ".[all]'
+   pip install ".[all]"
 
 to generate the wheel and install ``lmfit`` with all its dependencies.
 

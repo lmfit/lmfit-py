@@ -22,6 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
+from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -904,11 +905,19 @@ class Minimizer:
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
         if method == 'L-BFGS-B':
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
+
         elif method == 'COBYLA':
             # for this method, we explicitly let the solver reach
             # the users max nfev, and do not abort in _residual
             fmin_kws['options']['maxiter'] = self.max_nfev
             self.max_nfev = 5*self.max_nfev
+
+        # FIXME: update when SciPy requirement is >= 1.8
+        # ``maxiter`` deprecated in favor of ``maxfun``
+        elif method == "TNC" and int(scipy_version.split('.')[1]) >= 11:
+            fmin_kws['options']['maxfun'] = 2*self.max_nfev
+            fmin_kws['options'].pop('maxiter')
+
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
@@ -1382,7 +1391,7 @@ class Minimizer:
         # a ValueError. Note, you can't initialise with a position if you are
         # reusing the sampler.
         if pos is not None and not reuse_sampler:
-            tpos = np.asfarray(pos)
+            tpos = np.asarray(pos, dtype=np.float64)
             if p0.shape == tpos.shape:
                 pass
             # trying to initialise with a previous chain
@@ -2379,16 +2388,16 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
 
     Notes
     -----
-    Parts of this function are based on scipy/stats/stats.py/_contains_nan
+    Parts of this fudtype=np.float64nction are based on scipy/stats/stats.py/_contains_nan
 
-    support for 'array-like` objects is from numpy `asfarray`, which includes
+    support for 'array-like` objects is from numpy `asarray`, which includes
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects
     """
     if np.iscomplexobj(arr):
-        arr = np.asfarray(arr, dtype=np.complex128).view(np.float64)
+        arr = np.asarray(arr, dtype=np.complex128).view(np.float64)
     else:
-        arr = np.asfarray(arr, dtype=np.float64)
+        arr = np.asarray(arr, dtype=np.float64)
 
     if ravel:
         arr = arr.ravel(order=ravel_order)
