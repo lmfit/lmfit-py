@@ -163,7 +163,8 @@ class ConfidenceInterval:
     """Class used to calculate the confidence interval."""
 
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=None, trace=False, verbose=False, maxiter=50):
+                sigmas=None, trace=False, verbose=False, min_rel_change=1e-5,
+                maxiter=50):
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
@@ -196,7 +197,7 @@ class ConfidenceInterval:
 
         self.trace = trace
         self.maxiter = maxiter
-        self.min_rel_change = 1e-5
+        self.min_rel_change = min_rel_change
 
         if sigmas is None:
             sigmas = [1, 2, 3]
