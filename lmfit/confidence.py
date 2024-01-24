@@ -9,9 +9,9 @@ from scipy.stats import f
 
 from .minimizer import MinimizerException
 
-CONF_ERR_GEN = 'Cannot determine Confidence Intervals'
-CONF_ERR_STDERR = f'{CONF_ERR_GEN} without sensible uncertainty estimates'
-CONF_ERR_NVARS = f'{CONF_ERR_GEN} with < 2 variables'
+CONF_ERR_GEN = "Cannot determine Confidence Intervals"
+CONF_ERR_STDERR = f"{CONF_ERR_GEN} without sensible uncertainty estimates"
+CONF_ERR_NVARS = f"{CONF_ERR_GEN} with < 2 variables"
 
 
 def f_compare(best_fit, new_fit):
@@ -43,8 +43,7 @@ def copy_vals(params):
     """Save values/stderrs of parameters in a temporary dictionary."""
     tmp_params = {}
     for para_key in params:
-        tmp_params[para_key] = (params[para_key].value,
-                                params[para_key].stderr)
+        tmp_params[para_key] = (params[para_key].value, params[para_key].stderr)
     return tmp_params
 
 
@@ -54,8 +53,17 @@ def restore_vals(tmp_params, params):
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 
-def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
-                  maxiter=200, verbose=False, prob_func=None):
+def conf_interval(
+    minimizer,
+    result,
+    p_names=None,
+    sigmas=None,
+    trace=False,
+    maxiter=200,
+    verbose=False,
+    prob_func=None,
+    min_rel_change=1e-5,
+):
     """Calculate the confidence interval (CI) for parameters.
 
     The parameter for which the CI is calculated will be varied, while the
@@ -87,6 +95,8 @@ def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
         Function to calculate the probability from the optimized chi-square.
         Default is None and uses the built-in function `f_compare`
         (i.e., F-test).
+    min_rel_change : float, optional
+        Minimum relative change in probability (default is 1e-5).
 
     Returns
     -------
@@ -138,8 +148,17 @@ def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
     if sigmas is None:
         sigmas = [1, 2, 3]
 
-    ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
-                            trace, verbose, maxiter)
+    ci = ConfidenceInterval(
+        minimizer,
+        result,
+        p_names,
+        prob_func,
+        sigmas,
+        trace,
+        verbose,
+        maxiter,
+        min_rel_change,
+    )
     output = ci.calc_all_ci()
     if trace:
         return output, ci.trace_dict
@@ -149,7 +168,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
 def map_trace_to_names(trace, params):
     """Map trace to parameter names."""
     out = {}
-    allnames = list(params.keys()) + ['prob']
+    allnames = list(params.keys()) + ["prob"]
     for name in trace.keys():
         tmp_dict = {}
         tmp = np.array(trace[name])
@@ -162,9 +181,52 @@ def map_trace_to_names(trace, params):
 class ConfidenceInterval:
     """Class used to calculate the confidence interval."""
 
-    def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                sigmas=None, trace=False, verbose=False, min_rel_change=1e-5,
-                maxiter=50):
+    def __init__(
+        self,
+        minimizer,
+        result,
+        p_names=None,
+        prob_func=None,
+        sigmas=None,
+        trace=False,
+        verbose=False,
+        maxiter=50,
+        min_rel_change=1e-5,
+    ):
+        """Initialize the ConfidenceInterval class.
+
+        Parameters
+        ----------
+        minimizer : Minimizer
+            The minimizer to use, holding objective function.
+        result : MinimizerResult
+            The result of running minimize().
+        p_names : list, optional
+            Names of the parameters for which the CI is calculated. If None
+            (default), the CI is calculated for every parameter.
+        prob_func : None or callable, optional
+            Function to calculate the probability from the optimized chi-square.
+            Default is None and uses the built-in function `f_compare`
+            (i.e., F-test).
+        sigmas : list, optional
+            The sigma-levels to find (default is [1, 2, 3]). See Notes below.
+        trace : bool, optional
+            Defaults to False; if True, each result of a probability
+            calculation is saved along with the parameter. This can be used to
+            plot so-called "profile traces".
+        verbose : bool, optional
+            Print extra debugging information (default is False).
+        maxiter : int, optional
+            Maximum of iteration to find an upper limit (default is 200).
+        min_rel_change : float, optional
+            Minimum relative change in probability (default is 1e-5).
+
+        Raises
+        ------
+        MinimizerException
+            If there are less than 2 variables or if the stderrs are not
+            sensible.
+        """
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
@@ -208,7 +270,7 @@ class ConfidenceInterval:
             if sigma < 1:
                 prob = sigma
             else:
-                prob = erf(sigma/np.sqrt(2))
+                prob = erf(sigma / np.sqrt(2))
             self.probs.append(prob)
 
     def calc_all_ci(self):
@@ -216,9 +278,11 @@ class ConfidenceInterval:
         out = {}
 
         for p in self.p_names:
-            out[p] = (self.calc_ci(p, -1)[::-1] +
-                      [(0., self.params[p].value)] +
-                      self.calc_ci(p, 1))
+            out[p] = (
+                self.calc_ci(p, -1)[::-1]
+                + [(0.0, self.params[p].value)]
+                + self.calc_ci(p, 1)
+            )
         if self.trace:
             self.trace_dict = map_trace_to_names(self.trace_dict, self.params)
 
@@ -250,13 +314,19 @@ class ConfidenceInterval:
         a_limit = float(para.value)
         ret = []
         orig_warn_settings = np.geterr()
-        np.seterr(all='ignore')
+        np.seterr(all="ignore")
         for prob in self.probs:
             if prob > max_prob:
-                ret.append((prob, direction*np.inf))
+                ret.append((prob, direction * np.inf))
                 continue
 
-            sol = root_scalar(calc_prob, method='toms748', bracket=sorted([limit, a_limit]), rtol=.5e-4, args=(prob,))
+            sol = root_scalar(
+                calc_prob,
+                method="toms748",
+                bracket=sorted([limit, a_limit]),
+                rtol=0.5e-4,
+                args=(prob,),
+            )
             if sol.converged:
                 val = sol.root
             else:
@@ -277,7 +347,7 @@ class ConfidenceInterval:
     def find_limit(self, para, direction):
         """Find a value for given parameter so that prob(val) > sigmas."""
         if self.verbose:
-            print(f'Calculating CI for {para.name}')
+            print(f"Calculating CI for {para.name}")
         self.reset_vals()
 
         # determine starting step
@@ -308,26 +378,31 @@ class ConfidenceInterval:
             rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1e-12)
             old_prob = new_prob
             if self.verbose:
-                print(f'P({para.name}={limit}) = {new_prob}, '
-                      f'max. prob={max_prob}')
+                print(f"P({para.name}={limit}) = {new_prob}, " f"max. prob={max_prob}")
 
             # check for convergence
             if bound_reached and new_prob < max(self.probs):
-                errmsg = (f'Bound reached with prob({para.name}={limit}) '
-                          f'= {new_prob} < max(sigmas)')
+                errmsg = (
+                    f"Bound reached with prob({para.name}={limit}) "
+                    f"= {new_prob} < max(sigmas)"
+                )
                 warn(errmsg)
                 break
 
             if i > self.maxiter:
-                errmsg = (f'maxiter={self.maxiter} reached and prob('
-                          f'{para.name}={limit}) = {new_prob} < max(sigmas)')
+                errmsg = (
+                    f"maxiter={self.maxiter} reached and prob("
+                    f"{para.name}={limit}) = {new_prob} < max(sigmas)"
+                )
                 warn(errmsg)
                 break
 
             if rel_change < self.min_rel_change:
-                errmsg = (f'rel_change={rel_change} < {self.min_rel_change} '
-                          f'at iteration {i} and prob({para.name}={limit}) = '
-                          f'{new_prob} < max(sigmas)')
+                errmsg = (
+                    f"rel_change={rel_change} < {self.min_rel_change} "
+                    f"at iteration {i} and prob({para.name}={limit}) = "
+                    f"{new_prob} < max(sigmas)"
+                )
                 warn(errmsg)
                 break
 
@@ -335,7 +410,7 @@ class ConfidenceInterval:
 
         return limit, new_prob
 
-    def calc_prob(self, para, val, offset=0., restore=False):
+    def calc_prob(self, para, val, offset=0.0, restore=False):
         """Calculate the probability for given value."""
         if restore:
             restore_vals(self.org, self.params)
@@ -353,8 +428,18 @@ class ConfidenceInterval:
         return prob - offset
 
 
-def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
-                    limits=None, prob_func=None, nsigma=5, chi2_out=False):
+def conf_interval2d(
+    minimizer,
+    result,
+    x_name,
+    y_name,
+    nx=10,
+    ny=10,
+    limits=None,
+    prob_func=None,
+    nsigma=5,
+    chi2_out=False,
+):
     r"""Calculate confidence regions for two fixed parameters.
 
     The method itself is explained in `conf_interval`: here we are fixing
@@ -451,7 +536,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     if not chi2_out:
         chisqr0 = out_mat.min()
         chisqr0 = min(best_chisqr, chisqr0)
-        out_mat = np.sqrt((out_mat-chisqr0)/redchi)
+        out_mat = np.sqrt((out_mat - chisqr0) / redchi)
 
     x.vary, y.vary = True, True
     restore_vals(org, result.params)
