@@ -184,7 +184,7 @@ class ConfidenceInterval:
             Default is None and uses the built-in function `f_compare`
             (i.e., F-test).
         sigmas : list, optional
-            The sigma-levels to find (default is [1, 2, 3]). See Notes below.
+            The sigma-levels to find (default is [1, 2, 3]).
         trace : bool, optional
             Defaults to False; if True, each result of a probability
             calculation is saved along with the parameter. This can be used to
@@ -192,16 +192,17 @@ class ConfidenceInterval:
         verbose : bool, optional
             Print extra debugging information (default is False).
         maxiter : int, optional
-            Maximum of iteration to find an upper limit (default is 200).
+            Maximum of iteration to find an upper limit (default is 50).
         min_rel_change : float, optional
             Minimum relative change in probability (default is 1e-5).
 
         Raises
         ------
         MinimizerException
-            If there are less than 2 variables or if the stderrs are not
+            If there are less than two variables or if the stderrs are not
             sensible.
         """
+
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
