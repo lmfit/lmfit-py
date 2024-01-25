@@ -201,8 +201,8 @@ class ConfidenceInterval:
         MinimizerException
             If there are less than two variables or if the stderrs are not
             sensible.
-        """
 
+        """
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
