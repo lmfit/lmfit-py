@@ -55,7 +55,8 @@ def restore_vals(tmp_params, params):
 
 
 def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
-                  maxiter=200, verbose=False, prob_func=None):
+                  maxiter=200, verbose=False, prob_func=None,
+                  min_rel_change=1e-5):
     """Calculate the confidence interval (CI) for parameters.
 
     The parameter for which the CI is calculated will be varied, while the
@@ -87,6 +88,8 @@ def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
         Function to calculate the probability from the optimized chi-square.
         Default is None and uses the built-in function `f_compare`
         (i.e., F-test).
+    min_rel_change : float, optional
+        Minimum relative change in probability (default is 1e-5).
 
     Returns
     -------
@@ -139,7 +142,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
         sigmas = [1, 2, 3]
 
     ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
-                            trace, verbose, maxiter)
+                            trace, verbose, maxiter, min_rel_change)
     output = ci.calc_all_ci()
     if trace:
         return output, ci.trace_dict
@@ -163,7 +166,43 @@ class ConfidenceInterval:
     """Class used to calculate the confidence interval."""
 
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=None, trace=False, verbose=False, maxiter=50):
+                 sigmas=None, trace=False, verbose=False, maxiter=50,
+                 min_rel_change=1e-5):
+        """Initialize the ConfidenceInterval class.
+
+        Parameters
+        ----------
+        minimizer : Minimizer
+            The minimizer to use, holding objective function.
+        result : MinimizerResult
+            The result of running minimize().
+        p_names : list, optional
+            Names of the parameters for which the CI is calculated. If None
+            (default), the CI is calculated for every parameter.
+        prob_func : None or callable, optional
+            Function to calculate the probability from the optimized chi-square.
+            Default is None and uses the built-in function `f_compare`
+            (i.e., F-test).
+        sigmas : list, optional
+            The sigma-levels to find (default is [1, 2, 3]).
+        trace : bool, optional
+            Defaults to False; if True, each result of a probability
+            calculation is saved along with the parameter. This can be used to
+            plot so-called "profile traces".
+        verbose : bool, optional
+            Print extra debugging information (default is False).
+        maxiter : int, optional
+            Maximum of iteration to find an upper limit (default is 50).
+        min_rel_change : float, optional
+            Minimum relative change in probability (default is 1e-5).
+
+        Raises
+        ------
+        MinimizerException
+            If there are less than two variables or if the stderrs are not
+            sensible.
+
+        """
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
@@ -196,7 +235,7 @@ class ConfidenceInterval:
 
         self.trace = trace
         self.maxiter = maxiter
-        self.min_rel_change = 1e-5
+        self.min_rel_change = min_rel_change
 
         if sigmas is None:
             sigmas = [1, 2, 3]
