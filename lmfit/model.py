@@ -16,7 +16,7 @@ import lmfit
 
 from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
-from .jsonutils import HAS_DILL, decode4js, encode4js
+from .jsonutils import decode4js, encode4js
 from .minimizer import MinimizerResult
 from .printfuncs import ci_report, fit_report, fitreport_html_table
 
@@ -319,17 +319,35 @@ class Model:
         """Save a Model for serialization.
 
         Note: like the standard-ish '__getstate__' method but not really
-        useful with Pickle.
+        useful with Pickle, and only useful with dill.
+
+        This, and the companion function _buildmodel to use this serialized model
+        now supports versions of 'state'.
+
+        State Versions:
+         '1':  state is a tuple of length 9:
+               (self.func.__name__, funcdef, self._name, self._prefix,
+                self.independent_vars, self._param_root_names,
+                self.param_hints, self.nan_policy, self.opts)
+               with opts used in the version 1.2 sense
+         '2': state is a dict with a 'version' keyword, holding the
+              where state_version is the version string, and
+              state_dict is a dictionary of data
 
         """
-        funcdef = None
-        if HAS_DILL:
-            funcdef = self.func
+        funcdef = self.func
         if self.func.__name__ == '_eval':
             funcdef = self.expr
-        state = (self.func.__name__, funcdef, self._name, self._prefix,
-                 self.independent_vars, self._param_root_names,
-                 self.param_hints, self.nan_policy, self.opts)
+        state = dict(version='2',
+                     funcname=self.func.__name__,
+                     funcdef=funcdef,
+                     name=self._name,
+                     prefix=self._prefix,
+                     independent_vars=self.independent_vars,
+                     param_root_names=self._param_root_names,
+                     param_hints=self.param_hints,
+                     nan_policy=self.nan_policy,
+                     opts=self.opts)
         return (state, None, None)
 
     def _set_state(self, state, funcdefs=None):
@@ -550,6 +568,7 @@ class Model:
         if self._prefix is None:
             self._prefix = ''
         names = [f"{self._prefix}{pname}" for pname in self._param_root_names]
+
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
         fname = self.func.__name__
@@ -1299,28 +1318,49 @@ def _buildmodel(state, funcdefs=None):
         fcn = getattr(lineshapes, fname, None)
         if callable(fcn):
             known_funcs[fname] = fcn
-    if funcdefs is not None:
+    if funcdefs is None:
+        funcdefs = {}
+    else:
         known_funcs.update(funcdefs)
 
     left, right, op = state
     if op is None and right is None:
-        (fname, fcndef, name, prefix, ivars, pnames,
-         phints, nan_policy, opts) = left
-        if not callable(fcndef) and fname in known_funcs:
-            fcndef = known_funcs[fname]
+        if isinstance(left, tuple) and len(left) == 9:
+            (fname, func, name, prefix, ivars, pnames,
+             phints, nan_policy, opts) = left
+        elif isinstance(left, dict) and 'version' in left:
+            if left['version'] == '2':
+                fname = left.get('funcname', None)
+                func = left.get('funcdef', None)
+                name = left.get('name', None)
+                prefix = left.get('prefix', None)
+                ivars = left.get('indepedendent_vars', None)
+                pnames = left.get('param_root_names', None)
+                phints = left.get('param_hints', None)
+                nan_policy = left.get('nan_policy', None)
+                opts = left.get('opts', None)
+        else:
+            raise ValueError("Cannot restore Model: unrecognized state data")
 
-        if fcndef is None:
+        # if the function definition was passed in, use that!
+        if fname in funcdefs and fname != '_eval':
+            func = funcdefs[fname]
+
+        if not callable(func) and fname in known_funcs:
+            func = known_funcs[fname]
+
+        if func is None:
             raise ValueError("Cannot restore Model: model function not found")
 
-        if fname == '_eval' and isinstance(fcndef, str):
+        if fname == '_eval' and isinstance(func, str):
             from .models import ExpressionModel
-            model = ExpressionModel(fcndef, name=name,
+            model = ExpressionModel(func, name=name,
                                     independent_vars=ivars,
                                     param_names=pnames,
                                     nan_policy=nan_policy, **opts)
 
         else:
-            model = Model(fcndef, name=name, prefix=prefix,
+            model = Model(func, name=name, prefix=prefix,
                           independent_vars=ivars, param_names=pnames,
                           nan_policy=nan_policy, **opts)
 

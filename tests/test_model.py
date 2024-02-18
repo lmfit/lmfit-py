@@ -202,11 +202,22 @@ def test_Model_get_state(gmodel):
 
     assert isinstance(out, tuple)
     assert out[1] == out[2] is None
-    assert (out[0][1] is not None) == lmfit.jsonutils.HAS_DILL
-
-    assert out[0][0] == 'gaussian'
-    assert out[0][2:] == ('gaussian', '', ['x'],
-                          ['amplitude', 'center', 'sigma'], {}, 'raise', {})
+    sstate = out[0]
+    if isinstance(sstate, tuple):  # state version 1
+        assert sstate[1] is not None
+        assert sstate[0] == 'gaussian'
+        assert sstate[2:] == ('gaussian', '', ['x'],
+                              ['amplitude', 'center', 'sigma'], {}, 'raise', {})
+    elif isinstance(sstate, dict) and 'version' in sstate:  # state version 2 or higher
+        if sstate['version'] == '2':
+            assert sstate['funcname'] == 'gaussian'
+            assert sstate['name'] == 'gaussian'
+            assert sstate['independent_vars'] == ['x']
+            assert sstate['param_root_names'] == ['amplitude', 'center', 'sigma']
+        else:
+            assert sstate['version'] == 'unknown version!'
+    else:
+        assert sstate == 'unknown model state'
 
 
 def test_Model_set_state(gmodel):
