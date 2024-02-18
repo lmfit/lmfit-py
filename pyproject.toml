@@ -10,6 +10,7 @@ dependencies = [
     "numpy>=1.19",
     "scipy>=1.6",
     "uncertainties>=3.1.4",
+    "dill>=0.3.4"
 ]
 requires-python = ">= 3.8"
 authors = [
@@ -52,7 +53,6 @@ dev = [
 doc = [
     "cairosvg",
     "corner",
-    "dill",
     "emcee>=3.0.0",
     "ipykernel",
     "jupyter_sphinx>=0.2.4",

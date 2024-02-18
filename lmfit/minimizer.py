@@ -65,14 +65,6 @@ try:
 except ImportError:
     HAS_NUMDIFFTOOLS = False
 
-# check for dill
-try:
-    import dill  # noqa: F401
-    HAS_DILL = True
-except ImportError:
-    HAS_DILL = False
-
-
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
 
@@ -1348,7 +1340,7 @@ class Minimizer:
         # set up multiprocessing options for the samplers
         auto_pool = None
         sampler_kwargs = {}
-        if isinstance(workers, int) and workers > 1 and HAS_DILL:
+        if isinstance(workers, int) and workers > 1:
             auto_pool = multiprocessing.Pool(workers)
             sampler_kwargs['pool'] = auto_pool
         elif hasattr(workers, 'map'):

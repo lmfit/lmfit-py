@@ -505,9 +505,8 @@ def test_dumps_loads_parameters_usersyms():
     # Of note, this is only an issue within the py.test framework and it DOES
     # work correctly in a normal Python interpreter. Also, it isn't an issue
     # when DILL is used, so in that case the two asserts below will pass.
-    if lmfit.jsonutils.HAS_DILL:
-        assert newpars == pars
-        assert_allclose(newpars['c'].value, 53.0)
+    assert newpars == pars
+    assert_allclose(newpars['c'].value, 53.0)
 
 
 def test_parameters_expr_and_constraints():

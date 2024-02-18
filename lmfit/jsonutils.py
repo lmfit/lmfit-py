@@ -5,14 +5,11 @@ from io import StringIO
 import sys
 import warnings
 
+import dill
 import numpy as np
 import uncertainties
 
-try:
-    import dill
-    HAS_DILL = True
-except ImportError:
-    HAS_DILL = False
+HAS_DILL = True
 
 try:
     from pandas import DataFrame, Series, read_json
@@ -93,7 +90,7 @@ def encode4js(obj):
             out[encode4js(key)] = encode4js(val)
         return out
     if callable(obj):
-        value = str(b64encode(dill.dumps(obj)), 'utf-8') if HAS_DILL else None
+        value = str(b64encode(dill.dumps(obj)), 'utf-8')
         return dict(__class__='Callable', __name__=obj.__name__,
                     pyversion=pyvers, value=value,
                     importer=find_importer(obj))
@@ -142,13 +139,17 @@ def decode4js(obj):
             unpacked = True
         except (ImportError, AttributeError):
             unpacked = False
-        if not unpacked and HAS_DILL:
+        if not unpacked:
+            spyvers = obj.get('pyversion', '?')
+            if not pyvers == spyvers:
+                msg = f"Could not unpack dill-encoded callable '{out}', saved with Python version {spyvers}"
+                warnings.warn(msg)
+
             try:
                 out = dill.loads(b64decode(obj['value']))
             except RuntimeError:
-                msg = "Could not unpack dill-encoded callable `{0}`, saved with Python version {1}"
-                warnings.warn(msg.format(obj['__name__'],
-                                         obj['pyversion']))
+                msg = f"Could not unpack dill-encoded callable '{out}`, saved with Python version {spyvers}"
+                warnings.warn(msg)
 
     elif classname in ('Dict', 'dict'):
         out = {}
