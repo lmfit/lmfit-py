@@ -324,16 +324,17 @@ class Model:
         This, and the companion function _buildmodel to use this serialized model
         now supports versions of 'state'.
 
-        State Versions:
-         '1':  state is a tuple of length 9:
-               (self.func.__name__, funcdef, self._name, self._prefix,
+        State Version History:
+          original: up to and including version 1.2.2:
+             state is a tuple of length 9:
+                (self.func.__name__, funcdef, self._name, self._prefix,
                 self.independent_vars, self._param_root_names,
                 self.param_hints, self.nan_policy, self.opts)
-               with opts used in the version 1.2 sense
-         '2': state is a dict with a 'version' keyword, holding the
-              where state_version is the version string, and
-              state_dict is a dictionary of data
-
+             with opts used in the version 1.2 sense
+          version 1.2.3 and beyond:
+             state is a dict with a 'version' keyword and all other
+             values from the original state in key/value pairs.
+             The initial value for 'version' is '2'.
         """
         funcdef = self.func
         if self.func.__name__ == '_eval':
@@ -1329,16 +1330,17 @@ def _buildmodel(state, funcdefs=None):
             (fname, func, name, prefix, ivars, pnames,
              phints, nan_policy, opts) = left
         elif isinstance(left, dict) and 'version' in left:
-            if left['version'] == '2':
-                fname = left.get('funcname', None)
-                func = left.get('funcdef', None)
-                name = left.get('name', None)
-                prefix = left.get('prefix', None)
-                ivars = left.get('indepedendent_vars', None)
-                pnames = left.get('param_root_names', None)
-                phints = left.get('param_hints', None)
-                nan_policy = left.get('nan_policy', None)
-                opts = left.get('opts', None)
+            # for future-proofing, we could add "if left['version'] == '2':"
+            # here to cover cases when 'version' changes
+            fname = left.get('funcname', None)
+            func = left.get('funcdef', None)
+            name = left.get('name', None)
+            prefix = left.get('prefix', None)
+            ivars = left.get('indepedendent_vars', None)
+            pnames = left.get('param_root_names', None)
+            phints = left.get('param_hints', None)
+            nan_policy = left.get('nan_policy', None)
+            opts = left.get('opts', None)
         else:
             raise ValueError("Cannot restore Model: unrecognized state data")
 
