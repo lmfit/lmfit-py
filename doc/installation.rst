@@ -40,13 +40,14 @@ Lmfit requires the following Python packages, with versions given:
    * `SciPy`_ version 1.8 or higher.
    * `asteval`_ version 0.9.28 or higher.
    * `uncertainties`_ version 3.1.4 or higher.
+   * `dill`_ version 0.3.4 or higher.
 
 All of these are readily available on PyPI, and are installed
 automatically if installing with ``pip install lmfit``.
 
 In order to run the test suite, the `pytest`_, `pytest-cov`_, and `flaky`_
 packages are required. Some functionality requires the `emcee`_ (version 3+),
-`corner`_, `pandas`_, `Jupyter`_, `matplotlib`_, `dill`_, or `numdifftools`_
+`corner`_, `pandas`_, `Jupyter`_, `matplotlib`_, or `numdifftools`_
 packages. These are not installed automatically, but we highly recommend each
 of them.
 
