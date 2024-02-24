@@ -253,7 +253,7 @@ class Model:
         3. Specifying `independent_vars` here will explicitly name the
         independent variables for the Model.  in contrast, `param_names` is
         meant to help infer Parameter names for keyword arguments defined with
-        **kws in the Model function.
+        ``**kws`` in the Model function.
 
         4. `nan_policy` sets what to do when a NaN or missing value is
         seen in the data. Should be one of:
