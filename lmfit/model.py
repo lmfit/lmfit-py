@@ -793,12 +793,13 @@ class Model:
 
         # check for parameters that were initially flagged as independent
         # variables because the function signature used "key=None", "key=True",
-        # or "key=False" these could actually be variables
+        # or "key=False": these could actually be variables
         for key, val in kwargs.items():
             if key in params:
                 continue
             if key in self.independent_vars:
-                if self.independent_vars_defvals.get(key, inspect._empty) is None:
+                dxval = self.independent_vars_defvals.get(key, inspect._empty)
+                if dxval is None or isinstance(dxval, bool):
                     name = f"{self._prefix}{key}"
                     par = Parameter(name=name)
                     setpar(par, val)
