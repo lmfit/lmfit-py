@@ -11,7 +11,7 @@ from scipy import __version__ as scipy_version
 
 import lmfit
 from lmfit import Model, Parameters, models
-from lmfit.lineshapes import gaussian, lorentzian
+from lmfit.lineshapes import gaussian, lorentzian, step, voigt
 from lmfit.model import get_reducer, propagate_err
 from lmfit.models import GaussianModel, PseudoVoigtModel
 
@@ -875,7 +875,32 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_missing_independent_variable_raises_error(self):
         pars = self.model.make_params(**self.guess())
         f = lambda: self.model.fit(self.data, pars)
-        self.assertRaises(KeyError, f)
+        self.assertRaises(ValueError, f)
+
+    def test_independent_var_parsing(self):
+        """test the parsing of independent variables for model functions
+        with keyword arguments
+
+        step:  form='linear'
+        voigt: gamma=None,     can become a variable!!
+        """
+        stepmod = Model(step)
+        assert 'x' in stepmod.independent_vars
+        assert 'form' in stepmod.independent_vars
+        assert 'linear' == stepmod.independent_vars_defvals.get('form', None)
+
+        voigtmod = Model(voigt)
+        assert 'x' in voigtmod.independent_vars
+        assert 'gamma' in voigtmod.independent_vars
+        assert voigtmod.independent_vars_defvals['gamma'] is None
+
+        pars1 = voigtmod.make_params(amplitude=25, center=9.5, sigma=1)
+        assert 'sigma' in pars1
+        assert 'gamma' not in pars1
+
+        pars2 = voigtmod.make_params(amplitude=25, center=9.5, sigma=1, gamma=0.5)
+        assert 'sigma' in pars2
+        assert 'gamma' in pars2
 
     def test_bounding(self):
         true_values = self.true_values()
