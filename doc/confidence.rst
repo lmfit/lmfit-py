@@ -210,7 +210,7 @@ using :func:`conf_interval2d`:
         # from  chi_square_best
         # to    chi_square + sigma**2 * reduced_chi_square
         # so:   sigma = sqrt(dchi2 / reduced_chi_square)
-        sigma_mat = np.sqrt(abs(dchi2_mat)/out.redchi)
+        sigma_mat = np.sqrt(abs(dchi2_mat - dchi2_mat.min())/out.redchi)
 
         # you could calculate the matrix of probabilities from sigma as:
         # prob_mat  = np.erf(sigma_mat/np.sqrt(2))
