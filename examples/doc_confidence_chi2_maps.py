@@ -71,7 +71,6 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
     else:
         print(f"Generating sigma map for {pairs}")
         # or, you could just calculate the matrix of probabilities as:
-        # print(f"Generating chi-square map for {pairs}")
         c_x, c_y, sigma_mat = conf_interval2d(out, out, xpar, ypar,
                                               nsamples, nsamples, nsigma=3.5)
 
