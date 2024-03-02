@@ -58,7 +58,7 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
 
     xpar, ypar = pairs
     if explicitly_calculate_sigma:
-        print("Generating chi-square map for ", pairs)
+        print(f"Generating chi-square map for {pairs}")
         c_x, c_y, chi2_mat = conf_interval2d(out, out, xpar, ypar,
                                              nsamples, nsamples, nsigma=3.5,
                                              chi2_out=True)
@@ -69,9 +69,8 @@ for pairs in (('sigma', 'amplitude'), ('intercept', 'amplitude'),
         chi2_min = chi2_mat.min()
         sigma_mat = np.sqrt((chi2_mat-chi2_min)/out.redchi)
     else:
-        print("Generating sigma map for ", pairs)
+        print(f"Generating sigma map for {pairs}")
         # or, you could just calculate the matrix of probabilities as:
-        # print("Generating chi-square map for ", pairs)
         c_x, c_y, sigma_mat = conf_interval2d(out, out, xpar, ypar,
                                               nsamples, nsamples, nsigma=3.5)
 
