@@ -2248,7 +2248,7 @@ class Minimizer:
             - `'basinhopping'`: basinhopping
             - `'ampgo'`: Adaptive Memory Programming for Global
               Optimization
-            - '`nelder`': Nelder-Mead
+            - `'nelder'`: Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
             - `'cg'`: Conjugate-Gradient
