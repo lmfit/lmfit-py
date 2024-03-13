@@ -323,12 +323,12 @@ have multiple independent variables.
 
 
 By convention and default, the positional arguments (that is, those without
-default values specified in the function signature) other the first argument
-are marked as being Parameters -- these will have an invalid default value (or
-``-Inf``) that must be supplied before using the Parameter. Keyword arguments
-to the model function that have numerical values will also be marked as being
-Parameters, and the supplied numerical value will be used as the default value
-for that Parameter.
+default values specified in the function signature) other than the first
+argument are marked as being Parameters -- these will have an invalid default
+value (or ``-Inf``) that must be supplied before using the Parameter. Keyword
+arguments to the model function that have numerical values will also be marked
+as being Parameters, and the supplied numerical value will be used as the
+default value for that Parameter.
 
 Keyword arguments to the model function that have non-numerical values
 (including ``None``, ``False``, and ``True``, but also strings) will be marked
@@ -426,8 +426,8 @@ Here, ``check_positive`` is listed as an independent variable, because it
 has a default value of ``False``.
 
 The function argument ``N`` is expected to be an Parameter, because it has a
-numerical default value.  This value will be kept as the default value when
-building the Parameters (and note that the default value for ``tau`` is
+numerical default value. This value will be kept as the default value when
+building the Parameters. Also, note that the default value for ``tau`` is
 ``-np.inf``, which will need to be fixed before really be used.
 
 Function arguments with default values of ``None``, ``False``, and ``True`` are
@@ -464,7 +464,7 @@ this makes sense depends on the details of the implementation of the model
 function: it can be sensible (and even intended) for ``gamma`` in the ``voigt``
 function above to be a numerical value that could be a variable Parameter, but
 it is not sensible for the ``check_positive`` argument in ``decay2`` to be
-continuously-valued variable.
+variable that can take any numeric value.
 
 
 
