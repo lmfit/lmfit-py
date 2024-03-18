@@ -244,13 +244,18 @@ class Model:
 
         Notes
         -----
-        1. Parameter names are inferred from the function arguments, and a
-        residual function is automatically constructed.
-
-        2. The model function must return an array that will be the same
+        1. The model function must return an array that will be the same
         size as the data being modeled.
 
-        3. `nan_policy` sets what to do when a NaN or missing value is
+        2. Parameter names are inferred from the function arguments by default,
+        and a residual function is automatically constructed.
+
+        3. Specifying `independent_vars` here will explicitly name the
+        independent variables for the Model.  in contrast, `param_names` is
+        meant to help infer Parameter names for keyword arguments defined with
+        ``**kws`` in the Model function.
+
+        4. `nan_policy` sets what to do when a NaN or missing value is
         seen in the data. Should be one of:
 
            - `'raise'` : raise a `ValueError` (default)
@@ -294,6 +299,7 @@ class Model:
 
         self.opts = kws
         # the following has been changed from OrderedSet for the time being
+        self.independent_vars_defvals = {}
         self.param_hints = {}
         self._param_names = []
         self._parse_params()
@@ -515,40 +521,62 @@ class Model:
         # 2. modern, best-practice approach: use inspect.signature
         else:
             pos_args = []
+            default_vals = {}
+            indep_vars = []
             sig = inspect.signature(self.func)
             for fnam, fpar in sig.parameters.items():
                 if fpar.kind == fpar.VAR_KEYWORD:
                     keywords_ = fnam
-                elif fpar.kind == fpar.POSITIONAL_OR_KEYWORD:
-                    if fpar.default == fpar.empty:
+                elif fpar.kind in (fpar.POSITIONAL_ONLY, fpar.POSITIONAL_OR_KEYWORD):
+                    default_vals[fnam] = fpar.default
+                    if (isinstance(fpar.default, (float, int, complex))
+                       and not isinstance(fpar.default, bool)):
+                        kw_args[fnam] = fpar.default
+                    elif fpar.default == fpar.empty:
                         pos_args.append(fnam)
                     else:
                         kw_args[fnam] = fpar.default
+                        indep_vars.append(fnam)
                 elif fpar.kind == fpar.VAR_POSITIONAL:
                     raise ValueError(f"varargs '*{fnam}' is not supported")
         # inspection done
 
         self._func_haskeywords = keywords_ is not None
-        self._func_allargs = pos_args + list(kw_args.keys())
-        allargs = self._func_allargs
+        self._func_allargs = list(default_vals.keys())
+        for key in kw_args:
+            if key not in self._func_allargs:
+                self._func_allargs.append(key)
 
-        if len(allargs) == 0 and keywords_ is not None:
+        if len(self._func_allargs) == 0 and keywords_ is not None:
             return
 
+        self.independent_vars_defvals = {}
         # default independent_var = 1st argument
         if self.independent_vars is None:
-            self.independent_vars = [pos_args[0]]
+            self.independent_vars = [pos_args.pop(0)]
+            # default values for independent variables
+            for vnam in indep_vars:
+                dval = default_vals[vnam]
+                if vnam in self.opts:
+                    dval = self.opts[vnam]
+                self.independent_vars_defvals[vnam] = dval
+                if vnam not in self.independent_vars:
+                    self.independent_vars.append(vnam)
 
         # default param names: all positional args
         # except independent variables
         self.def_vals = {}
         might_be_param = []
         if self._param_root_names is None:
-            self._param_root_names = pos_args[:]
+            self._param_root_names = []
+            for pname in pos_args:
+                if pname not in self.independent_vars:
+                    self._param_root_names.append(pname)
             for key, val in kw_args.items():
                 if (not isinstance(val, bool) and
                         isinstance(val, (float, int))):
-                    self._param_root_names.append(key)
+                    if key not in self._param_root_names:
+                        self._param_root_names.append(key)
                     self.def_vals[key] = val
                 elif val is None:
                     might_be_param.append(key)
@@ -574,10 +602,10 @@ class Model:
         # The implicit magic in fit() requires us to disallow some
         fname = self.func.__name__
         for arg in self.independent_vars:
-            if arg not in allargs or arg in self._forbidden_args:
+            if arg not in self._func_allargs or arg in self._forbidden_args:
                 raise ValueError(self._invalid_ivar % (arg, fname))
         for arg in names:
-            if (self._strip_prefix(arg) not in allargs or
+            if (self._strip_prefix(arg) not in self._func_allargs or
                     arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
         # the following as been changed from OrderedSet for the time being.
@@ -763,6 +791,20 @@ class Model:
             if name not in self._param_names:
                 self._param_names.append(name)
 
+        # check for parameters that were initially flagged as independent
+        # variables because the function signature used "key=None", "key=True",
+        # or "key=False": these could actually be variables
+        for key, val in kwargs.items():
+            if key in params:
+                continue
+            if key in self.independent_vars:
+                dxval = self.independent_vars_defvals.get(key, inspect._empty)
+                if dxval is None or isinstance(dxval, bool):
+                    name = f"{self._prefix}{key}"
+                    par = Parameter(name=name)
+                    setpar(par, val)
+                    params.add(par)
+
         for p in params.values():
             p._delay_asteval = False
         return params
@@ -862,8 +904,9 @@ class Model:
         if kwargs is None:
             kwargs = {}
         out = {}
-        out.update(self.opts)
-
+        for key, val in self.independent_vars_defvals.items():
+            if val is not inspect._empty:
+                out[key] = val
         # 0: if a keyword argument is going to overwrite a parameter,
         #    save that value so it can be restored before returning
         saved_values = {}
@@ -892,10 +935,12 @@ class Model:
                         out[name] = params[fullname].value
 
         # 3. kwargs might directly update function arguments
+        validnames = [ivar for ivar in self.independent_vars]
+        validnames.extend(self._func_allargs)
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
-            if name in self._func_allargs or self._func_haskeywords:
+            if name in validnames or self._func_haskeywords:
                 out[name] = val
 
         # 4. finally, reset any values that have overwritten parameter values
@@ -1105,15 +1150,19 @@ class Model:
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
-            if not np.isscalar(kwargs[var]):
-                kwargs[var] = _align(kwargs[var], mask, data)
+            if var not in params:
+                if var not in kwargs:
+                    raise ValueError(f"'Missing independent variable '{var}'")
+                if not np.isscalar(kwargs[var]):
+                    kwargs[var] = _align(kwargs[var], mask, data)
 
         if coerce_farray:
             # coerce data and independent variable(s) that are 'array-like' (list,
             # tuples, pandas Series) to float64/complex128.
             data = coerce_arraylike(data)
             for var in self.independent_vars:
-                kwargs[var] = coerce_arraylike(kwargs[var])
+                if var not in params and var in kwargs:
+                    kwargs[var] = coerce_arraylike(kwargs[var])
 
         if fit_kws is None:
             fit_kws = {}

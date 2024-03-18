@@ -6,29 +6,29 @@ Modeling Data and Curve Fitting
 
 .. module:: lmfit.model
 
-A common use of least-squares minimization is *curve fitting*, where one
-has a parametrized model function meant to explain some phenomena and wants
-to adjust the numerical values for the model so that it most closely
-matches some data. With :mod:`scipy`, such problems are typically solved
-with :scipydoc:`optimize.curve_fit`, which is a wrapper around
-:scipydoc:`optimize.leastsq`. Since lmfit's
-:func:`~lmfit.minimizer.minimize` is also a high-level wrapper around
-:scipydoc:`optimize.leastsq` it can be used for curve-fitting problems.
-While it offers many benefits over :scipydoc:`optimize.leastsq`, using
-:func:`~lmfit.minimizer.minimize` for many curve-fitting problems still
-requires more effort than using :scipydoc:`optimize.curve_fit`.
+A common use of least-squares minimization is *curve fitting*, where one has a
+parametrized model function meant to explain some phenomena and wants to adjust
+the numerical values for the model so that it most closely matches some
+data. With :mod:`scipy`, such problems are typically solved with
+:scipydoc:`optimize.curve_fit`, which is a wrapper around
+:scipydoc:`optimize.least_squares`.  While :func:`~lmfit.minimizer.minimize`
+can be used for curve-fitting problems, it is more general and not aimed
+specifically at this common use-case.
 
-The :class:`Model` class in lmfit provides a simple and flexible approach
-to curve-fitting problems. Like :scipydoc:`optimize.curve_fit`, a
-:class:`Model` uses a *model function* -- a function that is meant to
-calculate a model for some phenomenon -- and then uses that to best match
-an array of supplied data. Beyond that similarity, its interface is rather
-different from :scipydoc:`optimize.curve_fit`, for example in that it uses
-:class:`~lmfit.parameter.Parameters`, but also offers several other
-important advantages.
+
+The :class:`Model` class in lmfit provides a simple and flexible approach to
+curve-fitting problems. Like :scipydoc:`optimize.curve_fit`, a :class:`Model`
+uses a *model function* -- a function that is meant to calculate a model for
+some phenomenon -- and then uses that to best match an array of supplied
+data.  Beyond that similarity, the :class:`Model` interface is rather different
+from :scipydoc:`optimize.curve_fit`.  These differences include a) being
+class-based and so having multiple methods for working with :class:`Model`s,
+b) using :class:`~lmfit.parameter.Parameters`, and all of the advantages they
+provide, and c) being easy to combine into composite models.
+
 
 In addition to allowing you to turn any model function into a curve-fitting
-method, lmfit also provides canonical definitions for many known lineshapes
+model, lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains. These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -41,10 +41,10 @@ turning Python functions into high-level fitting models with the
 Motivation and simple example: Fit data to Gaussian profile
 ===========================================================
 
-Let's start with a simple and common example of fitting data to a Gaussian
-peak. As we will see, there is a built-in :class:`GaussianModel` class that
-can help do this, but here we'll build our own. We start with a simple
-definition of the model function:
+We start with a simple and common example of fitting data to a Gaussian
+peak. As we will see, there is a built-in :class:`GaussianModel` class that can
+help do this, but here we'll build our own. We start with a simple definition
+of the model function:
 
 .. jupyter-execute::
     :hide-code:
@@ -62,7 +62,8 @@ definition of the model function:
     def gaussian(x, amp, cen, wid):
         return amp * exp(-(x-cen)**2 / wid)
 
-We want to use this function to fit to data :math:`y(x)` represented by the
+With that function, we can easily calculate a model for our data, and the goal
+here is to use this function to fit to data :math:`y(x)` represented by the
 arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be:
 
 .. jupyter-execute::
@@ -76,11 +77,10 @@ arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be:
     init_vals = [1, 0, 1]  # for [amp, cen, wid]
     best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
 
-That is, we create data, make an initial guess of the model values, and run
-:scipydoc:`optimize.curve_fit` with the model function, data arrays, and
-initial guesses. The results returned are the optimal values for the
-parameters and the covariance matrix. It's simple and useful, but it
-misses the benefits of lmfit.
+That is, we create data (maybe adding a little noise), make an initial guess of
+the model values, and run :scipydoc:`optimize.curve_fit` with the model
+function, data arrays, and initial guesses. The results returned are the
+optimal values for the parameters and the covariance matrix.
 
 With lmfit, we create a :class:`Model` that wraps the ``gaussian`` model
 function, which automatically generates the appropriate residual function,
@@ -95,26 +95,27 @@ signature itself:
     print(f'parameter names: {gmodel.param_names}')
     print(f'independent variables: {gmodel.independent_vars}')
 
-As you can see, the Model ``gmodel`` determined the names of the parameters
-and the independent variables. By default, the first argument of the
-function is taken as the independent variable, held in
-:attr:`independent_vars`, and the rest of the functions positional
-arguments (and, in certain cases, keyword arguments -- see below) are used
-for Parameter names. Thus, for the ``gaussian`` function above, the
-independent variable is ``x``, and the parameters are named ``amp``,
-``cen``, and ``wid``, and -- all taken directly from the signature of the
-model function. As we will see below, you can modify the default
-assignment of independent variable / arguments and specify yourself what
-the independent variable is and which function arguments should be identified
-as parameter names.
+As you can see, the Model ``gmodel`` determined the names of the parameters and
+the independent variables. By default, the first argument of the function is
+taken as the independent variable, held in :attr:`independent_vars`, and the
+rest of the functions positional arguments (and, in certain cases, keyword
+arguments -- see below) are used for Parameter names. Thus, for the
+``gaussian`` function above, the independent variable is ``x``, and the
+parameters are named ``amp``, ``cen``, and ``wid``.  These are all taken
+directly from the signature of the model function. As discussed below, you can
+modify the default assignment of independent variable / arguments and specify
+yourself what the independent variable.
 
+Although the model determines what the parameters should be named,
 :class:`~lmfit.parameter.Parameters` are *not* created when the model is
-created. The model knows what the parameters should be named, but nothing about
-the scale and range of your data. To help you create Parameters for a Model,
-each model has a :meth:`make_params` method that will generate parameters with
-the expected names. You will have to do this, or make Parameters some other way
-(say, with :func:`~lmfit.parameter.create_params`), and assign initial values
-for all Parameters. You can also assign other attributes when doing this:
+created.  That is, the model knows the parameters names, but nothing about the
+scale and range of your data.  You will have to make Parameters for a Model
+yourself.  To help you create Parameters for a Model, each model has a
+:meth:`make_params` method that will generate parameters with the
+expected names.  You can use this method or create Parameters some other way
+(say, with :func:`~lmfit.parameter.create_params`), but you will have to create
+Parameters and assign initial values for all Parameters. You can also assign
+other attributes when doing this:
 
 .. jupyter-execute::
 
@@ -301,21 +302,43 @@ function as a fitting model.
 Determining parameter names and independent variables for a function
 --------------------------------------------------------------------
 
-The :class:`Model` created from the supplied function ``func`` will create a
-:class:`~lmfit.parameter.Parameters` object, and names are inferred from the
-function` arguments, and a residual function is automatically constructed.
+The :class:`Model` created from the supplied function ``func`` will guess which
+function arguments of the model function should be made into
+:class:`~lmfit.parameter.Parameters` object, and which should be considered
+non-varying **independent variables** that need to be specified when evaluating
+or fitting with the Model.
 
-By default, the independent variable is taken as the first argument to the
-function. You can, of course, explicitly set this, and will need to do so
-if the independent variable is not first in the list, or if there is actually
-more than one independent variable.
+By convention and by default, the first argument to the model function is taken
+to be the independent variable -- this is often the ``x`` value for the model.
+You can explicitly set this to be a different functional argument, and will
+need to do so if the independent variable is not first in the list, or if there
+is more than one independent variable.  Since curve fitting most commonly fits
+some function :math:`y(x)`, it is common for the independent variable to be a
+numpy float ndarray of the same length as the data to be fit. While this is
+common, it is not actually required.  The independent variable does not not
+need to be an ndarray, and can be any Python data type, and it is fine to
+have multiple independent variables.
 
-If not specified, Parameters are constructed from all positional arguments
-and all keyword arguments that have a default value that is numerical, except
-the independent variable, of course. Importantly, the Parameters can be
-modified after creation. In fact, you will have to do this because none of the
-parameters have valid initial values. In addition, one can place bounds and
-constraints on Parameters, or fix their values.
+.. versionchanged:: 1.2.3
+
+
+By convention and default, the positional arguments (that is, those without
+default values specified in the function signature) other than the first
+argument are marked as being Parameters -- these will have an invalid default
+value (or ``-Inf``) that must be supplied before using the Parameter. Keyword
+arguments to the model function that have numerical values will also be marked
+as being Parameters, and the supplied numerical value will be used as the
+default value for that Parameter.
+
+Keyword arguments to the model function that have non-numerical values
+(including ``None``, ``False``, and ``True``, but also strings) will be marked
+as being independent variables and their default value will be stored and used
+unless overwritten.  There is some ambiguity for function arguments that have a
+value supplied in the function signature of ``None``, ``False``, or ``True``.
+These function arguments are tagged as independent variables, but can be made
+into a Parameter with :meth:`Model.make_params`, in which case, they will be
+treated as variables.  An example is given below.
+
 
 
 Explicitly specifying ``independent_vars``
@@ -342,9 +365,9 @@ function is fairly easy. Let's try another one:
     for pname, par in params.items():
         print(pname, par)
 
-Here, ``t`` is assumed to be the independent variable because it is the
-first argument to the function. The other function arguments are used to
-create parameters for the model.
+Here, ``t`` is assumed to be the independent variable because it is the first
+argument to the function. The other function arguments are used to create
+parameters for the model.
 
 If you want ``tau`` to be the independent variable in the above example,
 you can say so:
@@ -370,16 +393,16 @@ independent variable
     keyword argument for each fit with :meth:`Model.fit` or evaluation
     with :meth:`Model.eval`.
 
-Note that independent variables are not required to be arrays, or even
-floating point numbers.
+Note that independent variables are not required to be arrays, or even floating
+point numbers.  Dictionaries or Objects from user-defined classes can be
+independent variables.
 
 
 Functions with keyword arguments
 --------------------------------
 
 If the model function had keyword parameters, these would be turned into
-Parameters if the supplied default value was a valid number (but not
-``None``, ``True``, or ``False``).
+Parameters if the supplied default value was a valid number:
 
 .. jupyter-execute::
 
@@ -392,32 +415,70 @@ Parameters if the supplied default value was a valid number (but not
 
 
     mod = Model(decay2)
+    print(f'independent variables: {mod.independent_vars}')
+
     params = mod.make_params()
     print('Parameters:')
     for pname, par in params.items():
         print(pname, par)
 
-Here, even though ``N`` is a keyword argument to the function, it is turned
-into a parameter, with the default numerical value as its initial value.
-By default, it is permitted to be varied in the fit -- the 10 is taken as
-an initial value, not a fixed value. On the other hand, the
-``check_positive`` keyword argument, was not converted to a parameter
-because it has a boolean default value. In some sense,
-``check_positive`` becomes like an independent variable to the model.
-However, because it has a default value it is not required to be given for
-each model evaluation or fit, as independent variables are.
+Here, ``check_positive`` is listed as an independent variable, because it
+has a default value of ``False``.
+
+The function argument ``N`` is expected to be an Parameter, because it has a
+numerical default value. This value will be kept as the default value when
+building the Parameters. Also, note that the default value for ``tau`` is
+``-np.inf``, which will need to be fixed before really be used.
+
+Function arguments with default values of ``None``, ``False``, and ``True`` are
+slightly ambiguous whether they should be considered independent variables or
+Parameters.  That is, in many contexts (including basic arithmetic) ``True``
+acts like the integer 1, and ``False`` acts like 0.  A default value of
+``None`` might be used to signal some default behavior.  For example, the
+builtin :func:`lmfit.lineshapes.voigt` function is defined as
+
+.. jupyter-execute::
+
+
+    def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
+        """Return a 1-dimensional Voigt function.
+            ...
+        """
+        if gamma is None:
+            gamma = sigma
+        z = (x-center + 1j*gamma) / max(tiny, (sigma*s2))
+        return amplitude*real(wofz(z)) / max(tiny, (sigma*s2pi))
+
+    mod = Model(voigt)
+    print(f'independent variables: {mod.independent_vars}')
+
+    params = mod.make_params(amplitude=10, center=5, sigma=2)
+
+    # or
+    params2 = mod.make_params(amplitude=10, center=5, sigma=2, gamma=1.5)
+
+In this case, ``gamma`` will be listed as an independent variable.  But because
+its default value is ``None`` (or ``True`` or ``False``) it can be made a
+Parameter that can be varied independently as shown above.  Of course, whether
+this makes sense depends on the details of the implementation of the model
+function: it can be sensible (and even intended) for ``gamma`` in the ``voigt``
+function above to be a numerical value that could be a variable Parameter, but
+it is not sensible for the ``check_positive`` argument in ``decay2`` to be
+variable that can take any numeric value.
+
+
 
 
 Defining a ``prefix`` for the Parameters
 ----------------------------------------
 
-As we will see in the next chapter when combining models, it is sometimes
-necessary to decorate the parameter names in the model, but still have them
-be correctly used in the underlying model function. This would be
-necessary, for example, if two parameters in a composite model (see
-:ref:`composite_models_section` or examples in the next chapter) would have
-the same name. To avoid this, we can add a ``prefix`` to the
-:class:`Model` which will automatically do this mapping for us.
+As we will see below when combining models, it is sometimes necessary to
+decorate the parameter names in the model, but still have them be correctly
+used in the underlying model function. This would be necessary, for example, if
+two parameters in a composite model (see :ref:`composite_models_section` or
+examples in the next chapter) would have the same name. To avoid this, we can
+add a ``prefix`` to the :class:`Model` which will automatically do this mapping
+for us.
 
 .. jupyter-execute::
 

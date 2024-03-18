@@ -25,7 +25,6 @@ exp_back = sympy_parser.parse_expr('B*exp(-x/xw)')
 
 model_list = sympy.Array((gauss_peak1, gauss_peak2, exp_back))
 model = sum(model_list)
-print(model)
 
 ###############################################################################
 # We are using SymPy's lambdify function to make a function from the model
@@ -50,7 +49,7 @@ for c in yi:
 
 ###############################################################################
 # Next, we will just create a lmfit model from the function and fit the data.
-lm_mod = lmfit.Model(model_func, independent_vars=('x'))
+lm_mod = lmfit.Model(model_func, independent_vars=('x',))
 res = lm_mod.fit(data=yn, **param_values)
 
 ###############################################################################
@@ -65,9 +64,10 @@ plt.legend()
 # reason. Both can be expressed by just substituting the variables.
 model2 = model.subs('sigma2', 'sigma1').subs('A2', '3/2*A1')
 model2_func = sympy.lambdify(list(model2.free_symbols), model2)
-lm_mod = lmfit.Model(model2_func, independent_vars=('x'))
+lm_mod = lmfit.Model(model2_func, independent_vars=('x',))
 param2_values = dict(x=x, A1=2, sigma1=1, xc1=2, xc2=5, xw=4, B=5)
 res2 = lm_mod.fit(data=yn, **param2_values)
 res2.plot_fit()
 plt.plot(x, y, label='true')
 plt.legend()
+plt.show()
