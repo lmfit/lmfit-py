@@ -32,7 +32,7 @@ can be used for Bayesian model selection.
 
 .. GENERATED FROM PYTHON SOURCE LINES 13-19
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import matplotlib.pyplot as plt
@@ -47,7 +47,7 @@ Define a Gaussian lineshape and generate some data:
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-34
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -69,7 +69,7 @@ Plot the data:
 
 .. GENERATED FROM PYTHON SOURCE LINES 36-38
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.errorbar(x, y)
 
@@ -80,7 +80,7 @@ Define the normalised residual for the data:
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-55
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -104,7 +104,7 @@ Create a Parameter set for the initial guesses:
 
 .. GENERATED FROM PYTHON SOURCE LINES 57-79
 
-.. code-block:: default
+.. code-block:: Python
 
     def initial_peak_params(M):
         p = lmfit.Parameters()
@@ -135,7 +135,7 @@ Solving with `minimize` gives the Maximum Likelihood solution.
 
 .. GENERATED FROM PYTHON SOURCE LINES 81-86
 
-.. code-block:: default
+.. code-block:: Python
 
     p1 = initial_peak_params(1)
     mi1 = lmfit.minimize(residual, p1, method='differential_evolution')
@@ -164,7 +164,7 @@ probability for the sampling.
 
 .. GENERATED FROM PYTHON SOURCE LINES 103-110
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -185,7 +185,7 @@ contained in the `lmfit.Minimizer` object.
 
 .. GENERATED FROM PYTHON SOURCE LINES 117-148
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Work out the log-evidence for different numbers of peaks:
@@ -226,7 +226,7 @@ out the MCMC chain to reduce autocorrelation between successive samples.
 
 .. GENERATED FROM PYTHON SOURCE LINES 151-166
 
-.. code-block:: default
+.. code-block:: Python
 
     for j in range(6):
         total_steps += 100
@@ -253,7 +253,7 @@ peaks.
 
 .. GENERATED FROM PYTHON SOURCE LINES 171-177
 
-.. code-block:: default
+.. code-block:: Python
 
     r01 = np.exp(log_evidence[-4] - log_evidence[-3])
     r12 = np.exp(log_evidence[-3] - log_evidence[-2])
@@ -286,27 +286,19 @@ parameter, and the prior is a uniform distribution. Other types of prior are
 possible. For example, you might expect the prior to be Gaussian.
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** ( 0 minutes  0.000 seconds)
-
-
 .. _sphx_glr_download_examples_lmfit_emcee_model_selection.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: lmfit_emcee_model_selection.ipynb <lmfit_emcee_model_selection.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: lmfit_emcee_model_selection.py <lmfit_emcee_model_selection.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: lmfit_emcee_model_selection.ipynb <lmfit_emcee_model_selection.ipynb>`
 
 
 .. only:: html

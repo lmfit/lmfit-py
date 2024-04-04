@@ -23,7 +23,7 @@ Calculate Confidence Intervals
 
 .. GENERATED FROM PYTHON SOURCE LINES 6-13
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     from numpy import argsort, exp, linspace, pi, random, sign, sin, unique
@@ -46,7 +46,7 @@ a synthetic data set with some noise:
 
 .. GENERATED FROM PYTHON SOURCE LINES 16-36
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -81,7 +81,7 @@ Create fitting parameters and set initial values:
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-40
 
-.. code-block:: default
+.. code-block:: Python
 
     fit_params = create_params(amp=13.0, period=2, shift=0.0, decay=0.020)
 
@@ -99,7 +99,7 @@ show the report:
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-49
 
-.. code-block:: default
+.. code-block:: Python
 
     mini = Minimizer(residual, fit_params, fcn_args=(x,), fcn_kws={'data': data})
     out = mini.leastsq()
@@ -142,7 +142,7 @@ Calculate the confidence intervals for parameters and display the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 51-96
 
-.. code-block:: default
+.. code-block:: Python
 
     ci, tr = conf_interval(mini, out, trace=True)
 
@@ -218,7 +218,7 @@ parameters using the function ``conf_interval2d``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 99-143
 
-.. code-block:: default
+.. code-block:: Python
 
     names = list(out.params.keys())
 
@@ -279,7 +279,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  10.723 seconds)
+   **Total running time of the script:** (0 minutes 9.800 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:
@@ -288,16 +288,13 @@ parameters using the function ``conf_interval2d``:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_confidence_interval.ipynb <example_confidence_interval.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_confidence_interval.py <example_confidence_interval.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_confidence_interval.ipynb <example_confidence_interval.ipynb>`
 
 
 .. only:: html

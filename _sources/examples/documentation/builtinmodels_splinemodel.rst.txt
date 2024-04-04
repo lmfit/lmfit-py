@@ -96,7 +96,7 @@ doc_builtinmodels_splinemodel.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_builtinmodels_splinemodel.py>
     import matplotlib.pyplot as plt
@@ -163,7 +163,7 @@ doc_builtinmodels_splinemodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.295 seconds)
+   **Total running time of the script:** (0 minutes 0.268 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_splinemodel.py:
@@ -172,16 +172,13 @@ doc_builtinmodels_splinemodel.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: builtinmodels_splinemodel.ipynb <builtinmodels_splinemodel.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_splinemodel.py <builtinmodels_splinemodel.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: builtinmodels_splinemodel.ipynb <builtinmodels_splinemodel.ipynb>`
 
 
 .. only:: html

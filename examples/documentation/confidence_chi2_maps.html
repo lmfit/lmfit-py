@@ -1,28 +1,28 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>doc_confidence_chi2_maps.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_model_uncertainty_pred.py" href="model_uncertainty_pred.html" />
     <link rel="prev" title="doc_fitting_emcee.py" href="fitting_emcee.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -84,6 +84,9 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="model_uncertainty_pred.html" title="doc_model_uncertainty_pred.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="fitting_emcee.html" title="doc_fitting_emcee.py"
              accesskey="P">previous</a> |</li>
     <li>[ <a href="../../intro.html">intro</a> |</li>
@@ -105,6 +108,11 @@
     <h4>Previous topic</h4>
     <p class="topless"><a href="fitting_emcee.html"
                           title="previous chapter">doc_fitting_emcee.py</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="model_uncertainty_pred.html"
+                          title="next chapter">doc_model_uncertainty_pred.py</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -130,8 +138,8 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-confidence-chi2-maps-py">
-<span id="sphx-glr-examples-documentation-confidence-chi2-maps-py"></span><h1>doc_confidence_chi2_maps.py<a class="headerlink" href="#doc-confidence-chi2-maps-py" title="Permalink to this heading">¶</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_confidence_chi2_maps.py&gt;</span>
+<span id="sphx-glr-examples-documentation-confidence-chi2-maps-py"></span><h1>doc_confidence_chi2_maps.py<a class="headerlink" href="#doc-confidence-chi2-maps-py" title="Link to this heading">¶</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_confidence_chi2_maps.py&gt;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -147,7 +155,7 @@ to download the full example code</p>
 </div>
 <p>set up data – deliberately adding imperfections and
 a small amount of non-Gaussian noise</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">npts</span> <span class="o">=</span> <span class="mi">501</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">npts</span> <span class="o">=</span> <span class="mi">501</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rng</span></a><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rng</span></a><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span>
@@ -196,7 +204,7 @@ a small amount of non-Gaussian noise</p>
 </pre></div>
 </div>
 <p>run conf_intervale, print report</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ci</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigma_levels</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ci</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigma_levels</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;## Confidence Report:&quot;</span><span class="p">)</span>
 <span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
@@ -212,7 +220,7 @@ a small amount of non-Gaussian noise</p>
 </pre></div>
 </div>
 <p>plot initial fit</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#2030b0&#39;</span><span class="p">,</span> <span class="s1">&#39;#b02030&#39;</span><span class="p">,</span> <span class="s1">&#39;#207070&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#2030b0&#39;</span><span class="p">,</span> <span class="s1">&#39;#b02030&#39;</span><span class="p">,</span> <span class="s1">&#39;#207070&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">9.5</span><span class="p">))</span>
 
 
@@ -232,7 +240,7 @@ a small amount of non-Gaussian noise</p>
 
     <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span> <span class="o">=</span> <span class="n">pairs</span>
     <span class="k">if</span> <span class="n">explicitly_calculate_sigma</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating chi-square map for &quot;</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating chi-square map for </span><span class="si">{</span><span class="n">pairs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
                                              <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
                                              <span class="n">chi2_out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -243,9 +251,8 @@ a small amount of non-Gaussian noise</p>
         <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">chi2_min</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_mat</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">chi2_mat</span></a><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">chi2_min</span></a><span class="p">)</span><span class="o">/</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">out</span><span class="o">.</span><span class="n">redchi</span></a><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating sigma map for &quot;</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating sigma map for </span><span class="si">{</span><span class="n">pairs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># or, you could just calculate the matrix of probabilities as:</span>
-        <span class="c1"># print(&quot;Generating chi-square map for &quot;, pairs)</span>
         <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c_y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_mat</span></a> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
                                               <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
 
@@ -291,20 +298,20 @@ a small amount of non-Gaussian noise</p>
 <span class="c1"># &lt;end examples/doc_confidence_chi2_maps.py&gt;</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_confidence_chi2_maps_001.png" srcset="../../_images/sphx_glr_confidence_chi2_maps_001.png, ../../_images/sphx_glr_confidence_chi2_maps_001_3_00x.png 3.00x" alt="confidence chi2 maps" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;sigma&#39;, &#39;amplitude&#39;)
-Generating chi-square map for  (&#39;intercept&#39;, &#39;amplitude&#39;)
-Generating chi-square map for  (&#39;slope&#39;, &#39;intercept&#39;)
-Generating chi-square map for  (&#39;slope&#39;, &#39;center&#39;)
-Generating chi-square map for  (&#39;sigma&#39;, &#39;center&#39;)
+<img src="../../_images/sphx_glr_confidence_chi2_maps_001.png" srcset="../../_images/sphx_glr_confidence_chi2_maps_001.png, ../../_images/sphx_glr_confidence_chi2_maps_001_3_00x.png 3.00x" alt="confidence chi2 maps" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;sigma&#39;, &#39;amplitude&#39;)
+Generating chi-square map for (&#39;intercept&#39;, &#39;amplitude&#39;)
+Generating chi-square map for (&#39;slope&#39;, &#39;intercept&#39;)
+Generating chi-square map for (&#39;slope&#39;, &#39;center&#39;)
+Generating chi-square map for (&#39;sigma&#39;, &#39;center&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  41.733 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 35.937 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-confidence-chi2-maps-py">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/d1ffe34d09156ef9424e7c30100a6e12/confidence_chi2_maps.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">confidence_chi2_maps.py</span></code></a></p>
-</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/369abf849fe70dd637ab7e8a52ca329a/confidence_chi2_maps.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">confidence_chi2_maps.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/d1ffe34d09156ef9424e7c30100a6e12/confidence_chi2_maps.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">confidence_chi2_maps.py</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -324,6 +331,9 @@ Generating chi-square map for  (&#39;sigma&#39;, &#39;center&#39;)
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="model_uncertainty_pred.html" title="doc_model_uncertainty_pred.py"
+             >next</a> |</li>
+        <li class="right" >
           <a href="fitting_emcee.html" title="doc_fitting_emcee.py"
              >previous</a> |</li>
     <li>[ <a href="../../intro.html">intro</a> |</li>
@@ -340,8 +350,8 @@ Generating chi-square map for  (&#39;sigma&#39;, &#39;center&#39;)
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

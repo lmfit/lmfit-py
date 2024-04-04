@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Calculation of confidence intervals &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -153,7 +152,7 @@
           <div class="body" role="main">
             
   <section id="module-lmfit.confidence">
-<span id="calculation-of-confidence-intervals"></span><span id="confidence-chapter"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-lmfit.confidence" title="Permalink to this heading">¶</a></h1>
+<span id="calculation-of-confidence-intervals"></span><span id="confidence-chapter"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-lmfit.confidence" title="Link to this heading">¶</a></h1>
 <p>The lmfit <code class="xref py py-mod docutils literal notranslate"><span class="pre">confidence</span></code> module allows you to explicitly calculate
 confidence intervals for variable parameters. For most models, it is not
 necessary since the estimation of the standard error from the estimated
@@ -163,8 +162,10 @@ begins to fail. For this case, lmfit has the function <code class="xref py py-fu
 to calculate confidence intervals directly. This is substantially slower
 than using the errors estimated from the covariance matrix, but the results
 are more robust.</p>
+<p>Please note that <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code> is not suited to work with
+fit results obtained by <code class="docutils literal notranslate"><span class="pre">emcee</span></code>.</p>
 <section id="method-used-for-calculating-confidence-intervals">
-<h2>Method used for calculating confidence intervals<a class="headerlink" href="#method-used-for-calculating-confidence-intervals" title="Permalink to this heading">¶</a></h2>
+<h2>Method used for calculating confidence intervals<a class="headerlink" href="#method-used-for-calculating-confidence-intervals" title="Link to this heading">¶</a></h2>
 <p>The F-test is used to compare our null model, which is the best fit we have
 found, with an alternate model, where one of the parameters is fixed to a
 specific value. The value is changed until the difference between <span class="math notranslate nohighlight">\(\chi^2_0\)</span>
@@ -179,7 +180,7 @@ model).</p>
 <p>Adding a log-likelihood method is under consideration.</p>
 </section>
 <section id="a-basic-example">
-<h2>A basic example<a class="headerlink" href="#a-basic-example" title="Permalink to this heading">¶</a></h2>
+<h2>A basic example<a class="headerlink" href="#a-basic-example" title="Link to this heading">¶</a></h2>
 <p>First we create an example problem:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
@@ -252,7 +253,7 @@ calculate confidence intervals, and the estimates of the uncertainties from
 the covariance matrix are sufficient.</p>
 </section>
 <section id="working-without-standard-error-estimates">
-<h2>Working without standard error estimates<a class="headerlink" href="#working-without-standard-error-estimates" title="Permalink to this heading">¶</a></h2>
+<h2>Working without standard error estimates<a class="headerlink" href="#working-without-standard-error-estimates" title="Link to this heading">¶</a></h2>
 <p>Sometimes the estimation of the standard errors from the covariance
 matrix fails, especially if values are near given bounds. Hence, to
 find the confidence intervals in these cases, it is necessary to set
@@ -272,7 +273,7 @@ parameters and set it manually:</p>
 </div>
 </section>
 <section id="calculating-and-visualizing-maps-of-chi-2">
-<span id="label-confidence-chi2-maps"></span><h2>Calculating and visualizing maps of <span class="math notranslate nohighlight">\(\chi^2\)</span><a class="headerlink" href="#calculating-and-visualizing-maps-of-chi-2" title="Permalink to this heading">¶</a></h2>
+<span id="label-confidence-chi2-maps"></span><h2>Calculating and visualizing maps of <span class="math notranslate nohighlight">\(\chi^2\)</span><a class="headerlink" href="#calculating-and-visualizing-maps-of-chi-2" title="Link to this heading">¶</a></h2>
 <p>The estimated values for the <span class="math notranslate nohighlight">\(1-\sigma\)</span> standard error calculated by
 default for each fit include the effects of correlation between pairs of
 variables, but assumes the uncertainties are symmetric. While it doesn’t
@@ -381,7 +382,9 @@ estimates of the uncertainties are actually pretty good – agreeing to the
 second decimal place.  But we also see that some of the uncertainties do become
 noticeably asymmetric at high <span class="math notranslate nohighlight">\(n-\sigma\)</span> levels.</p>
 <p>We’ll plot this data and fit, and then further explore these uncertainties
-using <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval2d()</span></code>:</p>
+using <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval2d()</span></code>. Please note that <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval2d()</span></code> shows the
+confidence intervals obtained considering the standard errors, not those obtained
+by ‘conf_interval(out, out, sigmas=sigma_levels)’.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#########################</span>
@@ -396,22 +399,29 @@ using <code class="xref py py-func docutils literal notranslate"><span class="pr
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">aix</span><span class="p">,</span> <span class="n">aiy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-<span class="n">nsamples</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">nsamples</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">explicitly_calculate_sigma</span> <span class="o">=</span> <span class="kc">True</span>
+
 <span class="k">for</span> <span class="n">pairs</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;intercept&#39;</span><span class="p">,</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">),</span>
               <span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;intercept&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">)):</span>
-    <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span> <span class="o">=</span> <span class="n">pairs</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating chi-square map for &quot;</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
-    <span class="n">c_x</span><span class="p">,</span> <span class="n">c_y</span><span class="p">,</span> <span class="n">dchi2_mat</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
-                                          <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span>
-                                          <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">chi2_out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="c1"># sigma matrix: sigma increases chi_square</span>
-    <span class="c1"># from  chi_square_best</span>
-    <span class="c1"># to    chi_square + sigma**2 * reduced_chi_square</span>
-    <span class="c1"># so:   sigma = sqrt(dchi2 / reduced_chi_square)</span>
-    <span class="n">sigma_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dchi2_mat</span><span class="p">)</span><span class="o">/</span><span class="n">out</span><span class="o">.</span><span class="n">redchi</span><span class="p">)</span>
 
-    <span class="c1"># you could calculate the matrix of probabilities from sigma as:</span>
-    <span class="c1"># prob_mat  = np.erf(sigma_mat/np.sqrt(2))</span>
+    <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span> <span class="o">=</span> <span class="n">pairs</span>
+    <span class="k">if</span> <span class="n">explicitly_calculate_sigma</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating chi-square map for </span><span class="si">{</span><span class="n">pairs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">c_x</span><span class="p">,</span> <span class="n">c_y</span><span class="p">,</span> <span class="n">chi2_mat</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
+                                             <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
+                                             <span class="n">chi2_out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># explicitly calculate sigma matrix: sigma increases chi_square</span>
+        <span class="c1"># from  chi_square_best</span>
+        <span class="c1"># to    chi_square + sigma**2 * reduced_chi_square</span>
+        <span class="c1"># so:   sigma = sqrt((chi2-chi2_best)/ reduced_chi_square)</span>
+        <span class="n">chi2_min</span> <span class="o">=</span> <span class="n">chi2_mat</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">sigma_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">chi2_mat</span><span class="o">-</span><span class="n">chi2_min</span><span class="p">)</span><span class="o">/</span><span class="n">out</span><span class="o">.</span><span class="n">redchi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating sigma map for </span><span class="si">{</span><span class="n">pairs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># or, you could just calculate the matrix of probabilities as:</span>
+        <span class="n">c_x</span><span class="p">,</span> <span class="n">c_y</span><span class="p">,</span> <span class="n">sigma_mat</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">xpar</span><span class="p">,</span> <span class="n">ypar</span><span class="p">,</span>
+                                              <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
 
     <span class="n">aix</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">aix</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -421,7 +431,7 @@ using <code class="xref py py-func docutils literal notranslate"><span class="pr
 
     <span class="n">cnt</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">c_x</span><span class="p">,</span> <span class="n">c_y</span><span class="p">,</span> <span class="n">sigma_mat</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">sigma_levels</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
                      <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;$\sigma=</span><span class="si">%.0f</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\sigma=</span><span class="si">%.0f</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
 
     <span class="c1"># draw boxes for estimated uncertaties:</span>
     <span class="c1">#  dotted :  scaled stderr from initial fit</span>
@@ -455,19 +465,19 @@ using <code class="xref py py-func docutils literal notranslate"><span class="pr
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;sigma&#39;, &#39;amplitude&#39;)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;sigma&#39;, &#39;amplitude&#39;)
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;intercept&#39;, &#39;amplitude&#39;)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;intercept&#39;, &#39;amplitude&#39;)
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;slope&#39;, &#39;intercept&#39;)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;slope&#39;, &#39;intercept&#39;)
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;slope&#39;, &#39;center&#39;)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;slope&#39;, &#39;center&#39;)
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for  (&#39;sigma&#39;, &#39;center&#39;)
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Generating chi-square map for (&#39;sigma&#39;, &#39;center&#39;)
 </pre></div>
 </div>
 <img alt="_images/confidence_5_5.png" src="_images/confidence_5_5.png" />
@@ -484,7 +494,7 @@ initial fit, and the dashed boxes show the confidence levels from
 asymmetry in the uncertainties for the <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> parameters.</p>
 </section>
 <section id="an-advanced-example-for-evaluating-confidence-intervals">
-<span id="label-confidence-advanced"></span><h2>An advanced example for evaluating confidence intervals<a class="headerlink" href="#an-advanced-example-for-evaluating-confidence-intervals" title="Permalink to this heading">¶</a></h2>
+<span id="label-confidence-advanced"></span><h2>An advanced example for evaluating confidence intervals<a class="headerlink" href="#an-advanced-example-for-evaluating-confidence-intervals" title="Link to this heading">¶</a></h2>
 <p>Now we look at a problem where calculating the error from approximated
 covariance can lead to misleading result – the same double exponential
 problem shown in <a class="reference internal" href="fitting.html#label-emcee"><span class="std std-ref">Minimizer.emcee() - calculating the posterior probability distribution of parameters</span></a>. In fact such a problem is particularly
@@ -658,17 +668,17 @@ For example, you may have fractionally underestimated the uncertainties on a
 dataset. MCMC can be used to estimate the true level of uncertainty on each
 data point. A tutorial on the possibilities offered by MCMC can be found at <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id2" role="note">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/</a></p>
 </aside>
 </aside>
 </section>
 <section id="confidence-interval-functions">
-<h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Permalink to this heading">¶</a></h2>
+<h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="lmfit.conf_interval">
-<span class="sig-name descname"><span class="pre">conf_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">conf_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_rel_change</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate the confidence interval (CI) for parameters.</p>
 <p>The parameter for which the CI is calculated will be varied, while the
 remaining parameters are re-optimized to minimize the chi-square. The
@@ -680,17 +690,18 @@ to find the values resulting in the searched confidence region.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
-<li><p><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the CI is calculated. If None
+<li><p><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the CI is calculated. If None
 (default), the CI is calculated for every parameter.</p></li>
-<li><p><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Notes below.</p></li>
-<li><p><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability
+<li><p><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Notes below.</p></li>
+<li><p><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability
 calculation is saved along with the parameter. This can be used to
 plot so-called “profile traces”.</p></li>
-<li><p><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debugging information (default is False).</p></li>
+<li><p><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debugging information (default is False).</p></li>
 <li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
 Default is None and uses the built-in function <cite>f_compare</cite>
 (i.e., F-test).</p></li>
+<li><p><strong>min_rel_change</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum relative change in probability (default is 1e-5).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -741,7 +752,7 @@ parameters.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lmfit.conf_interval2d">
-<span class="sig-name descname"><span class="pre">conf_interval2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval2d" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">conf_interval2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval2d" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate confidence regions for two fixed parameters.</p>
 <p>The method itself is explained in <cite>conf_interval</cite>: here we are fixing
 two parameters.</p>
@@ -750,15 +761,15 @@ two parameters.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
-<li><p><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the x direction.</p></li>
-<li><p><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the y direction.</p></li>
-<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction (default is 10).</p></li>
-<li><p><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction (default is 10).</p></li>
-<li><p><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form <code class="docutils literal notranslate"><span class="pre">((x_upper,</span> <span class="pre">x_lower),</span> <span class="pre">(y_upper,</span> <span class="pre">y_lower))</span></code>.
+<li><p><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the parameter which will be the x direction.</p></li>
+<li><p><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the parameter which will be the y direction.</p></li>
+<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction (default is 10).</p></li>
+<li><p><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction (default is 10).</p></li>
+<li><p><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form <code class="docutils literal notranslate"><span class="pre">((x_upper,</span> <span class="pre">x_lower),</span> <span class="pre">(y_upper,</span> <span class="pre">y_lower))</span></code>.
 If not given, the default is nsigma*stderr in each direction.</p></li>
 <li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>deprecated</em>) – Starting with version 1.2, this argument is unused and has no effect.</p></li>
-<li><p><strong>nsigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Multiplier of stderr for limits (default is 5).</p></li>
-<li><p><strong>chi2_out</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to return chi-square at each coordinate instead of probability.</p></li>
+<li><p><strong>nsigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Multiplier of stderr for limits (default is 5).</p></li>
+<li><p><strong>chi2_out</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether to return chi-square at each coordinate instead of probability.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -786,23 +797,23 @@ probabilities or chi-square.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lmfit.ci_report">
-<span class="sig-name descname"><span class="pre">ci_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndigits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.ci_report" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ci_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndigits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.ci_report" title="Link to this definition">¶</a></dt>
 <dd><p>Return text of a report for confidence intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ci</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The result of <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>: a dictionary
+<li><p><strong>ci</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The result of <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>: a dictionary
 containing a list of <code class="docutils literal notranslate"><span class="pre">(sigma,</span> <span class="pre">vals)</span></code>-tuples for each parameter.</p></li>
-<li><p><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is
+<li><p><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is
 True).</p></li>
-<li><p><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</p></li>
+<li><p><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Text of formatted report on confidence intervals.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -841,8 +852,8 @@ True).</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

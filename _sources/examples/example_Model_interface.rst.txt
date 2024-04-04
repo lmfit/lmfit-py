@@ -27,7 +27,7 @@ https://lmfit.github.io/lmfit-py/model.html#the-model-class.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-15
 
-.. code-block:: default
+.. code-block:: Python
 
     import numpy as np
     from pandas import Series
@@ -48,7 +48,7 @@ fitting example data to an exponential decay.
 
 .. GENERATED FROM PYTHON SOURCE LINES 18-24
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -70,7 +70,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-31
 
-.. code-block:: default
+.. code-block:: Python
 
     t = np.linspace(0, 5, num=1000)
     np.random.seed(2021)
@@ -89,7 +89,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-36
 
-.. code-block:: default
+.. code-block:: Python
 
     model = Model(decay, independent_vars=['t'])
     result = model.fit(data, t=t, N=10, tau=1)
@@ -112,7 +112,7 @@ We can immediately see the best-fit values:
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-45
 
-.. code-block:: default
+.. code-block:: Python
 
     print(result.values)
 
@@ -135,7 +135,7 @@ and use these best-fit parameters for plotting with the ``plot`` function:
 
 .. GENERATED FROM PYTHON SOURCE LINES 47-49
 
-.. code-block:: default
+.. code-block:: Python
 
     result.plot()
 
@@ -157,7 +157,7 @@ We can review the best-fit `Parameters` by accessing `result.params`:
 
 .. GENERATED FROM PYTHON SOURCE LINES 51-53
 
-.. code-block:: default
+.. code-block:: Python
 
     result.params.pretty_print()
 
@@ -192,7 +192,7 @@ build the ``Parameter`` objects explicitly; the following is equivalent.
 
 .. GENERATED FROM PYTHON SOURCE LINES 64-69
 
-.. code-block:: default
+.. code-block:: Python
 
     result = model.fit(data, t=t,
                        N=Parameter('N', value=10),
@@ -223,7 +223,7 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-77
 
-.. code-block:: default
+.. code-block:: Python
 
     result = model.fit(data, t=t,
                        N=Parameter('N', value=7, vary=False),
@@ -255,7 +255,7 @@ and pass them to ``fit``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 83-88
 
-.. code-block:: default
+.. code-block:: Python
 
     params = model.make_params(N=10, tau={'value': 1, 'min': 0})
 
@@ -286,7 +286,7 @@ properties (``min``, ``max``, ``vary``).
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-94
 
-.. code-block:: default
+.. code-block:: Python
 
     result = model.fit(data, params, t=t, tau=1)
     report_fit(result.params)
@@ -326,7 +326,7 @@ as the initial guess for the next, simply pass ``params=result.params``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 107-110
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # #result = model.fit(data, t=t, tau=1)  # N unspecified
@@ -353,7 +353,7 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 120-124
 
-.. code-block:: default
+.. code-block:: Python
 
     weights = np.arange(len(data))
     result = model.fit(data, params, t=t, weights=weights)
@@ -386,7 +386,7 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
 
 .. GENERATED FROM PYTHON SOURCE LINES 130-137
 
-.. code-block:: default
+.. code-block:: Python
 
     data_with_holes = data.copy()
     data_with_holes[[5, 500, 700]] = np.nan  # Replace arbitrary values with NaN.
@@ -443,7 +443,7 @@ automatically aligned to the correct section of ``t`` using Series' index.
 
 .. GENERATED FROM PYTHON SOURCE LINES 163-169
 
-.. code-block:: default
+.. code-block:: Python
 
     model = Model(decay, independent_vars=['t'])
     truncated_data = Series(data)[200:800]  # data points 200-800
@@ -474,7 +474,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. GENERATED FROM PYTHON SOURCE LINES 171-175
 
-.. code-block:: default
+.. code-block:: Python
 
     model = Model(decay, independent_vars=['t'], nan_policy='omit')
     truncated_data_with_holes = Series(data_with_holes)[200:800]
@@ -500,7 +500,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.258 seconds)
+   **Total running time of the script:** (0 minutes 0.225 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:
@@ -509,16 +509,13 @@ Data with missing entries and an unequal length still aligns properly.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_Model_interface.ipynb <example_Model_interface.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_Model_interface.py <example_Model_interface.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_Model_interface.ipynb <example_Model_interface.ipynb>`
 
 
 .. only:: html

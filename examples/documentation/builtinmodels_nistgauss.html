@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>doc_builtinmodels_nistgauss.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -139,7 +138,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-builtinmodels-nistgauss-py">
-<span id="sphx-glr-examples-documentation-builtinmodels-nistgauss-py"></span><h1>doc_builtinmodels_nistgauss.py<a class="headerlink" href="#doc-builtinmodels-nistgauss-py" title="Permalink to this heading">¶</a></h1>
+<span id="sphx-glr-examples-documentation-builtinmodels-nistgauss-py"></span><h1>doc_builtinmodels_nistgauss.py<a class="headerlink" href="#doc-builtinmodels-nistgauss-py" title="Link to this heading">¶</a></h1>
 <img src="../../_images/sphx_glr_builtinmodels_nistgauss_001.png" srcset="../../_images/sphx_glr_builtinmodels_nistgauss_001.png, ../../_images/sphx_glr_builtinmodels_nistgauss_001_3_00x.png 3.00x" alt="builtinmodels nistgauss" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
     ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
 [[Fit Statistics]]
@@ -163,8 +162,8 @@ to download the full example code</p>
     g2_amplitude:   2493.41735 +/- 36.1697789 (1.45%) (init = 2000)
     g2_center:      153.270102 +/- 0.19466802 (0.13%) (init = 155)
     g2_sigma:       13.8069464 +/- 0.18679695 (1.35%) (init = 15)
-    g2_fwhm:        32.5128730 +/- 0.43987320 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455952 +/- 0.61722243 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    g2_fwhm:        32.5128735 +/- 0.43987320 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455941 +/- 0.61722243 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
 [[Correlations]]
   +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
   | Variable      | exp_amplitude | exp_decay     | g1_amplitude  | g1_center     | g1_sigma      | g2_amplitude  | g2_center     | g2_sigma      |
@@ -183,7 +182,7 @@ to download the full example code</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -230,13 +229,13 @@ to download the full example code</p>
 <span class="c1"># &lt;end examples/doc_builtinmodels_nistgauss.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.325 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.289 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-builtinmodels-nistgauss-py">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/c0716e59ff0e887536aa2f410ead27c8/builtinmodels_nistgauss.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_nistgauss.py</span></code></a></p>
-</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f71f73b14c11702bad6eb1eec882f8c3/builtinmodels_nistgauss.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">builtinmodels_nistgauss.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/c0716e59ff0e887536aa2f410ead27c8/builtinmodels_nistgauss.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_nistgauss.py</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -275,8 +274,8 @@ to download the full example code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -29,7 +29,7 @@ doc_model_savemodel.py
 
 
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_model_savemodel.py>
     import numpy as np
@@ -50,7 +50,7 @@ doc_model_savemodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.005 seconds)
+   **Total running time of the script:** (0 minutes 0.006 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_savemodel.py:
@@ -59,16 +59,13 @@ doc_model_savemodel.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: model_savemodel.ipynb <model_savemodel.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_savemodel.py <model_savemodel.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: model_savemodel.ipynb <model_savemodel.ipynb>`
 
 
 .. only:: html

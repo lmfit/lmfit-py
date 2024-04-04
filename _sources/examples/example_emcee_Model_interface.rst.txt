@@ -23,7 +23,7 @@ Emcee and the Model Interface
 
 .. GENERATED FROM PYTHON SOURCE LINES 6-13
 
-.. code-block:: default
+.. code-block:: Python
 
     import corner
     import matplotlib.pyplot as plt
@@ -45,7 +45,7 @@ Set up a double-exponential function and create a Model:
 
 .. GENERATED FROM PYTHON SOURCE LINES 15-21
 
-.. code-block:: default
+.. code-block:: Python
 
     def double_exp(x, a1, t1, a2, t2):
         return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
@@ -66,7 +66,7 @@ Generate some fake data from the model with added noise:
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-28
 
-.. code-block:: default
+.. code-block:: Python
 
     truths = (3.0, 2.0, -5.0, 10.0)
     x = np.linspace(1, 10, 250)
@@ -86,7 +86,7 @@ Create model parameters and give them initial values:
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-32
 
-.. code-block:: default
+.. code-block:: Python
 
     p = model.make_params(a1=4, t1=3, a2=4, t2=3)
 
@@ -103,7 +103,7 @@ Fit the model using a traditional minimizer, and show the output:
 
 .. GENERATED FROM PYTHON SOURCE LINES 34-39
 
-.. code-block:: default
+.. code-block:: Python
 
     result = model.fit(data=y, params=p, x=x, method='Nelder', nan_policy='omit')
 
@@ -159,7 +159,7 @@ Calculate parameter covariance using ``emcee``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 45-51
 
-.. code-block:: default
+.. code-block:: Python
 
 
     emcee_kws = dict(steps=5000, burn=500, thin=20, is_weighted=False,
@@ -180,7 +180,7 @@ run the MCMC algorithm and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 53-56
 
-.. code-block:: default
+.. code-block:: Python
 
     result_emcee = model.fit(data=y, x=x, params=emcee_params, method='emcee',
                              nan_policy='omit', fit_kws=emcee_kws)
@@ -194,7 +194,7 @@ run the MCMC algorithm and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 57-59
 
-.. code-block:: default
+.. code-block:: Python
 
     lmfit.report_fit(result_emcee)
 
@@ -215,7 +215,7 @@ run the MCMC algorithm and show the results:
         reduced chi-square = 1.00090526
         Akaike info crit   = 5.17553688
         Bayesian info crit = 22.7828415
-        R-squared          = -5.05618323
+        R-squared          = 0.94233862
     [[Variables]]
         a1:         2.99546858 +/- 0.14834594 (4.95%) (init = 2.986237)
         t1:         1.32127391 +/- 0.14079400 (10.66%) (init = 1.309932)
@@ -235,7 +235,7 @@ run the MCMC algorithm and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 60-64
 
-.. code-block:: default
+.. code-block:: Python
 
     result_emcee.plot_fit()
     plt.plot(x, model.eval(params=result.params, x=x), '--', label='Nelder')
@@ -259,7 +259,7 @@ Check the acceptance fraction to see whether ``emcee`` performed well:
 
 .. GENERATED FROM PYTHON SOURCE LINES 66-70
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(result_emcee.acceptance_fraction, 'o')
     plt.xlabel('walker')
@@ -283,7 +283,7 @@ Try to compute the autocorrelation time:
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-78
 
-.. code-block:: default
+.. code-block:: Python
 
     if hasattr(result_emcee, "acor"):
         print("Autocorrelation time for the parameters:")
@@ -315,7 +315,7 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 80-83
 
-.. code-block:: default
+.. code-block:: Python
 
     emcee_corner = corner.corner(result_emcee.flatchain, labels=result_emcee.var_names,
                                  truths=list(result_emcee.params.valuesdict().values()))
@@ -334,7 +334,7 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 84-88
 
-.. code-block:: default
+.. code-block:: Python
 
     print("\nmedian of posterior probability distribution")
     print('--------------------------------------------')
@@ -374,7 +374,7 @@ Find the maximum likelihood solution:
 
 .. GENERATED FROM PYTHON SOURCE LINES 90-101
 
-.. code-block:: default
+.. code-block:: Python
 
     highest_prob = np.argmax(result_emcee.lnprob)
     hp_loc = np.unravel_index(highest_prob, result_emcee.lnprob.shape)
@@ -414,7 +414,7 @@ Find the maximum likelihood solution:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  32.359 seconds)
+   **Total running time of the script:** (0 minutes 29.171 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:
@@ -423,16 +423,13 @@ Find the maximum likelihood solution:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_emcee_Model_interface.ipynb <example_emcee_Model_interface.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_emcee_Model_interface.py <example_emcee_Model_interface.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_emcee_Model_interface.ipynb <example_emcee_Model_interface.ipynb>`
 
 
 .. only:: html

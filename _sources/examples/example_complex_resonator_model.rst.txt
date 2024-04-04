@@ -40,7 +40,7 @@ mismatches in the input and output transmission impedances.
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-28
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -61,7 +61,7 @@ Since ``scipy.optimize`` and ``lmfit`` require real parameters, we represent
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-38
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -83,7 +83,7 @@ The standard practice of defining a ``lmfit`` model is as follows:
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-72
 
-.. code-block:: default
+.. code-block:: Python
 
     class ResonatorModel(lmfit.model.Model):
         __doc__ = "resonator model" + lmfit.models.COMMON_INIT_DOC
@@ -130,7 +130,7 @@ Now let's use the model to generate some fake data:
 
 .. GENERATED FROM PYTHON SOURCE LINES 74-88
 
-.. code-block:: default
+.. code-block:: Python
 
     resonator = ResonatorModel()
     true_params = resonator.make_params(f_0=100, Q=10000, Q_e_real=9000, Q_e_imag=-9000)
@@ -164,7 +164,7 @@ Try out the ``guess`` method we added:
 
 .. GENERATED FROM PYTHON SOURCE LINES 90-92
 
-.. code-block:: default
+.. code-block:: Python
 
     guess = resonator.guess(measured_s21, f=f, verbose=True)
 
@@ -188,7 +188,7 @@ And now fit the data using the ``guess``-ed values as a starting point:
 
 .. GENERATED FROM PYTHON SOURCE LINES 94-99
 
-.. code-block:: default
+.. code-block:: Python
 
     result = resonator.fit(measured_s21, params=guess, f=f, verbose=True)
 
@@ -214,7 +214,7 @@ And now fit the data using the ``guess``-ed values as a starting point:
         reduced chi-square = 4.3539e-04
         Akaike info crit   = -1543.89425
         Bayesian info crit = -1530.70099
-        R-squared          = -8.5336e+13
+        R-squared          = (-12528141463701.6+2276419599932.454j)
     [[Variables]]
         f_0:       100.000096 +/- 7.0308e-05 (0.00%) (init = 100.0035)
         Q:         10059.4972 +/- 142.294636 (1.41%) (init = 3146.538)
@@ -242,7 +242,7 @@ for plotting complex quantities:
 
 .. GENERATED FROM PYTHON SOURCE LINES 102-126
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -295,7 +295,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.436 seconds)
+   **Total running time of the script:** (0 minutes 0.402 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
@@ -304,16 +304,13 @@ for plotting complex quantities:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_complex_resonator_model.ipynb <example_complex_resonator_model.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_complex_resonator_model.ipynb <example_complex_resonator_model.ipynb>`
 
 
 .. only:: html

@@ -26,7 +26,7 @@ on a fairly simple problem.
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-25
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -57,7 +57,7 @@ Generate synthetic data and set-up Parameters with initial values/boundaries:
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-43
 
-.. code-block:: default
+.. code-block:: Python
 
     decay = 5
     offset = 1.0
@@ -88,7 +88,7 @@ Perform the fits and show fitting results and plot:
 
 .. GENERATED FROM PYTHON SOURCE LINES 45-49
 
-.. code-block:: default
+.. code-block:: Python
 
     o1 = lmfit.minimize(resid, params, args=(x, yn), method='leastsq')
     print("# Fit using leastsq:")
@@ -125,7 +125,7 @@ Perform the fits and show fitting results and plot:
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-54
 
-.. code-block:: default
+.. code-block:: Python
 
     o2 = lmfit.minimize(resid, params, args=(x, yn), method='differential_evolution')
     print("\n\n# Fit using differential_evolution:")
@@ -144,7 +144,7 @@ Perform the fits and show fitting results and plot:
     # Fit using differential_evolution:
     [[Fit Statistics]]
         # fitting method   = differential_evolution
-        # function evals   = 1425
+        # function evals   = 1865
         # data points      = 101
         # variables        = 4
         chi-square         = 21.7961792
@@ -152,10 +152,10 @@ Perform the fits and show fitting results and plot:
         Akaike info crit   = -146.871969
         Bayesian info crit = -136.411487
     [[Variables]]
-        offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
-        omega:   3.98700854 +/- 0.02121810 (0.53%) (init = 3.3)
-        amp:     1.80252618 +/- 0.19022409 (10.55%) (init = 2.5)
-        decay:   5.76284509 +/- 1.00452610 (17.43%) (init = 1)
+        offset:  0.96333018 +/- 0.04735904 (4.92%) (init = 2)
+        omega:   3.98700832 +/- 0.02121808 (0.53%) (init = 3.3)
+        amp:     1.80252738 +/- 0.19022472 (10.55%) (init = 2.5)
+        decay:   5.76285571 +/- 1.00453329 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.7434
 
@@ -164,7 +164,7 @@ Perform the fits and show fitting results and plot:
 
 .. GENERATED FROM PYTHON SOURCE LINES 55-59
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, yn, 'o', label='data')
     plt.plot(x, yn+o1.residual, '-', label='leastsq')
@@ -185,7 +185,7 @@ Perform the fits and show fitting results and plot:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.276 seconds)
+   **Total running time of the script:** (0 minutes 0.285 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:
@@ -194,16 +194,13 @@ Perform the fits and show fitting results and plot:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_diffev.ipynb <example_diffev.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_diffev.py <example_diffev.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_diffev.ipynb <example_diffev.ipynb>`
 
 
 .. only:: html

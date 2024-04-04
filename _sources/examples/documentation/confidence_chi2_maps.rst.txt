@@ -23,7 +23,7 @@ doc_confidence_chi2_maps.py
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-20
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_confidence_chi2_maps.py>
 
@@ -52,7 +52,7 @@ a small amount of non-Gaussian noise
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-38
 
-.. code-block:: default
+.. code-block:: Python
 
     npts = 501
     x = np.linspace(1, 100, num=npts)
@@ -117,7 +117,7 @@ run conf_intervale, print report
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-45
 
-.. code-block:: default
+.. code-block:: Python
 
     ci = conf_interval(out, out, sigmas=sigma_levels)
 
@@ -147,9 +147,9 @@ run conf_intervale, print report
 
 plot initial fit
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-124
+.. GENERATED FROM PYTHON SOURCE LINES 47-123
 
-.. code-block:: default
+.. code-block:: Python
 
     colors = ('#2030b0', '#b02030', '#207070')
     fig, axes = plt.subplots(2, 3, figsize=(15, 9.5))
@@ -171,7 +171,7 @@ plot initial fit
 
         xpar, ypar = pairs
         if explicitly_calculate_sigma:
-            print("Generating chi-square map for ", pairs)
+            print(f"Generating chi-square map for {pairs}")
             c_x, c_y, chi2_mat = conf_interval2d(out, out, xpar, ypar,
                                                  nsamples, nsamples, nsigma=3.5,
                                                  chi2_out=True)
@@ -182,9 +182,8 @@ plot initial fit
             chi2_min = chi2_mat.min()
             sigma_mat = np.sqrt((chi2_mat-chi2_min)/out.redchi)
         else:
-            print("Generating sigma map for ", pairs)
+            print(f"Generating sigma map for {pairs}")
             # or, you could just calculate the matrix of probabilities as:
-            # print("Generating chi-square map for ", pairs)
             c_x, c_y, sigma_mat = conf_interval2d(out, out, xpar, ypar,
                                                   nsamples, nsamples, nsigma=3.5)
 
@@ -241,11 +240,11 @@ plot initial fit
 
  .. code-block:: none
 
-    Generating chi-square map for  ('sigma', 'amplitude')
-    Generating chi-square map for  ('intercept', 'amplitude')
-    Generating chi-square map for  ('slope', 'intercept')
-    Generating chi-square map for  ('slope', 'center')
-    Generating chi-square map for  ('sigma', 'center')
+    Generating chi-square map for ('sigma', 'amplitude')
+    Generating chi-square map for ('intercept', 'amplitude')
+    Generating chi-square map for ('slope', 'intercept')
+    Generating chi-square map for ('slope', 'center')
+    Generating chi-square map for ('sigma', 'center')
 
 
 
@@ -253,7 +252,7 @@ plot initial fit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  41.733 seconds)
+   **Total running time of the script:** (0 minutes 35.937 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_chi2_maps.py:
@@ -262,16 +261,13 @@ plot initial fit
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: confidence_chi2_maps.ipynb <confidence_chi2_maps.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: confidence_chi2_maps.py <confidence_chi2_maps.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: confidence_chi2_maps.ipynb <confidence_chi2_maps.ipynb>`
 
 
 .. only:: html

@@ -161,7 +161,7 @@ doc_uvars_params.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_uvars_params.py>
     import numpy as np
@@ -237,7 +237,7 @@ doc_uvars_params.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.075 seconds)
+   **Total running time of the script:** (0 minutes 0.058 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_uvars_params.py:
@@ -246,16 +246,13 @@ doc_uvars_params.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: uvars_params.ipynb <uvars_params.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: uvars_params.py <uvars_params.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: uvars_params.ipynb <uvars_params.ipynb>`
 
 
 .. only:: html

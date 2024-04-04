@@ -51,8 +51,8 @@ doc_model_loadmodelresult.py
         amplitude:  8.88021907 +/- 0.11359530 (1.28%) (init = 5)
         center:     5.65866105 +/- 0.01030493 (0.18%) (init = 5)
         sigma:      0.69765480 +/- 0.01030508 (1.48%) (init = 1)
-        fwhm:       1.64285146 +/- 0.02426660 (1.48%) == '2.3548200*sigma'
-        height:     5.07800571 +/- 0.06495769 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
+        fwhm:       1.64285148 +/- 0.02426660 (1.48%) == '2.3548200*sigma'
+        height:     5.07800563 +/- 0.06495769 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigma) = +0.5774
 
@@ -63,7 +63,7 @@ doc_model_loadmodelresult.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_model_loadmodelresult.py>
     import os
@@ -92,7 +92,7 @@ doc_model_loadmodelresult.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.130 seconds)
+   **Total running time of the script:** (0 minutes 0.121 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodelresult.py:
@@ -101,16 +101,13 @@ doc_model_loadmodelresult.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: model_loadmodelresult.ipynb <model_loadmodelresult.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_loadmodelresult.py <model_loadmodelresult.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: model_loadmodelresult.ipynb <model_loadmodelresult.ipynb>`
 
 
 .. only:: html

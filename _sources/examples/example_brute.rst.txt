@@ -34,7 +34,7 @@ all varying parameters, but will also deal with non-bounded parameters
 
 .. GENERATED FROM PYTHON SOURCE LINES 15-23
 
-.. code-block:: default
+.. code-block:: Python
 
     import copy
 
@@ -71,7 +71,7 @@ the ``min`` and ``max`` attributes, and the stepsize is set using
 
 .. GENERATED FROM PYTHON SOURCE LINES 39-56
 
-.. code-block:: default
+.. code-block:: Python
 
 
     params = create_params(a=dict(value=2, vary=False),
@@ -103,7 +103,7 @@ Second, create the three functions and the objective function:
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-83
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -143,7 +143,7 @@ Performing the actual grid search is done with:
 
 .. GENERATED FROM PYTHON SOURCE LINES 85-88
 
-.. code-block:: default
+.. code-block:: Python
 
     fitter = Minimizer(f, params)
     result = fitter.minimize(method='brute')
@@ -162,7 +162,7 @@ Performing the actual grid search is done with:
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-94
 
-.. code-block:: default
+.. code-block:: Python
 
     grid_x, grid_y = (np.unique(par.ravel()) for par in result.brute_grid)
     print(grid_x)
@@ -193,7 +193,7 @@ which the objective function had its minimum value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 101-103
 
-.. code-block:: default
+.. code-block:: Python
 
     print(result.brute_x0)
 
@@ -216,7 +216,7 @@ which the objective function had its minimum value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 105-107
 
-.. code-block:: default
+.. code-block:: Python
 
     print(result.brute_fval)
 
@@ -240,7 +240,7 @@ same length as ``x0``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 110-112
 
-.. code-block:: default
+.. code-block:: Python
 
     print(result.brute_grid)
 
@@ -278,7 +278,7 @@ grid, i.e., ``Jout = func(*grid)``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 115-117
 
-.. code-block:: default
+.. code-block:: Python
 
     print(result.brute_Jout)
 
@@ -323,7 +323,7 @@ wave, define an objective function, and create/initialize a Parameter set.
 
 .. GENERATED FROM PYTHON SOURCE LINES 128-146
 
-.. code-block:: default
+.. code-block:: Python
 
     x = np.linspace(0, 15, 301)
     np.random.seed(7)
@@ -364,7 +364,7 @@ attribute specified:
 
 .. GENERATED FROM PYTHON SOURCE LINES 151-156
 
-.. code-block:: default
+.. code-block:: Python
 
     params = create_params(amp=dict(value=7, min=2.5, brute_step=0.25),
                            decay=dict(value=0.05, brute_step=0.005),
@@ -385,7 +385,7 @@ determine how the grid is set-up.
 
 .. GENERATED FROM PYTHON SOURCE LINES 159-161
 
-.. code-block:: default
+.. code-block:: Python
 
     params.pretty_print()
 
@@ -412,7 +412,7 @@ First, we initialize a ``Minimizer`` and perform the grid search:
 
 .. GENERATED FROM PYTHON SOURCE LINES 163-168
 
-.. code-block:: default
+.. code-block:: Python
 
     fitter = Minimizer(fcn2min, params, fcn_args=(x, data))
     result_brute = fitter.minimize(method='brute', Ns=25, keep=25)
@@ -460,7 +460,7 @@ to ``max`` (inclusive), is here shown for the parameter ``shift``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 178-183
 
-.. code-block:: default
+.. code-block:: Python
 
     par_name = 'shift'
     indx_shift = result_brute.var_names.index(par_name)
@@ -496,7 +496,7 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 .. GENERATED FROM PYTHON SOURCE LINES 189-194
 
-.. code-block:: default
+.. code-block:: Python
 
     par_name = 'amp'
     indx_shift = result_brute.var_names.index(par_name)
@@ -526,7 +526,7 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 .. GENERATED FROM PYTHON SOURCE LINES 197-202
 
-.. code-block:: default
+.. code-block:: Python
 
     par_name = 'omega'
     indx_shift = result_brute.var_names.index(par_name)
@@ -557,7 +557,7 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 .. GENERATED FROM PYTHON SOURCE LINES 205-210
 
-.. code-block:: default
+.. code-block:: Python
 
     par_name = 'decay'
     indx_shift = result_brute.var_names.index(par_name)
@@ -592,7 +592,7 @@ is given below together with a plot:
 
 .. GENERATED FROM PYTHON SOURCE LINES 214-216
 
-.. code-block:: default
+.. code-block:: Python
 
     print(fit_report(result_brute))
 
@@ -625,7 +625,7 @@ is given below together with a plot:
 
 .. GENERATED FROM PYTHON SOURCE LINES 217-221
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, data, 'o')
     plt.plot(x, data + fcn2min(result_brute.params, x, data), '--')
@@ -670,7 +670,7 @@ attribute and is, therefore, identical to ``result_brute.show_candidates(1)``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 244-246
 
-.. code-block:: default
+.. code-block:: Python
 
     result_brute.show_candidates(1)
 
@@ -700,7 +700,7 @@ increased quite a bit:
 
 .. GENERATED FROM PYTHON SOURCE LINES 249-251
 
-.. code-block:: default
+.. code-block:: Python
 
     result_brute.show_candidates(2)
 
@@ -734,7 +734,7 @@ is lower than the previously 'optimal' solution:
 
 .. GENERATED FROM PYTHON SOURCE LINES 258-265
 
-.. code-block:: default
+.. code-block:: Python
 
     best_result = copy.deepcopy(result_brute)
 
@@ -757,7 +757,7 @@ most optimal result:
 
 .. GENERATED FROM PYTHON SOURCE LINES 268-270
 
-.. code-block:: default
+.. code-block:: Python
 
     print(fit_report(best_result))
 
@@ -799,7 +799,7 @@ the plots below.
 
 .. GENERATED FROM PYTHON SOURCE LINES 274-282
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, data, 'o')
     plt.plot(x, data + fcn2min(result_brute.params, x, data), '-',
@@ -829,7 +829,7 @@ in lmfit at some point).
 
 .. GENERATED FROM PYTHON SOURCE LINES 286-389
 
-.. code-block:: default
+.. code-block:: Python
 
     def plot_results_brute(result, best_vals=True, varlabels=None,
                            output=None):
@@ -947,7 +947,7 @@ and finally, to generated the figure:
 
 .. GENERATED FROM PYTHON SOURCE LINES 391-393
 
-.. code-block:: default
+.. code-block:: Python
 
     plot_results_brute(result_brute, best_vals=True, varlabels=None)
     plt.show()
@@ -966,7 +966,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  17.922 seconds)
+   **Total running time of the script:** (0 minutes 16.219 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:
@@ -975,16 +975,13 @@ and finally, to generated the figure:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_brute.ipynb <example_brute.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_brute.py <example_brute.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_brute.ipynb <example_brute.ipynb>`
 
 
 .. only:: html

@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Built-in Fitting Models in the models module &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -287,7 +286,7 @@
           <div class="body" role="main">
             
   <section id="module-lmfit.models">
-<span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module<a class="headerlink" href="#module-lmfit.models" title="Permalink to this heading">¶</a></h1>
+<span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module<a class="headerlink" href="#module-lmfit.models" title="Link to this heading">¶</a></h1>
 <p>Lmfit provides several built-in fitting models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module.
 These pre-defined models each subclass from the <a class="reference internal" href="model.html#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class of the
 previous chapter and wrap relatively well-known functional forms, such as
@@ -326,7 +325,7 @@ area of) a peak or function and a <code class="docutils literal notranslate"><sp
 characteristic width.</p>
 <p>After a list of built-in models, a few examples of their use are given.</p>
 <section id="peak-like-models">
-<h2>Peak-like models<a class="headerlink" href="#peak-like-models" title="Permalink to this heading">¶</a></h2>
+<h2>Peak-like models<a class="headerlink" href="#peak-like-models" title="Link to this heading">¶</a></h2>
 <p>There are many peak-like models available. These include
 <a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>,
 <a class="reference internal" href="#lmfit.models.PseudoVoigtModel" title="lmfit.models.PseudoVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a>, and some less commonly used variations. Most of
@@ -348,10 +347,10 @@ that uses data to make a fairly crude but usually sufficient guess for the
 value of <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, and sets a lower bound
 of 0 on the value of <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.</p>
 <section id="gaussianmodel">
-<h3><a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a><a class="headerlink" href="#gaussianmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a><a class="headerlink" href="#gaussianmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.GaussianModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.GaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.GaussianModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Gaussian or normal distribution lineshape.</p>
 <p>The model has three Parameters: <cite>amplitude</cite>, <cite>center</cite>, and <cite>sigma</cite>.
 In addition, parameters <cite>fwhm</cite> and <cite>height</cite> are included as
@@ -367,9 +366,9 @@ maximum is <span class="math notranslate nohighlight">\(2\sigma\sqrt{2\ln{2}}\)<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -390,10 +389,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="lorentzianmodel">
-<h3><a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a><a class="headerlink" href="#lorentzianmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a><a class="headerlink" href="#lorentzianmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.LorentzianModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LorentzianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LorentzianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LorentzianModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Lorentzian or Cauchy-Lorentz distribution function.</p>
 <p>The model has three Parameters: <cite>amplitude</cite>, <cite>center</cite>, and <cite>sigma</cite>. In
 addition, parameters <cite>fwhm</cite> and <cite>height</cite> are included as constraints
@@ -409,9 +408,9 @@ maximum is <span class="math notranslate nohighlight">\(2\sigma\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -432,10 +431,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="splitlorentzianmodel">
-<h3><a class="reference internal" href="#lmfit.models.SplitLorentzianModel" title="lmfit.models.SplitLorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitLorentzianModel</span></code></a><a class="headerlink" href="#splitlorentzianmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.SplitLorentzianModel" title="lmfit.models.SplitLorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitLorentzianModel</span></code></a><a class="headerlink" href="#splitlorentzianmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.SplitLorentzianModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SplitLorentzianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplitLorentzianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SplitLorentzianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplitLorentzianModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Lorentzian or Cauchy-Lorentz distribution function.</p>
 <p>The model has four parameters: <cite>amplitude</cite>, <cite>center</cite>, <cite>sigma</cite>, and
 <cite>sigma_r</cite>. In addition, parameters <cite>fwhm</cite> and <cite>height</cite> are included
@@ -458,9 +457,9 @@ with the Lorentzian model, integral of this function from <cite>-.inf</cite> to
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -481,10 +480,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="voigtmodel">
-<h3><a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a><a class="headerlink" href="#voigtmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a><a class="headerlink" href="#voigtmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.VoigtModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">VoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.VoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">VoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.VoigtModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Voigt distribution function.</p>
 <p>The model has four Parameters: <cite>amplitude</cite>, <cite>center</cite>, <cite>sigma</cite>, and
 <cite>gamma</cite>. By default, <cite>gamma</cite> is constrained to have a value equal to
@@ -509,9 +508,9 @@ to <cite>sigma</cite>), the full width at half maximum is approximately
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -532,10 +531,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="pseudovoigtmodel">
-<h3><a class="reference internal" href="#lmfit.models.PseudoVoigtModel" title="lmfit.models.PseudoVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a><a class="headerlink" href="#pseudovoigtmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.PseudoVoigtModel" title="lmfit.models.PseudoVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a><a class="headerlink" href="#pseudovoigtmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.PseudoVoigtModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PseudoVoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PseudoVoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PseudoVoigtModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a pseudo-Voigt distribution function.</p>
 <p>This is a weighted sum of a Gaussian and Lorentzian distribution
 function that share values for <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
@@ -557,9 +556,9 @@ value for <cite>fraction</cite> at 0.5.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -580,10 +579,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="moffatmodel">
-<h3><a class="reference internal" href="#lmfit.models.MoffatModel" title="lmfit.models.MoffatModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoffatModel</span></code></a><a class="headerlink" href="#moffatmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.MoffatModel" title="lmfit.models.MoffatModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoffatModel</span></code></a><a class="headerlink" href="#moffatmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.MoffatModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MoffatModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.MoffatModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MoffatModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.MoffatModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on the Moffat distribution function.</p>
 <p>The model has four Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), a width parameter <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and an
@@ -601,9 +600,9 @@ more information, see:
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -624,10 +623,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="pearson4model">
-<h3><a class="reference internal" href="#lmfit.models.Pearson4Model" title="lmfit.models.Pearson4Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pearson4Model</span></code></a><a class="headerlink" href="#pearson4model" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.Pearson4Model" title="lmfit.models.Pearson4Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pearson4Model</span></code></a><a class="headerlink" href="#pearson4model" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.Pearson4Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pearson4Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson4Model" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pearson4Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson4Model" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Pearson IV distribution.</p>
 <p>The model has five parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), <cite>expon</cite> (<span class="math notranslate nohighlight">\(m\)</span>) and <cite>skew</cite> (<span class="math notranslate nohighlight">\(\nu\)</span>).
@@ -646,9 +645,9 @@ and 0 for <cite>skew</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -669,10 +668,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="pearson7model">
-<h3><a class="reference internal" href="#lmfit.models.Pearson7Model" title="lmfit.models.Pearson7Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pearson7Model</span></code></a><a class="headerlink" href="#pearson7model" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.Pearson7Model" title="lmfit.models.Pearson7Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pearson7Model</span></code></a><a class="headerlink" href="#pearson7model" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.Pearson7Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pearson7Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pearson7Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson7Model" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Pearson VII distribution.</p>
 <p>The model has four parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <cite>exponent</cite> (<span class="math notranslate nohighlight">\(m\)</span>).
@@ -691,9 +690,9 @@ height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -714,10 +713,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="studentstmodel">
-<h3><a class="reference internal" href="#lmfit.models.StudentsTModel" title="lmfit.models.StudentsTModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StudentsTModel</span></code></a><a class="headerlink" href="#studentstmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.StudentsTModel" title="lmfit.models.StudentsTModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StudentsTModel</span></code></a><a class="headerlink" href="#studentstmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.StudentsTModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StudentsTModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StudentsTModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StudentsTModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Student’s t-distribution function.</p>
 <p>The model has three Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), and <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>). In addition, parameters
@@ -731,9 +730,9 @@ at half maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -754,10 +753,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="breitwignermodel">
-<h3><a class="reference internal" href="#lmfit.models.BreitWignerModel" title="lmfit.models.BreitWignerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BreitWignerModel</span></code></a><a class="headerlink" href="#breitwignermodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.BreitWignerModel" title="lmfit.models.BreitWignerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BreitWignerModel</span></code></a><a class="headerlink" href="#breitwignermodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.BreitWignerModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BreitWignerModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BreitWignerModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.BreitWignerModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Breit-Wigner-Fano function.</p>
 <p>The model has four Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <cite>q</cite> (<span class="math notranslate nohighlight">\(q\)</span>).</p>
@@ -767,9 +766,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -790,10 +789,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="lognormalmodel">
-<h3><a class="reference internal" href="#lmfit.models.LognormalModel" title="lmfit.models.LognormalModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LognormalModel</span></code></a><a class="headerlink" href="#lognormalmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.LognormalModel" title="lmfit.models.LognormalModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LognormalModel</span></code></a><a class="headerlink" href="#lognormalmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.LognormalModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LognormalModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LognormalModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LognormalModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LognormalModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on the Log-normal distribution function.</p>
 <p>The modal has three Parameters <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), and <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>). In addition, parameters
@@ -805,9 +804,9 @@ full width at half maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -828,10 +827,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="dampedoscillatormodel">
-<h3><a class="reference internal" href="#lmfit.models.DampedOscillatorModel" title="lmfit.models.DampedOscillatorModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedOscillatorModel</span></code></a><a class="headerlink" href="#dampedoscillatormodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.DampedOscillatorModel" title="lmfit.models.DampedOscillatorModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedOscillatorModel</span></code></a><a class="headerlink" href="#dampedoscillatormodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.DampedOscillatorModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DampedOscillatorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedOscillatorModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DampedOscillatorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedOscillatorModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on the Damped Harmonic Oscillator Amplitude.</p>
 <p>The model has three Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), and <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>). In addition, the
@@ -844,9 +843,9 @@ peak height.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -867,10 +866,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="dampedharmonicoscillatormodel">
-<h3><a class="reference internal" href="#lmfit.models.DampedHarmonicOscillatorModel" title="lmfit.models.DampedHarmonicOscillatorModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedHarmonicOscillatorModel</span></code></a><a class="headerlink" href="#dampedharmonicoscillatormodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.DampedHarmonicOscillatorModel" title="lmfit.models.DampedHarmonicOscillatorModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedHarmonicOscillatorModel</span></code></a><a class="headerlink" href="#dampedharmonicoscillatormodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.DampedHarmonicOscillatorModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DampedHarmonicOscillatorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedHarmonicOscillatorModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DampedHarmonicOscillatorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedHarmonicOscillatorModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a variation of the Damped Harmonic Oscillator.</p>
 <p>The model follows the definition given in DAVE/PAN (see:
 <a class="reference external" href="https://www.ncnr.nist.gov/dave">https://www.ncnr.nist.gov/dave</a>) and has four Parameters: <cite>amplitude</cite>
@@ -888,9 +887,9 @@ maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -911,10 +910,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="exponentialgaussianmodel">
-<h3><a class="reference internal" href="#lmfit.models.ExponentialGaussianModel" title="lmfit.models.ExponentialGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a><a class="headerlink" href="#exponentialgaussianmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.ExponentialGaussianModel" title="lmfit.models.ExponentialGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a><a class="headerlink" href="#exponentialgaussianmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ExponentialGaussianModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExponentialGaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExponentialGaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialGaussianModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model of an Exponentially modified Gaussian distribution.</p>
 <p>The model has four Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <cite>gamma</cite> (<span class="math notranslate nohighlight">\(\gamma\)</span>).</p>
@@ -928,9 +927,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -951,10 +950,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="skewedgaussianmodel">
-<h3><a class="reference internal" href="#lmfit.models.SkewedGaussianModel" title="lmfit.models.SkewedGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a><a class="headerlink" href="#skewedgaussianmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.SkewedGaussianModel" title="lmfit.models.SkewedGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a><a class="headerlink" href="#skewedgaussianmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.SkewedGaussianModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SkewedGaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SkewedGaussianModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedGaussianModel" title="Link to this definition">¶</a></dt>
 <dd><p>A skewed Gaussian model, using a skewed normal distribution.</p>
 <p>The model has four Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <cite>gamma</cite> (<span class="math notranslate nohighlight">\(\gamma\)</span>).</p>
@@ -970,9 +969,9 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -993,10 +992,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="skewedvoigtmodel">
-<h3><a class="reference internal" href="#lmfit.models.SkewedVoigtModel" title="lmfit.models.SkewedVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a><a class="headerlink" href="#skewedvoigtmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.SkewedVoigtModel" title="lmfit.models.SkewedVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a><a class="headerlink" href="#skewedvoigtmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.SkewedVoigtModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SkewedVoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedVoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SkewedVoigtModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedVoigtModel" title="Link to this definition">¶</a></dt>
 <dd><p>A skewed Voigt model, modified using a skewed normal distribution.</p>
 <p>The model has five Parameters <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <cite>gamma</cite> (<span class="math notranslate nohighlight">\(\gamma\)</span>),
@@ -1012,9 +1011,9 @@ as usual for a Voigt distribution, and adds a new Parameter <cite>skew</cite>.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1035,10 +1034,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="thermaldistributionmodel">
-<h3><a class="reference internal" href="#lmfit.models.ThermalDistributionModel" title="lmfit.models.ThermalDistributionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a><a class="headerlink" href="#thermaldistributionmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.ThermalDistributionModel" title="lmfit.models.ThermalDistributionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a><a class="headerlink" href="#thermaldistributionmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ThermalDistributionModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ThermalDistributionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bose'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ThermalDistributionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bose'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Link to this definition">¶</a></dt>
 <dd><p>Return a thermal distribution function.</p>
 <p>Variable <cite>form</cite> defines the kind of distribution as below with three
 Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite> (<span class="math notranslate nohighlight">\(x_0\)</span>), and <cite>kt</cite>
@@ -1066,9 +1065,9 @@ scattering research.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1089,10 +1088,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="doniachmodel">
-<h3><a class="reference internal" href="#lmfit.models.DoniachModel" title="lmfit.models.DoniachModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a><a class="headerlink" href="#doniachmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.DoniachModel" title="lmfit.models.DoniachModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a><a class="headerlink" href="#doniachmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.DoniachModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoniachModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DoniachModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoniachModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DoniachModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model of an Doniach Sunjic asymmetric lineshape.</p>
 <p>This model is used in photo-emission and has four Parameters:
 <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite> (<span class="math notranslate nohighlight">\(\mu\)</span>), <cite>sigma</cite>
@@ -1107,9 +1106,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1131,17 +1130,17 @@ the data. Should be one of:</p>
 </section>
 </section>
 <section id="linear-and-polynomial-models">
-<h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Permalink to this heading">¶</a></h2>
+<h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Link to this heading">¶</a></h2>
 <p>These models correspond to polynomials of some degree. Of course, lmfit is
 a very inefficient way to do linear regression (see <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
 or <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html">scipy.stats.linregress</a>), but these models may be useful as one
 of many components of a composite model.  The SplineModel below corresponds
 to a cubic spline.</p>
 <section id="constantmodel">
-<h3><a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantModel</span></code></a><a class="headerlink" href="#constantmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantModel</span></code></a><a class="headerlink" href="#constantmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ConstantModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConstantModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ConstantModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConstantModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ConstantModel" title="Link to this definition">¶</a></dt>
 <dd><p>Constant model, with a single Parameter: <cite>c</cite>.</p>
 <p>Note that this is ‘constant’ in the sense of having no dependence on
 the independent variable <cite>x</cite>, not in the sense of being non-varying.
@@ -1150,9 +1149,9 @@ To be clear, <cite>c</cite> will be a Parameter that will be varied in the fit
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1173,10 +1172,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="linearmodel">
-<h3><a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearModel</span></code></a><a class="headerlink" href="#linearmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearModel</span></code></a><a class="headerlink" href="#linearmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.LinearModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinearModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinearModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Link to this definition">¶</a></dt>
 <dd><p>Linear model, with two Parameters: <cite>intercept</cite> and <cite>slope</cite>.</p>
 <p>Defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1185,9 +1184,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1208,10 +1207,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="quadraticmodel">
-<h3><a class="reference internal" href="#lmfit.models.QuadraticModel" title="lmfit.models.QuadraticModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuadraticModel</span></code></a><a class="headerlink" href="#quadraticmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.QuadraticModel" title="lmfit.models.QuadraticModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuadraticModel</span></code></a><a class="headerlink" href="#quadraticmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.QuadraticModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QuadraticModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QuadraticModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Link to this definition">¶</a></dt>
 <dd><p>A quadratic model, with three Parameters: <cite>a</cite>, <cite>b</cite>, and <cite>c</cite>.</p>
 <p>Defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1219,9 +1218,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1242,10 +1241,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="polynomialmodel">
-<h3><a class="reference internal" href="#lmfit.models.PolynomialModel" title="lmfit.models.PolynomialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialModel</span></code></a><a class="headerlink" href="#polynomialmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.PolynomialModel" title="lmfit.models.PolynomialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialModel</span></code></a><a class="headerlink" href="#polynomialmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.PolynomialModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PolynomialModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PolynomialModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Link to this definition">¶</a></dt>
 <dd><p>A polynomial model with up to 7 Parameters, specified by <cite>degree</cite>.</p>
 <div class="math notranslate nohighlight">
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i x^i\]</div>
@@ -1255,9 +1254,9 @@ specify how many of these are actual variable parameters. This uses
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1278,10 +1277,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="splinelmodel">
-<h3><code class="xref py py-class docutils literal notranslate"><span class="pre">SplinelModel</span></code><a class="headerlink" href="#splinelmodel" title="Permalink to this heading">¶</a></h3>
+<h3><code class="xref py py-class docutils literal notranslate"><span class="pre">SplinelModel</span></code><a class="headerlink" href="#splinelmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.SplineModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SplineModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xknots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplineModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SplineModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xknots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplineModel" title="Link to this definition">¶</a></dt>
 <dd><p>A 1-D cubic spline model with a variable number of <cite>knots</cite> and
 parameters <cite>s0</cite>, <cite>s1</cite>, …, <cite>sN</cite>, for <cite>N</cite> knots.</p>
 <p>The user must supply a list or ndarray <cite>xknots</cite>: the <cite>x</cite> values for the
@@ -1298,10 +1297,10 @@ recommended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xknots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of floats or <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code>, required) – x-values of knots for spline.</p></li>
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>xknots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of floats or <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code>, required) – x-values of knots for spline.</p></li>
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 </ul>
@@ -1328,13 +1327,13 @@ that have parameter names in common.</p></li>
 </section>
 </section>
 <section id="periodic-models">
-<h2>Periodic Models<a class="headerlink" href="#periodic-models" title="Permalink to this heading">¶</a></h2>
+<h2>Periodic Models<a class="headerlink" href="#periodic-models" title="Link to this heading">¶</a></h2>
 <p>These models correspond to periodic functions.</p>
 <section id="sinemodel">
-<h3><a class="reference internal" href="#lmfit.models.SineModel" title="lmfit.models.SineModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SineModel</span></code></a><a class="headerlink" href="#sinemodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.SineModel" title="lmfit.models.SineModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SineModel</span></code></a><a class="headerlink" href="#sinemodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.SineModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SineModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SineModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SineModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SineModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a sinusoidal lineshape.</p>
 <p>The model has three Parameters: <cite>amplitude</cite>, <cite>frequency</cite>, and <cite>shift</cite>.</p>
 <div class="math notranslate nohighlight">
@@ -1345,9 +1344,9 @@ non-negative, and <cite>shift</cite> additionally to be smaller than <span class
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1369,13 +1368,13 @@ the data. Should be one of:</p>
 </section>
 </section>
 <section id="step-like-models">
-<h2>Step-like models<a class="headerlink" href="#step-like-models" title="Permalink to this heading">¶</a></h2>
+<h2>Step-like models<a class="headerlink" href="#step-like-models" title="Link to this heading">¶</a></h2>
 <p>Two models represent step-like functions, and share many characteristics.</p>
 <section id="stepmodel">
-<h3><a class="reference internal" href="#lmfit.models.StepModel" title="lmfit.models.StepModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a><a class="headerlink" href="#stepmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.StepModel" title="lmfit.models.StepModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a><a class="headerlink" href="#stepmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.StepModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StepModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StepModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Step function.</p>
 <p>The model has three Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), and <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>).</p>
@@ -1400,9 +1399,9 @@ setting the characteristic width. The functional forms are defined as:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1423,10 +1422,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="rectanglemodel">
-<h3><a class="reference internal" href="#lmfit.models.RectangleModel" title="lmfit.models.RectangleModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangleModel</span></code></a><a class="headerlink" href="#rectanglemodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.RectangleModel" title="lmfit.models.RectangleModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangleModel</span></code></a><a class="headerlink" href="#rectanglemodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.RectangleModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RectangleModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RectangleModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Step-up and Step-down function.</p>
 <p>The model has five Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center1</cite>
 (<span class="math notranslate nohighlight">\(\mu_1\)</span>), <cite>center2</cite> (<span class="math notranslate nohighlight">\(\mu_2\)</span>), <cite>sigma1</cite>
@@ -1457,9 +1456,9 @@ forms are defined as:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1481,12 +1480,12 @@ the data. Should be one of:</p>
 </section>
 </section>
 <section id="exponential-and-power-law-models">
-<h2>Exponential and Power law models<a class="headerlink" href="#exponential-and-power-law-models" title="Permalink to this heading">¶</a></h2>
+<h2>Exponential and Power law models<a class="headerlink" href="#exponential-and-power-law-models" title="Link to this heading">¶</a></h2>
 <section id="exponentialmodel">
-<h3><a class="reference internal" href="#lmfit.models.ExponentialModel" title="lmfit.models.ExponentialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialModel</span></code></a><a class="headerlink" href="#exponentialmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.ExponentialModel" title="lmfit.models.ExponentialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialModel</span></code></a><a class="headerlink" href="#exponentialmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ExponentialModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExponentialModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExponentialModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on an exponential decay function.</p>
 <p>The model has two Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>) and <cite>decay</cite>
 (<span class="math notranslate nohighlight">\(\tau\)</span>) and is defined as:</p>
@@ -1497,9 +1496,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1520,10 +1519,10 @@ the data. Should be one of:</p>
 
 </section>
 <section id="powerlawmodel">
-<h3><a class="reference internal" href="#lmfit.models.PowerLawModel" title="lmfit.models.PowerLawModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerLawModel</span></code></a><a class="headerlink" href="#powerlawmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.PowerLawModel" title="lmfit.models.PowerLawModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerLawModel</span></code></a><a class="headerlink" href="#powerlawmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.PowerLawModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PowerLawModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PowerLawModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PowerLawModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Power Law.</p>
 <p>The model has two Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>) and <cite>exponent</cite>
 (<span class="math notranslate nohighlight">\(k\)</span>) and is defined as:</p>
@@ -1533,9 +1532,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1557,13 +1556,13 @@ the data. Should be one of:</p>
 </section>
 </section>
 <section id="two-dimensional-peak-like-models">
-<h2>Two dimensional Peak-like models<a class="headerlink" href="#two-dimensional-peak-like-models" title="Permalink to this heading">¶</a></h2>
+<h2>Two dimensional Peak-like models<a class="headerlink" href="#two-dimensional-peak-like-models" title="Link to this heading">¶</a></h2>
 <p>The one example of a two-dimensional peak is a two-dimensional Gaussian.</p>
 <section id="gaussian2dmodel">
-<h3><a class="reference internal" href="#lmfit.models.Gaussian2dModel" title="lmfit.models.Gaussian2dModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gaussian2dModel</span></code></a><a class="headerlink" href="#gaussian2dmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.Gaussian2dModel" title="lmfit.models.Gaussian2dModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gaussian2dModel</span></code></a><a class="headerlink" href="#gaussian2dmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.Gaussian2dModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Gaussian2dModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x',</span> <span class="pre">'y']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Gaussian2dModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Gaussian2dModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x',</span> <span class="pre">'y']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Gaussian2dModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a two-dimensional Gaussian function.</p>
 <p>The model has two independent variables <cite>x</cite> and <cite>y</cite> and five
 Parameters: <cite>amplitude</cite>, <cite>centerx</cite>, <cite>sigmax</cite>, <cite>centery</cite>, and <cite>sigmay</cite>.
@@ -1580,9 +1579,9 @@ A g(x; A=1, \mu_x, \sigma_x) g(y; A=1, \mu_y, \sigma_y)\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’, ‘y’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1604,7 +1603,7 @@ the data. Should be one of:</p>
 </section>
 </section>
 <section id="user-defined-models">
-<h2>User-defined Models<a class="headerlink" href="#user-defined-models" title="Permalink to this heading">¶</a></h2>
+<h2>User-defined Models<a class="headerlink" href="#user-defined-models" title="Link to this heading">¶</a></h2>
 <p>As shown in the previous chapter (<a class="reference internal" href="model.html#model-chapter"><span class="std std-ref">Modeling Data and Curve Fitting</span></a>), it is fairly
 straightforward to build fitting models from parametrized Python functions.
 The number of model classes listed so far in the present chapter should
@@ -1617,18 +1616,18 @@ build and use a new model from Python code.</p>
 user-supplied expression. This uses the <a class="reference external" href="https://newville.github.io/asteval/">asteval</a> module also used for
 mathematical constraints as discussed in <a class="reference internal" href="constraints.html#constraints-chapter"><span class="std std-ref">Using Mathematical Constraints</span></a>.</p>
 <section id="expressionmodel">
-<h3><a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a><a class="headerlink" href="#expressionmodel" title="Permalink to this heading">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a><a class="headerlink" href="#expressionmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ExpressionModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExpressionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_script</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExpressionModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExpressionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_script</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExpressionModel" title="Link to this definition">¶</a></dt>
 <dd><p>ExpressionModel class.</p>
 <p>Generate a model from user-supplied expression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Mathematical expression for model.</p></li>
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> or None, optional) – Variable names to use as independent variables.</p></li>
-<li><p><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</p></li>
+<li><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Mathematical expression for model.</p></li>
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> or None, optional) – Variable names to use as independent variables.</p></li>
+<li><p><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kws</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
 </ul>
@@ -1736,7 +1735,7 @@ and <code class="docutils literal notranslate"><span class="pre">wid</span></cod
 </section>
 </section>
 <section id="example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles">
-<h2>Example 1: Fit Peak data to Gaussian, Lorentzian, and Voigt profiles<a class="headerlink" href="#example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles" title="Permalink to this heading">¶</a></h2>
+<h2>Example 1: Fit Peak data to Gaussian, Lorentzian, and Voigt profiles<a class="headerlink" href="#example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles" title="Link to this heading">¶</a></h2>
 <p>Here, we will fit data to three similar lineshapes, in order to decide which
 might be the better model. We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in <a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a> instead
@@ -1963,7 +1962,7 @@ the model with <code class="docutils literal notranslate"><span class="pre">gamm
 of being the better model.</p>
 </section>
 <section id="example-2-fit-data-to-a-composite-model-with-pre-defined-models">
-<h2>Example 2: Fit data to a Composite Model with pre-defined models<a class="headerlink" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models" title="Permalink to this heading">¶</a></h2>
+<h2>Example 2: Fit data to a Composite Model with pre-defined models<a class="headerlink" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models" title="Link to this heading">¶</a></h2>
 <p>Here, we repeat the point made at the end of the last chapter that
 instances of <a class="reference internal" href="model.html#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class can be added together to make a
 <em>composite model</em>. By using the large number of built-in models available,
@@ -2021,30 +2020,28 @@ results, which gives:</p>
     (Model(step, prefix=&#39;step_&#39;, form=&#39;erf&#39;) + Model(linear, prefix=&#39;line_&#39;))
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 55
+    # function evals   = 37
     # data points      = 201
     # variables        = 5
-    chi-square         = 593.709621
-    reduced chi-square = 3.02913072
-    Akaike info crit   = 227.700173
-    Bayesian info crit = 244.216697
-    R-squared          = 0.99897798
+    chi-square         = 193.096393
+    reduced chi-square = 0.98518568
+    Akaike info crit   = 1.93680505
+    Bayesian info crit = 18.4533296
+    R-squared          = 0.99966760
 [[Variables]]
-    line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
-    line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
-    step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
-    step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
-    step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
+    line_slope:      2.08819865 +/- 0.04889098 (2.34%) (init = 0)
+    line_intercept:  12.3047194 +/- 0.15345326 (1.25%) (init = 11.58574)
+    step_amplitude:  110.940322 +/- 0.32733117 (0.30%) (init = 134.7378)
+    step_center:     3.13269691 +/- 0.00272841 (0.09%) (init = 2.5)
+    step_sigma:      1.45664264 +/- 0.00913525 (0.63%) (init = 1.428571)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(line_slope, step_amplitude)     = -0.8791
-    C(step_amplitude, step_sigma)     = +0.5643
-    C(line_slope, step_sigma)         = -0.4569
-    C(line_intercept, step_center)    = +0.4269
-    C(line_slope, line_intercept)     = -0.3093
-    C(line_slope, step_center)        = -0.2338
-    C(line_intercept, step_sigma)     = -0.1372
-    C(line_intercept, step_amplitude) = -0.1173
-    C(step_amplitude, step_center)    = +0.1095
+    C(line_slope, step_amplitude)  = -0.8588
+    C(line_intercept, step_center) = +0.4000
+    C(step_amplitude, step_sigma)  = +0.3826
+    C(line_slope, line_intercept)  = -0.3823
+    C(line_slope, step_sigma)      = -0.3017
+    C(line_slope, step_center)     = -0.2217
+    C(step_amplitude, step_center) = +0.1015
 </pre></div>
 </div>
 </div>
@@ -2056,7 +2053,7 @@ results, which gives:</p>
 </div>
 </section>
 <section id="example-3-fitting-multiple-peaks-and-using-prefixes">
-<h2>Example 3: Fitting Multiple Peaks – and using Prefixes<a class="headerlink" href="#example-3-fitting-multiple-peaks-and-using-prefixes" title="Permalink to this heading">¶</a></h2>
+<h2>Example 3: Fitting Multiple Peaks – and using Prefixes<a class="headerlink" href="#example-3-fitting-multiple-peaks-and-using-prefixes" title="Link to this heading">¶</a></h2>
 <p>As shown above, many of the models have similar parameter names. For
 composite models, this could lead to a problem of having parameters for
 different parts of the model having the same name. To overcome this, each
@@ -2288,7 +2285,7 @@ and without any bounds on parameters at all:</p>
 and the figure above shows an improved initial estimate of the data.</p>
 </section>
 <section id="example-4-using-a-spline-model">
-<h2>Example 4: Using a Spline Model<a class="headerlink" href="#example-4-using-a-spline-model" title="Permalink to this heading">¶</a></h2>
+<h2>Example 4: Using a Spline Model<a class="headerlink" href="#example-4-using-a-spline-model" title="Link to this heading">¶</a></h2>
 <p>In the example above, the two peaks might represent the interesting part of
 the data, and the exponential decay could be viewed a “background” which
 might be due to other physical effects or part of some response of the
@@ -2610,8 +2607,8 @@ points to use.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

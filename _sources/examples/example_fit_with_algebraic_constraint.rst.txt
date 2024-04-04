@@ -27,7 +27,7 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
 
 .. GENERATED FROM PYTHON SOURCE LINES 8-45
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     from numpy import linspace, random
@@ -90,12 +90,12 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
         reduced chi-square = 120.803875
         Akaike info crit   = 2887.26503
         Bayesian info crit = 2913.65660
-        R-squared          = -22.1967107
+        R-squared          = 0.98977025
     [[Variables]]
         g_amplitude:      21.1877635 +/- 0.32192128 (1.52%) (init = 10)
         g_center:         8.11125903 +/- 0.01162987 (0.14%) (init = 9)
         g_sigma:          1.20925819 +/- 0.01170853 (0.97%) (init = 1)
-        l_amplitude:      9.41261395 +/- 0.61672968 (6.55%) == 'total_amplitude - g_amplitude'
+        l_amplitude:      9.41261441 +/- 0.61672968 (6.55%) == 'total_amplitude - g_amplitude'
         l_center:         9.61125903 +/- 0.01162987 (0.12%) == '1.5+g_center'
         l_sigma:          2.41851637 +/- 0.02341707 (0.97%) == '2*g_sigma'
         line_slope:       0.04615727 +/- 0.00170178 (3.69%) (init = 0)
@@ -103,7 +103,7 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
         g_fwhm:           2.84758536 +/- 0.02757149 (0.97%) == '2.3548200*g_sigma'
         g_height:         6.98998378 +/- 0.05837066 (0.84%) == '0.3989423*g_amplitude/max(1e-15, g_sigma)'
         l_fwhm:           4.83703275 +/- 0.04683414 (0.97%) == '2.0000000*l_sigma'
-        l_height:         1.23882899 +/- 0.08992735 (7.26%) == '0.3183099*l_amplitude/max(1e-15, l_sigma)'
+        l_height:         1.23882905 +/- 0.08992735 (7.26%) == '0.3183099*l_amplitude/max(1e-15, l_sigma)'
         total_amplitude:  30.6003779 +/- 0.36481425 (1.19%) (init = 20)
     [[Correlations]] (unreported correlations are < 0.100)
         C(g_amplitude, g_sigma)            = +0.8662
@@ -125,7 +125,7 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.179 seconds)
+   **Total running time of the script:** (0 minutes 0.156 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:
@@ -134,16 +134,13 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_fit_with_algebraic_constraint.ipynb <example_fit_with_algebraic_constraint.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_algebraic_constraint.py <example_fit_with_algebraic_constraint.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_fit_with_algebraic_constraint.ipynb <example_fit_with_algebraic_constraint.ipynb>`
 
 
 .. only:: html

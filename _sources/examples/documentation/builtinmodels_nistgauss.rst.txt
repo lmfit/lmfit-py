@@ -58,8 +58,8 @@ doc_builtinmodels_nistgauss.py
         g2_amplitude:   2493.41735 +/- 36.1697789 (1.45%) (init = 2000)
         g2_center:      153.270102 +/- 0.19466802 (0.13%) (init = 155)
         g2_sigma:       13.8069464 +/- 0.18679695 (1.35%) (init = 15)
-        g2_fwhm:        32.5128730 +/- 0.43987320 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455952 +/- 0.61722243 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+        g2_fwhm:        32.5128735 +/- 0.43987320 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455941 +/- 0.61722243 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
     [[Correlations]] 
       +---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
       | Variable      | exp_amplitude | exp_decay     | g1_amplitude  | g1_center     | g1_sigma      | g2_amplitude  | g2_center     | g2_sigma      |
@@ -81,7 +81,7 @@ doc_builtinmodels_nistgauss.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_builtinmodels_nistgauss.py>
     import matplotlib.pyplot as plt
@@ -132,7 +132,7 @@ doc_builtinmodels_nistgauss.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.325 seconds)
+   **Total running time of the script:** (0 minutes 0.289 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py:
@@ -141,16 +141,13 @@ doc_builtinmodels_nistgauss.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: builtinmodels_nistgauss.ipynb <builtinmodels_nistgauss.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_nistgauss.py <builtinmodels_nistgauss.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: builtinmodels_nistgauss.ipynb <builtinmodels_nistgauss.ipynb>`
 
 
 .. only:: html

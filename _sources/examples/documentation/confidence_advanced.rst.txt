@@ -77,7 +77,7 @@ doc_confidence_advanced.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_confidence_advanced.py>
     import matplotlib.pyplot as plt
@@ -150,7 +150,7 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.014 seconds)
+   **Total running time of the script:** (0 minutes 3.543 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:
@@ -159,16 +159,13 @@ doc_confidence_advanced.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: confidence_advanced.ipynb <confidence_advanced.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: confidence_advanced.py <confidence_advanced.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: confidence_advanced.ipynb <confidence_advanced.ipynb>`
 
 
 .. only:: html

@@ -31,7 +31,7 @@ attributes to fitting parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 14-20
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     from numpy import exp, linspace, pi, random, sign, sin
@@ -52,7 +52,7 @@ create the 'true' Parameter values and residual function:
 
 .. GENERATED FROM PYTHON SOURCE LINES 22-36
 
-.. code-block:: default
+.. code-block:: Python
 
     p_true = create_params(amp=14.0, period=5.4321, shift=0.12345, decay=0.010)
 
@@ -81,7 +81,7 @@ Generate synthetic data and initialize fitting Parameters:
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-48
 
-.. code-block:: default
+.. code-block:: Python
 
     random.seed(0)
     x = linspace(0, 250, 1500)
@@ -106,7 +106,7 @@ Perform the fit and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-53
 
-.. code-block:: default
+.. code-block:: Python
 
     out = minimize(residual, fit_params, args=(x,), kws={'data': data})
     fit = residual(out.params, x)
@@ -120,7 +120,7 @@ Perform the fit and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 54-56
 
-.. code-block:: default
+.. code-block:: Python
 
     report_fit(out, modelpars=p_true, correl_mode='table')
 
@@ -161,7 +161,7 @@ Perform the fit and show the results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 57-61
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, data, 'o', label='data')
     plt.plot(x, fit, label='best fit')
@@ -182,7 +182,7 @@ Perform the fit and show the results:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.164 seconds)
+   **Total running time of the script:** (0 minutes 0.145 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_bounds.py:
@@ -191,16 +191,13 @@ Perform the fit and show the results:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_fit_with_bounds.ipynb <example_fit_with_bounds.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_bounds.py <example_fit_with_bounds.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_fit_with_bounds.ipynb <example_fit_with_bounds.ipynb>`
 
 
 .. only:: html

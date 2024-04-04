@@ -25,7 +25,7 @@ This example illustrates how to handle two-dimensional data with lmfit.
 
 .. GENERATED FROM PYTHON SOURCE LINES 8-15
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -51,7 +51,7 @@ data will be irregularly sampled and noisy. Let's simulate some:
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-28
 
-.. code-block:: default
+.. code-block:: Python
 
     npoints = 10000
     np.random.seed(2021)
@@ -73,7 +73,7 @@ To plot this, we can interpolate the data onto a grid.
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-40
 
-.. code-block:: default
+.. code-block:: Python
 
     X, Y = np.meshgrid(np.linspace(x.min(), x.max(), 100),
                        np.linspace(y.min(), y.max(), 100))
@@ -103,7 +103,7 @@ In this case, we can use a built-in model to fit
 
 .. GENERATED FROM PYTHON SOURCE LINES 42-46
 
-.. code-block:: default
+.. code-block:: Python
 
     model = lmfit.models.Gaussian2dModel()
     params = model.guess(z, x, y)
@@ -126,7 +126,7 @@ In this case, we can use a built-in model to fit
         reduced chi-square = 2.06284916
         Akaike info crit   = 7245.87992
         Bayesian info crit = 7281.93162
-        R-squared          = 0.28378389
+        R-squared          = 0.87508800
     [[Variables]]
         amplitude:  27.4195833 +/- 0.65062974 (2.37%) (init = 16.51399)
         centerx:    1.99705425 +/- 0.01405864 (0.70%) (init = 1.940764)
@@ -134,8 +134,8 @@ In this case, we can use a built-in model to fit
         sigmax:     0.54740777 +/- 0.01224965 (2.24%) (init = 1.666582)
         sigmay:     0.73300589 +/- 0.01617042 (2.21%) (init = 0.8332836)
         fwhmx:      1.28904676 +/- 0.02884573 (2.24%) == '2.3548200*sigmax'
-        fwhmy:      1.72609691 +/- 0.03807842 (2.21%) == '2.3548200*sigmay'
-        height:     10.8758310 +/- 0.35409534 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
+        fwhmy:      1.72609693 +/- 0.03807842 (2.21%) == '2.3548200*sigmay'
+        height:     10.8758308 +/- 0.35409534 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigmay) = +0.2464
         C(amplitude, sigmax) = +0.2314
@@ -150,7 +150,7 @@ before and make plots of the data, the fit and the difference between the two.
 
 .. GENERATED FROM PYTHON SOURCE LINES 49-77
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, axs = plt.subplots(2, 2, figsize=(10, 10))
 
@@ -203,7 +203,7 @@ lmfit provides in the lineshapes module.
 
 .. GENERATED FROM PYTHON SOURCE LINES 84-100
 
-.. code-block:: default
+.. code-block:: Python
 
     def lorentzian2d(x, y, amplitude=1., centerx=0., centery=0., sigmax=1., sigmay=1.,
                      rotation=0):
@@ -234,7 +234,7 @@ Data can be simulated and plotted in the same way as we did before.
 
 .. GENERATED FROM PYTHON SOURCE LINES 102-121
 
-.. code-block:: default
+.. code-block:: Python
 
     npoints = 10000
     x = np.random.rand(npoints)*10 - 4
@@ -278,7 +278,7 @@ over a quarter circle.
 
 .. GENERATED FROM PYTHON SOURCE LINES 128-138
 
-.. code-block:: default
+.. code-block:: Python
 
     model = lmfit.Model(lorentzian2d, independent_vars=['x', 'y'])
     params = model.make_params(amplitude=10, centerx=x[np.argmax(z)],
@@ -307,7 +307,7 @@ over a quarter circle.
         reduced chi-square = 1.12941588
         Akaike info crit   = 1223.00402
         Bayesian info crit = 1266.26606
-        R-squared          = 0.57742880
+        R-squared          = 0.85940121
     [[Variables]]
         amplitude:  25.6417887 +/- 0.50569636 (1.97%) (init = 10)
         centerx:    2.00326033 +/- 0.01163397 (0.58%) (init = 2.051478)
@@ -329,7 +329,7 @@ The process of making plots to check it worked is the same as before.
 
 .. GENERATED FROM PYTHON SOURCE LINES 140-166
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, axs = plt.subplots(2, 2, figsize=(10, 10))
 
@@ -372,7 +372,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.016 seconds)
+   **Total running time of the script:** (0 minutes 2.271 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:
@@ -381,16 +381,13 @@ The process of making plots to check it worked is the same as before.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_two_dimensional_peak.ipynb <example_two_dimensional_peak.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_two_dimensional_peak.py <example_two_dimensional_peak.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_two_dimensional_peak.ipynb <example_two_dimensional_peak.ipynb>`
 
 
 .. only:: html

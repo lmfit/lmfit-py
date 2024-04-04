@@ -30,7 +30,7 @@ See also: https://lmfit.github.io/lmfit-py/constraints.html#using-inequality-con
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-25
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -58,7 +58,7 @@ Generate the simulated data using a Gaussian and Lorentzian lineshape:
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-33
 
-.. code-block:: default
+.. code-block:: Python
 
     np.random.seed(0)
     x = np.linspace(0, 20.0, 601)
@@ -82,7 +82,7 @@ expression to be ``'peak_split+cen_g'``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-47
 
-.. code-block:: default
+.. code-block:: Python
 
     pfit = create_params(amp_g=10, cen_g=5, wid_g=1, amp_l=10,
                          peak_split=dict(value=2.5, min=0, max=5),
@@ -107,7 +107,7 @@ fitting results:
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-52
 
-.. code-block:: default
+.. code-block:: Python
 
     report_fit(out.params)
 
@@ -125,7 +125,7 @@ fitting results:
         wid_g:       1.21434954 +/- 0.00327317 (0.27%) (init = 1)
         amp_l:       9.46504173 +/- 0.05445415 (0.58%) (init = 10)
         peak_split:  3.52163544 +/- 0.01004618 (0.29%) (init = 2.5)
-        cen_l:       9.62659935 +/- 0.01066172 (0.11%) == 'peak_split+cen_g'
+        cen_l:       9.62659940 +/- 0.01066172 (0.11%) == 'peak_split+cen_g'
         wid_l:       1.21434954 +/- 0.00327317 (0.27%) == 'wid_g'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp_g, wid_g)      = +0.6199
@@ -146,7 +146,7 @@ and figure:
 
 .. GENERATED FROM PYTHON SOURCE LINES 54-58
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, data, 'o')
     plt.plot(x, best_fit, '--', label='best fit')
@@ -167,7 +167,7 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.158 seconds)
+   **Total running time of the script:** (0 minutes 0.142 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:
@@ -176,16 +176,13 @@ and figure:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_fit_with_inequality.ipynb <example_fit_with_inequality.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_inequality.py <example_fit_with_inequality.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_fit_with_inequality.ipynb <example_fit_with_inequality.ipynb>`
 
 
 .. only:: html

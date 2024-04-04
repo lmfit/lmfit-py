@@ -70,8 +70,8 @@ doc_builtinmodels_peakmodels.py
         amplitude:  30.3135789 +/- 0.15712752 (0.52%) (init = 43.62238)
         center:     9.24277046 +/- 0.00737497 (0.08%) (init = 9.25)
         sigma:      1.23218496 +/- 0.00737506 (0.60%) (init = 1.35)
-        fwhm:       2.90157374 +/- 0.01736695 (0.60%) == '2.3548200*sigma'
-        height:     9.81457286 +/- 0.05087308 (0.52%) == '0.3989423*amplitude/max(1e-15, sigma)'
+        fwhm:       2.90157379 +/- 0.01736695 (0.60%) == '2.3548200*sigma'
+        height:     9.81457271 +/- 0.05087308 (0.52%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] 
       +-----------+-----------+-----------+-----------+
       | Variable  | amplitude | center    | sigma     |
@@ -96,8 +96,8 @@ doc_builtinmodels_peakmodels.py
         amplitude:  38.9726380 +/- 0.31386754 (0.81%) (init = 54.52798)
         center:     9.24439393 +/- 0.00927645 (0.10%) (init = 9.25)
         sigma:      1.15483177 +/- 0.01315708 (1.14%) (init = 1.35)
-        fwhm:       2.30966350 +/- 0.02631416 (1.14%) == '2.0000000*sigma'
-        height:     10.7421505 +/- 0.08634317 (0.80%) == '0.3183099*amplitude/max(1e-15, sigma)'
+        fwhm:       2.30966354 +/- 0.02631416 (1.14%) == '2.0000000*sigma'
+        height:     10.7421504 +/- 0.08634317 (0.80%) == '0.3183099*amplitude/max(1e-15, sigma)'
     [[Correlations]] 
       +-----------+-----------+-----------+-----------+
       | Variable  | amplitude | center    | sigma     |
@@ -122,9 +122,9 @@ doc_builtinmodels_peakmodels.py
         amplitude:  35.7553799 +/- 0.13861559 (0.39%) (init = 65.43358)
         center:     9.24411179 +/- 0.00505496 (0.05%) (init = 9.25)
         sigma:      0.73015485 +/- 0.00368473 (0.50%) (init = 0.8775)
-        gamma:      0.73015484 +/- 0.00368473 (0.50%) == 'sigma'
-        fwhm:       2.62949979 +/- 0.01326979 (0.50%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
-        height:     10.2204069 +/- 0.03959933 (0.39%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))'
+        gamma:      0.73015485 +/- 0.00368473 (0.50%) == 'sigma'
+        fwhm:       2.62949983 +/- 0.01326979 (0.50%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
+        height:     10.2204068 +/- 0.03959933 (0.39%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))'
     [[Correlations]] 
       +-----------+-----------+-----------+-----------+
       | Variable  | amplitude | center    | sigma     |
@@ -149,9 +149,9 @@ doc_builtinmodels_peakmodels.py
         amplitude:  35.7553799 +/- 0.13861559 (0.39%) (init = 65.43358)
         center:     9.24411179 +/- 0.00505496 (0.05%) (init = 9.25)
         sigma:      0.73015485 +/- 0.00368473 (0.50%) (init = 0.8775)
-        gamma:      0.73015484 +/- 0.00368473 (0.50%) == 'sigma'
-        fwhm:       2.62949979 +/- 0.01326979 (0.50%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
-        height:     10.2204069 +/- 0.03959933 (0.39%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))'
+        gamma:      0.73015485 +/- 0.00368473 (0.50%) == 'sigma'
+        fwhm:       2.62949983 +/- 0.01326979 (0.50%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
+        height:     10.2204068 +/- 0.03959933 (0.39%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))'
     [[Correlations]] 
       +-----------+-----------+-----------+-----------+
       | Variable  | amplitude | center    | sigma     |
@@ -168,7 +168,7 @@ doc_builtinmodels_peakmodels.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_builtinmodels_peakmodels.py>
     import matplotlib.pyplot as plt
@@ -236,7 +236,7 @@ doc_builtinmodels_peakmodels.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.615 seconds)
+   **Total running time of the script:** (0 minutes 0.544 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_peakmodels.py:
@@ -245,16 +245,13 @@ doc_builtinmodels_peakmodels.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: builtinmodels_peakmodels.ipynb <builtinmodels_peakmodels.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_peakmodels.py <builtinmodels_peakmodels.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: builtinmodels_peakmodels.ipynb <builtinmodels_peakmodels.ipynb>`
 
 
 .. only:: html

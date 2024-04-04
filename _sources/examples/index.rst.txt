@@ -156,6 +156,23 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th...">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_example_basinhopping_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_example_basinhopping.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fit comparing leastsq and basin hopping, or other methods</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously.">
 
 .. only:: html
@@ -340,6 +357,7 @@ below currently do *not* follow these guidelines yet.
    /examples/example_fit_with_algebraic_constraint
    /examples/example_reduce_fcn
    /examples/example_sympy
+   /examples/example_basinhopping
    /examples/example_fit_multi_datasets
    /examples/example_Model_interface
    /examples/example_fit_with_derivfunc
@@ -801,6 +819,23 @@ Below are all the examples that are part of the lmfit documentation.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">doc_confidence_chi2_maps.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty_pred.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty_pred_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_documentation_model_uncertainty_pred.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty_pred.py</div>
     </div>
 
 

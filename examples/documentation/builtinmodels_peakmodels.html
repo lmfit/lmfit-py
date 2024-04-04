@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>doc_builtinmodels_peakmodels.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -139,7 +138,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-builtinmodels-peakmodels-py">
-<span id="sphx-glr-examples-documentation-builtinmodels-peakmodels-py"></span><h1>doc_builtinmodels_peakmodels.py<a class="headerlink" href="#doc-builtinmodels-peakmodels-py" title="Permalink to this heading">¶</a></h1>
+<span id="sphx-glr-examples-documentation-builtinmodels-peakmodels-py"></span><h1>doc_builtinmodels_peakmodels.py<a class="headerlink" href="#doc-builtinmodels-peakmodels-py" title="Link to this heading">¶</a></h1>
 <ul class="sphx-glr-horizontal">
 <li><img src="../../_images/sphx_glr_builtinmodels_peakmodels_001.png" srcset="../../_images/sphx_glr_builtinmodels_peakmodels_001.png, ../../_images/sphx_glr_builtinmodels_peakmodels_001_3_00x.png 3.00x" alt="builtinmodels peakmodels" class = "sphx-glr-multi-img"/></li>
 <li><img src="../../_images/sphx_glr_builtinmodels_peakmodels_002.png" srcset="../../_images/sphx_glr_builtinmodels_peakmodels_002.png, ../../_images/sphx_glr_builtinmodels_peakmodels_002_3_00x.png 3.00x" alt="builtinmodels peakmodels" class = "sphx-glr-multi-img"/></li>
@@ -161,8 +160,8 @@ to download the full example code</p>
     amplitude:  30.3135789 +/- 0.15712752 (0.52%) (init = 43.62238)
     center:     9.24277046 +/- 0.00737497 (0.08%) (init = 9.25)
     sigma:      1.23218496 +/- 0.00737506 (0.60%) (init = 1.35)
-    fwhm:       2.90157374 +/- 0.01736695 (0.60%) == &#39;2.3548200*sigma&#39;
-    height:     9.81457286 +/- 0.05087308 (0.52%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
+    fwhm:       2.90157379 +/- 0.01736695 (0.60%) == &#39;2.3548200*sigma&#39;
+    height:     9.81457271 +/- 0.05087308 (0.52%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]]
   +-----------+-----------+-----------+-----------+
   | Variable  | amplitude | center    | sigma     |
@@ -187,8 +186,8 @@ to download the full example code</p>
     amplitude:  38.9726380 +/- 0.31386754 (0.81%) (init = 54.52798)
     center:     9.24439393 +/- 0.00927645 (0.10%) (init = 9.25)
     sigma:      1.15483177 +/- 0.01315708 (1.14%) (init = 1.35)
-    fwhm:       2.30966350 +/- 0.02631416 (1.14%) == &#39;2.0000000*sigma&#39;
-    height:     10.7421505 +/- 0.08634317 (0.80%) == &#39;0.3183099*amplitude/max(1e-15, sigma)&#39;
+    fwhm:       2.30966354 +/- 0.02631416 (1.14%) == &#39;2.0000000*sigma&#39;
+    height:     10.7421504 +/- 0.08634317 (0.80%) == &#39;0.3183099*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]]
   +-----------+-----------+-----------+-----------+
   | Variable  | amplitude | center    | sigma     |
@@ -213,9 +212,9 @@ to download the full example code</p>
     amplitude:  35.7553799 +/- 0.13861559 (0.39%) (init = 65.43358)
     center:     9.24411179 +/- 0.00505496 (0.05%) (init = 9.25)
     sigma:      0.73015485 +/- 0.00368473 (0.50%) (init = 0.8775)
-    gamma:      0.73015484 +/- 0.00368473 (0.50%) == &#39;sigma&#39;
-    fwhm:       2.62949979 +/- 0.01326979 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
-    height:     10.2204069 +/- 0.03959933 (0.39%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))&#39;
+    gamma:      0.73015485 +/- 0.00368473 (0.50%) == &#39;sigma&#39;
+    fwhm:       2.62949983 +/- 0.01326979 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
+    height:     10.2204068 +/- 0.03959933 (0.39%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))&#39;
 [[Correlations]]
   +-----------+-----------+-----------+-----------+
   | Variable  | amplitude | center    | sigma     |
@@ -240,9 +239,9 @@ to download the full example code</p>
     amplitude:  35.7553799 +/- 0.13861559 (0.39%) (init = 65.43358)
     center:     9.24411179 +/- 0.00505496 (0.05%) (init = 9.25)
     sigma:      0.73015485 +/- 0.00368473 (0.50%) (init = 0.8775)
-    gamma:      0.73015484 +/- 0.00368473 (0.50%) == &#39;sigma&#39;
-    fwhm:       2.62949979 +/- 0.01326979 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
-    height:     10.2204069 +/- 0.03959933 (0.39%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))&#39;
+    gamma:      0.73015485 +/- 0.00368473 (0.50%) == &#39;sigma&#39;
+    fwhm:       2.62949983 +/- 0.01326979 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
+    height:     10.2204068 +/- 0.03959933 (0.39%) == &#39;(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*real(wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))))&#39;
 [[Correlations]]
   +-----------+-----------+-----------+-----------+
   | Variable  | amplitude | center    | sigma     |
@@ -256,7 +255,7 @@ to download the full example code</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_peakmodels.py&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_peakmodels.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">loadtxt</span></a>
 
@@ -320,13 +319,13 @@ to download the full example code</p>
 <span class="c1"># &lt;end examples/doc_builtinmodels_peakmodels.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.615 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.544 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-builtinmodels-peakmodels-py">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/899f89dbe1c4eca052115447c2edd294/builtinmodels_peakmodels.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_peakmodels.py</span></code></a></p>
-</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/15fee2177fa6048d52beaf06f43d92a8/builtinmodels_peakmodels.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">builtinmodels_peakmodels.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/899f89dbe1c4eca052115447c2edd294/builtinmodels_peakmodels.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_peakmodels.py</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -365,8 +364,8 @@ to download the full example code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

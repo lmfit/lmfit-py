@@ -28,7 +28,7 @@ shows how to do this with lmfit. Note that the presented method is very basic.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-17
 
-.. code-block:: default
+.. code-block:: Python
 
     from collections import defaultdict
 
@@ -50,7 +50,7 @@ Generate test data and model:
 
 .. GENERATED FROM PYTHON SOURCE LINES 19-31
 
-.. code-block:: default
+.. code-block:: Python
 
     x = np.linspace(0.3, 10, 100)
     np.random.seed(1)
@@ -77,7 +77,7 @@ Make five points outliers:
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-36
 
-.. code-block:: default
+.. code-block:: Python
 
     idx = np.random.randint(0, x.size, 5)
     y[idx] += 10 * np.random.randn(idx.size)
@@ -95,7 +95,7 @@ Fit the data:
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-41
 
-.. code-block:: default
+.. code-block:: Python
 
     model = lmfit.Model(func, independent_vars=['x'])
     fit_result = model.fit(y, x=x, a=0.1, b=2)
@@ -113,7 +113,7 @@ and gives the plot and fitting results below:
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-47
 
-.. code-block:: default
+.. code-block:: Python
 
     fit_result.plot_fit()
     plt.plot(x[idx], y[idx], 'o', label='outliers')
@@ -133,7 +133,7 @@ and gives the plot and fitting results below:
 
 .. GENERATED FROM PYTHON SOURCE LINES 48-50
 
-.. code-block:: default
+.. code-block:: Python
 
     print(fit_result.fit_report())
 
@@ -172,7 +172,7 @@ Fit the dataset while omitting one data point:
 
 .. GENERATED FROM PYTHON SOURCE LINES 52-67
 
-.. code-block:: default
+.. code-block:: Python
 
     best_vals = defaultdict(lambda: np.zeros(x.size))
     stderrs = defaultdict(lambda: np.zeros(x.size))
@@ -202,7 +202,7 @@ Plot the influence on the red. chisqr of each point:
 
 .. GENERATED FROM PYTHON SOURCE LINES 69-77
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, ax = plt.subplots()
     ax.plot(x, (fit_result.chisqr - chi_sq) / chi_sq)
@@ -230,7 +230,7 @@ Plot the influence on the parameter value and error of each point:
 
 .. GENERATED FROM PYTHON SOURCE LINES 79-97
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, axs = plt.subplots(4, figsize=(4, 7), sharex='col')
     axs[0].plot(x, best_vals['a'])
@@ -265,7 +265,7 @@ Plot the influence on the parameter value and error of each point:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.786 seconds)
+   **Total running time of the script:** (0 minutes 0.746 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:
@@ -274,16 +274,13 @@ Plot the influence on the parameter value and error of each point:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_detect_outliers.ipynb <example_detect_outliers.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_detect_outliers.py <example_detect_outliers.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_detect_outliers.ipynb <example_detect_outliers.ipynb>`
 
 
 .. only:: html

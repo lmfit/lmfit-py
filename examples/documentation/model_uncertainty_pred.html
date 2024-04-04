@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>doc_model_uncertainty_pred.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="doc_confidence_chi2_maps.py" href="confidence_chi2_maps.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="../../contents.html">Contents</a></li>
+    <li><a href="../index.html">Examples</a></li>
+    <li><a href="../../installation.html">Installation</a></li>
+    <li><a href="../../faq.html">FAQ</a></li>
+    <li><a href="../../support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="../../index.html">
+      <img src="../../_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="confidence_chi2_maps.html" title="doc_confidence_chi2_maps.py"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="confidence_chi2_maps.html"
+                          title="previous chapter">doc_confidence_chi2_maps.py</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-model-uncertainty-pred-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="doc-model-uncertainty-pred-py">
+<span id="sphx-glr-examples-documentation-model-uncertainty-pred-py"></span><h1>doc_model_uncertainty_pred.py<a class="headerlink" href="#doc-model-uncertainty-pred-py" title="Link to this heading">¶</a></h1>
+<img src="../../_images/sphx_glr_model_uncertainty_pred_001.png" srcset="../../_images/sphx_glr_model_uncertainty_pred_001.png, ../../_images/sphx_glr_model_uncertainty_pred_001_3_00x.png 3.00x" alt="model uncertainty pred" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    Model(logistic_func)
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 60
+    # data points      = 272
+    # variables        = 4
+    chi-square         = 8469.42359
+    reduced chi-square = 31.6023268
+    Akaike info crit   = 943.249061
+    Bayesian info crit = 957.672270
+    R-squared          = 0.83090615
+[[Variables]]
+    amp:    82.4660404 +/- 0.99770817 (1.21%) (init = 90)
+    off:    51.3218514 +/- 1.83125060 (3.57%) (init = 50)
+    tau:    3.05525924 +/- 0.11068420 (3.62%) (init = 2)
+    gamma:  2.25386376 +/- 0.43544396 (19.32%) (init = 2)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(off, gamma) = +0.8634
+    C(amp, gamma) = -0.7706
+    C(off, tau)   = +0.7277
+    C(amp, off)   = -0.5381
+    C(tau, gamma) = +0.4699
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_uncertainty_pred.py&gt;</span>
+
+<span class="c1"># Here we reproduce the results presented in Section 5.1 of the</span>
+<span class="c1"># nonlinear regression lecture by Julien Chiquet</span>
+<span class="c1"># https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="c1"># data from the R base package datasets for the waiting time between eruptions</span>
+<span class="c1"># and the duration of the eruption for the Old Faithful geyser in Yellowstone</span>
+<span class="c1"># National Park, Wyoming, USA.</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tlen</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mf">3.6</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">3.333</span><span class="p">,</span> <span class="mf">2.283</span><span class="p">,</span> <span class="mf">4.533</span><span class="p">,</span> <span class="mf">2.883</span><span class="p">,</span> <span class="mf">4.7</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">,</span> <span class="mf">1.95</span><span class="p">,</span> <span class="mf">4.35</span><span class="p">,</span>
+                 <span class="mf">1.833</span><span class="p">,</span> <span class="mf">3.917</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.7</span><span class="p">,</span> <span class="mf">2.167</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span>
+                 <span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">3.45</span><span class="p">,</span> <span class="mf">3.067</span><span class="p">,</span> <span class="mf">4.533</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">,</span> <span class="mf">1.967</span><span class="p">,</span> <span class="mf">4.083</span><span class="p">,</span> <span class="mf">3.85</span><span class="p">,</span> <span class="mf">4.433</span><span class="p">,</span>
+                 <span class="mf">4.3</span><span class="p">,</span> <span class="mf">4.467</span><span class="p">,</span> <span class="mf">3.367</span><span class="p">,</span> <span class="mf">4.033</span><span class="p">,</span> <span class="mf">3.833</span><span class="p">,</span> <span class="mf">2.017</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.833</span><span class="p">,</span> <span class="mf">1.833</span><span class="p">,</span>
+                 <span class="mf">4.783</span><span class="p">,</span> <span class="mf">4.35</span><span class="p">,</span> <span class="mf">1.883</span><span class="p">,</span> <span class="mf">4.567</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.533</span><span class="p">,</span> <span class="mf">3.317</span><span class="p">,</span> <span class="mf">3.833</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span>
+                 <span class="mf">4.633</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mf">4.716</span><span class="p">,</span> <span class="mf">1.833</span><span class="p">,</span> <span class="mf">4.833</span><span class="p">,</span> <span class="mf">1.733</span><span class="p">,</span> <span class="mf">4.883</span><span class="p">,</span> <span class="mf">3.717</span><span class="p">,</span>
+                 <span class="mf">1.667</span><span class="p">,</span> <span class="mf">4.567</span><span class="p">,</span> <span class="mf">4.317</span><span class="p">,</span> <span class="mf">2.233</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mf">1.817</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="mf">4.167</span><span class="p">,</span>
+                 <span class="mf">4.7</span><span class="p">,</span> <span class="mf">2.067</span><span class="p">,</span> <span class="mf">4.7</span><span class="p">,</span> <span class="mf">4.033</span><span class="p">,</span> <span class="mf">1.967</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">1.983</span><span class="p">,</span> <span class="mf">5.067</span><span class="p">,</span> <span class="mf">2.017</span><span class="p">,</span>
+                 <span class="mf">4.567</span><span class="p">,</span> <span class="mf">3.883</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">,</span> <span class="mf">4.133</span><span class="p">,</span> <span class="mf">4.333</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">,</span> <span class="mf">2.633</span><span class="p">,</span> <span class="mf">4.067</span><span class="p">,</span> <span class="mf">4.933</span><span class="p">,</span>
+                 <span class="mf">3.95</span><span class="p">,</span> <span class="mf">4.517</span><span class="p">,</span> <span class="mf">2.167</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">4.333</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.817</span><span class="p">,</span> <span class="mf">1.833</span><span class="p">,</span> <span class="mf">4.3</span><span class="p">,</span>
+                 <span class="mf">4.667</span><span class="p">,</span> <span class="mf">3.75</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="mf">2.483</span><span class="p">,</span> <span class="mf">4.367</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.05</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span>
+                 <span class="mf">4.7</span><span class="p">,</span> <span class="mf">1.783</span><span class="p">,</span> <span class="mf">4.85</span><span class="p">,</span> <span class="mf">3.683</span><span class="p">,</span> <span class="mf">4.733</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="mf">4.417</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">,</span> <span class="mf">4.633</span><span class="p">,</span>
+                 <span class="mf">2.317</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">,</span> <span class="mf">1.817</span><span class="p">,</span> <span class="mf">4.417</span><span class="p">,</span> <span class="mf">2.617</span><span class="p">,</span> <span class="mf">4.067</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">1.967</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">,</span>
+                 <span class="mf">3.767</span><span class="p">,</span> <span class="mf">1.917</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">2.267</span><span class="p">,</span> <span class="mf">4.65</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.167</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mf">4.333</span><span class="p">,</span>
+                 <span class="mf">1.833</span><span class="p">,</span> <span class="mf">4.383</span><span class="p">,</span> <span class="mf">1.883</span><span class="p">,</span> <span class="mf">4.933</span><span class="p">,</span> <span class="mf">2.033</span><span class="p">,</span> <span class="mf">3.733</span><span class="p">,</span> <span class="mf">4.233</span><span class="p">,</span> <span class="mf">2.233</span><span class="p">,</span> <span class="mf">4.533</span><span class="p">,</span>
+                 <span class="mf">4.817</span><span class="p">,</span> <span class="mf">4.333</span><span class="p">,</span> <span class="mf">1.983</span><span class="p">,</span> <span class="mf">4.633</span><span class="p">,</span> <span class="mf">2.017</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">5.033</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span>
+                 <span class="mf">4.6</span><span class="p">,</span> <span class="mf">3.567</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.083</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">3.967</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">4.15</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">3.833</span><span class="p">,</span>
+                 <span class="mf">3.5</span><span class="p">,</span> <span class="mf">4.583</span><span class="p">,</span> <span class="mf">2.367</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">1.933</span><span class="p">,</span> <span class="mf">4.617</span><span class="p">,</span> <span class="mf">1.917</span><span class="p">,</span> <span class="mf">2.083</span><span class="p">,</span> <span class="mf">4.583</span><span class="p">,</span>
+                 <span class="mf">3.333</span><span class="p">,</span> <span class="mf">4.167</span><span class="p">,</span> <span class="mf">4.333</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">2.417</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">4.167</span><span class="p">,</span> <span class="mf">1.883</span><span class="p">,</span> <span class="mf">4.583</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span>
+                 <span class="mf">3.767</span><span class="p">,</span> <span class="mf">2.033</span><span class="p">,</span> <span class="mf">4.433</span><span class="p">,</span> <span class="mf">4.083</span><span class="p">,</span> <span class="mf">1.833</span><span class="p">,</span> <span class="mf">4.417</span><span class="p">,</span> <span class="mf">2.183</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mf">1.833</span><span class="p">,</span>
+                 <span class="mf">4.8</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">,</span> <span class="mf">3.966</span><span class="p">,</span> <span class="mf">4.233</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">4.366</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mf">4.667</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">4.35</span><span class="p">,</span>
+                 <span class="mf">4.133</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">,</span> <span class="mf">1.783</span><span class="p">,</span> <span class="mf">4.367</span><span class="p">,</span> <span class="mf">3.85</span><span class="p">,</span> <span class="mf">1.933</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">2.383</span><span class="p">,</span> <span class="mf">4.7</span><span class="p">,</span>
+                 <span class="mf">1.867</span><span class="p">,</span> <span class="mf">3.833</span><span class="p">,</span> <span class="mf">3.417</span><span class="p">,</span> <span class="mf">4.233</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">4.15</span><span class="p">,</span> <span class="mf">1.867</span><span class="p">,</span> <span class="mf">4.267</span><span class="p">,</span>
+                 <span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.483</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">4.117</span><span class="p">,</span> <span class="mf">4.083</span><span class="p">,</span> <span class="mf">4.267</span><span class="p">,</span> <span class="mf">3.917</span><span class="p">,</span> <span class="mf">4.55</span><span class="p">,</span> <span class="mf">4.083</span><span class="p">,</span>
+                 <span class="mf">2.417</span><span class="p">,</span> <span class="mf">4.183</span><span class="p">,</span> <span class="mf">2.217</span><span class="p">,</span> <span class="mf">4.45</span><span class="p">,</span> <span class="mf">1.883</span><span class="p">,</span> <span class="mf">1.85</span><span class="p">,</span> <span class="mf">4.283</span><span class="p">,</span> <span class="mf">3.95</span><span class="p">,</span> <span class="mf">2.333</span><span class="p">,</span>
+                 <span class="mf">4.15</span><span class="p">,</span> <span class="mf">2.35</span><span class="p">,</span> <span class="mf">4.933</span><span class="p">,</span> <span class="mf">2.9</span><span class="p">,</span> <span class="mf">4.583</span><span class="p">,</span> <span class="mf">3.833</span><span class="p">,</span> <span class="mf">2.083</span><span class="p">,</span> <span class="mf">4.367</span><span class="p">,</span> <span class="mf">2.133</span><span class="p">,</span>
+                 <span class="mf">4.35</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">4.45</span><span class="p">,</span> <span class="mf">3.567</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.15</span><span class="p">,</span> <span class="mf">3.817</span><span class="p">,</span> <span class="mf">3.917</span><span class="p">,</span> <span class="mf">4.45</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+                 <span class="mf">4.283</span><span class="p">,</span> <span class="mf">4.767</span><span class="p">,</span> <span class="mf">4.533</span><span class="p">,</span> <span class="mf">1.85</span><span class="p">,</span> <span class="mf">4.25</span><span class="p">,</span> <span class="mf">1.983</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mf">4.75</span><span class="p">,</span> <span class="mf">4.117</span><span class="p">,</span>
+                 <span class="mf">2.15</span><span class="p">,</span> <span class="mf">4.417</span><span class="p">,</span> <span class="mf">1.817</span><span class="p">,</span> <span class="mf">4.467</span><span class="p">])</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">delay</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">79</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span>
+                  <span class="mi">52</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span>
+                  <span class="mi">73</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span>
+                  <span class="mi">83</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span>
+                  <span class="mi">59</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span>
+                  <span class="mi">76</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span>
+                  <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span>
+                  <span class="mi">47</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span>
+                  <span class="mi">53</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span>
+                  <span class="mi">82</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span>
+                  <span class="mi">77</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span>
+                  <span class="mi">76</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span>
+                  <span class="mi">55</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span>
+                  <span class="mi">81</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span>
+                  <span class="mi">71</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span>
+                  <span class="mi">79</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span>
+                  <span class="mi">75</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span>
+                  <span class="mi">80</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span>
+                  <span class="mi">46</span><span class="p">,</span> <span class="mi">74</span><span class="p">])</span>
+
+
+<span class="c1"># model with a modified logistic function + offset</span>
+<span class="k">def</span> <span class="nf">logistic_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">off</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">amp</span><span class="o">-</span><span class="n">off</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tau</span><span class="p">)))</span> <span class="o">+</span> <span class="n">off</span>
+
+
+<span class="c1"># set up model and initial parameter values</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">logistic_func</span><span class="p">)</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">off</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># run fit, and print report</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">delay</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tlen</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+
+<span class="c1"># make finely spaced grid of duration values, extending past data range</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a><span class="p">)</span>
+
+<span class="c1"># now calculate uncertainty interval and predicted interval for sigma=2, 95% level</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">efine</span></a> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_uncertainty</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfine</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result</span><span class="o">.</span><span class="n">dely_predicted</span></a>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tlen</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">delay</span></a><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;observations&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tlen</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">result</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fine grid model&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.fill_between.html#matplotlib.pyplot.fill_between" title="matplotlib.pyplot.fill_between" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">efine</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a><span class="o">+</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">efine</span></a><span class="p">,</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#c0c0c0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$2\sigma$ confidence interval&#39;</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.fill_between.html#matplotlib.pyplot.fill_between" title="matplotlib.pyplot.fill_between" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tfine</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfine</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">yfine</span></a><span class="o">+</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfine</span></a><span class="p">,</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#d0d0a060&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$2\sigma$ predicted interval&#39;</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s1">&#39;duration (minutes)&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s1">&#39;delay to next eruption (minutes)&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+
+<span class="c1"># &lt;end examples/doc_model_uncertainty_pred.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.168 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-uncertainty-pred-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/9e9f302b1ad034bccd39c7927d6a4bc6/model_uncertainty_pred.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">model_uncertainty_pred.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/ec61b8ff41c3777a5145f53e673063a0/model_uncertainty_pred.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_uncertainty_pred.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="confidence_chi2_maps.html" title="doc_confidence_chi2_maps.py"
+             >previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

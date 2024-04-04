@@ -61,7 +61,7 @@ doc_parameters_valuesdict.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_parameters_valuesdict.py>
     import numpy as np
@@ -113,7 +113,7 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.135 seconds)
+   **Total running time of the script:** (0 minutes 0.122 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_valuesdict.py:
@@ -122,16 +122,13 @@ doc_parameters_valuesdict.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: parameters_valuesdict.ipynb <parameters_valuesdict.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parameters_valuesdict.py <parameters_valuesdict.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: parameters_valuesdict.ipynb <parameters_valuesdict.ipynb>`
 
 
 .. only:: html

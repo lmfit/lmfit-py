@@ -46,7 +46,7 @@ doc_confidence_basic.py
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
     # <examples/doc_confidence_basic.py>
     import numpy as np
@@ -76,7 +76,7 @@ doc_confidence_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.124 seconds)
+   **Total running time of the script:** (0 minutes 0.111 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_basic.py:
@@ -85,16 +85,13 @@ doc_confidence_basic.py
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: confidence_basic.ipynb <confidence_basic.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: confidence_basic.py <confidence_basic.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: confidence_basic.ipynb <confidence_basic.ipynb>`
 
 
 .. only:: html

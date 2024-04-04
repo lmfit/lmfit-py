@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Computation times &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -114,84 +113,107 @@
           <div class="body" role="main">
             
   <section id="computation-times">
-<span id="sphx-glr-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this heading">¶</a></h1>
-<p><strong>01:07.337</strong> total execution time for <strong>examples</strong> files:</p>
-<table class="docutils align-default">
+<span id="sphx-glr-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading">¶</a></h1>
+<p><strong>01:03.707</strong> total execution time for 19 files <strong>from examples</strong>:</p>
+<div class="docutils container">
+<style scoped>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" class="init">
+$(document).ready( function () {
+    $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+} );
+</script><table class="table table-striped sg-datatable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Example</p></th>
+<th class="head"><p>Time</p></th>
+<th class="head"><p>Mem (MB)</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="example_emcee_Model_interface.html#sphx-glr-examples-example-emcee-model-interface-py"><span class="std std-ref">Emcee and the Model Interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_emcee_Model_interface.py</span></code>)</p></td>
-<td><p>00:32.359</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="example_emcee_Model_interface.html#sphx-glr-examples-example-emcee-model-interface-py"><span class="std std-ref">Emcee and the Model Interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_emcee_Model_interface.py</span></code>)</p></td>
+<td><p>00:29.171</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="example_brute.html#sphx-glr-examples-example-brute-py"><span class="std std-ref">Global minimization using the brute method (a.k.a. grid search)</span></a> (<code class="docutils literal notranslate"><span class="pre">example_brute.py</span></code>)</p></td>
-<td><p>00:17.922</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="example_brute.html#sphx-glr-examples-example-brute-py"><span class="std std-ref">Global minimization using the brute method (a.k.a. grid search)</span></a> (<code class="docutils literal notranslate"><span class="pre">example_brute.py</span></code>)</p></td>
+<td><p>00:16.219</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="example_confidence_interval.html#sphx-glr-examples-example-confidence-interval-py"><span class="std std-ref">Calculate Confidence Intervals</span></a> (<code class="docutils literal notranslate"><span class="pre">example_confidence_interval.py</span></code>)</p></td>
-<td><p>00:10.723</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="example_confidence_interval.html#sphx-glr-examples-example-confidence-interval-py"><span class="std std-ref">Calculate Confidence Intervals</span></a> (<code class="docutils literal notranslate"><span class="pre">example_confidence_interval.py</span></code>)</p></td>
+<td><p>00:09.800</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="example_two_dimensional_peak.html#sphx-glr-examples-example-two-dimensional-peak-py"><span class="std std-ref">Fit Two Dimensional Peaks</span></a> (<code class="docutils literal notranslate"><span class="pre">example_two_dimensional_peak.py</span></code>)</p></td>
-<td><p>00:02.016</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="example_two_dimensional_peak.html#sphx-glr-examples-example-two-dimensional-peak-py"><span class="std std-ref">Fit Two Dimensional Peaks</span></a> (<code class="docutils literal notranslate"><span class="pre">example_two_dimensional_peak.py</span></code>)</p></td>
+<td><p>00:02.271</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="example_basinhopping.html#sphx-glr-examples-example-basinhopping-py"><span class="std std-ref">Fit comparing leastsq and basin hopping, or other methods</span></a> (<code class="docutils literal notranslate"><span class="pre">example_basinhopping.py</span></code>)</p></td>
+<td><p>00:01.961</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="example_sympy.html#sphx-glr-examples-example-sympy-py"><span class="std std-ref">Building a lmfit model with SymPy</span></a> (<code class="docutils literal notranslate"><span class="pre">example_sympy.py</span></code>)</p></td>
-<td><p>00:01.136</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:01.163</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="example_detect_outliers.html#sphx-glr-examples-example-detect-outliers-py"><span class="std std-ref">Outlier detection via leave-one-out</span></a> (<code class="docutils literal notranslate"><span class="pre">example_detect_outliers.py</span></code>)</p></td>
-<td><p>00:00.786</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.746</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="example_complex_resonator_model.html#sphx-glr-examples-example-complex-resonator-model-py"><span class="std std-ref">Complex Resonator Model</span></a> (<code class="docutils literal notranslate"><span class="pre">example_complex_resonator_model.py</span></code>)</p></td>
-<td><p>00:00.436</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="example_use_pandas.html#sphx-glr-examples-example-use-pandas-py"><span class="std std-ref">Fit with Data in a pandas DataFrame</span></a> (<code class="docutils literal notranslate"><span class="pre">example_use_pandas.py</span></code>)</p></td>
+<td><p>00:00.408</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="example_diffev.html#sphx-glr-examples-example-diffev-py"><span class="std std-ref">Fit Using differential_evolution Algorithm</span></a> (<code class="docutils literal notranslate"><span class="pre">example_diffev.py</span></code>)</p></td>
-<td><p>00:00.276</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="example_complex_resonator_model.html#sphx-glr-examples-example-complex-resonator-model-py"><span class="std std-ref">Complex Resonator Model</span></a> (<code class="docutils literal notranslate"><span class="pre">example_complex_resonator_model.py</span></code>)</p></td>
+<td><p>00:00.402</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="example_Model_interface.html#sphx-glr-examples-example-model-interface-py"><span class="std std-ref">Fit using the Model interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_Model_interface.py</span></code>)</p></td>
-<td><p>00:00.258</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="example_diffev.html#sphx-glr-examples-example-diffev-py"><span class="std std-ref">Fit Using differential_evolution Algorithm</span></a> (<code class="docutils literal notranslate"><span class="pre">example_diffev.py</span></code>)</p></td>
+<td><p>00:00.285</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="example_use_pandas.html#sphx-glr-examples-example-use-pandas-py"><span class="std std-ref">Fit with Data in a pandas DataFrame</span></a> (<code class="docutils literal notranslate"><span class="pre">example_use_pandas.py</span></code>)</p></td>
-<td><p>00:00.243</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="example_Model_interface.html#sphx-glr-examples-example-model-interface-py"><span class="std std-ref">Fit using the Model interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_Model_interface.py</span></code>)</p></td>
+<td><p>00:00.225</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="example_reduce_fcn.html#sphx-glr-examples-example-reduce-fcn-py"><span class="std std-ref">Fit Specifying Different Reduce Function</span></a> (<code class="docutils literal notranslate"><span class="pre">example_reduce_fcn.py</span></code>)</p></td>
-<td><p>00:00.197</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.177</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="example_fit_with_algebraic_constraint.html#sphx-glr-examples-example-fit-with-algebraic-constraint-py"><span class="std std-ref">Fit with Algebraic Constraint</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_algebraic_constraint.py</span></code>)</p></td>
-<td><p>00:00.179</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.156</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="example_fit_multi_datasets.html#sphx-glr-examples-example-fit-multi-datasets-py"><span class="std std-ref">Fit Multiple Data Sets</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_multi_datasets.py</span></code>)</p></td>
-<td><p>00:00.173</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.154</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="example_fit_with_bounds.html#sphx-glr-examples-example-fit-with-bounds-py"><span class="std std-ref">Fit Using Bounds</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_bounds.py</span></code>)</p></td>
-<td><p>00:00.164</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.145</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="example_fit_with_inequality.html#sphx-glr-examples-example-fit-with-inequality-py"><span class="std std-ref">Fit Using Inequality Constraint</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_inequality.py</span></code>)</p></td>
-<td><p>00:00.158</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>00:00.142</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="example_fit_with_derivfunc.html#sphx-glr-examples-example-fit-with-derivfunc-py"><span class="std std-ref">Fit Specifying a Function to Compute the Jacobian</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_derivfunc.py</span></code>)</p></td>
-<td><p>00:00.157</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="example_expression_model.html#sphx-glr-examples-example-expression-model-py"><span class="std std-ref">Using an ExpressionModel</span></a> (<code class="docutils literal notranslate"><span class="pre">example_expression_model.py</span></code>)</p></td>
+<td><p>00:00.142</p></td>
+<td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="example_expression_model.html#sphx-glr-examples-example-expression-model-py"><span class="std std-ref">Using an ExpressionModel</span></a> (<code class="docutils literal notranslate"><span class="pre">example_expression_model.py</span></code>)</p></td>
-<td><p>00:00.155</p></td>
-<td><p>0.0 MB</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="example_fit_with_derivfunc.html#sphx-glr-examples-example-fit-with-derivfunc-py"><span class="std std-ref">Fit Specifying a Function to Compute the Jacobian</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_derivfunc.py</span></code>)</p></td>
+<td><p>00:00.140</p></td>
+<td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="lmfit_emcee_model_selection.html#sphx-glr-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">Model Selection using lmfit and emcee</span></a> (<code class="docutils literal notranslate"><span class="pre">lmfit_emcee_model_selection.py</span></code>)</p></td>
 <td><p>00:00.000</p></td>
-<td><p>0.0 MB</p></td>
+<td><p>0.0</p></td>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 
 
@@ -219,8 +241,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -26,7 +26,7 @@ fitting procedure.
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-44
 
-.. code-block:: default
+.. code-block:: Python
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -76,7 +76,7 @@ Fit without analytic derivative:
 
 .. GENERATED FROM PYTHON SOURCE LINES 46-50
 
-.. code-block:: default
+.. code-block:: Python
 
     min1 = Minimizer(func, params, fcn_args=(x,), fcn_kws={'data': data})
     out1 = min1.leastsq()
@@ -95,7 +95,7 @@ Fit with analytic derivative:
 
 .. GENERATED FROM PYTHON SOURCE LINES 52-56
 
-.. code-block:: default
+.. code-block:: Python
 
     min2 = Minimizer(func, params, fcn_args=(x,), fcn_kws={'data': data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
@@ -115,7 +115,7 @@ to model = a*exp(-b*x) + c:
 
 .. GENERATED FROM PYTHON SOURCE LINES 59-70
 
-.. code-block:: default
+.. code-block:: Python
 
     print(f'"true" parameters are: a = {a:.3f}, b = {b:.3f}, c = {c:.3f}\n\n'
           '|=========================================\n'
@@ -158,7 +158,7 @@ both methods:
 
 .. GENERATED FROM PYTHON SOURCE LINES 73-77
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.plot(x, data, 'o', label='data')
     plt.plot(x, fit1, label='with analytical derivative')
@@ -179,7 +179,7 @@ both methods:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.157 seconds)
+   **Total running time of the script:** (0 minutes 0.140 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_derivfunc.py:
@@ -188,16 +188,13 @@ both methods:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: example_fit_with_derivfunc.ipynb <example_fit_with_derivfunc.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_derivfunc.py <example_fit_with_derivfunc.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: example_fit_with_derivfunc.ipynb <example_fit_with_derivfunc.ipynb>`
 
 
 .. only:: html
