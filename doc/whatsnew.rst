@@ -13,16 +13,63 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_130_label:
 
-Version 1.3.0 Release Notes (TBD)
-=================================
+Version 1.3.0 Release Notes (April 4, 2024)
+===========================================
 
 New features:
 
+- add ``'min_rel_change'`` as optional variable in calculation of confidence intervals with
+   ``Model.conf_interval()``. (PR #937).
+
+- ``Model.eval_uncertainty`` now takes an optional ``dscale`` parameter (default value of 0.01) to
+   set the step size for calculating derivatives (PR #933).
+
+- add calculation of ``predicted_interval`` to ``Model.eval_uncertainty`` (PR #933).
+
+
 Bug fixes/enhancements:
+
+- restore best-fit parameter values for high accuracy values of constrained values (PR #907)
+
+- improvement to Model for the difference between Parameter, "independent variable", and
+  "option".  With this change, keyword arguments to model functions with non-numerice
+  default values such as ``do_thing=True``, or ``form='linear'`` has those arguments
+  become clearly identified as independent variables,and use the provided values as
+  default values. (PR #941)
+
+- better saving/loading saved states of Model now use dill, have several cleanups, and
+  are now versioned for future-proofing. Also, propagate funcdets for Parameters when
+  loading a Model. (PR #932, PR #934)
+
+- in the TNC method, ``maxfun`` is used instead of ``maxiter``.
+
+- fix bug calculating r-squared for fits with weights (PR #921, PR #923)
+
+- fix bug in ``modelresult.eval_uncertainty()`` after ``load_modelresult()`` (PR #909)
+
+- use StringIO for ``pandas.read_json``.
+
+- add test for MinimizerResult.uvars after successful fit (PR #913)
+
+- adding an example using basinhopping, can take other methods as command-line argument
 
 Maintenance/Deprecations:
 
 - drop support for Python 3.7 that reached EOL on 2023-06-27 (PR #927)
+
+- fix tests for Python 3.12 and Python 3.13-dev
+
+- increase minimum numpy verstio to 1.23 and scipy to 1.8.
+
+- updates for compatibility with numpy 2.0
+
+- the ``dill`` package is now required. (#940)
+
+- build switchded to use pyproject.toml (#928)
+
+- fix broken links in Examples gallery
+
+- fix intersphinx mapping to scipy docs.
 
 
 .. _whatsnew_122_label:
