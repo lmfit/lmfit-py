@@ -279,7 +279,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.800 seconds)
+   **Total running time of the script:** (0 minutes 12.613 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:

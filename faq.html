@@ -8,7 +8,7 @@
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -391,21 +391,23 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 16
+    # function evals   = 35
     # data points      = 101
     # variables        = 4
-    chi-square         = 8.54485436
-    reduced chi-square = 0.08809128
-    Akaike info crit   = -241.448916
-    Bayesian info crit = -230.988434
-    R-squared          = 0.99997592
-##  Warning: uncertainties could not be estimated:
-    x0:  at initial value
+    chi-square         = 3.42663866
+    reduced chi-square = 0.03532617
+    Akaike info crit   = -333.737612
+    Bayesian info crit = -323.277130
+    R-squared          = 0.99999034
 [[Variables]]
-    x0:  22.0000000 (init = 22)
-    a:   1.97699808 (init = 1)
-    b:   0.02000391 (init = 1)
-    c:   9.42776683 (init = 1)
+    x0:  21.9999857 +/- 1.8357e-05 (0.00%) (init = 22)
+    a:   1.97846585 +/- 0.03887133 (1.96%) (init = 1)
+    b:   0.02000509 +/- 7.5838e-06 (0.04%) (init = 1)
+    c:   9.36757663 +/- 0.04007162 (0.43%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a, b)  = -0.8368
+    C(x0, a) = +0.1871
+    C(x0, b) = -0.1508
 </pre></div>
 </div>
 </div>
@@ -461,22 +463,24 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 51
+    # function evals   = 63
     # data points      = 101
     # variables        = 4
-    chi-square         = 0.99167822
-    reduced chi-square = 0.01022349
-    Akaike info crit   = -458.971189
-    Bayesian info crit = -448.510707
-    R-squared          = 0.99999720
+    chi-square         = 1.06963418
+    reduced chi-square = 0.01102716
+    Akaike info crit   = -451.328186
+    Bayesian info crit = -440.867704
+    R-squared          = 0.99999698
 [[Variables]]
-    x0:  18.6240034 +/- 0.33672087 (1.81%) (init = 22)
-    a:   1.98550533 +/- 0.01968698 (0.99%) (init = 1)
-    b:   0.02000286 +/- 3.9248e-06 (0.02%) (init = 1)
-    c:   9.23936836 +/- 0.02399509 (0.26%) (init = 1)
+    x0:  18.9951132 +/- 0.47748004 (2.51%) (init = 22)
+    a:   2.00377200 +/- 0.02075190 (1.04%) (init = 1)
+    b:   0.01999781 +/- 4.1148e-06 (0.02%) (init = 1)
+    c:   9.21552922 +/- 0.02430281 (0.26%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8223
-    C(x0, c) = -0.2269
+    C(a, b)  = -0.8260
+    C(x0, c) = -0.1482
+    C(x0, a) = +0.1305
+    C(x0, b) = -0.1042
 </pre></div>
 </div>
 </div>
