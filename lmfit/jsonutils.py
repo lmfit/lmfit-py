@@ -24,7 +24,7 @@ pyvers = f'{sys.version_info.major}.{sys.version_info.minor}'
 def find_importer(obj):
     """Find importer of an object."""
     oname = obj.__name__
-    for modname, module in sys.modules.items():
+    for modname, module in sys.modules.copy().items():
         if modname.startswith('__main__'):
             continue
         t = getattr(module, oname, None)
