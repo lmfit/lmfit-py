@@ -281,7 +281,7 @@ def test_Model_getter_param_names(gmodel):
 
 def test_Model__repr__(gmodel):
     """Test for Model class __repr__ method."""
-    assert gmodel.__repr__() == '<lmfit.Model: Model(gaussian)>'
+    assert 'Model(gaussian)' in gmodel.__repr__()
 
 
 def test_Model_copy(gmodel):

@@ -309,7 +309,7 @@ class Model:
             name = self.func.__name__
         self._name = name
 
-    def _reprstring(self, long=False):
+    def _reprstring(self, long=True):
         out = self._name
         opts = []
         if len(self._prefix) > 0:
@@ -468,7 +468,7 @@ class Model:
     @property
     def name(self):
         """Return Model name."""
-        return self._reprstring(long=False)
+        return self._reprstring(long=True)
 
     @name.setter
     def name(self, value):
@@ -497,8 +497,7 @@ class Model:
 
     def __repr__(self):
         """Return representation of Model."""
-        # could be just self._reprstring(long=True)
-        return f"<lmfit.Model: {self.name}>"
+        return self._reprstring(long=True)
 
     def copy(self, **kwargs):
         """DOES NOT WORK."""
@@ -1273,7 +1272,7 @@ class CompositeModel(Model):
         self.opts = deepcopy(self.right.opts)
         self.opts.update(self.left.opts)
 
-    def _reprstring(self, long=False):
+    def _reprstring(self, long=True):
         return (f"({self.left._reprstring(long=long)} "
                 f"{self._known_ops.get(self.op, self.op)} "
                 f"{self.right._reprstring(long=long)})")
