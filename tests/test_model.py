@@ -884,10 +884,23 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         step:  form='linear'
         voigt: gamma=None,     can become a variable!!
         """
-        stepmod = Model(step)
-        assert 'x' in stepmod.independent_vars
-        assert 'form' in stepmod.independent_vars
-        assert 'linear' == stepmod.independent_vars_defvals.get('form', None)
+        stepmod1 = Model(step)
+        assert 'x' in stepmod1.independent_vars
+        assert 'form' in stepmod1.independent_vars
+        assert 'linear' == stepmod1.independent_vars_defvals.get('form', None)
+
+        stepmod2 = Model(step, form='arctan')
+        assert 'x' in stepmod2.independent_vars
+        assert 'form' in stepmod2.independent_vars
+        assert 'arctan' == stepmod2.independent_vars_defvals.get('form', None)
+
+        x = np.linspace(0, 30, 301)
+        pars = stepmod1.make_params(amplitude=10, center=14, sigma=2.5)
+        yline = stepmod1.eval(pars, x=x)
+        yatan = stepmod2.eval(pars, x=x)
+
+        assert (yatan-yline).std() > 0.1
+        assert (yatan-yline).ptp() > 1.0
 
         voigtmod = Model(voigt)
         assert 'x' in voigtmod.independent_vars
