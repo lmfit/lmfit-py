@@ -497,6 +497,7 @@ class Model:
 
     def __repr__(self):
         """Return representation of Model."""
+        # could be just self._reprstring(long=True)
         return f"<lmfit.Model: {self.name}>"
 
     def copy(self, **kwargs):
@@ -904,6 +905,7 @@ class Model:
         if kwargs is None:
             kwargs = {}
         out = {}
+        out.update(self.opts)
         for key, val in self.independent_vars_defvals.items():
             if val is not inspect._empty:
                 out[key] = val
@@ -1150,7 +1152,7 @@ class Model:
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
-            if var not in params:
+            if var not in params and var not in self.opts:
                 if var not in kwargs:
                     raise ValueError(f"'Missing independent variable '{var}'")
                 if not np.isscalar(kwargs[var]):
