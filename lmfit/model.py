@@ -1686,18 +1686,18 @@ class ModelResult(Minimizer):
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
         feval = self.model.eval(params, **userkws)
-        ndata = len(feval.view('float64'))        # allows feval to be complex
+        ndata = np.atleast_1d(feval).view('float64').shape  # allows feval to be complex
         covar = self.covar
         if any(p.stderr is None for p in params.values()):
             return np.zeros(ndata)
 
         # '0' would be an invalid prefix, here signifying 'Full'
-        fjac = {'0': np.zeros((nvarys, ndata), dtype='float64')}
+        fjac = {'0': np.zeros((nvarys, *ndata), dtype='float64')}
         df2 = {'0': np.zeros(ndata, dtype='float64')}
 
         for comp in self.model.components:
             label = comp.prefix if len(comp.prefix) > 1 else comp._name
-            fjac[label] = np.zeros((nvarys, ndata), dtype='float64')
+            fjac[label] = np.zeros((nvarys, *ndata), dtype='float64')
             df2[label] = np.zeros(ndata, dtype='float64')
 
         # find derivative by hand!
@@ -1717,8 +1717,8 @@ class ModelResult(Minimizer):
 
             pars[pname].value = val0
             for key in fjac:
-                fjac[key][i] = (res1[key].view('float64')
-                                - res2[key].view('float64')) / (2*dval)
+                fjac[key][i] = (np.atleast_1d(res1[key]).view('float64')
+                                - np.atleast_1d(res2[key]).view('float64')) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
@@ -1735,7 +1735,7 @@ class ModelResult(Minimizer):
         # for complex data, convert back to real/imag pairs
         if feval.dtype in ('complex64', 'complex128'):
             for key in fjac:
-                df2[key] = df2[key][0::2] + 1j * df2[key][1::2]
+                df2[key] = df2[key].view(feval.dtype)
 
         df2_total = df2.pop('0')
         self.dely = scale * np.sqrt(df2_total)
