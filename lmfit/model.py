@@ -1686,7 +1686,7 @@ class ModelResult(Minimizer):
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
         feval = self.model.eval(params, **userkws)
-        ndata = feval.view('float64').ravel().size  # allows feval to be complex
+        ndata = np.atleast_1d(feval).view('float64').ravel().size  # allows feval to be complex
         covar = self.covar
         if any(p.stderr is None for p in params.values()):
             return np.zeros(ndata)
@@ -1717,8 +1717,8 @@ class ModelResult(Minimizer):
 
             pars[pname].value = val0
             for key in fjac:
-                fjac[key][i] = (res1[key].view('float64')
-                                - res2[key].view('float64')) / (2*dval)
+                fjac[key][i] = (np.atleast_1d(res1[key]).view('float64').ravel()
+                                - np.atleast_1d(res2[key]).view('float64').ravel()) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
@@ -1736,6 +1736,9 @@ class ModelResult(Minimizer):
         if feval.dtype in ('complex64', 'complex128'):
             for key in fjac:
                 df2[key] = df2[key].view(feval.dtype)
+
+        for key in fjac:
+            df2[key] = df2[key].reshape(feval.shape)
 
         df2_total = df2.pop('0')
         self.dely = scale * np.sqrt(df2_total)
