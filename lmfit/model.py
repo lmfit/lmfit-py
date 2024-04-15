@@ -509,6 +509,8 @@ class Model:
             return
         kw_args = {}
         keywords_ = None
+        indep_vars = []
+        default_vals = {}
         # need to fetch the following from the function signature:
         #   pos_args: list of positional argument names
         #   kw_args: dict of keyword arguments with default values
@@ -516,13 +518,13 @@ class Model:
         # 1. limited support for asteval functions as the model functions:
         if hasattr(self.func, 'argnames') and hasattr(self.func, 'kwargs'):
             pos_args = self.func.argnames[:]
+            default_vals = {v: inspect._empty for v in pos_args}
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
+                default_vals[name] = defval
         # 2. modern, best-practice approach: use inspect.signature
         else:
             pos_args = []
-            default_vals = {}
-            indep_vars = []
             sig = inspect.signature(self.func)
             for fnam, fpar in sig.parameters.items():
                 if fpar.kind == fpar.VAR_KEYWORD:

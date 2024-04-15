@@ -1605,3 +1605,46 @@ def test_rsquared_with_weights():
 
     assert result.rsquared < 1.00
     assert result.rsquared > 0.95
+
+
+# based on Github #953
+class PolynomialFunction:
+    def __init__(self, degree=1):
+        self.degree = degree
+
+    @property
+    def __name__(self):
+        return self.__class__.__name__
+
+    @property
+    def argnames(self):
+        return ["x"] + [f"c{i}" for i in range(self.degree + 1)]
+
+    @property
+    def kwargs(self):
+        return {}
+
+    def __call__(self, x, *coeffs, **params):
+        if len(coeffs) != self.degree + 1:
+            coeffs = [params[f"c{d}"] for d in range(self.degree + 1)]
+        return np.polynomial.polynomial.polyval(x, coeffs)
+
+
+def test_custom_variadic_model():
+    """Github #953"""
+    model = Model(PolynomialFunction(degree=3))
+    params = model.make_params(c0=5, c1=3.6, c2=-0.2, c3=0)
+
+    assert 'x' in model.independent_vars
+
+    np.random.seed(0)
+    x1 = np.linspace(-10, 10, 201)
+    y1 = 5 + 3.3*x1 + 0.17*x1**2 - 0.004*x1**3
+    y1 += np.random.normal(size=201, scale=0.1)
+
+    result = model.fit(y1, params, x=x1)
+
+    assert result.chisqr < 15.0
+    assert result.nfev > 7
+    assert_allclose(result.values['c0'], 5.0, 0.02, 0.02, '', True)
+    assert_allclose(result.values['c1'], 3.3, 0.02, 0.02, '', True)
