@@ -1383,8 +1383,8 @@ class ThermalDistributionModel(Model):
 
     valid_forms = ('bose', 'maxwell', 'fermi')
 
-    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 form='bose', **kwargs):
+    def __init__(self, independent_vars=['x', 'form'], prefix='',
+                 nan_policy='raise', form='bose', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
         super().__init__(thermal_distribution, **kwargs)
@@ -1544,8 +1544,8 @@ class StepModel(Model):
 
     valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
-    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 form='linear', **kwargs):
+    def __init__(self, independent_vars=['x', 'form'], prefix='',
+                 nan_policy='raise', form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
         super().__init__(step, **kwargs)
@@ -1604,8 +1604,8 @@ class RectangleModel(Model):
 
     valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
-    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 form='linear', **kwargs):
+    def __init__(self, independent_vars=['x', 'form'], prefix='',
+                 nan_policy='raise', form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
         super().__init__(rectangle, **kwargs)
