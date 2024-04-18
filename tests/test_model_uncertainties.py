@@ -5,6 +5,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from lmfit.lineshapes import gaussian
+from lmfit.model import Model
 from lmfit.models import ExponentialModel, GaussianModel, LinearModel
 
 
@@ -127,3 +128,23 @@ def test_component_uncertainties():
     assert result.dely_comps['g2_'].mean() < 1.5
     assert result.dely_comps['bkg_'].mean() > 0.5
     assert result.dely_comps['bkg_'].mean() < 1.5
+
+
+def test_scalar_independent_vars():
+    """Github #951"""
+    mr = LinearModel().fit(data=[1, 2, 4], x=[1, 2, 3])
+
+    assert_allclose(mr.eval_uncertainty(x=1.2), np.array([0.60629034]))
+    assert_allclose(mr.eval_uncertainty(x=np.array(1.2j)), np.array([1.15903153+0.17475665j]))
+
+
+def test_multidim_model():
+    """test models that return a multi-dimension output"""
+    def fit(x, p=2):
+        return np.array([x, p*x])
+    model = Model(fit)
+
+    mr = model.fit(data=np.array([[1, 2, 3], [2, 3, 5]]), x=np.array([1, 2, 3]))
+
+    assert_allclose(mr.eval_uncertainty(x=np.array([3, 4])), np.array([[0, 0], [0.18432744, 0.24576991]]))
+    assert_allclose(mr.eval_uncertainty(x=np.array([3j, 4j])), np.array([[0, 0], [0.13033918+0.13033918j, 0.17378557+0.17378557j]]))
