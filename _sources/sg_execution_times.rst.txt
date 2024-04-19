@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**02:27.055** total execution time for 46 files **from all galleries**:
+**01:50.542** total execution time for 46 files **from all galleries**:
 
 .. container::
 
@@ -33,139 +33,139 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_documentation_confidence_chi2_maps.py` (``../examples/documentation/confidence_chi2_maps.py``)
-     - 00:47.149
+     - 00:35.236
      - 0.0
    * - :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``../examples/example_emcee_Model_interface.py``)
-     - 00:38.149
+     - 00:28.793
      - 0.0
    * - :ref:`sphx_glr_examples_example_brute.py` (``../examples/example_brute.py``)
-     - 00:21.213
+     - 00:15.789
      - 0.0
    * - :ref:`sphx_glr_examples_example_confidence_interval.py` (``../examples/example_confidence_interval.py``)
-     - 00:12.613
+     - 00:09.578
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_fitting_emcee.py` (``../examples/documentation/fitting_emcee.py``)
-     - 00:08.337
+     - 00:06.126
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_confidence_advanced.py` (``../examples/documentation/confidence_advanced.py``)
-     - 00:04.650
+     - 00:03.467
      - 0.0
    * - :ref:`sphx_glr_examples_example_basinhopping.py` (``../examples/example_basinhopping.py``)
-     - 00:02.624
+     - 00:01.998
      - 0.0
    * - :ref:`sphx_glr_examples_example_two_dimensional_peak.py` (``../examples/example_two_dimensional_peak.py``)
-     - 00:02.273
+     - 00:01.877
      - 0.0
    * - :ref:`sphx_glr_examples_example_sympy.py` (``../examples/example_sympy.py``)
-     - 00:01.078
+     - 00:00.870
      - 0.0
    * - :ref:`sphx_glr_examples_example_detect_outliers.py` (``../examples/example_detect_outliers.py``)
-     - 00:00.944
+     - 00:00.713
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_uncertainty2.py` (``../examples/documentation/model_uncertainty2.py``)
-     - 00:00.804
+     - 00:00.612
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py` (``../examples/documentation/builtinmodels_peakmodels.py``)
-     - 00:00.708
+     - 00:00.536
      - 0.0
    * - :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``../examples/example_complex_resonator_model.py``)
-     - 00:00.510
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py` (``../examples/documentation/builtinmodels_nistgauss.py``)
-     - 00:00.383
+     - 00:00.392
      - 0.0
    * - :ref:`sphx_glr_examples_example_diffev.py` (``../examples/example_diffev.py``)
-     - 00:00.366
+     - 00:00.292
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py` (``../examples/documentation/builtinmodels_nistgauss.py``)
+     - 00:00.284
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_splinemodel.py` (``../examples/documentation/builtinmodels_splinemodel.py``)
-     - 00:00.355
+     - 00:00.258
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_composite.py` (``../examples/documentation/model_composite.py``)
-     - 00:00.336
+     - 00:00.255
      - 0.0
    * - :ref:`sphx_glr_examples_example_Model_interface.py` (``../examples/example_Model_interface.py``)
-     - 00:00.300
+     - 00:00.228
      - 0.0
    * - :ref:`sphx_glr_examples_example_use_pandas.py` (``../examples/example_use_pandas.py``)
-     - 00:00.248
+     - 00:00.192
      - 0.0
    * - :ref:`sphx_glr_examples_example_reduce_fcn.py` (``../examples/example_reduce_fcn.py``)
-     - 00:00.231
+     - 00:00.175
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_uncertainty_pred.py` (``../examples/documentation/model_uncertainty_pred.py``)
-     - 00:00.216
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``../examples/example_fit_with_algebraic_constraint.py``)
-     - 00:00.202
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``../examples/example_fit_multi_datasets.py``)
-     - 00:00.201
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py` (``../examples/documentation/builtinmodels_nistgauss2.py``)
-     - 00:00.193
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``../examples/example_fit_with_bounds.py``)
-     - 00:00.191
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py` (``../examples/documentation/model_with_iter_callback.py``)
-     - 00:00.187
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_uncertainty.py` (``../examples/documentation/model_uncertainty.py``)
-     - 00:00.183
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``../examples/example_fit_with_derivfunc.py``)
-     - 00:00.182
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``../examples/example_fit_with_inequality.py``)
-     - 00:00.181
-     - 0.0
-   * - :ref:`sphx_glr_examples_example_expression_model.py` (``../examples/example_expression_model.py``)
-     - 00:00.178
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_two_components.py` (``../examples/documentation/model_two_components.py``)
-     - 00:00.176
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_gaussian.py` (``../examples/documentation/model_gaussian.py``)
-     - 00:00.173
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py` (``../examples/documentation/builtinmodels_stepmodel.py``)
-     - 00:00.172
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py` (``../examples/documentation/model_with_nan_policy.py``)
-     - 00:00.169
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py` (``../examples/documentation/model_loadmodelresult2.py``)
-     - 00:00.169
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_loadmodel.py` (``../examples/documentation/model_loadmodel.py``)
-     - 00:00.165
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_parameters_basic.py` (``../examples/documentation/parameters_basic.py``)
      - 00:00.164
      - 0.0
+   * - :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``../examples/example_fit_multi_datasets.py``)
+     - 00:00.159
+     - 0.0
+   * - :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``../examples/example_fit_with_algebraic_constraint.py``)
+     - 00:00.155
+     - 0.0
+   * - :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``../examples/example_fit_with_bounds.py``)
+     - 00:00.154
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py` (``../examples/documentation/builtinmodels_nistgauss2.py``)
+     - 00:00.148
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py` (``../examples/documentation/model_with_iter_callback.py``)
+     - 00:00.142
+     - 0.0
+   * - :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``../examples/example_fit_with_derivfunc.py``)
+     - 00:00.140
+     - 0.0
+   * - :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``../examples/example_fit_with_inequality.py``)
+     - 00:00.140
+     - 0.0
+   * - :ref:`sphx_glr_examples_example_expression_model.py` (``../examples/example_expression_model.py``)
+     - 00:00.137
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_uncertainty.py` (``../examples/documentation/model_uncertainty.py``)
+     - 00:00.135
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py` (``../examples/documentation/builtinmodels_stepmodel.py``)
+     - 00:00.131
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_two_components.py` (``../examples/documentation/model_two_components.py``)
+     - 00:00.130
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_gaussian.py` (``../examples/documentation/model_gaussian.py``)
+     - 00:00.129
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py` (``../examples/documentation/model_with_nan_policy.py``)
+     - 00:00.128
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py` (``../examples/documentation/model_loadmodelresult2.py``)
+     - 00:00.127
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_loadmodel.py` (``../examples/documentation/model_loadmodel.py``)
+     - 00:00.124
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_parameters_basic.py` (``../examples/documentation/parameters_basic.py``)
+     - 00:00.120
+     - 0.0
    * - :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py` (``../examples/documentation/parameters_valuesdict.py``)
-     - 00:00.158
+     - 00:00.119
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py` (``../examples/documentation/model_loadmodelresult.py``)
-     - 00:00.158
+     - 00:00.116
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_confidence_basic.py` (``../examples/documentation/confidence_basic.py``)
-     - 00:00.152
+     - 00:00.111
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_uvars_params.py` (``../examples/documentation/uvars_params.py``)
-     - 00:00.073
+     - 00:00.056
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py` (``../examples/documentation/model_savemodelresult2.py``)
-     - 00:00.071
+     - 00:00.054
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodelresult.py` (``../examples/documentation/model_savemodelresult.py``)
-     - 00:00.057
+     - 00:00.041
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_fitting_withreport.py` (``../examples/documentation/fitting_withreport.py``)
-     - 00:00.009
+     - 00:00.007
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodel.py` (``../examples/documentation/model_savemodel.py``)
-     - 00:00.007
+     - 00:00.005
      - 0.0
    * - :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py` (``../examples/lmfit_emcee_model_selection.py``)
      - 00:00.000

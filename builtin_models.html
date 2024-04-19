@@ -8,13 +8,13 @@
     <title>Built-in Fitting Models in the models module &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
-    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="_static/documentation_options.js?v=bb516dca"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -1037,7 +1037,7 @@ the data. Should be one of:</p>
 <h3><a class="reference internal" href="#lmfit.models.ThermalDistributionModel" title="lmfit.models.ThermalDistributionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a><a class="headerlink" href="#thermaldistributionmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.ThermalDistributionModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ThermalDistributionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bose'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ThermalDistributionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x',</span> <span class="pre">'form']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bose'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Link to this definition">¶</a></dt>
 <dd><p>Return a thermal distribution function.</p>
 <p>Variable <cite>form</cite> defines the kind of distribution as below with three
 Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite> (<span class="math notranslate nohighlight">\(x_0\)</span>), and <cite>kt</cite>
@@ -1374,7 +1374,7 @@ the data. Should be one of:</p>
 <h3><a class="reference internal" href="#lmfit.models.StepModel" title="lmfit.models.StepModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a><a class="headerlink" href="#stepmodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.StepModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StepModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StepModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x',</span> <span class="pre">'form']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Step function.</p>
 <p>The model has three Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center</cite>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), and <cite>sigma</cite> (<span class="math notranslate nohighlight">\(\sigma\)</span>).</p>
@@ -1425,7 +1425,7 @@ the data. Should be one of:</p>
 <h3><a class="reference internal" href="#lmfit.models.RectangleModel" title="lmfit.models.RectangleModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangleModel</span></code></a><a class="headerlink" href="#rectanglemodel" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.models.RectangleModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RectangleModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RectangleModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['x',</span> <span class="pre">'form']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">form</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Link to this definition">¶</a></dt>
 <dd><p>A model based on a Step-up and Step-down function.</p>
 <p>The model has five Parameters: <cite>amplitude</cite> (<span class="math notranslate nohighlight">\(A\)</span>), <cite>center1</cite>
 (<span class="math notranslate nohighlight">\(\mu_1\)</span>), <cite>center2</cite> (<span class="math notranslate nohighlight">\(\mu_2\)</span>), <cite>sigma1</cite>
@@ -2020,28 +2020,30 @@ results, which gives:</p>
     (Model(step, prefix=&#39;step_&#39;, form=&#39;erf&#39;) + Model(linear, prefix=&#39;line_&#39;))
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 37
+    # function evals   = 55
     # data points      = 201
     # variables        = 5
-    chi-square         = 193.096393
-    reduced chi-square = 0.98518568
-    Akaike info crit   = 1.93680505
-    Bayesian info crit = 18.4533296
-    R-squared          = 0.99966760
+    chi-square         = 593.709621
+    reduced chi-square = 3.02913072
+    Akaike info crit   = 227.700173
+    Bayesian info crit = 244.216697
+    R-squared          = 0.99897798
 [[Variables]]
-    line_slope:      2.08819865 +/- 0.04889098 (2.34%) (init = 0)
-    line_intercept:  12.3047194 +/- 0.15345326 (1.25%) (init = 11.58574)
-    step_amplitude:  110.940322 +/- 0.32733117 (0.30%) (init = 134.7378)
-    step_center:     3.13269691 +/- 0.00272841 (0.09%) (init = 2.5)
-    step_sigma:      1.45664264 +/- 0.00913525 (0.63%) (init = 1.428571)
+    line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
+    line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
+    step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
+    step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
+    step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(line_slope, step_amplitude)  = -0.8588
-    C(line_intercept, step_center) = +0.4000
-    C(step_amplitude, step_sigma)  = +0.3826
-    C(line_slope, line_intercept)  = -0.3823
-    C(line_slope, step_sigma)      = -0.3017
-    C(line_slope, step_center)     = -0.2217
-    C(step_amplitude, step_center) = +0.1015
+    C(line_slope, step_amplitude)     = -0.8791
+    C(step_amplitude, step_sigma)     = +0.5643
+    C(line_slope, step_sigma)         = -0.4569
+    C(line_intercept, step_center)    = +0.4269
+    C(line_slope, line_intercept)     = -0.3093
+    C(line_slope, step_center)        = -0.2338
+    C(line_intercept, step_sigma)     = -0.1372
+    C(line_intercept, step_amplitude) = -0.1173
+    C(step_amplitude, step_center)    = +0.1095
 </pre></div>
 </div>
 </div>

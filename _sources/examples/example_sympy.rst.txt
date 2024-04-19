@@ -193,7 +193,7 @@ reason. Both can be expressed by just substituting the variables.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.078 seconds)
+   **Total running time of the script:** (0 minutes 0.870 seconds)
 
 
 .. _sphx_glr_download_examples_example_sympy.py:

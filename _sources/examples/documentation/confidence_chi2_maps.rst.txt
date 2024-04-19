@@ -252,7 +252,7 @@ plot initial fit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 47.149 seconds)
+   **Total running time of the script:** (0 minutes 35.236 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_chi2_maps.py:

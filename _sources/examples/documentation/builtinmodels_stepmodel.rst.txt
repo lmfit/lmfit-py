@@ -39,28 +39,30 @@ doc_builtinmodels_stepmodel.py
         (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 37
+        # function evals   = 55
         # data points      = 201
         # variables        = 5
-        chi-square         = 193.096393
-        reduced chi-square = 0.98518568
-        Akaike info crit   = 1.93680505
-        Bayesian info crit = 18.4533296
-        R-squared          = 0.99966760
+        chi-square         = 593.709621
+        reduced chi-square = 3.02913072
+        Akaike info crit   = 227.700173
+        Bayesian info crit = 244.216697
+        R-squared          = 0.99897798
     [[Variables]]
-        line_slope:      2.08819865 +/- 0.04889098 (2.34%) (init = 0)
-        line_intercept:  12.3047194 +/- 0.15345326 (1.25%) (init = 11.58574)
-        step_amplitude:  110.940322 +/- 0.32733117 (0.30%) (init = 134.7378)
-        step_center:     3.13269691 +/- 0.00272841 (0.09%) (init = 2.5)
-        step_sigma:      1.45664264 +/- 0.00913525 (0.63%) (init = 1.428571)
+        line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
+        line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
+        step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
+        step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
+        step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(line_slope, step_amplitude)  = -0.8588
-        C(line_intercept, step_center) = +0.4000
-        C(step_amplitude, step_sigma)  = +0.3826
-        C(line_slope, line_intercept)  = -0.3823
-        C(line_slope, step_sigma)      = -0.3017
-        C(line_slope, step_center)     = -0.2217
-        C(step_amplitude, step_center) = +0.1015
+        C(line_slope, step_amplitude)     = -0.8791
+        C(step_amplitude, step_sigma)     = +0.5643
+        C(line_slope, step_sigma)         = -0.4569
+        C(line_intercept, step_center)    = +0.4269
+        C(line_slope, line_intercept)     = -0.3093
+        C(line_slope, step_center)        = -0.2338
+        C(line_intercept, step_sigma)     = -0.1372
+        C(line_intercept, step_amplitude) = -0.1173
+        C(step_amplitude, step_center)    = +0.1095
 
 
 
@@ -105,7 +107,7 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.172 seconds)
+   **Total running time of the script:** (0 minutes 0.131 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
