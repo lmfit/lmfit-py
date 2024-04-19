@@ -11,6 +11,30 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_131_label:
+
+Version 1.3.1 Release Notes (April 19, 2024)
+====================================================
+
+Mostly fixes for bugs introduced in 1.3.0
+
+- allow ``Model.eval_uncertainty`` to be performed with single points for ``x``
+  independent variables (PR #952, Issue #951)
+
+-  allow ``Model._parse_param`` to handle older-style passed-in 'argnames' and
+   'kwargs' as for variadic function, add test  (PR #950)
+
+- better allow (or re-allow) Model function independent variables / keyword
+  argumentss to be given non-default values at model creation time
+
+- add ``form`` as independent variable for builtin Step, Rectangle, Thermal
+  Distribution models.
+
+- use a copy of ``sys.modules`` when iterating over it. (#949)
+
+-  use ``Model._reprstring(long=True)`` for model ``Model.__repr__()``.
+
+
 .. _whatsnew_130_label:
 
 Version 1.3.0 Release Notes (April 4, 2024)
