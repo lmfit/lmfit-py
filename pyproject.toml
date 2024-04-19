@@ -59,6 +59,7 @@ doc = [
     "matplotlib",
     "numdifftools",
     "pandas",
+    "numexpr", # note: Pandas appears to need numexpr to build our docs
     "Pillow",
     "pycairo;platform_system=='Windows'",
     "Sphinx",
