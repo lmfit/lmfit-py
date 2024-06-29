@@ -900,7 +900,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         yatan = stepmod2.eval(pars, x=x)
 
         assert (yatan-yline).std() > 0.1
-        assert (yatan-yline).ptp() > 1.0
+        assert np.ptp(yatan-yline) > 1.0
 
         voigtmod = Model(voigt)
         assert 'x' in voigtmod.independent_vars
