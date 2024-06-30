@@ -139,7 +139,7 @@ stages:
             swig libmpc-dev
           displayName: 'Install dependencies'
         - script: |
-            python -m pip install --upgrade build pip setuptools wheel numpy
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python -m build
@@ -183,7 +183,7 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            python -m pip install --upgrade build pip setuptools wheel "numpy>=2.0"
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python -m build
@@ -218,7 +218,7 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            python -m pip install --upgrade build pip setuptools wheel "numpy>=2.0"
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python -m build
