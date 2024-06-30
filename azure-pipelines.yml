@@ -107,13 +107,13 @@ stages:
         - script: |
             ./codecov -v -f "coverage.xml"
           displayName: 'Upload to codecov.io'
-
 - stage: tests_latest_dependencies
   dependsOn: check_codestyle
   condition: succeededOrFailed()
   jobs:
     - job:
       pool:
+
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
