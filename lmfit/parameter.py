@@ -6,7 +6,6 @@ import json
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
 from numpy import version as npvers
-from packaging.version import Version
 from scipy.linalg import LinAlgError
 import scipy.special
 from uncertainties import correlated_values, ufloat
@@ -26,9 +25,9 @@ for fnc_name in ('erf', 'erfc', 'wofz'):
 def clean_np2_symbols(user_syms):
     """clean symbols from self._asteval.user_defined_symbols()
     that have been deprecated in numpy 2.0
-    This should be a short term fix, as these are removed from asteval.
+    This function can be removed when asteval 0.9.33 is no longer supported
     """
-    if Version(npvers.version) > Version('1.9'):
+    if npvers.version.startswith('2'):
         for sym in ('ogrid', 'mgrid', 'c_', 'r_', 's_', 'index_exp'):
             if sym in user_syms:
                 user_syms.remove(sym)
@@ -109,6 +108,7 @@ class Parameters(dict):
         if not isinstance(other, Parameters):
             raise ValueError(f"'{other}' is not a Parameters object")
         self.add_many(*other.values())
+        # FIXME: clear_np2_symbols() can be removed when asteval 0.9.33 is not supported
         usersyms = clean_np2_symbols(other._asteval.user_defined_symbols())
         for sym in usersyms:
             self._asteval.symtable[sym] = other._asteval.symtable[sym]
@@ -129,6 +129,7 @@ class Parameters(dict):
 
         # find the symbols that were added by users, not during construction
         unique_symbols = {}
+        # FIXME: clear_np2_symbols() can be removed when asteval 0.9.33 is not supported
         usersyms = clean_np2_symbols(self._asteval.user_defined_symbols())
         for key in usersyms:
             try:
@@ -177,6 +178,7 @@ class Parameters(dict):
             raise ValueError(f"'{other}' is not a Parameters object")
         out = deepcopy(self)
         out.add_many(*other.values())
+        # FIXME: clear_np2_symbols() can be removed when asteval 0.9.33 is not supported
         usersyms = clean_np2_symbols(other._asteval.user_defined_symbols())
         for sym in usersyms:
             if sym not in out._asteval.symtable:
@@ -198,6 +200,7 @@ class Parameters(dict):
         params = [self[k] for k in self]
 
         # find the symbols from _asteval.symtable, that need to be remembered.
+        # FIXME: clear_np2_symbols() can be removed when asteval 0.9.33 is not supported
         usersyms = clean_np2_symbols(self._asteval.user_defined_symbols())
         unique_symbols = {key: deepcopy(self._asteval.symtable[key])
                           for key in usersyms}
@@ -584,6 +587,7 @@ class Parameters(dict):
 
         """
         params = [p.__getstate__() for p in self.values()]
+        # FIXME: clear_np2_symbols() can be removed when asteval 0.9.33 is not supported
         usersyms = clean_np2_symbols(self._asteval.user_defined_symbols())
         unique_symbols = {key: encode4js(deepcopy(self._asteval.symtable[key]))
                           for key in usersyms}
