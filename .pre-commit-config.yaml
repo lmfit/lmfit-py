@@ -2,13 +2,13 @@ exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.16.0
     hooks:
     -   id: pyupgrade
         args: [--py38-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
     -   id: check-ast
     -   id: check-builtin-literals
@@ -23,7 +23,7 @@ repos:
         args: [--remove]
 
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.1.0
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-deprecated, flake8-mutable, Flake8-pyproject]
@@ -51,14 +51,14 @@ repos:
     -   id: python-check-blanket-noqa
 
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.2.6
+    rev: v2.3.0
     hooks:
     -   id: codespell
         files: '.py|.rst'
         exclude: 'doc/doc_examples_to_gallery.py|.ipynb'
         # escaped characters currently do not work correctly
         # so \nnumber is considered a spelling error....
-        args: ["-L nnumber", "-L mone"]
+        args: ["-L nnumber", "-L mone", "-L assertIn", "-L efine",]
 
 -   repo: https://github.com/asottile/yesqa
     rev: v1.5.0
