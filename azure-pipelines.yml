@@ -82,7 +82,7 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             python -m pip install --upgrade build pip wheel
-            python -m pip install asteval==0.9.28 numpy==1.23.0 scipy==1.8.0 uncertainties==3.1.4
+            python -m pip install asteval==1.0 numpy==1.23.0 scipy==1.8.0 uncertainties==3.2.2
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python -m build
@@ -256,7 +256,7 @@ stages:
           displayName: 'Install build, pip, setuptools, wheel, pybind11, and cython'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            export numpy_version=1.26.4
+            export numpy_version=2.0.0
             wget https://github.com/numpy/numpy/releases/download/v${numpy_version}/numpy-${numpy_version}.tar.gz
             tar xzvf numpy-${numpy_version}.tar.gz
             cd numpy-${numpy_version}
@@ -269,7 +269,7 @@ stages:
           displayName: 'Install pythran'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            export scipy_version=1.13.0
+            export scipy_version=1.14.0
             wget https://github.com/scipy/scipy/releases/download/v${scipy_version}/scipy-${scipy_version}.tar.gz
             tar xzvf scipy-${scipy_version}.tar.gz
             cd scipy-${scipy_version}

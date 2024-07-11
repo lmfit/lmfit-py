@@ -181,9 +181,8 @@ class Parameters(dict):
         params = [self[k] for k in self]
 
         # find the symbols from _asteval.symtable, that need to be remembered.
-        sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: deepcopy(self._asteval.symtable[key])
-                          for key in sym_unique}
+                          for key in self._asteval.user_defined_symbols()}
 
         return self.__class__, (), {'unique_symbols': unique_symbols,
                                     'params': params}
@@ -567,9 +566,8 @@ class Parameters(dict):
 
         """
         params = [p.__getstate__() for p in self.values()]
-        sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: encode4js(deepcopy(self._asteval.symtable[key]))
-                          for key in sym_unique}
+                          for key in self._asteval.user_defined_symbols()}
         return json.dumps({'unique_symbols': unique_symbols,
                            'params': params}, **kws)
 
