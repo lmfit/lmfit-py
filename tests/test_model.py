@@ -1685,3 +1685,15 @@ def test_model_refitting():
     # and assert that the initial value are from the Powell result
     assert result.init_values['peak_amplitude'] > 1500
     assert result.init_values['peak_sigma'] > 25
+
+    params = model.make_params(bkg_a=0, bkg_b=-.02, bkg_c=26, peak_amplitude=20,
+                               peak_center=62, peak_sigma=3)
+
+    # now re-fit with LM and these new params
+    result.fit(y, params, x=x, method='leastsq')
+
+    # and assert that the initial value are from the Powell result
+    assert result.init_values['peak_amplitude'] > 19
+    assert result.init_values['peak_amplitude'] < 21
+    assert result.init_values['peak_sigma'] > 2
+    assert result.init_values['peak_sigma'] < 4
