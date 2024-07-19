@@ -1255,10 +1255,14 @@ class CompositeModel(Model):
         if 'nan_policy' not in kws:
             kws['nan_policy'] = self.left.nan_policy
 
+        # CompositeModel cannot have a prefix.
+        if 'prefix' in kws:
+            warnings.warn("CompositeModel ignores `prefix` argument")
+            kws['prefix'] = ''
+
         def _tmp(self, *args, **kws):
             pass
         Model.__init__(self, _tmp, **kws)
-
         for side in (left, right):
             prefix = side.prefix
             for basename, hint in side.param_hints.items():
@@ -1548,7 +1552,10 @@ class ModelResult(Minimizer):
         if data is not None:
             self.data = data
         if params is not None:
-            self.init_params = params
+            self.init_params = deepcopy(params)
+        else:
+            self.init_params = deepcopy(self.params)
+
         if weights is not None:
             self.weights = weights
         if method is not None:
@@ -1559,8 +1566,8 @@ class ModelResult(Minimizer):
         self.ci_out = None
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
-        self.init_fit = self.model.eval(params=self.params, **self.userkws)
-        _ret = self.minimize(method=self.method)
+        self.init_fit = self.model.eval(params=self.init_params, **self.userkws)
+        _ret = self.minimize(method=self.method, params=self.init_params)
         self.model.post_fit(_ret)
         _ret.params.create_uvars(covar=_ret.covar)
 

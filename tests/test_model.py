@@ -13,7 +13,7 @@ import lmfit
 from lmfit import Model, Parameters, models
 from lmfit.lineshapes import gaussian, lorentzian, step, voigt
 from lmfit.model import get_reducer, propagate_err
-from lmfit.models import GaussianModel, PseudoVoigtModel
+from lmfit.models import GaussianModel, PseudoVoigtModel, QuadraticModel
 
 
 @pytest.fixture()
@@ -1648,3 +1648,52 @@ def test_custom_variadic_model():
     assert result.nfev > 7
     assert_allclose(result.values['c0'], 5.0, 0.02, 0.02, '', True)
     assert_allclose(result.values['c1'], 3.3, 0.02, 0.02, '', True)
+
+
+def test_model_refitting():
+    """Github #960"""
+    np.random.seed(0)
+    x = np.linspace(0, 100, 5001)
+    y = gaussian(x, amplitude=90, center=60, sigma=4) + 30 + 0.3*x - 0.0030*x*x
+    y += np.random.normal(size=5001, scale=0.5)
+
+    model = GaussianModel(prefix='peak_') + QuadraticModel(prefix='bkg_')
+
+    params = model.make_params(bkg_a=0, bkg_b=0, bkg_c=20, peak_amplitude=200,
+                               peak_center=55, peak_sigma=10)
+
+    result = model.fit(y, params, x=x, method='powell')
+    assert result.chisqr > 12000.0
+    assert result.nfev > 500
+    assert result.params['peak_amplitude'].value > 500
+    assert result.params['peak_amplitude'].value < 5000
+    assert result.params['peak_sigma'].value > 10
+    assert result.params['peak_sigma'].value < 100
+
+    # now re-fit with LM
+    result.fit(y, x=x, method='leastsq')
+
+    assert result.nfev > 25
+    assert result.nfev < 200
+    assert result.chisqr < 2000.0
+
+    assert result.params['peak_amplitude'].value > 85
+    assert result.params['peak_amplitude'].value < 95
+    assert result.params['peak_sigma'].value > 3
+    assert result.params['peak_sigma'].value < 5
+
+    # and assert that the initial value are from the Powell result
+    assert result.init_values['peak_amplitude'] > 1500
+    assert result.init_values['peak_sigma'] > 25
+
+    params = model.make_params(bkg_a=0, bkg_b=-.02, bkg_c=26, peak_amplitude=20,
+                               peak_center=62, peak_sigma=3)
+
+    # now re-fit with LM and these new params
+    result.fit(y, params, x=x, method='leastsq')
+
+    # and assert that the initial value are from the Powell result
+    assert result.init_values['peak_amplitude'] > 19
+    assert result.init_values['peak_amplitude'] < 21
+    assert result.init_values['peak_sigma'] > 2
+    assert result.init_values['peak_sigma'] < 4
