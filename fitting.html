@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=bb516dca"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -154,7 +154,7 @@
 </li>
 <li><a class="reference internal" href="#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
 <li><a class="reference internal" href="#using-the-minimizer-class">Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class</a><ul>
-<li><a class="reference internal" href="#lmfit.minimizer.Minimizer"><code class="docutils literal notranslate"><span class="pre">Minimizer</span></code></a><ul>
+<li><a class="reference internal" href="#lmfit.minimizer.Minimizer"><code class="docutils literal notranslate"><span class="pre">Minimizer</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.minimize"><code class="docutils literal notranslate"><span class="pre">Minimizer.minimize()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.leastsq"><code class="docutils literal notranslate"><span class="pre">Minimizer.leastsq()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.least_squares"><code class="docutils literal notranslate"><span class="pre">Minimizer.least_squares()</span></code></a></li>
@@ -166,8 +166,6 @@
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.shgo"><code class="docutils literal notranslate"><span class="pre">Minimizer.shgo()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.dual_annealing"><code class="docutils literal notranslate"><span class="pre">Minimizer.dual_annealing()</span></code></a></li>
 <li><a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee"><code class="docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
@@ -186,7 +184,7 @@
     <p class="topless"><a href="model.html"
                           title="next chapter">Modeling Data and Curve Fitting</a></p>
   </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -194,7 +192,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -367,7 +365,7 @@ but it must look like this:</p>
 <dd class="field-even"><p>Residual array (generally <code class="docutils literal notranslate"><span class="pre">data-model</span></code>) to be minimized in the least-squares sense.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>. The length of this array cannot change between calls.</p>
+<dd class="field-odd"><p><a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>. The length of this array cannot change between calls.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -657,7 +655,7 @@ in the <a class="reference internal" href="#lmfit.minimizer.MinimizerResult.para
 function when using the best-fit values of the parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -704,7 +702,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 be determined, this value will be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a> or None</p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -792,7 +790,7 @@ view of success, meaning that the method finished without error.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.minimizer.MinimizerResult.ier">
 <span class="sig-name descname"><span class="pre">ier</span></span><a class="headerlink" href="#lmfit.minimizer.MinimizerResult.ier" title="Link to this definition">¶</a></dt>
-<dd><p>Integer error value from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>‘leastsq’</cite>
+<dd><p>Integer error value from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>‘leastsq’</cite>
 method only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -804,7 +802,7 @@ method only).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.minimizer.MinimizerResult.lmdif_message">
 <span class="sig-name descname"><span class="pre">lmdif_message</span></span><a class="headerlink" href="#lmfit.minimizer.MinimizerResult.lmdif_message" title="Link to this definition">¶</a></dt>
-<dd><p>Message from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>‘leastsq’</cite> method only).</p>
+<dd><p>Message from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>‘leastsq’</cite> method only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
@@ -1275,7 +1273,7 @@ be used to abort a fit.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>) – Parameters.</p></li>
 <li><p><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Iteration number.</p></li>
-<li><p><strong>resid</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – Residual array.</p></li>
+<li><p><strong>resid</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – Residual array.</p></li>
 <li><p><strong>args</strong> – Positional arguments. Must match <code class="docutils literal notranslate"><span class="pre">args</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
 <li><p><strong>kws</strong> – Keyword arguments. Must match <code class="docutils literal notranslate"><span class="pre">kws</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
 </ul>
@@ -1457,7 +1455,7 @@ goodness-of-fit statistics.</p>
 function to minimize has been properly set up. When possible, this
 calculates the estimated uncertainties and variable correlations
 from the covariance matrix.</p>
-<p>This method calls <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> and, by default,
+<p>This method calls <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> and, by default,
 numerical derivatives are used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1466,7 +1464,7 @@ numerical derivatives are used.</p>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations. Defaults to
 <code class="docutils literal notranslate"><span class="pre">2000*(nvars+1)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nvars</span></code> is the number of variable
 parameters.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1485,8 +1483,8 @@ goodness-of-fit statistics.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lmfit.minimizer.Minimizer.least_squares">
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">least_squares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.least_squares" title="Link to this definition">¶</a></dt>
-<dd><p>Least-squares minimization using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p>
-<p>This method wraps <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>, which has
+<dd><p>Least-squares minimization using <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p>
+<p>This method wraps <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>, which has
 built-in support for bounds and robust loss functions. By default
 it uses the Trust Region Reflective algorithm with a linear loss
 function (i.e., the standard least-squares problem).</p>
@@ -1497,7 +1495,7 @@ function (i.e., the standard least-squares problem).</p>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations. Defaults to
 <code class="docutils literal notranslate"><span class="pre">2000*(nvars+1)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nvars</span></code> is the number of variable
 parameters.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1516,9 +1514,9 @@ goodness-of-fit statistics.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lmfit.minimizer.Minimizer.scalar_minimize">
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">scalar_minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nelder-Mead'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.scalar_minimize" title="Link to this definition">¶</a></dt>
-<dd><p>Scalar minimization using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p>
+<dd><p>Scalar minimization using <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p>
 <p>Perform fit with any of the scalar minimization algorithms
-supported by <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>. Default argument
+supported by <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>. Default argument
 values are:</p>
 <table class="docutils align-default">
 <thead>
@@ -1571,7 +1569,7 @@ function</p></td>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations. Defaults to
 <code class="docutils literal notranslate"><span class="pre">2000*(nvars+1)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nvars</span></code> is the number of variable
 parameters.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options pass to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1627,7 +1625,7 @@ generally not necessary to call this function explicitly.</p>
 <dt class="sig sig-object py" id="lmfit.minimizer.Minimizer.brute">
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">brute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.brute" title="Link to this definition">¶</a></dt>
 <dd><p>Use the <cite>brute</cite> method to find the global minimum of a function.</p>
-<p>The following parameters are passed to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a>
+<p>The following parameters are passed to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a>
 and cannot be changed:</p>
 <table class="docutils align-default">
 <thead>
@@ -1665,9 +1663,9 @@ Parameters used to initialize the Minimizer object are used.</p></li>
 specified (see Notes).</p></li>
 <li><p><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Number of best candidates from the brute force method that are
 stored in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">candidates</span></code> attribute. If <cite>‘all’</cite>, then
-all grid points from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> are stored as
+all grid points from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> are stored as
 candidates.</p></li>
-<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>map-like callable</em><em>, </em><em>optional</em>) – For parallel evaluation of the grid (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a>
+<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>map-like callable</em><em>, </em><em>optional</em>) – For parallel evaluation of the grid (see <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a>
 for more details).</p></li>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations (default is None). Defaults
 to <code class="docutils literal notranslate"><span class="pre">200000*(nvarys+1)</span></code>.</p></li>
@@ -1676,7 +1674,7 @@ to <code class="docutils literal notranslate"><span class="pre">200000*(nvarys+1
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Object containing the parameters from the brute force method.
 The return values (<code class="docutils literal notranslate"><span class="pre">x0</span></code>, <code class="docutils literal notranslate"><span class="pre">fval</span></code>, <code class="docutils literal notranslate"><span class="pre">grid</span></code>, <code class="docutils literal notranslate"><span class="pre">Jout</span></code>) from
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> are stored as <code class="docutils literal notranslate"><span class="pre">brute_&lt;parname&gt;</span></code>
+<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> are stored as <code class="docutils literal notranslate"><span class="pre">brute_&lt;parname&gt;</span></code>
 attributes. The <cite>MinimizerResult</cite> also contains the
 :attr:<code class="docutils literal notranslate"><span class="pre">candidates</span></code> attribute and <code class="xref py py-meth docutils literal notranslate"><span class="pre">show_candidates()</span></code>
 method. The <code class="xref py py-attr docutils literal notranslate"><span class="pre">candidates</span></code> attribute contains the
@@ -1694,13 +1692,13 @@ all candidates when no number is specified.</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.6.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.6.</span></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The <a class="reference internal" href="#lmfit.minimizer.Minimizer.brute" title="lmfit.minimizer.Minimizer.brute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">brute()</span></code></a> method evaluates the function at each point of a
 multidimensional grid of points. The grid points are generated from
 the parameter ranges using <cite>Ns</cite> and (optional) <cite>brute_step</cite>.
-The implementation in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> requires finite
+The implementation in <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> requires finite
 bounds and the <code class="docutils literal notranslate"><span class="pre">range</span></code> is specified as a two-tuple <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code>
 or slice-object <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max,</span> <span class="pre">brute_step)</span></code>. A slice-object is used
 directly, whereas a two-tuple is converted to a slice object that
@@ -1734,10 +1732,10 @@ scenarios given below with their respective slice-object:</p>
 <dt class="sig sig-object py" id="lmfit.minimizer.Minimizer.basinhopping">
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">basinhopping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.basinhopping" title="Link to this definition">¶</a></dt>
 <dd><p>Use the <cite>basinhopping</cite> algorithm to find the global minimum.</p>
-<p>This method calls <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a> using the
+<p>This method calls <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a> using the
 default arguments. The default minimizer is <code class="docutils literal notranslate"><span class="pre">BFGS</span></code>, but since
 lmfit supports parameter bounds for all minimizers, the user can
-choose any of the solvers present in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p>
+choose any of the solvers present in <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1745,7 +1743,7 @@ choose any of the solvers present in <a class="reference external" href="https:/
 Parameters used to initialize the Minimizer object are used.</p></li>
 <li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum number of function evaluations (default is None). Defaults
 to <code class="docutils literal notranslate"><span class="pre">200000*(nvarys+1)</span></code>.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1757,7 +1755,7 @@ basinhopping algorithm.</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.10.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.10.</span></p>
 </div>
 </dd></dl>
 
@@ -1837,7 +1835,7 @@ as <code class="docutils literal notranslate"><span class="pre">ampgo_&lt;parnam
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.10.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.10.</span></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The Python implementation was written by Andrea Gavana in 2014
@@ -1853,7 +1851,7 @@ located here:</p>
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">shgo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.shgo" title="Link to this definition">¶</a></dt>
 <dd><p>Use the <cite>SHGO</cite> algorithm to find the global minimum.</p>
 <p>SHGO stands for “simplicial homology global optimization” and
-calls <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html">scipy.optimize.shgo</a> using its default arguments.</p>
+calls <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html">scipy.optimize.shgo</a> using its default arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1867,7 +1865,7 @@ parameters.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Object containing the parameters from the SHGO method.
-The return values specific to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html">scipy.optimize.shgo</a>
+The return values specific to <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html">scipy.optimize.shgo</a>
 (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">xl</span></code>, <code class="docutils literal notranslate"><span class="pre">fun</span></code>, <code class="docutils literal notranslate"><span class="pre">funl</span></code>, <code class="docutils literal notranslate"><span class="pre">nfev</span></code>, <code class="docutils literal notranslate"><span class="pre">nit</span></code>,
 <code class="docutils literal notranslate"><span class="pre">nlfev</span></code>, <code class="docutils literal notranslate"><span class="pre">nlhev</span></code>, and <code class="docutils literal notranslate"><span class="pre">nljev</span></code>) are stored as
 <code class="docutils literal notranslate"><span class="pre">shgo_&lt;parname&gt;</span></code> attributes.</p>
@@ -1877,7 +1875,7 @@ The return values specific to <a class="reference external" href="https://docs.s
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.14.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.14.</span></p>
 </div>
 </dd></dl>
 
@@ -1885,7 +1883,7 @@ The return values specific to <a class="reference external" href="https://docs.s
 <dt class="sig sig-object py" id="lmfit.minimizer.Minimizer.dual_annealing">
 <span class="sig-prename descclassname"><span class="pre">Minimizer.</span></span><span class="sig-name descname"><span class="pre">dual_annealing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.dual_annealing" title="Link to this definition">¶</a></dt>
 <dd><p>Use the <cite>dual_annealing</cite> algorithm to find the global minimum.</p>
-<p>This method calls <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html">scipy.optimize.dual_annealing</a> using its
+<p>This method calls <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html">scipy.optimize.dual_annealing</a> using its
 default arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1900,7 +1898,7 @@ Parameters used to initialize the Minimizer object are used.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Object containing the parameters from the dual_annealing
 method. The return values specific to
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html">scipy.optimize.dual_annealing</a> (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">fun</span></code>, <code class="docutils literal notranslate"><span class="pre">nfev</span></code>,
+<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html">scipy.optimize.dual_annealing</a> (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">fun</span></code>, <code class="docutils literal notranslate"><span class="pre">nfev</span></code>,
 <code class="docutils literal notranslate"><span class="pre">nhev</span></code>, <code class="docutils literal notranslate"><span class="pre">njev</span></code>, and <code class="docutils literal notranslate"><span class="pre">nit</span></code>) are stored as
 <code class="docutils literal notranslate"><span class="pre">da_&lt;parname&gt;</span></code> attributes.</p>
 </dd>
@@ -1909,7 +1907,7 @@ method. The return values specific to
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.14.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.14.</span></p>
 </div>
 </dd></dl>
 
@@ -1937,7 +1935,7 @@ the other walkers in the ensemble.’ - from the <cite>emcee</cite> webpage.</p>
 <li><p><strong>burn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Discard this many samples from the start of the sampling regime.</p></li>
 <li><p><strong>thin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Only accept 1 in every <cite>thin</cite> samples.</p></li>
 <li><p><strong>ntemps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>deprecated</em>) – ntemps has no effect.</p></li>
-<li><p><strong>pos</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler, an ndarray of
+<li><p><strong>pos</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler, an ndarray of
 shape <code class="docutils literal notranslate"><span class="pre">(nwalkers,</span> <span class="pre">nvarys)</span></code>. You can also initialise using a
 previous chain of the same <cite>nwalkers</cite> and <code class="docutils literal notranslate"><span class="pre">nvarys</span></code>. Note that
 <code class="docutils literal notranslate"><span class="pre">nvarys</span></code> may be one larger than you expect it to be if your
@@ -1984,7 +1982,7 @@ use this parameter name yourself.
 objective function returns an array. If your objective function
 returns a float, then this parameter is ignored. See Notes for
 more details.</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.26)"><em>numpy.random.RandomState</em></a><em>, </em><em>optional</em>) – If <cite>seed</cite> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, a new <cite>numpy.random.RandomState</cite>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.0)"><em>numpy.random.RandomState</em></a><em>, </em><em>optional</em>) – If <cite>seed</cite> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, a new <cite>numpy.random.RandomState</cite>
 instance is used, seeded with <cite>seed</cite>.
 If <cite>seed</cite> is already a <cite>numpy.random.RandomState</cite> instance,
 then that <cite>numpy.random.RandomState</cite> instance is used. Specify
@@ -2158,7 +2156,8 @@ the solution if starting near the solution:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/fitting_12_0.svg" src="_images/fitting_12_0.svg" /></div>
+<img alt="_images/fitting_12_0.svg" src="_images/fitting_12_0.svg" />
+</div>
 </div>
 <p>Note that the fit here (for which the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package is installed)
 does estimate and report uncertainties in the parameters and correlations for
@@ -2219,7 +2218,8 @@ worked as intended (as a rule of thumb the value should be between 0.2 and
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/fitting_15_0.svg" src="_images/fitting_15_0.svg" /></div>
+<img alt="_images/fitting_15_0.svg" src="_images/fitting_15_0.svg" />
+</div>
 </div>
 <p>With the results from <code class="docutils literal notranslate"><span class="pre">emcee</span></code>, we can visualize the posterior distributions
 for the parameters using the <code class="docutils literal notranslate"><span class="pre">corner</span></code> package:</p>
@@ -2233,7 +2233,8 @@ for the parameters using the <code class="docutils literal notranslate"><span cl
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/fitting_16_0.svg" src="_images/fitting_16_0.svg" /></div>
+<img alt="_images/fitting_16_0.svg" src="_images/fitting_16_0.svg" />
+</div>
 </div>
 <p>The values reported in the <a class="reference internal" href="#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code></a> are the medians of the
 probability distributions and a 1 <span class="math notranslate nohighlight">\(\sigma\)</span> quantile, estimated as half
@@ -2386,7 +2387,7 @@ calculate the 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</sp
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>
 </html>

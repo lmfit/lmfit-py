@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:48.762** total execution time for 27 files **from examples/documentation**:
+**01:00.196** total execution time for 27 files **from examples/documentation**:
 
 .. container::
 
@@ -33,83 +33,83 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_documentation_confidence_chi2_maps.py` (``confidence_chi2_maps.py``)
-     - 00:35.236
+     - 00:43.876
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_fitting_emcee.py` (``fitting_emcee.py``)
-     - 00:06.126
+     - 00:07.606
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_confidence_advanced.py` (``confidence_advanced.py``)
-     - 00:03.467
+     - 00:04.294
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_uncertainty2.py` (``model_uncertainty2.py``)
-     - 00:00.612
+     - 00:00.693
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py` (``builtinmodels_peakmodels.py``)
-     - 00:00.536
+     - 00:00.588
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py` (``builtinmodels_nistgauss.py``)
-     - 00:00.284
+     - 00:00.321
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_splinemodel.py` (``builtinmodels_splinemodel.py``)
-     - 00:00.258
+     - 00:00.309
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_composite.py` (``model_composite.py``)
-     - 00:00.255
+     - 00:00.286
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_uncertainty_pred.py` (``model_uncertainty_pred.py``)
-     - 00:00.164
+     - 00:00.184
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py` (``builtinmodels_nistgauss2.py``)
-     - 00:00.148
+     - 00:00.164
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py` (``model_with_iter_callback.py``)
-     - 00:00.142
+     - 00:00.159
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_uncertainty.py` (``model_uncertainty.py``)
-     - 00:00.135
+     - 00:00.153
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py` (``builtinmodels_stepmodel.py``)
-     - 00:00.131
+     - 00:00.148
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_two_components.py` (``model_two_components.py``)
-     - 00:00.130
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_gaussian.py` (``model_gaussian.py``)
-     - 00:00.129
+     - 00:00.143
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py` (``model_with_nan_policy.py``)
-     - 00:00.128
+     - 00:00.141
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_gaussian.py` (``model_gaussian.py``)
+     - 00:00.139
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py` (``model_loadmodelresult2.py``)
-     - 00:00.127
+     - 00:00.138
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_loadmodel.py` (``model_loadmodel.py``)
-     - 00:00.124
+     - 00:00.134
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_parameters_basic.py` (``parameters_basic.py``)
-     - 00:00.120
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py` (``parameters_valuesdict.py``)
-     - 00:00.119
-     - 0.0
-   * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py` (``model_loadmodelresult.py``)
-     - 00:00.116
+     - 00:00.134
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_confidence_basic.py` (``confidence_basic.py``)
-     - 00:00.111
+     - 00:00.131
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py` (``parameters_valuesdict.py``)
+     - 00:00.131
+     - 0.0
+   * - :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py` (``model_loadmodelresult.py``)
+     - 00:00.126
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_uvars_params.py` (``uvars_params.py``)
-     - 00:00.056
+     - 00:00.077
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py` (``model_savemodelresult2.py``)
-     - 00:00.054
+     - 00:00.062
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodelresult.py` (``model_savemodelresult.py``)
-     - 00:00.041
+     - 00:00.047
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_fitting_withreport.py` (``fitting_withreport.py``)
-     - 00:00.007
+     - 00:00.008
      - 0.0
    * - :ref:`sphx_glr_examples_documentation_model_savemodel.py` (``model_savemodel.py``)
-     - 00:00.005
+     - 00:00.004
      - 0.0

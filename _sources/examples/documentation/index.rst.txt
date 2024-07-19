@@ -12,6 +12,7 @@ Below are all the examples that are part of the lmfit documentation.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -471,6 +472,8 @@ Below are all the examples that are part of the lmfit documentation.
       <div class="sphx-glr-thumbnail-title">doc_model_uncertainty_pred.py</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

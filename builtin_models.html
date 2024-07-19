@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=bb516dca"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -267,7 +267,7 @@
     <p class="topless"><a href="confidence.html"
                           title="next chapter">Calculation of confidence intervals</a></p>
   </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -275,7 +275,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -637,7 +637,7 @@ The fwhm value has an error of about 20% in the
 parameter range expon: (0.5, 1000], skew: [-1000, 1000].</p>
 <div class="math notranslate nohighlight">
 \[f(x;A,\mu,\sigma,m,\nu)=A \frac{\left|\frac{\Gamma(m+i\tfrac{\nu}{2})}{\Gamma(m)}\right|^2}{\sigma\beta(m-\tfrac{1}{2},\tfrac{1}{2})}\left[1+\frac{(x-\mu)^2}{\sigma^2}\right]^{-m}\exp\left(-\nu \arctan\left(\frac{x-\mu}{\sigma}\right)\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always gives a starting value of 1.5 for <cite>expon</cite>,
 and 0 for <cite>skew</cite>.</p>
 <p>For more information, see:
@@ -680,7 +680,7 @@ constraints to report estimates for the full width at half maximum and
 maximum peak height, respectively.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2} \bigr]^{-m}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always gives a starting value for <cite>exponent</cite>
 of 1.5. In addition, parameters <cite>fwhm</cite> and <cite>height</cite> are included as
 constraints to report full width at half maximum and maximum peak
@@ -1132,8 +1132,8 @@ the data. Should be one of:</p>
 <section id="linear-and-polynomial-models">
 <h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Link to this heading">¶</a></h2>
 <p>These models correspond to polynomials of some degree. Of course, lmfit is
-a very inefficient way to do linear regression (see <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
-or <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html">scipy.stats.linregress</a>), but these models may be useful as one
+a very inefficient way to do linear regression (see <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
+or <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html">scipy.stats.linregress</a>), but these models may be useful as one
 of many components of a composite model.  The SplineModel below corresponds
 to a cubic spline.</p>
 <section id="constantmodel">
@@ -1250,7 +1250,7 @@ the data. Should be one of:</p>
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i x^i\]</div>
 <p>with parameters <cite>c0</cite>, <cite>c1</cite>, …, <cite>c7</cite>. The supplied <cite>degree</cite> will
 specify how many of these are actual variable parameters. This uses
-<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">numpy.polyval</a> for its calculation of the polynomial.</p>
+<a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">numpy.polyval</a> for its calculation of the polynomial.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1798,7 +1798,8 @@ maximum peak height, respectively. And third, the automated initial guesses
 are pretty good. A plot of the fit:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_7_0.svg" src="_images/builtin_models_7_0.svg" /></div>
+<img alt="_images/builtin_models_7_0.svg" src="_images/builtin_models_7_0.svg" />
+</div>
 </div>
 <p>shows a decent match to the data – the fit worked with no explicit setting
 of initial parameter values. Looking more closely, the fit is not perfect,
@@ -1848,7 +1849,8 @@ we try gives results that are worse by comparing the fit statistics:</p>
 <p>and also by visual inspection of the fit to the data (figure below).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_10_0.svg" src="_images/builtin_models_10_0.svg" /></div>
+<img alt="_images/builtin_models_10_0.svg" src="_images/builtin_models_10_0.svg" />
+</div>
 </div>
 <p>The tails are now too big, and the value for <span class="math notranslate nohighlight">\(\chi^2\)</span> almost doubled.
 A Voigt model does a better job. Using <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>, this is as simple as using:</p>
@@ -1896,7 +1898,8 @@ goodness-of-fit measures, and an obviously better match to the data as seen
 in the figure below (left).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_13_0.svg" src="_images/builtin_models_13_0.svg" /></div>
+<img alt="_images/builtin_models_13_0.svg" src="_images/builtin_models_13_0.svg" />
+</div>
 </div>
 <p>Fit to peak with Voigt model (left) and Voigt model with <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
 varying independently of <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (right).</p>
@@ -2051,7 +2054,8 @@ results, which gives:</p>
 <p>with a plot of</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_17_0.svg" src="_images/builtin_models_17_0.svg" /></div>
+<img alt="_images/builtin_models_17_0.svg" src="_images/builtin_models_17_0.svg" />
+</div>
 </div>
 </section>
 <section id="example-3-fitting-multiple-peaks-and-using-prefixes">
@@ -2189,7 +2193,8 @@ on the parameter values. The overall fit is shown on the left, with its individu
 components displayed on the right:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_20_0.svg" src="_images/builtin_models_20_0.svg" /></div>
+<img alt="_images/builtin_models_20_0.svg" src="_images/builtin_models_20_0.svg" />
+</div>
 </div>
 <p>One final point on setting initial values. From looking at the data
 itself, we can see the two Gaussian peaks are reasonably well separated but
@@ -2221,7 +2226,8 @@ That is, with:</p>
 <p>we can get a better initial estimate (see below).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_22_0.svg" src="_images/builtin_models_22_0.svg" /></div>
+<img alt="_images/builtin_models_22_0.svg" src="_images/builtin_models_22_0.svg" />
+</div>
 </div>
 <p>The fit converges to the same answer, giving to identical values
 (to the precision printed out in the report), but in fewer steps,
@@ -2332,7 +2338,8 @@ characterize clearly as a simple decay, oscillatory structure.</p>
 <p>which shows (figure below):</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_25_0.svg" src="_images/builtin_models_25_0.svg" /></div>
+<img alt="_images/builtin_models_25_0.svg" src="_images/builtin_models_25_0.svg" />
+</div>
 </div>
 <p>There is definitely a peak there, so we could start with building a model
 for a Gaussian peak, say with:</p>
@@ -2477,7 +2484,8 @@ good.</p>
 <p>which will generate the plot shown below:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_31_0.svg" src="_images/builtin_models_31_0.svg" /></div>
+<img alt="_images/builtin_models_31_0.svg" src="_images/builtin_models_31_0.svg" />
+</div>
 </div>
 <p>If we’re interested in seeing the locations of the knots, you might do</p>
 <div class="jupyter_cell jupyter_container docutils container">
@@ -2493,7 +2501,8 @@ good.</p>
 <p>which will generate be shown as</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_33_0.svg" src="_images/builtin_models_33_0.svg" /></div>
+<img alt="_images/builtin_models_33_0.svg" src="_images/builtin_models_33_0.svg" />
+</div>
 </div>
 <p>You might be interested in trying to assess what impact the select of the
 knots has on the resulting peak intensity.  For example, you might try some
@@ -2568,7 +2577,8 @@ just try increasing the number of spline points to fit this data</p>
 <p>which will show the fit below:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_36_0.svg" src="_images/builtin_models_36_0.svg" /></div>
+<img alt="_images/builtin_models_36_0.svg" src="_images/builtin_models_36_0.svg" />
+</div>
 </div>
 <p>By itself, 10 knots does not give a very good fit, but 25 knots or more
 does give a very good fit to the peak.  This should give some confidence
@@ -2610,7 +2620,7 @@ points to use.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>
 </html>

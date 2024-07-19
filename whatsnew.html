@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=bb516dca"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -106,6 +106,7 @@
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-1-3-2-release-notes-july-19-2024">Version 1.3.2 Release Notes (July 19, 2024)</a></li>
 <li><a class="reference internal" href="#version-1-3-1-release-notes-april-19-2024">Version 1.3.1 Release Notes (April 19, 2024)</a></li>
 <li><a class="reference internal" href="#version-1-3-0-release-notes-april-4-2024">Version 1.3.0 Release Notes (April 4, 2024)</a></li>
 <li><a class="reference internal" href="#version-1-2-2-release-notes-july-14-2023">Version 1.2.2 Release Notes (July 14, 2023)</a></li>
@@ -147,7 +148,7 @@
     <p class="topless"><a href="examples/index.html"
                           title="next chapter">Examples gallery</a></p>
   </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -155,7 +156,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -171,6 +172,22 @@
 significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<section id="version-1-3-2-release-notes-july-19-2024">
+<span id="whatsnew-132-label"></span><h2>Version 1.3.2 Release Notes (July 19, 2024)<a class="headerlink" href="#version-1-3-2-release-notes-july-19-2024" title="Link to this heading">¶</a></h2>
+<p>Fixes:</p>
+<ul class="simple">
+<li><p>fix typo in restoring a <code class="docutils literal notranslate"><span class="pre">_buildmodel</span></code> dict (PR #957, Issue #956)</p></li>
+<li><p>fixes for Numpy2 support (PR #959, Issue #958)</p></li>
+<li><p>ensure that correct initial params are used when re-fitting a ModeRresult (PR #961, Issue #960)</p></li>
+<li><p>make sure that CompositeModels cannot have a prefix (PR #961, Issue #954)</p></li>
+</ul>
+<p>Build, Maintenance:</p>
+<ul class="simple">
+<li><p>update pre-commit hooks, adding codespell exceptions</p></li>
+<li><p>update to latest SciPy/NumPy versions, including dependency versions for NumPy 2.</p></li>
+<li><p>now require asteval&gt;=1.0 and uncertainties&gt;=3.2.2</p></li>
+</ul>
+</section>
 <section id="version-1-3-1-release-notes-april-19-2024">
 <span id="whatsnew-131-label"></span><h2>Version 1.3.1 Release Notes (April 19, 2024)<a class="headerlink" href="#version-1-3-1-release-notes-april-19-2024" title="Link to this heading">¶</a></h2>
 <p>Mostly fixes for bugs introduced in 1.3.0</p>
@@ -585,7 +602,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 <p>Two new global algorithms were added: basinhopping and AMPGO.
 Basinhopping wraps the method present in <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, and more information
 can be found in the documentation (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.basinhopping" title="lmfit.minimizer.Minimizer.basinhopping"><code class="xref py py-func docutils literal notranslate"><span class="pre">basinhopping()</span></code></a>
-and <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a>).
+and <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a>).
 The Adaptive Memory Programming for Global Optimization (AMPGO) algorithm
 was adapted from Python code written by <a class="reference external" href="http://infinity77.net/global_optimization/index.html">Andrea Gavana</a>. A more detailed
 explanation of the algorithm is available in the <a class="reference external" href="http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf">AMPGO paper</a> and specifics
@@ -762,7 +779,7 @@ track of changes made while adjusting parameters and re-running fits.</p></li>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>
 </html>

@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_examples_example_diffev.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -144,7 +144,7 @@ Perform the fits and show fitting results and plot:
     # Fit using differential_evolution:
     [[Fit Statistics]]
         # fitting method   = differential_evolution
-        # function evals   = 1865
+        # function evals   = 1720
         # data points      = 101
         # variables        = 4
         chi-square         = 21.7961792
@@ -152,10 +152,10 @@ Perform the fits and show fitting results and plot:
         Akaike info crit   = -146.871969
         Bayesian info crit = -136.411487
     [[Variables]]
-        offset:  0.96333018 +/- 0.04735904 (4.92%) (init = 2)
-        omega:   3.98700832 +/- 0.02121808 (0.53%) (init = 3.3)
-        amp:     1.80252738 +/- 0.19022472 (10.55%) (init = 2.5)
-        decay:   5.76285571 +/- 1.00453329 (17.43%) (init = 1)
+        offset:  0.96333168 +/- 0.04735902 (4.92%) (init = 2)
+        omega:   3.98700858 +/- 0.02121811 (0.53%) (init = 3.3)
+        amp:     1.80253517 +/- 0.19022457 (10.55%) (init = 2.5)
+        decay:   5.76281259 +/- 1.00451713 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.7434
 
@@ -185,7 +185,7 @@ Perform the fits and show fitting results and plot:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.292 seconds)
+   **Total running time of the script:** (0 minutes 0.293 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:

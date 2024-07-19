@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=bb516dca"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -137,7 +137,7 @@
     <p class="topless"><a href="parameters.html"
                           title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a></p>
   </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -145,7 +145,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -181,7 +181,7 @@
 <p>The fitting routines accept data arrays that are one-dimensional and double
 precision. So you need to convert the data and model (or the value
 returned by the objective function) to be one-dimensional. A simple way to
-do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
+do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -194,7 +194,7 @@ do this is to use <a class="reference external" href="https://docs.scipy.org/doc
 <p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision. So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one-dimensional. A
-simple way to do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
+simple way to do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -215,7 +215,7 @@ different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision, floating point numbers. The simplest approach is to use
-<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
+<a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -391,19 +391,19 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 30
+    # function evals   = 35
     # data points      = 101
     # variables        = 4
-    chi-square         = 3.72776009
-    reduced chi-square = 0.03843052
-    Akaike info crit   = -325.230610
-    Bayesian info crit = -314.770128
-    R-squared          = 0.99998949
+    chi-square         = 4.20312305
+    reduced chi-square = 0.04333117
+    Akaike info crit   = -313.108561
+    Bayesian info crit = -302.648079
+    R-squared          = 0.99998815
 [[Variables]]
-    x0:  21.9999906 +/- 1.8890e-05 (0.00%) (init = 22)
-    a:   1.99021297 +/- 0.04054331 (2.04%) (init = 1)
-    b:   0.01999948 +/- 7.9100e-06 (0.04%) (init = 1)
-    c:   9.34538510 +/- 0.04179523 (0.45%) (init = 1)
+    x0:  21.9999848 +/- 1.9607e-05 (0.00%) (init = 22)
+    a:   2.00169947 +/- 0.04305080 (2.15%) (init = 1)
+    b:   0.01999684 +/- 8.3992e-06 (0.04%) (init = 1)
+    c:   9.30217081 +/- 0.04438016 (0.48%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(a, b)  = -0.8368
     C(x0, a) = +0.1871
@@ -463,24 +463,23 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 71
+    # function evals   = 51
     # data points      = 101
     # variables        = 4
-    chi-square         = 0.79848359
-    reduced chi-square = 0.00823179
-    Akaike info crit   = -480.856300
-    Bayesian info crit = -470.395818
-    R-squared          = 0.99999775
+    chi-square         = 1.17198386
+    reduced chi-square = 0.01208231
+    Akaike info crit   = -442.098683
+    Bayesian info crit = -431.638200
+    R-squared          = 0.99999670
 [[Variables]]
-    x0:  19.0790155 +/- 0.40044476 (2.10%) (init = 22)
-    a:   2.01793162 +/- 0.01800587 (0.89%) (init = 1)
-    b:   0.01999925 +/- 3.5648e-06 (0.02%) (init = 1)
-    c:   9.23630082 +/- 0.02086183 (0.23%) (init = 1)
+    x0:  18.9666595 +/- 0.49468347 (2.61%) (init = 22)
+    a:   1.97871779 +/- 0.02163809 (1.09%) (init = 1)
+    b:   0.02000285 +/- 4.2965e-06 (0.02%) (init = 1)
+    c:   9.24010249 +/- 0.02559629 (0.28%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8270
-    C(x0, a) = +0.1501
-    C(x0, b) = -0.1201
-    C(x0, c) = -0.1165
+    C(a, b)  = -0.8250
+    C(x0, c) = -0.1804
+    C(x0, a) = +0.1016
 </pre></div>
 </div>
 </div>
@@ -523,7 +522,7 @@ transition for example.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
     </div>
   </body>
 </html>

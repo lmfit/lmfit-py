@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_examples_documentation_model_uncertainty2.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -164,7 +164,7 @@ doc_model_uncertainty2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.612 seconds)
+   **Total running time of the script:** (0 minutes 0.693 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty2.py:

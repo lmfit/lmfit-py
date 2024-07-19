@@ -1,4 +1,4 @@
-.. lmfit documentation master file,
+.. lmfit documentation master file
 
 Non-Linear Least-Squares Minimization and Curve-Fitting for Python
 ==================================================================
@@ -63,4 +63,4 @@ participating in this effort please use the `lmfit GitHub repository`_.
    bounds
    constraints
    whatsnew
-   examples/index
+   examples/index.rst
