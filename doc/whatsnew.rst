@@ -11,6 +11,26 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+
+.. _whatsnew_132_label:
+
+Version 1.3.2 Release Notes (July 19, 2024)
+====================================================
+
+Fixes:
+
+-  fix typo in restoring a ``_buildmodel`` dict (PR #957, Issue #956)
+-  fixes for Numpy2 support (PR #959, Issue #958)
+-  ensure that correct initial params are used when re-fitting a ModeRresult (PR #961, Issue #960)
+-  make sure that CompositeModels cannot have a prefix (PR #961, Issue #954)
+
+Build, Maintenance:
+
+- update pre-commit hooks, adding codespell exceptions
+- update to latest SciPy/NumPy versions, including dependency versions for NumPy 2.
+- now require asteval>=1.0 and uncertainties>=3.2.2
+
+
 .. _whatsnew_131_label:
 
 Version 1.3.1 Release Notes (April 19, 2024)
