@@ -101,6 +101,17 @@ def test_parameters_deepcopy(parameters):
                     deepcopy_pars._asteval.symtable[unique_symbol])
 
 
+def test_parameter_deepcopy_subclass():
+    """Test that a subclass of parameter is preserved when performing a deepcopy"""
+    class ParameterSubclass(lmfit.Parameter):
+        pass
+    
+    parameters = lmfit.Parameters()
+    parameters.add(ParameterSubclass('name'))
+    parameterscopy = deepcopy(parameters)
+    assert isinstance(parameterscopy['name'], ParameterSubclass)
+
+
 def test_parameters_deepcopy_subclass():
     """Test that a subclass of parameters is preserved when performing a deepcopy"""
     class ParametersSubclass(lmfit.Parameters):

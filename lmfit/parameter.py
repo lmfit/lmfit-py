@@ -127,17 +127,7 @@ class Parameters(dict):
         parameter_list = []
         for key, par in self.items():
             if isinstance(par, Parameter):
-                param = Parameter(name=par.name,
-                                  value=par.value,
-                                  min=par.min,
-                                  max=par.max)
-                param.vary = par.vary
-                param.brute_step = par.brute_step
-                param.stderr = par.stderr
-                param.correl = deepcopy(par.correl)
-                param.init_value = par.init_value
-                param.expr = par.expr
-                param.user_data = deepcopy(par.user_data)
+                param = deepcopy(par)
                 parameter_list.append(param)
 
         _pars.add_many(*parameter_list)
@@ -989,6 +979,20 @@ class Parameter:
 
         """
         self.__set_expression(val)
+
+    def __deepcopy__(self, memo):
+        param = type(self)(name=self.name,
+                            value=self.value,
+                            min=self.min,
+                            max=self.max)
+        param.vary = self.vary
+        param.brute_step = self.brute_step
+        param.stderr = self.stderr
+        param.correl = deepcopy(self.correl)
+        param.init_value = self.init_value
+        param.expr = self.expr
+        param.user_data = deepcopy(self.user_data)
+        return param
 
     def __set_expression(self, val):
         if val == '':
