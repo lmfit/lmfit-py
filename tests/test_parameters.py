@@ -39,8 +39,7 @@ def assert_parameter_attributes(par, expected):
 def test_check_ast_errors():
     """Assert that an exception is raised upon AST errors."""
     pars = lmfit.Parameters()
-
-    msg = r"at expr='<_?ast.Module object at"
+    msg = "name 'par2' is not defined"
     with pytest.raises(NameError, match=msg):
         pars.add('par1', expr='2.0*par2')
 

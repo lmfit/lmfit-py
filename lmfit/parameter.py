@@ -27,6 +27,20 @@ def check_ast_errors(expr_eval):
         expr_eval.raise_exception(None)
 
 
+class Writer:
+    """Replace 'stdout' and 'stderr' for asteval."""
+    def __init__(self, **kws):
+        self.messages = []
+        for k, v in kws.items():
+            setattr(self, k, v)
+
+    def write(self, msg):
+        """Internal writer."""
+        o = msg.strip()
+        if len(o) > 0:
+            self.messages.append(msg)
+
+
 def asteval_with_uncertainties(*vals, obj=None, pars=None, names=None, **kwargs):
     """Calculate object value, given values for variables.
 
@@ -76,8 +90,9 @@ class Parameters(dict):
 
         """
         super().__init__(self)
-
-        self._asteval = Interpreter()
+        self._ast_msgs = Writer()
+        self._asteval = Interpreter(writer=self._ast_msgs,
+                                    err_writer=self._ast_msgs)
 
         _syms = {}
         _syms.update(SCIPY_FUNCTIONS)
@@ -85,6 +100,9 @@ class Parameters(dict):
             _syms.update(usersyms)
         for key, val in _syms.items():
             self._asteval.symtable[key] = val
+
+    def _writer(self, msg):
+        self._asteval_msgs.append(msg)
 
     def copy(self):
         """Parameters.copy() should always be a deepcopy."""
@@ -433,6 +451,9 @@ class Parameters(dict):
             self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
                                              min=min, max=max, expr=expr,
                                              brute_step=brute_step))
+        if len(self._asteval.error) > 0:
+            err = self._asteval.error[0]
+            raise err.exc(err.msg)
 
     def add_many(self, *parlist):
         """Add many parameters, using a sequence of tuples.
