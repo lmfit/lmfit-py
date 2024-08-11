@@ -517,7 +517,10 @@ class Parameters(dict):
                 vbest.append(par.value)
                 if getattr(par, 'stderr', None) is None and covar is not None:
                     par.stderr = sqrt(covar[vindex, vindex])
-            uvars[par.name] = ufloat(par.value, getattr(par, 'stderr', 0.0))
+            stderr = getattr(par, 'stderr', 0.0)
+            if stderr is None:
+                stderr = 0.0
+            uvars[par.name] = ufloat(par.value, stderr)
 
         corr_uvars = None
         if covar is not None:
