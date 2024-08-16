@@ -1166,7 +1166,7 @@ that taking correlations between Parameters into account when performing
 calculations can have a noticeable influence on the resulting uncertainties.
 
 
-.. jupyter-execute:: ../examples/doc_uvars_params.py
+.. jupyter-execute:: ../examples/doc_parameters_uvars.py
 
 
 Note that the :meth:`Model.post_fit` does not need to be limited to this

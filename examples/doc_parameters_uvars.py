@@ -1,4 +1,4 @@
-# <examples/doc_uvars_params.py>
+# <examples/doc_parameters_uvars.py>
 import numpy as np
 
 from lmfit.models import ExponentialModel, GaussianModel
@@ -67,4 +67,4 @@ pars.add('centroid', expr='(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_
 
 out = mod.fit(y, pars, x=x)
 print(out.fit_report(min_correl=0.5))
-# <end examples/doc_uvars_params.py>
+# <end examples/doc_parameters_uvars.py>

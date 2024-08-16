@@ -5,7 +5,7 @@ Process the examples in the documentation for inclusion in the Gallery:
 
 - create a "documentation" directory within "examples"
 - add a README.txt file
-- copy the examples from the documentation, bu remove the "doc_" from the
+- copy the examples from the documentation, removing the "doc_" from the
    filename
 - add the required docstring to the files for proper rendering
 - copy the data files
@@ -46,12 +46,15 @@ scripts_to_run = []
 )
 
 for fn in files:
+    sname = fn.name[4:]
+    lmfit_class, *description = sname[:-3].split('_')
+    gallery_name = f"{lmfit_class.capitalize()} - {' '.join(description)}"
 
     script_text = fn.read_text()
 
-    gallery_file = examples_documentation_dir / fn.name[4:]
-    msg = ""  # add optional message f
-    gallery_file.write_text(f'"""\n{fn.name}\n{"=" * len(fn.name)}\n\n'
+    gallery_file = examples_documentation_dir / sname
+    msg = ""  # add optional message
+    gallery_file.write_text(f'"""\n{gallery_name}\n{"=" * len(gallery_name)}\n\n'
                             f'{msg}\n"""\n{script_text}')
 
     # make sure the saved Models and ModelResult are available
@@ -67,5 +70,5 @@ for script in scripts_to_run:
 
 os.chdir(doc_dir)
 
-# # data files for the other Gallery examples
+# data files for the other Gallery examples
 copy_data_files(examples_documentation_dir, doc_dir)
