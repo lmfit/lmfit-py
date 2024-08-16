@@ -167,7 +167,7 @@ sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'examples',
     'filename_pattern': r'(\\|/)documentation|(\\|/)example_',
-    'ignore_pattern': r'(\\|/)doc_',
+    'ignore_pattern': 'doc_',
     'ignore_repr_types': r'matplotlib',
     'image_srcset': ["3x"],
 }
