@@ -1541,7 +1541,7 @@ class StepModel(Model):
 
     where :math:`\alpha = (x - \mu)/{\sigma}`.
 
-    Note that :math:`\sigma \gt 0` gives a rising step, while :math:`\sigma \lt 0` gives
+    Note that :math:`\sigma > 0` gives a rising step, while :math:`\sigma < 0` gives
     a falling step.
     """
 
@@ -1607,8 +1607,8 @@ class RectangleModel(Model):
     where :math:`\alpha_1 = (x - \mu_1)/{\sigma_1}` and
     :math:`\alpha_2 = -(x - \mu_2)/{\sigma_2}`.
 
-    Note that, unlike a StepModel, :math:`\sigma_1 \gt 0` is enforced, giving a
-    rising initial step, and  :math:`\sigma_2 \gt 0` gives a falling final step.
+    Note that, unlike a StepModel, :math:`\sigma_1 > 0` is enforced, giving a
+    rising initial step, and  :math:`\sigma_2 > 0` gives a falling final step.
     """
 
     valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
