@@ -1525,8 +1525,9 @@ class StepModel(Model):
       https://en.wikipedia.org/wiki/Logistic_function)
 
     The step function starts with a value 0 and ends with a value of
-    :math:`A` rising to :math:`A/2` at :math:`\mu`, with :math:`\sigma`
-    setting the characteristic width. The functional forms are defined as:
+    :math:`\tt{sign}(\sigma)A` rising or falling to :math:`A/2` at :math:`\mu`,
+    with :math:`\sigma` setting the characteristic width and the sign up the step.
+    The functional forms are defined as:
 
     .. math::
         :nowrap:
@@ -1540,6 +1541,8 @@ class StepModel(Model):
 
     where :math:`\alpha = (x - \mu)/{\sigma}`.
 
+    Note that :math:`\sigma \gt 0` gives a rising step, while :math:`\sigma \lt 0` gives
+    a falling step.
     """
 
     valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
@@ -1556,7 +1559,11 @@ class StepModel(Model):
         xmin, xmax = min(x), max(x)
         pars = self.make_params(amplitude=(ymax-ymin),
                                 center=(xmax+xmin)/2.0)
-        pars[f'{self.prefix}sigma'].set(value=(xmax-xmin)/7.0, min=0.0)
+        n = len(data)
+        sigma = 0.1*(xmax - xmin)
+        if data[:n//5].mean() > data[-n//5:].mean():
+            sigma = -sigma
+        pars[f'{self.prefix}sigma'].set(value=sigma)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1600,6 +1607,8 @@ class RectangleModel(Model):
     where :math:`\alpha_1 = (x - \mu_1)/{\sigma_1}` and
     :math:`\alpha_2 = -(x - \mu_2)/{\sigma_2}`.
 
+    Note that, unlike a StepModel, :math:`\sigma_1 \gt 0` is enforced, giving a
+    rising initial step, and  :math:`\sigma_2 \gt 0` gives a falling final step.
     """
 
     valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
@@ -1624,9 +1633,10 @@ class RectangleModel(Model):
         xmin, xmax = min(x), max(x)
         pars = self.make_params(amplitude=(ymax-ymin),
                                 center1=(xmax+xmin)/4.0,
-                                center2=3*(xmax+xmin)/4.0)
-        pars[f'{self.prefix}sigma1'].set(value=(xmax-xmin)/7.0, min=0.0)
-        pars[f'{self.prefix}sigma2'].set(value=(xmax-xmin)/7.0, min=0.0)
+                                center2=3*(xmax+xmin)/4.0,
+                                sigma1={'value': (xmax-xmin)/10.0, 'min': 0},
+                                sigma2={'value': (xmax-xmin)/10.0, 'min': 0})
+
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
