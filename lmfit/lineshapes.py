@@ -1,7 +1,7 @@
 """Basic model lineshapes and distribution functions."""
 
 from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
-                   maximum, minimum, pi, real, sin, sqrt, where)
+                   maximum, minimum, pi, real, sign, sin, sqrt, where)
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -415,8 +415,8 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.
 
-    Starts at 0.0, ends at `amplitude`, with half-max at `center`, and
-    rising with `form`:
+    Starts at 0.0, ends at `sign(sigma)*amplitude`, has a half-max at
+    `center`, rsing or falling with `form`:
 
     - `'linear'` (default) = amplitude * min(1, max(0, arg + 0.5))
     - `'atan'`, `'arctan'` = amplitude * (0.5 + atan(arg)/pi)
@@ -425,8 +425,10 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
 
     where ``arg = (x - center)/sigma``.
 
+    Note that ``sigma > 0`` gives a rising step, while ``sigma < 0`` gives
+    a falling step.
     """
-    out = (x - center)/max(tiny, sigma)
+    out = sign(sigma)*(x - center)/max(tiny*tiny, abs(sigma))
 
     if form == 'erf':
         out = 0.5*(1 + erf(out))
@@ -455,8 +457,11 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     - `'erf'`              = amplitude*(erf(arg1) + erf(arg2))/2.
     - `'logisitic'`        = amplitude*[1 - 1/(1 + exp(arg1)) - 1/(1+exp(arg2))]
 
-    where ``arg1 = (x - center1)/sigma1`` and
-    ``arg2 = -(x - center2)/sigma2``.
+    where ``arg1 = (x - center1)/sigma1`` and ``arg2 = -(x - center2)/sigma2``.
+
+    Note that, unlike `step`,  ``sigma1 > 0`` and ``sigma2 > 0``, so that a
+    rectangle can support a step up followed by a step down.
+    Use a constant offset and adjust amplitude if that is what you need.
 
     See Also
     --------
