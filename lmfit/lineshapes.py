@@ -416,7 +416,7 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.
 
     Starts at 0.0, ends at `sign(sigma)*amplitude`, has a half-max at
-    `center`, rsing or falling with `form`:
+    `center`, rising or falling with `form`:
 
     - `'linear'` (default) = amplitude * min(1, max(0, arg + 0.5))
     - `'atan'`, `'arctan'` = amplitude * (0.5 + atan(arg)/pi)
@@ -449,7 +449,6 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
 def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
               center2=1.0, sigma2=1.0, form='linear'):
     """Return a rectangle function: step up, step down.
-
     Starts at 0.0, rises to `amplitude` (at `center1` with width `sigma1`),
     then drops to 0.0 (at `center2` with width `sigma2`) with `form`:
     - `'linear'` (default) = ramp_up + ramp_down

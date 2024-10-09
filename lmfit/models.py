@@ -1526,7 +1526,7 @@ class StepModel(Model):
 
     The step function starts with a value 0 and ends with a value of
     :math:`\tt{sign}(\sigma)A` rising or falling to :math:`A/2` at :math:`\mu`,
-    with :math:`\sigma` setting the characteristic width and the sign up the step.
+    with :math:`\sigma` setting the characteristic width of the step.
     The functional forms are defined as:
 
     .. math::
