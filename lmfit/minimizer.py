@@ -921,7 +921,7 @@ class Minimizer:
             fmin_kws['options']['maxiter'] = self.max_nfev
             self.max_nfev = 5*self.max_nfev
 
-        # FIXME: update when SciPy requirement is >= 1.8
+        # FIXME: update when SciPy requirement is >= 1.11
         # ``maxiter`` deprecated in favor of ``maxfun``
         elif method == "TNC" and int(scipy_version.split('.')[1]) >= 11:
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
