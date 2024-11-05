@@ -92,7 +92,11 @@ class, which are also complex-aware.
 How should I cite LMFIT?
 ========================
 
-See https://dx.doi.org/10.5281/zenodo.11813
+For LMFIT 1.3.2, use https://doi.org/10.5281/zenodo.12785036.
+
+For other versions, see https://zenodo.org/records/12785036
+
+
 
 
 I get errors from NaN in my fit. What can I do?
