@@ -500,7 +500,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.251 seconds)
+   **Total running time of the script:** (0 minutes 0.351 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:
@@ -516,6 +516,10 @@ Data with missing entries and an unequal length still aligns properly.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_Model_interface.py <example_Model_interface.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_Model_interface.zip <example_Model_interface.zip>`
 
 
 .. only:: html

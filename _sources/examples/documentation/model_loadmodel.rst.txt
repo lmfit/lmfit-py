@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_loadmodel.py:
 
 
-doc_model_loadmodel.py
-======================
+Model - loadmodel
+=================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-40
 
@@ -100,7 +100,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.134 seconds)
+   **Total running time of the script:** (0 minutes 0.175 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:
@@ -116,6 +116,10 @@ doc_model_loadmodel.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_loadmodel.py <model_loadmodel.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_loadmodel.zip <model_loadmodel.zip>`
 
 
 .. only:: html

@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -305,7 +305,7 @@ the main point of having these is to be able to use them in composite models. Fo
 example, a Lorentzian plus a linear background might be represented as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
 
 <span class="n">peak</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 <span class="n">background</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">()</span>
@@ -366,9 +366,9 @@ maximum is <span class="math notranslate nohighlight">\(2\sigma\sqrt{2\ln{2}}\)<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -408,9 +408,9 @@ maximum is <span class="math notranslate nohighlight">\(2\sigma\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -457,9 +457,9 @@ with the Lorentzian model, integral of this function from <cite>-.inf</cite> to
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -508,9 +508,9 @@ to <cite>sigma</cite>), the full width at half maximum is approximately
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -556,9 +556,9 @@ value for <cite>fraction</cite> at 0.5.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -600,9 +600,9 @@ more information, see:
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -645,9 +645,9 @@ and 0 for <cite>skew</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -690,9 +690,9 @@ height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -730,9 +730,9 @@ at half maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -766,9 +766,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -804,9 +804,9 @@ full width at half maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -843,9 +843,9 @@ peak height.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -887,9 +887,9 @@ maximum and maximum peak height, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -927,9 +927,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -969,9 +969,9 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1011,9 +1011,9 @@ as usual for a Voigt distribution, and adds a new Parameter <cite>skew</cite>.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1065,9 +1065,9 @@ scattering research.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1106,9 +1106,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1149,9 +1149,9 @@ To be clear, <cite>c</cite> will be a Parameter that will be varied in the fit
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1184,9 +1184,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1218,9 +1218,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1254,9 +1254,9 @@ specify how many of these are actual variable parameters. This uses
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1297,10 +1297,10 @@ recommended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xknots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of floats or <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code>, required) – x-values of knots for spline.</p></li>
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>xknots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of floats or <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code>, required) – x-values of knots for spline.</p></li>
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 </ul>
@@ -1344,9 +1344,9 @@ non-negative, and <cite>shift</cite> additionally to be smaller than <span class
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1387,8 +1387,9 @@ the data. Should be one of:</p>
 <a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_function">https://en.wikipedia.org/wiki/Logistic_function</a>)</p></li>
 </ul>
 <p>The step function starts with a value 0 and ends with a value of
-<span class="math notranslate nohighlight">\(A\)</span> rising to <span class="math notranslate nohighlight">\(A/2\)</span> at <span class="math notranslate nohighlight">\(\mu\)</span>, with <span class="math notranslate nohighlight">\(\sigma\)</span>
-setting the characteristic width. The functional forms are defined as:</p>
+<span class="math notranslate nohighlight">\(\tt{sign}(\sigma)A\)</span> rising or falling to <span class="math notranslate nohighlight">\(A/2\)</span> at <span class="math notranslate nohighlight">\(\mu\)</span>,
+with <span class="math notranslate nohighlight">\(\sigma\)</span> setting the characteristic width of the step.
+The functional forms are defined as:</p>
 <div class="math notranslate nohighlight">
 \begin{eqnarray*}
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  &amp; = A \min{[1, \max{(0, \alpha + 1/2)}]} \\
@@ -1396,12 +1397,14 @@ setting the characteristic width. The functional forms are defined as:</p>
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     &amp; = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})&amp; = A \left[1 - \frac{1}{1 + e^{\alpha}} \right]
 \end{eqnarray*}</div><p>where <span class="math notranslate nohighlight">\(\alpha = (x - \mu)/{\sigma}\)</span>.</p>
+<p>Note that <span class="math notranslate nohighlight">\(\sigma &gt; 0\)</span> gives a rising step, while <span class="math notranslate nohighlight">\(\sigma &lt; 0\)</span> gives
+a falling step.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1453,12 +1456,14 @@ forms are defined as:</p>
 &amp;f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &amp;= A \left[1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 + e^{\alpha_2}} \right]
 \end{eqnarray*}</div><p>where <span class="math notranslate nohighlight">\(\alpha_1 = (x - \mu_1)/{\sigma_1}\)</span> and
 <span class="math notranslate nohighlight">\(\alpha_2 = -(x - \mu_2)/{\sigma_2}\)</span>.</p>
+<p>Note that, unlike a StepModel, <span class="math notranslate nohighlight">\(\sigma_1 &gt; 0\)</span> is enforced, giving a
+rising initial step, and  <span class="math notranslate nohighlight">\(\sigma_2 &gt; 0\)</span> gives a falling final step.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1496,9 +1501,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1532,9 +1537,9 @@ the data. Should be one of:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1579,9 +1584,9 @@ A g(x; A=1, \mu_x, \sigma_x) g(y; A=1, \mu_y, \sigma_y)\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Arguments to the model function that are independent variables
 default is [‘x’, ‘y’]).</p></li>
-<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models
 that have parameter names in common.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise'</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
@@ -1625,9 +1630,9 @@ mathematical constraints as discussed in <a class="reference internal" href="con
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Mathematical expression for model.</p></li>
-<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> or None, optional) – Variable names to use as independent variables.</p></li>
-<li><p><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</p></li>
+<li><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Mathematical expression for model.</p></li>
+<li><p><strong>independent_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> or None, optional) – Variable names to use as independent variables.</p></li>
+<li><p><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</p></li>
 <li><p><strong>nan_policy</strong> (<em>{'raise</em><em>, </em><em>'propagate'</em><em>, </em><em>'omit'}</em><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. See Notes below.</p></li>
 <li><p><strong>**kws</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
 </ul>
@@ -1666,7 +1671,7 @@ default value of <code class="docutils literal notranslate"><span class="pre">No
 <p>For example, if one creates an <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a> as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExpressionModel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExpressionModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;off + amp * exp(-x/x0) * sin(x*phase)&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1683,7 +1688,7 @@ parameter hints for bounds, so this will have to be handled explicitly.</p>
 <p>To evaluate this model, you might do the following:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">501</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">off</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
@@ -1707,7 +1712,7 @@ a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">def mycurve(x, amp, cen, sig):</span>
 <span class="s2">    loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)</span>
 <span class="s2">    gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)</span>
@@ -1722,7 +1727,7 @@ could to define this in a script:</p>
 <p>and then use this with <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a> as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;mycurve(x, height, mid, wid)&#39;</span><span class="p">,</span> <span class="n">init_script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;mycurve(x, height, mid, wid)&#39;</span><span class="p">,</span> <span class="n">init_script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span>
                       <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -1744,7 +1749,7 @@ one in previous example in that the parameter names are different, and have
 built-in default values. We will simply use:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
 
@@ -1809,7 +1814,7 @@ better? To do this, we simply replace <code class="docutils literal notranslate"
 <code class="docutils literal notranslate"><span class="pre">LorentzianModel</span></code> to get a <a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a>:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 </pre></div>
@@ -1856,7 +1861,7 @@ we try gives results that are worse by comparing the fit statistics:</p>
 A Voigt model does a better job. Using <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>, this is as simple as using:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
 </pre></div>
@@ -1974,7 +1979,7 @@ various backgrounds. An example of a simple fit to a noisy step function
 plus a constant:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -2029,14 +2034,14 @@ results, which gives:</p>
     chi-square         = 593.709621
     reduced chi-square = 3.02913072
     Akaike info crit   = 227.700173
-    Bayesian info crit = 244.216697
+    Bayesian info crit = 244.216698
     R-squared          = 0.99897798
 [[Variables]]
-    line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
-    line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
-    step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
-    step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
-    step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
+    line_slope:      1.87162051 +/- 0.09318576 (4.98%) (init = 0)
+    line_intercept:  12.0964556 +/- 0.27606000 (2.28%) (init = 11.58574)
+    step_amplitude:  112.858605 +/- 0.65391558 (0.58%) (init = 134.7378)
+    step_center:     3.13494787 +/- 0.00516601 (0.16%) (init = 2.5)
+    step_sigma:      0.67393526 +/- 0.01091153 (1.62%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(line_slope, step_amplitude)     = -0.8791
     C(step_amplitude, step_sigma)     = +0.5643
@@ -2069,7 +2074,7 @@ illustrate, we fit one of the classic datasets from the <a class="reference exte
 involving a decaying exponential and two Gaussians.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -2318,7 +2323,7 @@ start with data with a single peak and a background that is hard to
 characterize clearly as a simple decay, oscillatory structure.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">SplineModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
 
@@ -2345,7 +2350,7 @@ characterize clearly as a simple decay, oscillatory structure.</p>
 for a Gaussian peak, say with:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;peak_&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;peak_&#39;</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2361,7 +2366,7 @@ flexibility near the peak.  Let’s try spacing knot points at <code class="docu
 at <code class="docutils literal notranslate"><span class="pre">x=19,</span> <span class="pre">21,</span> <span class="pre">23,</span> <span class="pre">25</span></code>.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knot_xvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knot_xvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
 
 <span class="n">bkg</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;bkg_&#39;</span><span class="p">,</span> <span class="n">xknots</span><span class="o">=</span><span class="n">knot_xvals</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bkg</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
@@ -2382,7 +2387,7 @@ values.  You’ll see below that these initial values are close.</p>
 a fit.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="o">+</span> <span class="n">bkg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="o">+</span> <span class="n">bkg</span>
 
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;peak_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;peak_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">10</span>
@@ -2470,7 +2475,7 @@ good.</p>
 <p>We can plot the results and fit components with</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">comps</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">comps</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;bkg_&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">)</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;peak_&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">)</span>
@@ -2490,7 +2495,7 @@ good.</p>
 <p>If we’re interested in seeing the locations of the knots, you might do</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;bkg&#39;</span><span class="p">)])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;bkg&#39;</span><span class="p">)])</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">knot_xvals</span><span class="p">,</span> <span class="n">knot_yvals</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;spline knots values&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2509,7 +2514,7 @@ knots has on the resulting peak intensity.  For example, you might try some
 of the following set of knot values:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_xvals1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>         <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_xvals1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>         <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
  <span class="n">knot_xvals2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>   <span class="mi">16</span><span class="p">,</span>   <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
  <span class="n">knot_xvals3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
 </pre></div>
@@ -2559,7 +2564,7 @@ Gaussian, the spline could fit the full curve.  By way of example, we’ll
 just try increasing the number of spline points to fit this data</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
  <span class="k">for</span> <span class="n">nknots</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">):</span>
      <span class="n">model</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;bkg_&#39;</span><span class="p">,</span>   <span class="n">xknots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">nknots</span><span class="p">))</span>
      <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>

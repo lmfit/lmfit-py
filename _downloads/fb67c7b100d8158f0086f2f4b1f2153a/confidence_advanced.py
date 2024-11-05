@@ -1,6 +1,6 @@
 """
-doc_confidence_advanced.py
-==========================
+Confidence - advanced
+=====================
 
 
 """

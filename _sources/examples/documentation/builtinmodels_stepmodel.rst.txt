@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_builtinmodels_stepmodel.py:
 
 
-doc_builtinmodels_stepmodel.py
-==============================
+Builtinmodels - stepmodel
+=========================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-37
 
@@ -107,7 +107,7 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.148 seconds)
+   **Total running time of the script:** (0 minutes 0.189 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
@@ -123,6 +123,10 @@ doc_builtinmodels_stepmodel.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_stepmodel.py <builtinmodels_stepmodel.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: builtinmodels_stepmodel.zip <builtinmodels_stepmodel.zip>`
 
 
 .. only:: html

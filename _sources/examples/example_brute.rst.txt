@@ -966,7 +966,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 21.447 seconds)
+   **Total running time of the script:** (0 minutes 27.423 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:
@@ -982,6 +982,10 @@ and finally, to generated the figure:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_brute.py <example_brute.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_brute.zip <example_brute.zip>`
 
 
 .. only:: html

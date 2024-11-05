@@ -1,6 +1,6 @@
 """
-doc_builtinmodels_nistgauss.py
-==============================
+Builtinmodels - nistgauss
+=========================
 
 
 """

@@ -1,6 +1,6 @@
 """
-doc_model_two_components.py
-===========================
+Model - two components
+======================
 
 
 """

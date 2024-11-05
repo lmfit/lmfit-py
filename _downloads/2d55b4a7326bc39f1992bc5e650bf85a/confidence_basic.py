@@ -1,6 +1,6 @@
 """
-doc_confidence_basic.py
-=======================
+Confidence - basic
+==================
 
 
 """

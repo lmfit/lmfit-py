@@ -1,6 +1,6 @@
 """
-doc_builtinmodels_splinemodel.py
-================================
+Builtinmodels - splinemodel
+===========================
 
 
 """

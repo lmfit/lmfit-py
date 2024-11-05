@@ -1,6 +1,6 @@
 """
-doc_model_gaussian.py
-=====================
+Model - gaussian
+================
 
 
 """

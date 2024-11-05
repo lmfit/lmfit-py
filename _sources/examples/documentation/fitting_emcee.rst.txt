@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_fitting_emcee.py:
 
 
-doc_fitting_emcee.py
-====================
+Fitting - emcee
+===============
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-114
 
@@ -220,7 +220,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.606 seconds)
+   **Total running time of the script:** (0 minutes 9.813 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:
@@ -236,6 +236,10 @@ doc_fitting_emcee.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: fitting_emcee.py <fitting_emcee.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: fitting_emcee.zip <fitting_emcee.zip>`
 
 
 .. only:: html

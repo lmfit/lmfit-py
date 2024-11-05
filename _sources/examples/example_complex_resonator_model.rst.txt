@@ -295,7 +295,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.434 seconds)
+   **Total running time of the script:** (0 minutes 0.557 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
@@ -311,6 +311,10 @@ for plotting complex quantities:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_complex_resonator_model.zip <example_complex_resonator_model.zip>`
 
 
 .. only:: html

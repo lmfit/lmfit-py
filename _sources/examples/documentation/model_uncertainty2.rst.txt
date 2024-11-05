@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_uncertainty2.py:
 
 
-doc_model_uncertainty2.py
-=========================
+Model - uncertainty2
+====================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-86
 
@@ -164,7 +164,7 @@ doc_model_uncertainty2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.693 seconds)
+   **Total running time of the script:** (0 minutes 0.898 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty2.py:
@@ -180,6 +180,10 @@ doc_model_uncertainty2.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_uncertainty2.py <model_uncertainty2.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_uncertainty2.zip <model_uncertainty2.zip>`
 
 
 .. only:: html

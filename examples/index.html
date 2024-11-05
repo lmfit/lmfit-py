@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -147,52 +147,52 @@ Click on any image to see the complete source code and output.</p>
 and preferably self-contained examples of how you use lmfit for
 inclusion in this gallery! Please note that many of the examples
 below currently do <em>not</em> follow these guidelines yet.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th..."><img alt="" src="../_images/sphx_glr_example_use_pandas_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of the DataFrame to lmfit."><img alt="" src="../_images/sphx_glr_example_use_pandas_thumb.png" />
 <p><a class="reference internal" href="example_use_pandas.html#sphx-glr-examples-example-use-pandas-py"><span class="std std-ref">Fit with Data in a pandas DataFrame</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit with Data in a pandas DataFrame</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit...."><img alt="" src="../_images/sphx_glr_example_expression_model_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models"><img alt="" src="../_images/sphx_glr_example_expression_model_thumb.png" />
 <p><a class="reference internal" href="example_expression_model.html#sphx-glr-examples-example-expression-model-py"><span class="std std-ref">Using an ExpressionModel</span></a></p>
   <div class="sphx-glr-thumbnail-title">Using an ExpressionModel</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine..."><img alt="" src="../_images/sphx_glr_example_fit_with_inequality_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (inequality) constraints are needed. In the example below the center of the Lorentzian peak is constrained to be between 0-5 away from the center of the Gaussian peak."><img alt="" src="../_images/sphx_glr_example_fit_with_inequality_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_inequality.html#sphx-glr-examples-example-fit-with-inequality-py"><span class="std std-ref">Fit Using Inequality Constraint</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using Inequality Constraint</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob..."><img alt="" src="../_images/sphx_glr_example_diffev_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple problem."><img alt="" src="../_images/sphx_glr_example_diffev_thumb.png" />
 <p><a class="reference internal" href="example_diffev.html#sphx-glr-examples-example-diffev-py"><span class="std std-ref">Fit Using differential_evolution Algorithm</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using differential_evolution Algorithm</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even..."><img alt="" src="../_images/sphx_glr_example_fit_with_bounds_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even if the underlying algorithm in SciPy does not support this. For more information on how this is implemented, please refer to: https://lmfit.github.io/lmfit-py/bounds.html"><img alt="" src="../_images/sphx_glr_example_fit_with_bounds_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_bounds.html#sphx-glr-examples-example-fit-with-bounds-py"><span class="std std-ref">Fit Using Bounds</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using Bounds</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Fit with Algebraic Constraint"><img alt="" src="../_images/sphx_glr_example_fit_with_algebraic_constraint_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_algebraic_constraint.html#sphx-glr-examples-example-fit-with-algebraic-constraint-py"><span class="std std-ref">Fit with Algebraic Constraint</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit with Algebraic Constraint</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim..."><img alt="" src="../_images/sphx_glr_example_reduce_fcn_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minimizers. The default value is None (i.e., &quot;sum of squares of residual&quot;) - alternatives are: negentropy, neglogcauchy, or a user-specified callable. For more information please refer to: https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class"><img alt="" src="../_images/sphx_glr_example_reduce_fcn_thumb.png" />
 <p><a class="reference internal" href="example_reduce_fcn.html#sphx-glr-examples-example-reduce-fcn-py"><span class="std std-ref">Fit Specifying Different Reduce Function</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Specifying Different Reduce Function</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with..."><img alt="" src="../_images/sphx_glr_example_sympy_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with SymPy and then apply that model to the data with lmfit. This example shows how to do that. Please note that this example requires both the sympy and matplotlib packages."><img alt="" src="../_images/sphx_glr_example_sympy_thumb.png" />
 <p><a class="reference internal" href="example_sympy.html#sphx-glr-examples-example-sympy-py"><span class="std std-ref">Building a lmfit model with SymPy</span></a></p>
   <div class="sphx-glr-thumbnail-title">Building a lmfit model with SymPy</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th..."><img alt="" src="../_images/sphx_glr_example_basinhopping_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note that this can be used to compare other fitting algorithms too."><img alt="" src="../_images/sphx_glr_example_basinhopping_thumb.png" />
 <p><a class="reference internal" href="example_basinhopping.html#sphx-glr-examples-example-basinhopping-py"><span class="std std-ref">Fit comparing leastsq and basin hopping, or other methods</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit comparing leastsq and basin hopping, or other methods</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously."><img alt="" src="../_images/sphx_glr_example_fit_multi_datasets_thumb.png" />
 <p><a class="reference internal" href="example_fit_multi_datasets.html#sphx-glr-examples-example-fit-multi-datasets-py"><span class="std std-ref">Fit Multiple Data Sets</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Multiple Data Sets</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas..."><img alt="" src="../_images/sphx_glr_example_Model_interface_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information please refer to: https://lmfit.github.io/lmfit-py/model.html#the-model-class."><img alt="" src="../_images/sphx_glr_example_Model_interface_thumb.png" />
 <p><a class="reference internal" href="example_Model_interface.html#sphx-glr-examples-example-model-interface-py"><span class="std std-ref">Fit using the Model interface</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit using the Model interface</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure."><img alt="" src="../_images/sphx_glr_example_fit_with_derivfunc_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_derivfunc.html#sphx-glr-examples-example-fit-with-derivfunc-py"><span class="std std-ref">Fit Specifying a Function to Compute the Jacobian</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Specifying a Function to Compute the Jacobian</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th..."><img alt="" src="../_images/sphx_glr_example_detect_outliers_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess the influence of one point, we fit the dataset without the point and compare the result with the fit of the full dataset. The code below shows how to do this with lmfit. Note that the presented method is very basic."><img alt="" src="../_images/sphx_glr_example_detect_outliers_thumb.png" />
 <p><a class="reference internal" href="example_detect_outliers.html#sphx-glr-examples-example-detect-outliers-py"><span class="std std-ref">Outlier detection via leave-one-out</span></a></p>
   <div class="sphx-glr-thumbnail-title">Outlier detection via leave-one-out</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Emcee and the Model Interface"><img alt="" src="../_images/sphx_glr_example_emcee_Model_interface_thumb.png" />
 <p><a class="reference internal" href="example_emcee_Model_interface.html#sphx-glr-examples-example-emcee-model-interface-py"><span class="std std-ref">Emcee and the Model Interface</span></a></p>
   <div class="sphx-glr-thumbnail-title">Emcee and the Model Interface</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def..."><img alt="" src="../_images/sphx_glr_example_complex_resonator_model_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and defining a custom Model class."><img alt="" src="../_images/sphx_glr_example_complex_resonator_model_thumb.png" />
 <p><a class="reference internal" href="example_complex_resonator_model.html#sphx-glr-examples-example-complex-resonator-model-py"><span class="std std-ref">Complex Resonator Model</span></a></p>
   <div class="sphx-glr-thumbnail-title">Complex Resonator Model</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was..."><img alt="" src="../_images/sphx_glr_lmfit_emcee_model_selection_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was removed in emcee v3..."><img alt="" src="../_images/sphx_glr_lmfit_emcee_model_selection_thumb.png" />
 <p><a class="reference internal" href="lmfit_emcee_model_selection.html#sphx-glr-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">Model Selection using lmfit and emcee</span></a></p>
   <div class="sphx-glr-thumbnail-title">Model Selection using lmfit and emcee</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Calculate Confidence Intervals"><img alt="" src="../_images/sphx_glr_example_confidence_interval_thumb.png" />
@@ -210,87 +210,87 @@ below currently do <em>not</em> follow these guidelines yet.</p>
 <section id="examples-from-the-documentation">
 <h1>Examples from the documentation<a class="headerlink" href="#examples-from-the-documentation" title="Link to this heading">¶</a></h1>
 <p>Below are all the examples that are part of the lmfit documentation.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodel.py"><img alt="" src="../_images/sphx_glr_model_savemodel_thumb.png" />
-<p><a class="reference internal" href="documentation/model_savemodel.html#sphx-glr-examples-documentation-model-savemodel-py"><span class="std std-ref">doc_model_savemodel.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_savemodel.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult.py"><img alt="" src="../_images/sphx_glr_model_savemodelresult_thumb.png" />
-<p><a class="reference internal" href="documentation/model_savemodelresult.html#sphx-glr-examples-documentation-model-savemodelresult-py"><span class="std std-ref">doc_model_savemodelresult.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_basic.py"><img alt="" src="../_images/sphx_glr_confidence_basic_thumb.png" />
-<p><a class="reference internal" href="documentation/confidence_basic.html#sphx-glr-examples-documentation-confidence-basic-py"><span class="std std-ref">doc_confidence_basic.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_confidence_basic.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py"><img alt="" src="../_images/sphx_glr_model_loadmodelresult_thumb.png" />
-<p><a class="reference internal" href="documentation/model_loadmodelresult.html#sphx-glr-examples-documentation-model-loadmodelresult-py"><span class="std std-ref">doc_model_loadmodelresult.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py"><img alt="" src="../_images/sphx_glr_model_loadmodelresult2_thumb.png" />
-<p><a class="reference internal" href="documentation/model_loadmodelresult2.html#sphx-glr-examples-documentation-model-loadmodelresult2-py"><span class="std std-ref">doc_model_loadmodelresult2.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_gaussian.py"><img alt="" src="../_images/sphx_glr_model_gaussian_thumb.png" />
-<p><a class="reference internal" href="documentation/model_gaussian.html#sphx-glr-examples-documentation-model-gaussian-py"><span class="std std-ref">doc_model_gaussian.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_gaussian.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py"><img alt="" src="../_images/sphx_glr_model_loadmodel_thumb.png" />
-<p><a class="reference internal" href="documentation/model_loadmodel.html#sphx-glr-examples-documentation-model-loadmodel-py"><span class="std std-ref">doc_model_loadmodel.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy.py"><img alt="" src="../_images/sphx_glr_model_with_nan_policy_thumb.png" />
-<p><a class="reference internal" href="documentation/model_with_nan_policy.html#sphx-glr-examples-documentation-model-with-nan-policy-py"><span class="std std-ref">doc_model_with_nan_policy.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_with_nan_policy.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_stepmodel.py"><img alt="" src="../_images/sphx_glr_builtinmodels_stepmodel_thumb.png" />
-<p><a class="reference internal" href="documentation/builtinmodels_stepmodel.html#sphx-glr-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">doc_builtinmodels_stepmodel.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_stepmodel.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty.py"><img alt="" src="../_images/sphx_glr_model_uncertainty_thumb.png" />
-<p><a class="reference internal" href="documentation/model_uncertainty.html#sphx-glr-examples-documentation-model-uncertainty-py"><span class="std std-ref">doc_model_uncertainty.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_uncertainty.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py"><img alt="" src="../_images/sphx_glr_model_two_components_thumb.png" />
-<p><a class="reference internal" href="documentation/model_two_components.html#sphx-glr-examples-documentation-model-two-components-py"><span class="std std-ref">doc_model_two_components.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_withreport.py"><img alt="" src="../_images/sphx_glr_fitting_withreport_thumb.png" />
-<p><a class="reference internal" href="documentation/fitting_withreport.html#sphx-glr-examples-documentation-fitting-withreport-py"><span class="std std-ref">doc_fitting_withreport.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_fitting_withreport.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py"><img alt="" src="../_images/sphx_glr_model_savemodelresult2_thumb.png" />
-<p><a class="reference internal" href="documentation/model_savemodelresult2.html#sphx-glr-examples-documentation-model-savemodelresult2-py"><span class="std std-ref">doc_model_savemodelresult2.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py"><img alt="" src="../_images/sphx_glr_builtinmodels_nistgauss2_thumb.png" />
-<p><a class="reference internal" href="documentation/builtinmodels_nistgauss2.html#sphx-glr-examples-documentation-builtinmodels-nistgauss2-py"><span class="std std-ref">doc_builtinmodels_nistgauss2.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py"><img alt="" src="../_images/sphx_glr_model_with_iter_callback_thumb.png" />
-<p><a class="reference internal" href="documentation/model_with_iter_callback.html#sphx-glr-examples-documentation-model-with-iter-callback-py"><span class="std std-ref">doc_model_with_iter_callback.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict.py"><img alt="" src="../_images/sphx_glr_parameters_valuesdict_thumb.png" />
-<p><a class="reference internal" href="documentation/parameters_valuesdict.html#sphx-glr-examples-documentation-parameters-valuesdict-py"><span class="std std-ref">doc_parameters_valuesdict.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_parameters_valuesdict.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels.py"><img alt="" src="../_images/sphx_glr_builtinmodels_peakmodels_thumb.png" />
-<p><a class="reference internal" href="documentation/builtinmodels_peakmodels.html#sphx-glr-examples-documentation-builtinmodels-peakmodels-py"><span class="std std-ref">doc_builtinmodels_peakmodels.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_peakmodels.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss.py"><img alt="" src="../_images/sphx_glr_builtinmodels_nistgauss_thumb.png" />
-<p><a class="reference internal" href="documentation/builtinmodels_nistgauss.html#sphx-glr-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">doc_builtinmodels_nistgauss.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py"><img alt="" src="../_images/sphx_glr_parameters_basic_thumb.png" />
-<p><a class="reference internal" href="documentation/parameters_basic.html#sphx-glr-examples-documentation-parameters-basic-py"><span class="std std-ref">doc_parameters_basic.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite.py"><img alt="" src="../_images/sphx_glr_model_composite_thumb.png" />
-<p><a class="reference internal" href="documentation/model_composite.html#sphx-glr-examples-documentation-model-composite-py"><span class="std std-ref">doc_model_composite.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_composite.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_splinemodel.py"><img alt="" src="../_images/sphx_glr_builtinmodels_splinemodel_thumb.png" />
-<p><a class="reference internal" href="documentation/builtinmodels_splinemodel.html#sphx-glr-examples-documentation-builtinmodels-splinemodel-py"><span class="std std-ref">doc_builtinmodels_splinemodel.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_splinemodel.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced.py"><img alt="" src="../_images/sphx_glr_confidence_advanced_thumb.png" />
-<p><a class="reference internal" href="documentation/confidence_advanced.html#sphx-glr-examples-documentation-confidence-advanced-py"><span class="std std-ref">doc_confidence_advanced.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_confidence_advanced.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_uvars_params.py"><img alt="" src="../_images/sphx_glr_uvars_params_thumb.png" />
-<p><a class="reference internal" href="documentation/uvars_params.html#sphx-glr-examples-documentation-uvars-params-py"><span class="std std-ref">doc_uvars_params.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_uvars_params.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty2.py"><img alt="" src="../_images/sphx_glr_model_uncertainty2_thumb.png" />
-<p><a class="reference internal" href="documentation/model_uncertainty2.html#sphx-glr-examples-documentation-model-uncertainty2-py"><span class="std std-ref">doc_model_uncertainty2.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_uncertainty2.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_emcee.py"><img alt="" src="../_images/sphx_glr_fitting_emcee_thumb.png" />
-<p><a class="reference internal" href="documentation/fitting_emcee.html#sphx-glr-examples-documentation-fitting-emcee-py"><span class="std std-ref">doc_fitting_emcee.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_fitting_emcee.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_chi2_maps.py"><img alt="" src="../_images/sphx_glr_confidence_chi2_maps_thumb.png" />
-<p><a class="reference internal" href="documentation/confidence_chi2_maps.html#sphx-glr-examples-documentation-confidence-chi2-maps-py"><span class="std std-ref">doc_confidence_chi2_maps.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_confidence_chi2_maps.py</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty_pred.py"><img alt="" src="../_images/sphx_glr_model_uncertainty_pred_thumb.png" />
-<p><a class="reference internal" href="documentation/model_uncertainty_pred.html#sphx-glr-examples-documentation-model-uncertainty-pred-py"><span class="std std-ref">doc_model_uncertainty_pred.py</span></a></p>
-  <div class="sphx-glr-thumbnail-title">doc_model_uncertainty_pred.py</div>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Model - savemodel"><img alt="" src="../_images/sphx_glr_model_savemodel_thumb.png" />
+<p><a class="reference internal" href="documentation/model_savemodel.html#sphx-glr-examples-documentation-model-savemodel-py"><span class="std std-ref">Model - savemodel</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - savemodel</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - savemodelresult"><img alt="" src="../_images/sphx_glr_model_savemodelresult_thumb.png" />
+<p><a class="reference internal" href="documentation/model_savemodelresult.html#sphx-glr-examples-documentation-model-savemodelresult-py"><span class="std std-ref">Model - savemodelresult</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - savemodelresult</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Confidence - basic"><img alt="" src="../_images/sphx_glr_confidence_basic_thumb.png" />
+<p><a class="reference internal" href="documentation/confidence_basic.html#sphx-glr-examples-documentation-confidence-basic-py"><span class="std std-ref">Confidence - basic</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Confidence - basic</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodelresult"><img alt="" src="../_images/sphx_glr_model_loadmodelresult_thumb.png" />
+<p><a class="reference internal" href="documentation/model_loadmodelresult.html#sphx-glr-examples-documentation-model-loadmodelresult-py"><span class="std std-ref">Model - loadmodelresult</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - loadmodelresult</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodelresult2"><img alt="" src="../_images/sphx_glr_model_loadmodelresult2_thumb.png" />
+<p><a class="reference internal" href="documentation/model_loadmodelresult2.html#sphx-glr-examples-documentation-model-loadmodelresult2-py"><span class="std std-ref">Model - loadmodelresult2</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - loadmodelresult2</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - gaussian"><img alt="" src="../_images/sphx_glr_model_gaussian_thumb.png" />
+<p><a class="reference internal" href="documentation/model_gaussian.html#sphx-glr-examples-documentation-model-gaussian-py"><span class="std std-ref">Model - gaussian</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - gaussian</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodel"><img alt="" src="../_images/sphx_glr_model_loadmodel_thumb.png" />
+<p><a class="reference internal" href="documentation/model_loadmodel.html#sphx-glr-examples-documentation-model-loadmodel-py"><span class="std std-ref">Model - loadmodel</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - loadmodel</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - with nan policy"><img alt="" src="../_images/sphx_glr_model_with_nan_policy_thumb.png" />
+<p><a class="reference internal" href="documentation/model_with_nan_policy.html#sphx-glr-examples-documentation-model-with-nan-policy-py"><span class="std std-ref">Model - with nan policy</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - with nan policy</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - stepmodel"><img alt="" src="../_images/sphx_glr_builtinmodels_stepmodel_thumb.png" />
+<p><a class="reference internal" href="documentation/builtinmodels_stepmodel.html#sphx-glr-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">Builtinmodels - stepmodel</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Builtinmodels - stepmodel</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty"><img alt="" src="../_images/sphx_glr_model_uncertainty_thumb.png" />
+<p><a class="reference internal" href="documentation/model_uncertainty.html#sphx-glr-examples-documentation-model-uncertainty-py"><span class="std std-ref">Model - uncertainty</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - uncertainty</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - two components"><img alt="" src="../_images/sphx_glr_model_two_components_thumb.png" />
+<p><a class="reference internal" href="documentation/model_two_components.html#sphx-glr-examples-documentation-model-two-components-py"><span class="std std-ref">Model - two components</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - two components</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Fitting - withreport"><img alt="" src="../_images/sphx_glr_fitting_withreport_thumb.png" />
+<p><a class="reference internal" href="documentation/fitting_withreport.html#sphx-glr-examples-documentation-fitting-withreport-py"><span class="std std-ref">Fitting - withreport</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Fitting - withreport</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - savemodelresult2"><img alt="" src="../_images/sphx_glr_model_savemodelresult2_thumb.png" />
+<p><a class="reference internal" href="documentation/model_savemodelresult2.html#sphx-glr-examples-documentation-model-savemodelresult2-py"><span class="std std-ref">Model - savemodelresult2</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - savemodelresult2</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - nistgauss2"><img alt="" src="../_images/sphx_glr_builtinmodels_nistgauss2_thumb.png" />
+<p><a class="reference internal" href="documentation/builtinmodels_nistgauss2.html#sphx-glr-examples-documentation-builtinmodels-nistgauss2-py"><span class="std std-ref">Builtinmodels - nistgauss2</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Builtinmodels - nistgauss2</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - with iter callback"><img alt="" src="../_images/sphx_glr_model_with_iter_callback_thumb.png" />
+<p><a class="reference internal" href="documentation/model_with_iter_callback.html#sphx-glr-examples-documentation-model-with-iter-callback-py"><span class="std std-ref">Model - with iter callback</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - with iter callback</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parameters - valuesdict"><img alt="" src="../_images/sphx_glr_parameters_valuesdict_thumb.png" />
+<p><a class="reference internal" href="documentation/parameters_valuesdict.html#sphx-glr-examples-documentation-parameters-valuesdict-py"><span class="std std-ref">Parameters - valuesdict</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parameters - valuesdict</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - peakmodels"><img alt="" src="../_images/sphx_glr_builtinmodels_peakmodels_thumb.png" />
+<p><a class="reference internal" href="documentation/builtinmodels_peakmodels.html#sphx-glr-examples-documentation-builtinmodels-peakmodels-py"><span class="std std-ref">Builtinmodels - peakmodels</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Builtinmodels - peakmodels</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - nistgauss"><img alt="" src="../_images/sphx_glr_builtinmodels_nistgauss_thumb.png" />
+<p><a class="reference internal" href="documentation/builtinmodels_nistgauss.html#sphx-glr-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">Builtinmodels - nistgauss</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Builtinmodels - nistgauss</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parameters - basic"><img alt="" src="../_images/sphx_glr_parameters_basic_thumb.png" />
+<p><a class="reference internal" href="documentation/parameters_basic.html#sphx-glr-examples-documentation-parameters-basic-py"><span class="std std-ref">Parameters - basic</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parameters - basic</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - composite"><img alt="" src="../_images/sphx_glr_model_composite_thumb.png" />
+<p><a class="reference internal" href="documentation/model_composite.html#sphx-glr-examples-documentation-model-composite-py"><span class="std std-ref">Model - composite</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - composite</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - splinemodel"><img alt="" src="../_images/sphx_glr_builtinmodels_splinemodel_thumb.png" />
+<p><a class="reference internal" href="documentation/builtinmodels_splinemodel.html#sphx-glr-examples-documentation-builtinmodels-splinemodel-py"><span class="std std-ref">Builtinmodels - splinemodel</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Builtinmodels - splinemodel</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Confidence - advanced"><img alt="" src="../_images/sphx_glr_confidence_advanced_thumb.png" />
+<p><a class="reference internal" href="documentation/confidence_advanced.html#sphx-glr-examples-documentation-confidence-advanced-py"><span class="std std-ref">Confidence - advanced</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Confidence - advanced</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Parameters - uvars"><img alt="" src="../_images/sphx_glr_parameters_uvars_thumb.png" />
+<p><a class="reference internal" href="documentation/parameters_uvars.html#sphx-glr-examples-documentation-parameters-uvars-py"><span class="std std-ref">Parameters - uvars</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parameters - uvars</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty2"><img alt="" src="../_images/sphx_glr_model_uncertainty2_thumb.png" />
+<p><a class="reference internal" href="documentation/model_uncertainty2.html#sphx-glr-examples-documentation-model-uncertainty2-py"><span class="std std-ref">Model - uncertainty2</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - uncertainty2</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Fitting - emcee"><img alt="" src="../_images/sphx_glr_fitting_emcee_thumb.png" />
+<p><a class="reference internal" href="documentation/fitting_emcee.html#sphx-glr-examples-documentation-fitting-emcee-py"><span class="std std-ref">Fitting - emcee</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Fitting - emcee</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Confidence - chi2 maps"><img alt="" src="../_images/sphx_glr_confidence_chi2_maps_thumb.png" />
+<p><a class="reference internal" href="documentation/confidence_chi2_maps.html#sphx-glr-examples-documentation-confidence-chi2-maps-py"><span class="std std-ref">Confidence - chi2 maps</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Confidence - chi2 maps</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty pred"><img alt="" src="../_images/sphx_glr_model_uncertainty_pred_thumb.png" />
+<p><a class="reference internal" href="documentation/model_uncertainty_pred.html#sphx-glr-examples-documentation-model-uncertainty-pred-py"><span class="std std-ref">Model - uncertainty pred</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Model - uncertainty pred</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">

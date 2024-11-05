@@ -1,6 +1,6 @@
 """
-doc_fitting_emcee.py
-====================
+Fitting - emcee
+===============
 
 
 """

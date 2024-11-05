@@ -148,7 +148,7 @@ fitting algorithms too.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.398 seconds)
+   **Total running time of the script:** (0 minutes 3.289 seconds)
 
 
 .. _sphx_glr_download_examples_example_basinhopping.py:
@@ -164,6 +164,10 @@ fitting algorithms too.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_basinhopping.py <example_basinhopping.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_basinhopping.zip <example_basinhopping.zip>`
 
 
 .. only:: html

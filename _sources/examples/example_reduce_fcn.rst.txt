@@ -198,7 +198,7 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.197 seconds)
+   **Total running time of the script:** (0 minutes 0.258 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:
@@ -214,6 +214,10 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_reduce_fcn.py <example_reduce_fcn.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_reduce_fcn.zip <example_reduce_fcn.zip>`
 
 
 .. only:: html

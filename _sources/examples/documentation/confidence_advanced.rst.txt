@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_confidence_advanced.py:
 
 
-doc_confidence_advanced.py
-==========================
+Confidence - advanced
+=====================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-74
 
@@ -150,7 +150,7 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.294 seconds)
+   **Total running time of the script:** (0 minutes 5.638 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:
@@ -166,6 +166,10 @@ doc_confidence_advanced.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: confidence_advanced.py <confidence_advanced.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: confidence_advanced.zip <confidence_advanced.zip>`
 
 
 .. only:: html

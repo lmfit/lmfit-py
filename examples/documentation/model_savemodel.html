@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>doc_model_savemodel.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Model - savemodel &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="doc_model_savemodelresult.py" href="model_savemodelresult.html" />
+    <link rel="next" title="Model - savemodelresult" href="model_savemodelresult.html" />
     <link rel="prev" title="Examples from the documentation" href="index.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -84,7 +84,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="model_savemodelresult.html" title="doc_model_savemodelresult.py"
+          <a href="model_savemodelresult.html" title="Model - savemodelresult"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Examples from the documentation"
@@ -112,7 +112,7 @@
   <div>
     <h4>Next topic</h4>
     <p class="topless"><a href="model_savemodelresult.html"
-                          title="next chapter">doc_model_savemodelresult.py</a></p>
+                          title="next chapter">Model - savemodelresult</a></p>
   </div>
 <search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -137,8 +137,8 @@
 <p><a class="reference internal" href="#sphx-glr-download-examples-documentation-model-savemodel-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="doc-model-savemodel-py">
-<span id="sphx-glr-examples-documentation-model-savemodel-py"></span><h1>doc_model_savemodel.py<a class="headerlink" href="#doc-model-savemodel-py" title="Link to this heading">¶</a></h1>
+<section class="sphx-glr-example-title" id="model-savemodel">
+<span id="sphx-glr-examples-documentation-model-savemodel-py"></span><h1>Model - savemodel<a class="headerlink" href="#model-savemodel" title="Link to this heading">¶</a></h1>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_savemodel.py&gt;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -146,7 +146,7 @@ to download the full example code.</p>
 
 
 <span class="k">def</span> <span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a></a></a></a><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
 
 
 <span class="n">sinemodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">mysine</span><span class="p">)</span>
@@ -163,6 +163,9 @@ to download the full example code.</p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/9d9b87e0c44a6c98496d598916714d39/model_savemodel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_savemodel.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8c87d866bf250a5d939a1ea3feed5289/model_savemodel.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">model_savemodel.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -182,7 +185,7 @@ to download the full example code.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="model_savemodelresult.html" title="doc_model_savemodelresult.py"
+          <a href="model_savemodelresult.html" title="Model - savemodelresult"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Examples from the documentation"

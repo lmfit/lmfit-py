@@ -1,6 +1,6 @@
 """
-doc_model_with_iter_callback.py
-===============================
+Model - with iter callback
+==========================
 
 
 """

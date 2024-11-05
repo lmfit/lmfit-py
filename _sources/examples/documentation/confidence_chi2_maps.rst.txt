@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_confidence_chi2_maps.py:
 
 
-doc_confidence_chi2_maps.py
-===========================
+Confidence - chi2 maps
+======================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-20
 
@@ -252,7 +252,7 @@ plot initial fit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 43.876 seconds)
+   **Total running time of the script:** (0 minutes 57.484 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_chi2_maps.py:
@@ -268,6 +268,10 @@ plot initial fit
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: confidence_chi2_maps.py <confidence_chi2_maps.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: confidence_chi2_maps.zip <confidence_chi2_maps.zip>`
 
 
 .. only:: html

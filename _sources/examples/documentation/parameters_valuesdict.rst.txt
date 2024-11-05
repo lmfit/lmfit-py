@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_parameters_valuesdict.py:
 
 
-doc_parameters_valuesdict.py
-============================
+Parameters - valuesdict
+=======================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-53
 
@@ -113,7 +113,7 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.131 seconds)
+   **Total running time of the script:** (0 minutes 0.175 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_valuesdict.py:
@@ -129,6 +129,10 @@ doc_parameters_valuesdict.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parameters_valuesdict.py <parameters_valuesdict.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: parameters_valuesdict.zip <parameters_valuesdict.zip>`
 
 
 .. only:: html

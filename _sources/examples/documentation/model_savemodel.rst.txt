@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_savemodel.py:
 
 
-doc_model_savemodel.py
-======================
+Model - savemodel
+=================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-22
 
@@ -66,6 +66,10 @@ doc_model_savemodel.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_savemodel.py <model_savemodel.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_savemodel.zip <model_savemodel.zip>`
 
 
 .. only:: html

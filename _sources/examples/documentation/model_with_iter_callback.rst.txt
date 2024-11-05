@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_with_iter_callback.py:
 
 
-doc_model_with_iter_callback.py
-===============================
+Model - with iter callback
+==========================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-43
 
@@ -219,7 +219,7 @@ doc_model_with_iter_callback.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.159 seconds)
+   **Total running time of the script:** (0 minutes 0.212 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_iter_callback.py:
@@ -235,6 +235,10 @@ doc_model_with_iter_callback.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_with_iter_callback.py <model_with_iter_callback.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_with_iter_callback.zip <model_with_iter_callback.zip>`
 
 
 .. only:: html

@@ -143,7 +143,7 @@ this results in the following output:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.152 seconds)
+   **Total running time of the script:** (0 minutes 0.195 seconds)
 
 
 .. _sphx_glr_download_examples_example_expression_model.py:
@@ -159,6 +159,10 @@ this results in the following output:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_expression_model.py <example_expression_model.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_expression_model.zip <example_expression_model.zip>`
 
 
 .. only:: html

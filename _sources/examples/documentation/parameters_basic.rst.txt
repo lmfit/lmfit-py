@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_parameters_basic.py:
 
 
-doc_parameters_basic.py
-=======================
+Parameters - basic
+==================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-62
 
@@ -122,7 +122,7 @@ doc_parameters_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.134 seconds)
+   **Total running time of the script:** (0 minutes 0.171 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_basic.py:
@@ -138,6 +138,10 @@ doc_parameters_basic.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parameters_basic.py <parameters_basic.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: parameters_basic.zip <parameters_basic.zip>`
 
 
 .. only:: html

@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_with_nan_policy.py:
 
 
-doc_model_with_nan_policy.py
-============================
+Model - with nan policy
+=======================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-40
 
@@ -102,7 +102,7 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.141 seconds)
+   **Total running time of the script:** (0 minutes 0.183 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:
@@ -118,6 +118,10 @@ doc_model_with_nan_policy.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_with_nan_policy.py <model_with_nan_policy.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_with_nan_policy.zip <model_with_nan_policy.zip>`
 
 
 .. only:: html

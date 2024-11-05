@@ -1,6 +1,6 @@
 """
-doc_confidence_chi2_maps.py
-===========================
+Confidence - chi2 maps
+======================
 
 
 """

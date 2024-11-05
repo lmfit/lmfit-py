@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_builtinmodels_nistgauss2.py:
 
 
-doc_builtinmodels_nistgauss2.py
-===============================
+Builtinmodels - nistgauss2
+==========================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-50
 
@@ -128,7 +128,7 @@ doc_builtinmodels_nistgauss2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.164 seconds)
+   **Total running time of the script:** (0 minutes 0.217 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py:
@@ -144,6 +144,10 @@ doc_builtinmodels_nistgauss2.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_nistgauss2.py <builtinmodels_nistgauss2.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: builtinmodels_nistgauss2.zip <builtinmodels_nistgauss2.zip>`
 
 
 .. only:: html

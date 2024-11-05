@@ -18,8 +18,8 @@
 .. _sphx_glr_examples_documentation_model_composite.py:
 
 
-doc_model_composite.py
-======================
+Model - composite
+=================
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-73
 
@@ -36,7 +36,7 @@ doc_model_composite.py
  .. code-block:: none
 
     [[Model]]
-        (Model(jump) <function convolve at 0x1824856c0> Model(gaussian))
+        (Model(jump) <function convolve at 0x1852b3060> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
         # function evals   = 33
@@ -135,7 +135,7 @@ doc_model_composite.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.286 seconds)
+   **Total running time of the script:** (0 minutes 0.363 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_composite.py:
@@ -151,6 +151,10 @@ doc_model_composite.py
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_composite.py <model_composite.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_composite.zip <model_composite.zip>`
 
 
 .. only:: html

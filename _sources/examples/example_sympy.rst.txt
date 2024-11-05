@@ -193,7 +193,7 @@ reason. Both can be expressed by just substituting the variables.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.509 seconds)
+   **Total running time of the script:** (0 minutes 1.125 seconds)
 
 
 .. _sphx_glr_download_examples_example_sympy.py:
@@ -209,6 +209,10 @@ reason. Both can be expressed by just substituting the variables.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_sympy.py <example_sympy.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_sympy.zip <example_sympy.zip>`
 
 
 .. only:: html

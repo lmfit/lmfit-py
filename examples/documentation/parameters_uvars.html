@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parameters - uvars &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Model - uncertainty2" href="model_uncertainty2.html" />
+    <link rel="prev" title="Confidence - advanced" href="confidence_advanced.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="../../contents.html">Contents</a></li>
+    <li><a href="../index.html">Examples</a></li>
+    <li><a href="../../installation.html">Installation</a></li>
+    <li><a href="../../faq.html">FAQ</a></li>
+    <li><a href="../../support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="../../index.html">
+      <img src="../../_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model_uncertainty2.html" title="Model - uncertainty2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confidence_advanced.html" title="Confidence - advanced"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="confidence_advanced.html"
+                          title="previous chapter">Confidence - advanced</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="model_uncertainty2.html"
+                          title="next chapter">Model - uncertainty2</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-documentation-parameters-uvars-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="parameters-uvars">
+<span id="sphx-glr-examples-documentation-parameters-uvars-py"></span><h1>Parameters - uvars<a class="headerlink" href="#parameters-uvars" title="Link to this heading">¶</a></h1>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+### Peak Area:
+Peak1: 4257.77390+/-42.38380
+Peak2: 2493.41716+/-36.16971
+Sum  : 6751.19106+/-46.50802
+Correlation of peak1 and peak2 areas:            -0.30712
+Stderr Quadrature sum for peak1 and peak2 area2: 55.71924
+Stderr of peak1 + peak2 area, with correlation:  46.50802
+### Peak Centroid:
+Peak Centroid: 124.10846+/-0.14074
+[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+[[Model]]
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.52821
+    reduced chi-square = 5.15507524
+    Akaike info crit   = 417.864631
+    Bayesian info crit = 446.036318
+    R-squared          = 0.99648654
+[[Variables]]
+    g1_amplitude:   4257.77390 +/- 42.3837959 (1.00%) (init = 4000)
+    g1_center:      107.030957 +/- 0.15006877 (0.14%) (init = 105)
+    g1_sigma:       16.6725785 +/- 0.16048211 (0.96%) (init = 15)
+    g2_amplitude:   2493.41716 +/- 36.1697062 (1.45%) (init = 2000)
+    g2_center:      153.270104 +/- 0.19466774 (0.13%) (init = 155)
+    g2_sigma:       13.8069453 +/- 0.18680153 (1.35%) (init = 15)
+    exp_amplitude:  99.0183277 +/- 0.53748650 (0.54%) (init = 100)
+    exp_decay:      90.9508838 +/- 1.10310767 (1.21%) (init = 100)
+    g1_fwhm:        39.2609214 +/- 0.37790648 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
+    g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
+    area:           6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    centroid:       124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(g1_amplitude, g1_sigma)   = +0.8243
+    C(g2_amplitude, g2_sigma)   = +0.8154
+    C(exp_amplitude, exp_decay) = -0.6946
+    C(g1_sigma, g2_center)      = +0.6842
+    C(g1_center, g2_amplitude)  = -0.6689
+    C(g1_center, g2_sigma)      = -0.6520
+    C(g1_amplitude, g2_center)  = +0.6477
+    C(g1_center, g2_center)     = +0.6205
+    C(g1_center, g1_sigma)      = +0.5075
+    C(g1_amplitude, exp_decay)  = -0.5074
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_parameters_uvars.py&gt;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dat</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="s1">&#39;NIST_Gauss2.dat&#39;</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dat</span></a><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dat</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">bkg</span> <span class="o">=</span> <span class="n">ExponentialModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;exp_&#39;</span><span class="p">)</span>
+<span class="n">gauss1</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g1_&#39;</span><span class="p">)</span>
+<span class="n">gauss2</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;g2_&#39;</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">gauss1</span> <span class="o">+</span> <span class="n">gauss2</span> <span class="o">+</span> <span class="n">bkg</span>
+
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">g1_center</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span> <span class="n">g1_amplitude</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">g1_sigma</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                       <span class="n">g2_center</span><span class="o">=</span><span class="mi">155</span><span class="p">,</span> <span class="n">g2_amplitude</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">g2_sigma</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                       <span class="n">exp_amplitude</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">exp_decay</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="c1"># Area and Centroid of the combined peaks</span>
+<span class="c1"># option 1: from output uncertainties values</span>
+
+<span class="n">uvar_g1amp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span>
+<span class="n">uvar_g2amp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span>
+<span class="n">uvar_g1cen</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g1_center&#39;</span><span class="p">]</span>
+<span class="n">uvar_g2cen</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">uvars</span><span class="p">[</span><span class="s1">&#39;g2_center&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Peak Area: &quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak1: </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">+/-</span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak2: </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">+/-</span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sum  : </span><span class="si">{</span><span class="p">(</span><span class="n">uvar_g1amp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">uvar_g2amp</span><span class="p">)</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">area_quadrature</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Correlation of peak1 and peak2 areas:            </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">correl</span><span class="p">[</span><span class="s1">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stderr Quadrature sum for peak1 and peak2 area2: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">area_quadrature</span></a><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stderr of peak1 + peak2 area, with correlation:  </span><span class="si">{</span><span class="p">(</span><span class="n">uvar_g1amp</span><span class="o">+</span><span class="n">uvar_g2amp</span><span class="p">)</span><span class="o">.</span><span class="n">std_dev</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Peak Centroid: &quot;</span><span class="p">)</span>
+
+<span class="n">centroid</span> <span class="o">=</span> <span class="p">(</span><span class="n">uvar_g1amp</span> <span class="o">*</span> <span class="n">uvar_g1cen</span> <span class="o">+</span> <span class="n">uvar_g2amp</span> <span class="o">*</span> <span class="n">uvar_g2cen</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">uvar_g1amp</span> <span class="o">+</span> <span class="n">uvar_g2amp</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak Centroid: </span><span class="si">{</span><span class="n">centroid</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># option 2: define corresponding variables after fit</span>
+
+
+<span class="k">def</span> <span class="nf">post_fit</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="s2">&quot;example post fit function&quot;</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_area&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;g1_amplitude + g2_amplitude&#39;</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_centroid&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;</span><span class="p">)</span>
+
+
+<span class="n">mod</span><span class="o">.</span><span class="n">post_fit</span> <span class="o">=</span> <span class="n">post_fit</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="c1"># option 3: define corresponding variables before fit</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;g1_amplitude + g2_amplitude&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;centroid&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># &lt;end examples/doc_parameters_uvars.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.102 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-parameters-uvars-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8cbac198f4477da6991bf77c39d6f9f3/parameters_uvars.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">parameters_uvars.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/66e39e22647791799ed1a4f20ef7974d/parameters_uvars.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">parameters_uvars.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/63851e4ecfbdd58deaf96620c0ad7aa1/parameters_uvars.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">parameters_uvars.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="model_uncertainty2.html" title="Model - uncertainty2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confidence_advanced.html" title="Confidence - advanced"
+             >previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Examples from the documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    </div>
+  </body>
+</html>

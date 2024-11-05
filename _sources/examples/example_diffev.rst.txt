@@ -185,7 +185,7 @@ Perform the fits and show fitting results and plot:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.293 seconds)
+   **Total running time of the script:** (0 minutes 0.377 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:
@@ -201,6 +201,10 @@ Perform the fits and show fitting results and plot:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_diffev.py <example_diffev.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_diffev.zip <example_diffev.zip>`
 
 
 .. only:: html

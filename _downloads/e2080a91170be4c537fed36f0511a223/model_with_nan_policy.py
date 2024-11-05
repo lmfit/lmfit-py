@@ -1,6 +1,6 @@
 """
-doc_model_with_nan_policy.py
-============================
+Model - with nan policy
+=======================
 
 
 """

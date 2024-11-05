@@ -167,7 +167,7 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.154 seconds)
+   **Total running time of the script:** (0 minutes 0.199 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:
@@ -183,6 +183,10 @@ and figure:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_inequality.py <example_fit_with_inequality.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_fit_with_inequality.zip <example_fit_with_inequality.zip>`
 
 
 .. only:: html

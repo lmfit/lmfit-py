@@ -21,7 +21,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of the DataFrame to lmfit.">
 
 .. only:: html
 
@@ -38,7 +38,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit....">
+    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models">
 
 .. only:: html
 
@@ -55,7 +55,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (inequality) constraints are needed. In the example below the center of the Lorentzian peak is constrained to be between 0-5 away from the center of the Gaussian peak.">
 
 .. only:: html
 
@@ -72,7 +72,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple problem.">
 
 .. only:: html
 
@@ -89,7 +89,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even...">
+    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even if the underlying algorithm in SciPy does not support this. For more information on how this is implemented, please refer to: https://lmfit.github.io/lmfit-py/bounds.html">
 
 .. only:: html
 
@@ -123,7 +123,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim...">
+    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minimizers. The default value is None (i.e., &quot;sum of squares of residual&quot;) - alternatives are: negentropy, neglogcauchy, or a user-specified callable. For more information please refer to: https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class">
 
 .. only:: html
 
@@ -140,7 +140,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with...">
+    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with SymPy and then apply that model to the data with lmfit. This example shows how to do that. Please note that this example requires both the sympy and matplotlib packages.">
 
 .. only:: html
 
@@ -157,7 +157,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note that this can be used to compare other fitting algorithms too.">
 
 .. only:: html
 
@@ -191,7 +191,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information please refer to: https://lmfit.github.io/lmfit-py/model.html#the-model-class.">
 
 .. only:: html
 
@@ -225,7 +225,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess the influence of one point, we fit the dataset without the point and compare the result with the fit of the full dataset. The code below shows how to do this with lmfit. Note that the presented method is very basic.">
 
 .. only:: html
 
@@ -259,7 +259,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and defining a custom Model class.">
 
 .. only:: html
 
@@ -276,7 +276,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was...">
+    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was removed in emcee v3...">
 
 .. only:: html
 
@@ -386,7 +386,7 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodel.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - savemodel">
 
 .. only:: html
 
@@ -397,13 +397,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_savemodel.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - savemodel</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - savemodelresult">
 
 .. only:: html
 
@@ -414,13 +414,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - savemodelresult</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_basic.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Confidence - basic">
 
 .. only:: html
 
@@ -431,13 +431,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_confidence_basic.py</div>
+      <div class="sphx-glr-thumbnail-title">Confidence - basic</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodelresult">
 
 .. only:: html
 
@@ -448,13 +448,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - loadmodelresult</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodelresult2">
 
 .. only:: html
 
@@ -465,13 +465,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - loadmodelresult2</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_gaussian.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - gaussian">
 
 .. only:: html
 
@@ -482,13 +482,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_gaussian.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - gaussian</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - loadmodel">
 
 .. only:: html
 
@@ -499,13 +499,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - loadmodel</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - with nan policy">
 
 .. only:: html
 
@@ -516,13 +516,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_with_nan_policy.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - with nan policy</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_stepmodel.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - stepmodel">
 
 .. only:: html
 
@@ -533,13 +533,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_stepmodel.py</div>
+      <div class="sphx-glr-thumbnail-title">Builtinmodels - stepmodel</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty">
 
 .. only:: html
 
@@ -550,13 +550,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - uncertainty</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - two components">
 
 .. only:: html
 
@@ -567,13 +567,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - two components</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_withreport.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Fitting - withreport">
 
 .. only:: html
 
@@ -584,13 +584,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_fitting_withreport.py</div>
+      <div class="sphx-glr-thumbnail-title">Fitting - withreport</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - savemodelresult2">
 
 .. only:: html
 
@@ -601,13 +601,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - savemodelresult2</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - nistgauss2">
 
 .. only:: html
 
@@ -618,13 +618,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
+      <div class="sphx-glr-thumbnail-title">Builtinmodels - nistgauss2</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - with iter callback">
 
 .. only:: html
 
@@ -635,13 +635,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - with iter callback</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Parameters - valuesdict">
 
 .. only:: html
 
@@ -652,13 +652,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_parameters_valuesdict.py</div>
+      <div class="sphx-glr-thumbnail-title">Parameters - valuesdict</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - peakmodels">
 
 .. only:: html
 
@@ -669,13 +669,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_peakmodels.py</div>
+      <div class="sphx-glr-thumbnail-title">Builtinmodels - peakmodels</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - nistgauss">
 
 .. only:: html
 
@@ -686,13 +686,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss.py</div>
+      <div class="sphx-glr-thumbnail-title">Builtinmodels - nistgauss</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Parameters - basic">
 
 .. only:: html
 
@@ -703,13 +703,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
+      <div class="sphx-glr-thumbnail-title">Parameters - basic</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - composite">
 
 .. only:: html
 
@@ -720,13 +720,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_composite.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - composite</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_splinemodel.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Builtinmodels - splinemodel">
 
 .. only:: html
 
@@ -737,13 +737,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_splinemodel.py</div>
+      <div class="sphx-glr-thumbnail-title">Builtinmodels - splinemodel</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Confidence - advanced">
 
 .. only:: html
 
@@ -754,30 +754,30 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_confidence_advanced.py</div>
+      <div class="sphx-glr-thumbnail-title">Confidence - advanced</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_uvars_params.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Parameters - uvars">
 
 .. only:: html
 
-  .. image:: /examples/documentation/images/thumb/sphx_glr_uvars_params_thumb.png
+  .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_uvars_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_documentation_uvars_params.py`
+  :ref:`sphx_glr_examples_documentation_parameters_uvars.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_uvars_params.py</div>
+      <div class="sphx-glr-thumbnail-title">Parameters - uvars</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty2.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty2">
 
 .. only:: html
 
@@ -788,13 +788,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty2.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - uncertainty2</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_emcee.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Fitting - emcee">
 
 .. only:: html
 
@@ -805,13 +805,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_fitting_emcee.py</div>
+      <div class="sphx-glr-thumbnail-title">Fitting - emcee</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_chi2_maps.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Confidence - chi2 maps">
 
 .. only:: html
 
@@ -822,13 +822,13 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_confidence_chi2_maps.py</div>
+      <div class="sphx-glr-thumbnail-title">Confidence - chi2 maps</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty_pred.py">
+    <div class="sphx-glr-thumbcontainer" tooltip="Model - uncertainty pred">
 
 .. only:: html
 
@@ -839,7 +839,7 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty_pred.py</div>
+      <div class="sphx-glr-thumbnail-title">Model - uncertainty pred</div>
     </div>
 
 
