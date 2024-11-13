@@ -27,7 +27,10 @@ def find_importer(obj):
     for modname, module in sys.modules.copy().items():
         if modname.startswith('__main__'):
             continue
-        t = getattr(module, oname, None)
+        try:
+            t = getattr(module, oname, None)
+        except (ModuleNotFoundError, ImportError):
+            pass
         if t is obj:
             return modname
     return None
