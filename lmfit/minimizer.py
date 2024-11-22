@@ -565,8 +565,11 @@ class Minimizer:
         grad_scale = np.ones_like(fvars)
         for ivar, name in enumerate(self.result.var_names):
             val = fvars[ivar]
-            pars[name].value = pars[name].from_internal(val)
-            grad_scale[ivar] = pars[name].scale_gradient(val)
+            if apply_bounds_transformation:
+                pars[name].value = pars[name].from_internal(val)
+                grad_scale[ivar] = pars[name].scale_gradient(val)
+            else:
+                pars[name].value = val
 
         pars.update_constraints()
 
