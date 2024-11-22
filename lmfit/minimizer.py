@@ -553,7 +553,7 @@ class Minimizer:
         else:
             return coerce_float64(out, nan_policy=self.nan_policy)
 
-    def __jacobian(self, fvars):
+    def __jacobian(self, fvars, apply_bounds_transformation=True):
         """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
