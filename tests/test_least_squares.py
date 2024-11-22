@@ -138,7 +138,7 @@ def test_least_squares_jacobian_types():
     # numpy.ndarray, scipy.sparse.spmatrix, scipy.sparse.linalg.LinearOperator
     # J = [ 2x - 2a , 2y - 2b ]
     def jac_array(params, *args, **kwargs):
-        return np.column_stack((2 * params[0] - 2 * a, 2 * params[1] - 2 * b))
+        return np.column_stack((2 * params['x'] - 2 * a, 2 * params['y'] - 2 * b))
 
     def jac_sparse(params, *args, **kwargs):
         return bsr_matrix(jac_array(params, *args, **kwargs))
