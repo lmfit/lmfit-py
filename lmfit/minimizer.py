@@ -2396,7 +2396,12 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects
     """
-    if np.iscomplexobj(arr):
+    if issparse(arr):
+        arr = arr.toarray().astype(np.float64)
+    elif isinstance(arr, LinearOperator):
+        identity = np.eye(arr.shape[1], dtype=np.float64)
+        arr = (arr * identity).astype(np.float64)
+    elif np.iscomplexobj(arr):
         arr = np.asarray(arr, dtype=np.complex128).view(np.float64)
     else:
         arr = np.asarray(arr, dtype=np.float64)
