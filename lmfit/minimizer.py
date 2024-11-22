@@ -1532,6 +1532,13 @@ class Minimizer:
         least_squares_kws.update(self.kws)
         least_squares_kws.update(kws)
 
+        if least_squares_kws.get('Dfun', None) is not None:
+            least_squares_kws['jac'] = least_squares_kws.pop('Dfun')
+
+        if callable(least_squares_kws['jac']):
+            self.jacfcn = least_squares_kws['jac']
+            least_squares_kws['jac'] = self.__jacobian
+
         least_squares_kws['kwargs'].update({'apply_bounds_transformation': False})
         result.call_kws = least_squares_kws
 
