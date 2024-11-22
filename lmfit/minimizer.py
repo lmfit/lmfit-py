@@ -553,7 +553,7 @@ class Minimizer:
         else:
             return coerce_float64(out, nan_policy=self.nan_policy)
 
-    def __jacobian(self, fvars, apply_bounds_transformation=True):
+    def _jacobian(self, fvars, apply_bounds_transformation=True):
         """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
@@ -934,7 +934,7 @@ class Minimizer:
         # Wrap Jacobian function to deal with bounds
         if 'jac' in fmin_kws:
             self.jacfcn = fmin_kws.pop('jac')
-            fmin_kws['jac'] = self.__jacobian
+            fmin_kws['jac'] = self._jacobian
 
         # Ignore jac argument for methods that do not support it
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
@@ -1540,7 +1540,7 @@ class Minimizer:
 
         if callable(least_squares_kws['jac']):
             self.jacfcn = least_squares_kws['jac']
-            least_squares_kws['jac'] = self.__jacobian
+            least_squares_kws['jac'] = self._jacobian
 
         least_squares_kws['kwargs'].update({'apply_bounds_transformation': False})
         result.call_kws = least_squares_kws
@@ -1649,7 +1649,7 @@ class Minimizer:
         if lskws['Dfun'] is not None:
             self.jacfcn = lskws['Dfun']
             self.col_deriv = lskws['col_deriv']
-            lskws['Dfun'] = self.__jacobian
+            lskws['Dfun'] = self._jacobian
 
         # suppress runtime warnings during fit and error analysis
         orig_warn_settings = np.geterr()
