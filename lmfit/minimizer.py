@@ -560,6 +560,20 @@ class Minimizer:
         modified 06-29-2015 by M Newville to apply gradient scaling for
         bounded variables (thanks to JJ Helmus, N Mayorov)
 
+        Parameters
+        ----------
+        fvars : numpy.ndarray
+            Array of new parameter values suggested by the minimizer.
+        apply_bounds_transformation : bool, optional
+            Whether to apply lmfits parameter transformation to constrain
+            parameters (default is True). This is needed for solvers
+            without built-in support for bounds.
+
+        Returns
+        -------
+        numpy.ndarray
+             The evaluated Jacobian matrix for given `fvars`.
+
         """
         pars = self.result.params
         grad_scale = np.ones_like(fvars)
