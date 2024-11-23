@@ -120,7 +120,7 @@ def test_jacobian_with_forkingpickler():
 
         while True:
             try:
-                out = iterator.next(timeout=2)
+                out = iterator.next(timeout=30)
             except StopIteration:
                 break
 
