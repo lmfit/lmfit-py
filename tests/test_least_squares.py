@@ -138,7 +138,7 @@ def test_least_squares_jacobian_types():
     # numpy.ndarray, scipy.sparse.spmatrix, scipy.sparse.linalg.LinearOperator
     # J = [ 2x - 2a , 2y - 2b ]
     def jac_array(params, *args, **kwargs):
-        return np.column_stack((2 * params[0] - 2 * a, 2 * params[1] - 2 * b))
+        return np.column_stack((2 * params['x'] - 2 * a, 2 * params['y'] - 2 * b))
 
     def jac_sparse(params, *args, **kwargs):
         return bsr_matrix(jac_array(params, *args, **kwargs))
@@ -169,3 +169,47 @@ def test_least_squares_jacobian_types():
     assert_allclose(result.covar, result_array.covar)
     assert_allclose(result.covar, result_sparse.covar)
     assert_allclose(result.covar, result_operator.covar)
+
+
+def test_least_squares_jacobian():
+    pars = lmfit.Parameters()
+    pars.add('x0', value=2.0)
+    pars.add('x1', value=2.0, min=1.5)
+
+    global jac_count
+
+    jac_count = 0
+
+    def resid(params):
+        x0 = params['x0']
+        x1 = params['x1']
+        return np.array([10 * (x1 - x0*x0), 1-x0])
+
+    def jac(params):
+        global jac_count
+        jac_count += 1
+        x0 = params['x0']
+        return np.array([[-20*x0, 10], [-1, 0]])
+
+    out0 = lmfit.minimize(resid, pars, method='least_squares', jac='2-point')
+
+    assert_allclose(out0.params['x0'], 1.2243, rtol=1.0e-4)
+    assert_allclose(out0.params['x1'], 1.5000, rtol=1.0e-4)
+    assert jac_count == 0
+
+    out1 = lmfit.minimize(resid, pars, method='least_squares', jac=jac)
+
+    assert_allclose(out1.params['x0'], 1.2243, rtol=1.0e-4)
+    assert_allclose(out1.params['x1'], 1.5000, rtol=1.0e-4)
+    assert out1.nfev < out0.nfev
+    assert jac_count > 5
+
+    jac_count = 0
+
+    out2 = lmfit.minimize(resid, pars, method='least_squares', Dfun=jac)
+
+    assert_allclose(out2.params['x0'], 1.2243, rtol=1.0e-4)
+    assert_allclose(out2.params['x1'], 1.5000, rtol=1.0e-4)
+    assert out2.nfev < out0.nfev
+    assert out2.nfev == out1.nfev
+    assert jac_count > 5

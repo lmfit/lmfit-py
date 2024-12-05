@@ -553,20 +553,37 @@ class Minimizer:
         else:
             return coerce_float64(out, nan_policy=self.nan_policy)
 
-    def __jacobian(self, fvars):
+    def _jacobian(self, fvars, apply_bounds_transformation=True):
         """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 by M Newville to apply gradient scaling for
         bounded variables (thanks to JJ Helmus, N Mayorov)
 
+        Parameters
+        ----------
+        fvars : numpy.ndarray
+            Array of new parameter values suggested by the minimizer.
+        apply_bounds_transformation : bool, optional
+            Whether to apply lmfits parameter transformation to constrain
+            parameters (default is True). This is needed for solvers
+            without built-in support for bounds.
+
+        Returns
+        -------
+        numpy.ndarray
+             The evaluated Jacobian matrix for given `fvars`.
+
         """
         pars = self.result.params
         grad_scale = np.ones_like(fvars)
         for ivar, name in enumerate(self.result.var_names):
             val = fvars[ivar]
-            pars[name].value = pars[name].from_internal(val)
-            grad_scale[ivar] = pars[name].scale_gradient(val)
+            if apply_bounds_transformation:
+                pars[name].value = pars[name].from_internal(val)
+                grad_scale[ivar] = pars[name].scale_gradient(val)
+            else:
+                pars[name].value = val
 
         pars.update_constraints()
 
@@ -931,7 +948,7 @@ class Minimizer:
         # Wrap Jacobian function to deal with bounds
         if 'jac' in fmin_kws:
             self.jacfcn = fmin_kws.pop('jac')
-            fmin_kws['jac'] = self.__jacobian
+            fmin_kws['jac'] = self._jacobian
 
         # Ignore jac argument for methods that do not support it
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
@@ -1532,6 +1549,13 @@ class Minimizer:
         least_squares_kws.update(self.kws)
         least_squares_kws.update(kws)
 
+        if least_squares_kws.get('Dfun', None) is not None:
+            least_squares_kws['jac'] = least_squares_kws.pop('Dfun')
+
+        if callable(least_squares_kws['jac']):
+            self.jacfcn = least_squares_kws['jac']
+            least_squares_kws['jac'] = self._jacobian
+
         least_squares_kws['kwargs'].update({'apply_bounds_transformation': False})
         result.call_kws = least_squares_kws
 
@@ -1639,7 +1663,7 @@ class Minimizer:
         if lskws['Dfun'] is not None:
             self.jacfcn = lskws['Dfun']
             self.col_deriv = lskws['col_deriv']
-            lskws['Dfun'] = self.__jacobian
+            lskws['Dfun'] = self._jacobian
 
         # suppress runtime warnings during fit and error analysis
         orig_warn_settings = np.geterr()
@@ -2386,7 +2410,12 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects
     """
-    if np.iscomplexobj(arr):
+    if issparse(arr):
+        arr = arr.toarray().astype(np.float64)
+    elif isinstance(arr, LinearOperator):
+        identity = np.eye(arr.shape[1], dtype=np.float64)
+        arr = (arr * identity).astype(np.float64)
+    elif np.iscomplexobj(arr):
         arr = np.asarray(arr, dtype=np.complex128).view(np.float64)
     else:
         arr = np.asarray(arr, dtype=np.float64)
