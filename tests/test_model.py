@@ -1697,3 +1697,32 @@ def test_model_refitting():
     assert result.init_values['peak_amplitude'] < 21
     assert result.init_values['peak_sigma'] > 2
     assert result.init_values['peak_sigma'] < 4
+
+
+def test_model_barestar():
+    """Github #976 (and discussion #975)"""
+    def foo(x, *, a=1, b=1, kind='linear'):
+        if kind == 'linear':
+            return a + b * x
+        elif kind == 'exponential':
+            return a * np.exp(b * x)
+
+    modl = lmfit.Model(foo)
+    assert modl.independent_vars == ['x', 'kind']
+    assert modl._param_names == ['a', 'b']
+
+
+def test_model_bareslash():
+    """Github #976 (and discussion #975)"""
+    def foo(x, /, a=1, b=1, kind='linear'):
+        if kind == 'linear':
+            return a + b * x
+        elif kind == 'exponential':
+            return a * np.exp(b * x)
+    try:
+        lmfit.Model(foo)
+        that_failed = False
+    except ValueError:
+        that_failed = True
+
+    assert that_failed
