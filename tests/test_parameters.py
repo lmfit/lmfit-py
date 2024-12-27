@@ -226,7 +226,7 @@ def test_parameters__array__(parameters):
     """Test the __array__ magic method."""
     pars, _, _ = parameters
 
-    assert_allclose(np.array(pars), np.array([10.0, 20.0]))
+    assert_allclose(np.asarray(pars), np.asarray([10.0, 20.0]))
 
 
 def test_parameters__reduce__(parameters):
