@@ -370,7 +370,7 @@ def test_value_setter(parameter):
 def test__array__(parameter):
     """Test the __array__ magic method."""
     par, _ = parameter
-    assert np.array(par) == np.array(10.0)
+    assert np.asarray(par) == np.asarray(10.0)
 
 
 def test__str__(parameter):
