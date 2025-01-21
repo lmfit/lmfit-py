@@ -881,7 +881,7 @@ class Model:
                    'this, using "nan_policy=\'omit\'" will probably not work.')
             raise ValueError(msg)
 
-        diff = model - data
+        diff = data - model
 
         if diff.dtype is complex:
             # data/model are complex
@@ -2323,7 +2323,7 @@ class ModelResult(Minimizer):
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
 
-        residuals = reduce_complex(self.eval()) - reduce_complex(self.data)
+        residuals = reduce_complex(self.data) - reduce_complex(self.eval())
         if yerr is not None:
             ax.errorbar(x_array, residuals,
                         yerr=propagate_err(self.data, yerr, parse_complex),
