@@ -404,8 +404,8 @@ class Parameters(dict):
                 val['is_init_value'] = True
             par.set(**val)
 
-    def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
-            brute_step=None):
+    def add(self, name, value=None, vary=None, min=-inf, max=inf, expr=None,
+            brute_step=None, user_data=None):
         """Add a Parameter.
 
         Parameters
@@ -446,11 +446,43 @@ class Parameters(dict):
 
         """
         if isinstance(name, Parameter):
+            if name.value is None:
+                name.value = value
+            if name.expr is None:
+                name.expr = expr
+            if name.min in (None, -inf):
+                name.min = min
+            if name.max in (None, inf):
+                name.max = max
+            if name.brute_step is None:
+                name.brute_step = brute_step
+            if name.user_data is None:
+                name.user_data = user_data
+            if vary is not None:
+                name.vary = vary
             self.__setitem__(name.name, name)
+        elif isinstance(value, Parameter):
+            value = deepcopy(value)
+            value.name = name
+            if value.expr is None:
+                value.expr = expr
+            if value.min in (None, -inf):
+                value.min = min
+            if value.max in (None, inf):
+                value.max = max
+            if value.brute_step is None:
+                value.brute_step = brute_step
+            if value.user_data is None:
+                value.user_data = user_data
+            if vary is not None:
+                value.vary = vary
+            self.__setitem__(name, value)
         else:
+            if vary is None:
+                vary = True
             self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
                                              min=min, max=max, expr=expr,
-                                             brute_step=brute_step))
+                                             brute_step=brute_step, user_data=user_data))
         if len(self._asteval.error) > 0:
             err = self._asteval.error[0]
             raise err.exc(err.msg)
