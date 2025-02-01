@@ -11,6 +11,15 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_133_label:
+
+Version 1.3.3 Release Notes
+===========================
+
+Fixes:
+
+-  fix loading spline models with more than five knots (Issue #985)
+
 
 .. _whatsnew_132_label:
 
