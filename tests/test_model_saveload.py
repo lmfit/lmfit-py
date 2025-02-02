@@ -309,7 +309,7 @@ def test_saveload_modelresult_spline_model(tmp_path):
     as a workaround, the number of knots was increased to 100 as
     discussed in https://github.com/lmfit/lmfit-py/issues/985.
     """
-    number_of_knots = 100
+    number_of_knots = 80
     model_file = tmp_path / 'spline_modelresult.sav'
     xx = np.linspace(-10, 10, 100)
     yy = 0.6*np.exp(-(xx**2)/(1.3**2))
@@ -340,6 +340,11 @@ def test_saveload_modelresult_spline_model(tmp_path):
                     rtol=0, atol=1e-12)
     assert_allclose(result.userkws["x"], result2.userkws["x"],
                     rtol=0, atol=1e-12)
+    for attr in ('best_fit', 'init_fit'):
+        val1 = getattr(result, attr)
+        val2 = getattr(result2, attr)
+        assert_allclose(val1.mean(), val2.mean(), rtol=0.01, atol=0.01)
+
     for attr in ['aborted', 'aic', 'bic', 'chisqr', 'ci_out', 'col_deriv',
                  'errorbars', 'flatchain', 'ier', 'lmdif_message', 'message',
                  'method', 'nan_policy', 'ndata', 'nfev', 'nfree', 'nvarys',
