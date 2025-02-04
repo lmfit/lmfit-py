@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-fitting data with uncertainties in x and y
+Fitting data with uncertainties in x and y
+==============================================
 
 This examples shows a general way of fitting a model
 to y(x) data which has uncertainties in both y and x.
