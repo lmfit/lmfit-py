@@ -363,7 +363,7 @@ class SplineModel(Model):
 
     """
 
-    MAX_KNOTS = 300
+    MAX_KNOTS = 100
     NKNOTS_MAX_ERR = f"SplineModel supports up to {MAX_KNOTS:d} knots"
     NKNOTS_NDARRY_ERR = "SplineModel xknots must be 1-D array-like"
     DIM_ERR = "SplineModel supports only 1-d spline interpolation"
@@ -403,9 +403,25 @@ class SplineModel(Model):
                          s72=1, s73=1, s74=1, s75=1, s76=1, s77=1, s78=1, s79=1,
                          s80=1, s81=1, s82=1, s83=1, s84=1, s85=1, s86=1, s87=1,
                          s88=1, s89=1, s90=1, s91=1, s92=1, s93=1, s94=1, s95=1,
-                         s96=1, s97=1, s98=1, s99=1):
-            """used only for the initial parsing"""
-            return x
+                         s96=1, s97=1, s98=1, s99=1, knots=None, order=None):
+            """spline evaluation"""
+            coefs = [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
+                     s12, s13, s14, s15, s16, s17, s18, s19, s20, s21,
+                     s22, s23, s24, s25, s26, s27, s28, s29, s30, s31,
+                     s32, s33, s34, s35, s36, s37, s38, s39, s40, s41,
+                     s42, s43, s44, s45, s46, s47, s48, s49, s50, s51,
+                     s52, s53, s54, s55, s56, s57, s58, s59, s60, s61,
+                     s62, s63, s64, s65, s66, s67, s68, s69, s70, s71,
+                     s72, s73, s74, s75, s76, s77, s78, s79, s80, s81,
+                     s82, s83, s84, s85, s86, s87, s88, s89, s90, s91,
+                     s92, s93, s94, s95, s96, s97, s98, s99]
+            if knots is None:
+                knots = self.knots
+            if order is None:
+                order = self.order
+            coefs = coefs[:len(knots)]
+            coefs.extend([coefs[-1]]*(order+1))
+            return splev(x, [knots, np.array(coefs), order])
 
         super().__init__(spline_model, **kwargs)
 
@@ -414,21 +430,7 @@ class SplineModel(Model):
 
         self._param_root_names = [f's{d}' for d in range(self.nknots)]
         self._param_names = [f'{prefix}{s}' for s in self._param_root_names]
-
-        self.knots, _c, _k = splrep(self.xknots, np.ones(self.nknots),
-                                    k=self.order)
-
-    def eval(self, params=None, **kwargs):
-        """note that we override `eval()` here for a variadic function,
-        as we will not know  the number of spline parameters until run time
-        """
-        self.make_funcargs(params, kwargs)
-
-        coefs = [params[f'{self.prefix}s{d}'].value for d in range(self.nknots)]
-        coefs.extend([coefs[-1]]*(self.order+1))
-        coefs = np.array(coefs)
-        x = kwargs[self.independent_vars[0]]
-        return splev(x, [self.knots, coefs, self.order])
+        self.knots, _c, _k = splrep(self.xknots, np.ones(self.nknots), k=self.order)
 
     def guess(self, data, x, **kwargs):
         """Estimate initial model parameter values from data."""
