@@ -13,12 +13,37 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_133_label:
 
-Version 1.3.3 Release Notes
-===========================
+Version 1.3.3 Release Notes (2025-March-10)
+=========================================================
 
 Fixes:
 
--  fix loading spline models with more than five knots (Issue #985)
+- fix loading spline models with more than five knots (Issue #985)
+- improved SplineModel to explicitly allow more knots, make it easier to evaluate and save/reload (Issue #985 PR #989, Paul Müller)
+- improvements to adding Parameters.
+- support Model functions with "barestar" syntax (PR #982)
+- fix several related problems with providing a Jacobian function, especially for consistency across solvers (including least_squares), and for pickling (PR #973 Ville Yrjänä)
+- fix Step and Rectangle Models to allow a negative value for sigma, indicating a downward step (PR #970)
+
+Build, Maintenance:
+
+- update issue templates
+- add test for consistent init_fit and best_fit for saved/looded SplineModel
+- fix NumPy v2 DeprecationWarning
+- uppdate SciPy/NumPy dependencies.
+- remove numexpr dependency (again)
+- drop support for Python 3.8, add Python 3.13
+- asteval no longer raises NameError to Python, so we catch exceptions from asteval when creating parameters.
+- avoid setting ``stderr`` to ``None`` for uncertainties calculations.
+
+Documentation and Examples:
+
+- add example with uncertainties in both x and y (#992)
+- make sign of residual calculations in model.py consistent with documentation  (Discussion #986,  PR#987, Timothy-J-Warner)
+- add example fitting multiple datasets using Model interface (Discussion #904, PR #967,  mstekiel)
+- tweaks to 'sphinx-gallery' settings.
+- update names of the documentation examples in Gallery
+
 
 
 .. _whatsnew_132_label:
