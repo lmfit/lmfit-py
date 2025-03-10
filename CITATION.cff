@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software and want to cite it, please use the DOI citation below."
+title: "LMFIT: Non-Linear Least-Squares Minimization and Curve-Fitting for Python"
+version: 1.3.3
+date-released: 2025-03-09
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.12785036
+authors:
+  - family-names: Newville
+    given-names: Matthew
+    orcid: https://orcid.org/0000-0001-6938-1014
+  - family-names: Otten
+    given-names: Renee
+    orcid: https://orcid.org/0000-0001-7342-6131
+  - family-names: Nelson
+    given-names: Andrew
+    orcid: https://orcid.org/0000-0002-4548-3558
+  - family-names: Stensitzki
+    given-names: Till
+    orcid: https://orcid.org/0000-0003-2317-4874
+  - family-names: Ingargiola
+    given-names: Antonino
+    orcid: https://orcid.org/0000-0002-9348-1397
+  - family-names: Allan
+    given-names: Daniel
+    orcid: https://orcid.org/0000-0002-5947-6017
+  - family-names: Fox
+    given-names: Austin
+    orcid: https://orcid.org/0000-0002-8926-0524
+  - family-names: Carter
+    given-names: Faustin
+    orcid: https://orcid.org/0000-0002-1236-3517
+  - family-names: Rawlik
+    given-names: Michal
+    orcid: https://orcid.org/0000-0002-1232-4497
