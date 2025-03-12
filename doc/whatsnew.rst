@@ -13,7 +13,7 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_133_label:
 
-Version 1.3.3 Release Notes (2025-March-10)
+Version 1.3.3 Release Notes (2025-March-12)
 =========================================================
 
 Fixes:
