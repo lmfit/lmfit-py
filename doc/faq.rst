@@ -20,8 +20,8 @@ To cite LMFIT, see https://doi.org/10.5281/zenodo.598352
 
 Each release will have its own DOI, including:
 
-Version 1.3.3  https://zenodo.org/records/12785036
-Version 1.3.2  https://zenodo.org/records/12785036
+ * Version 1.3.3  https://zenodo.org/records/15014437
+ * Version 1.3.2  https://zenodo.org/records/12785036
 
 
 
