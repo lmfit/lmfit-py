@@ -45,14 +45,14 @@ Builtinmodels - stepmodel
         chi-square         = 593.709621
         reduced chi-square = 3.02913072
         Akaike info crit   = 227.700173
-        Bayesian info crit = 244.216697
+        Bayesian info crit = 244.216698
         R-squared          = 0.99897798
     [[Variables]]
-        line_slope:      1.87162383 +/- 0.09318592 (4.98%) (init = 0)
-        line_intercept:  12.0964588 +/- 0.27606017 (2.28%) (init = 11.58574)
-        step_amplitude:  112.858576 +/- 0.65391731 (0.58%) (init = 134.7378)
-        step_center:     3.13494787 +/- 0.00516602 (0.16%) (init = 2.5)
-        step_sigma:      0.67393440 +/- 0.01091158 (1.62%) (init = 1.428571)
+        line_slope:      1.87162051 +/- 0.09318576 (4.98%) (init = 0)
+        line_intercept:  12.0964556 +/- 0.27606000 (2.28%) (init = 11.58574)
+        step_amplitude:  112.858605 +/- 0.65391558 (0.58%) (init = 134.7378)
+        step_center:     3.13494787 +/- 0.00516601 (0.16%) (init = 2.5)
+        step_sigma:      0.67393526 +/- 0.01091153 (1.62%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(line_slope, step_amplitude)     = -0.8791
         C(step_amplitude, step_sigma)     = +0.5643
@@ -107,7 +107,7 @@ Builtinmodels - stepmodel
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.189 seconds)
+   **Total running time of the script:** (0 minutes 0.251 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
@@ -123,10 +123,6 @@ Builtinmodels - stepmodel
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: builtinmodels_stepmodel.py <builtinmodels_stepmodel.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: builtinmodels_stepmodel.zip <builtinmodels_stepmodel.zip>`
 
 
 .. only:: html

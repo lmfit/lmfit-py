@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/documentation_options.js?v=28d163b9"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -305,7 +305,7 @@ the main point of having these is to be able to use them in composite models. Fo
 example, a Lorentzian plus a linear background might be represented as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
 
 <span class="n">peak</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 <span class="n">background</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">()</span>
@@ -637,7 +637,7 @@ The fwhm value has an error of about 20% in the
 parameter range expon: (0.5, 1000], skew: [-1000, 1000].</p>
 <div class="math notranslate nohighlight">
 \[f(x;A,\mu,\sigma,m,\nu)=A \frac{\left|\frac{\Gamma(m+i\tfrac{\nu}{2})}{\Gamma(m)}\right|^2}{\sigma\beta(m-\tfrac{1}{2},\tfrac{1}{2})}\left[1+\frac{(x-\mu)^2}{\sigma^2}\right]^{-m}\exp\left(-\nu \arctan\left(\frac{x-\mu}{\sigma}\right)\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always gives a starting value of 1.5 for <cite>expon</cite>,
 and 0 for <cite>skew</cite>.</p>
 <p>For more information, see:
@@ -680,7 +680,7 @@ constraints to report estimates for the full width at half maximum and
 maximum peak height, respectively.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2} \bigr]^{-m}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>).
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always gives a starting value for <cite>exponent</cite>
 of 1.5. In addition, parameters <cite>fwhm</cite> and <cite>height</cite> are included as
 constraints to report full width at half maximum and maximum peak
@@ -1132,8 +1132,8 @@ the data. Should be one of:</p>
 <section id="linear-and-polynomial-models">
 <h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Link to this heading">¶</a></h2>
 <p>These models correspond to polynomials of some degree. Of course, lmfit is
-a very inefficient way to do linear regression (see <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
-or <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html">scipy.stats.linregress</a>), but these models may be useful as one
+a very inefficient way to do linear regression (see <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
+or <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html">scipy.stats.linregress</a>), but these models may be useful as one
 of many components of a composite model.  The SplineModel below corresponds
 to a cubic spline.</p>
 <section id="constantmodel">
@@ -1250,7 +1250,7 @@ the data. Should be one of:</p>
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i x^i\]</div>
 <p>with parameters <cite>c0</cite>, <cite>c1</cite>, …, <cite>c7</cite>. The supplied <cite>degree</cite> will
 specify how many of these are actual variable parameters. This uses
-<a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">numpy.polyval</a> for its calculation of the polynomial.</p>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">numpy.polyval</a> for its calculation of the polynomial.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1671,7 +1671,7 @@ default value of <code class="docutils literal notranslate"><span class="pre">No
 <p>For example, if one creates an <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a> as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExpressionModel</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExpressionModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;off + amp * exp(-x/x0) * sin(x*phase)&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1688,7 +1688,7 @@ parameter hints for bounds, so this will have to be handled explicitly.</p>
 <p>To evaluate this model, you might do the following:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">501</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">off</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
@@ -1712,7 +1712,7 @@ a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">def mycurve(x, amp, cen, sig):</span>
 <span class="s2">    loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)</span>
 <span class="s2">    gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)</span>
@@ -1727,7 +1727,7 @@ could to define this in a script:</p>
 <p>and then use this with <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a> as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;mycurve(x, height, mid, wid)&#39;</span><span class="p">,</span> <span class="n">init_script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;mycurve(x, height, mid, wid)&#39;</span><span class="p">,</span> <span class="n">init_script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span>
                       <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -1749,7 +1749,7 @@ one in previous example in that the parameter names are different, and have
 built-in default values. We will simply use:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
 
@@ -1803,8 +1803,7 @@ maximum peak height, respectively. And third, the automated initial guesses
 are pretty good. A plot of the fit:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_7_0.svg" src="_images/builtin_models_7_0.svg" />
-</div>
+<img alt="_images/builtin_models_7_0.svg" src="_images/builtin_models_7_0.svg" /></div>
 </div>
 <p>shows a decent match to the data – the fit worked with no explicit setting
 of initial parameter values. Looking more closely, the fit is not perfect,
@@ -1814,7 +1813,7 @@ better? To do this, we simply replace <code class="docutils literal notranslate"
 <code class="docutils literal notranslate"><span class="pre">LorentzianModel</span></code> to get a <a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a>:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 </pre></div>
@@ -1854,14 +1853,13 @@ we try gives results that are worse by comparing the fit statistics:</p>
 <p>and also by visual inspection of the fit to the data (figure below).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_10_0.svg" src="_images/builtin_models_10_0.svg" />
-</div>
+<img alt="_images/builtin_models_10_0.svg" src="_images/builtin_models_10_0.svg" /></div>
 </div>
 <p>The tails are now too big, and the value for <span class="math notranslate nohighlight">\(\chi^2\)</span> almost doubled.
 A Voigt model does a better job. Using <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>, this is as simple as using:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
 </pre></div>
@@ -1903,8 +1901,7 @@ goodness-of-fit measures, and an obviously better match to the data as seen
 in the figure below (left).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_13_0.svg" src="_images/builtin_models_13_0.svg" />
-</div>
+<img alt="_images/builtin_models_13_0.svg" src="_images/builtin_models_13_0.svg" /></div>
 </div>
 <p>Fit to peak with Voigt model (left) and Voigt model with <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
 varying independently of <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (right).</p>
@@ -1979,7 +1976,7 @@ various backgrounds. An example of a simple fit to a noisy step function
 plus a constant:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -2059,8 +2056,7 @@ results, which gives:</p>
 <p>with a plot of</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_17_0.svg" src="_images/builtin_models_17_0.svg" />
-</div>
+<img alt="_images/builtin_models_17_0.svg" src="_images/builtin_models_17_0.svg" /></div>
 </div>
 </section>
 <section id="example-3-fitting-multiple-peaks-and-using-prefixes">
@@ -2074,7 +2070,7 @@ illustrate, we fit one of the classic datasets from the <a class="reference exte
 involving a decaying exponential and two Gaussians.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -2198,8 +2194,7 @@ on the parameter values. The overall fit is shown on the left, with its individu
 components displayed on the right:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_20_0.svg" src="_images/builtin_models_20_0.svg" />
-</div>
+<img alt="_images/builtin_models_20_0.svg" src="_images/builtin_models_20_0.svg" /></div>
 </div>
 <p>One final point on setting initial values. From looking at the data
 itself, we can see the two Gaussian peaks are reasonably well separated but
@@ -2231,8 +2226,7 @@ That is, with:</p>
 <p>we can get a better initial estimate (see below).</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_22_0.svg" src="_images/builtin_models_22_0.svg" />
-</div>
+<img alt="_images/builtin_models_22_0.svg" src="_images/builtin_models_22_0.svg" /></div>
 </div>
 <p>The fit converges to the same answer, giving to identical values
 (to the precision printed out in the report), but in fewer steps,
@@ -2323,7 +2317,7 @@ start with data with a single peak and a background that is hard to
 characterize clearly as a simple decay, oscillatory structure.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">SplineModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
 
@@ -2343,14 +2337,13 @@ characterize clearly as a simple decay, oscillatory structure.</p>
 <p>which shows (figure below):</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_25_0.svg" src="_images/builtin_models_25_0.svg" />
-</div>
+<img alt="_images/builtin_models_25_0.svg" src="_images/builtin_models_25_0.svg" /></div>
 </div>
 <p>There is definitely a peak there, so we could start with building a model
 for a Gaussian peak, say with:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;peak_&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;peak_&#39;</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2366,7 +2359,7 @@ flexibility near the peak.  Let’s try spacing knot points at <code class="docu
 at <code class="docutils literal notranslate"><span class="pre">x=19,</span> <span class="pre">21,</span> <span class="pre">23,</span> <span class="pre">25</span></code>.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knot_xvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knot_xvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
 
 <span class="n">bkg</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;bkg_&#39;</span><span class="p">,</span> <span class="n">xknots</span><span class="o">=</span><span class="n">knot_xvals</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bkg</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
@@ -2387,7 +2380,7 @@ values.  You’ll see below that these initial values are close.</p>
 a fit.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="o">+</span> <span class="n">bkg</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="o">+</span> <span class="n">bkg</span>
 
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;peak_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;peak_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">10</span>
@@ -2475,7 +2468,7 @@ good.</p>
 <p>We can plot the results and fit components with</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">comps</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">comps</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;bkg_&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">)</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;peak_&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">)</span>
@@ -2489,13 +2482,12 @@ good.</p>
 <p>which will generate the plot shown below:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_31_0.svg" src="_images/builtin_models_31_0.svg" />
-</div>
+<img alt="_images/builtin_models_31_0.svg" src="_images/builtin_models_31_0.svg" /></div>
 </div>
 <p>If we’re interested in seeing the locations of the knots, you might do</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;bkg&#39;</span><span class="p">)])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;bkg&#39;</span><span class="p">)])</span>
  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">knot_xvals</span><span class="p">,</span> <span class="n">knot_yvals</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;spline knots values&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2506,15 +2498,14 @@ good.</p>
 <p>which will generate be shown as</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_33_0.svg" src="_images/builtin_models_33_0.svg" />
-</div>
+<img alt="_images/builtin_models_33_0.svg" src="_images/builtin_models_33_0.svg" /></div>
 </div>
 <p>You might be interested in trying to assess what impact the select of the
 knots has on the resulting peak intensity.  For example, you might try some
 of the following set of knot values:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_xvals1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>         <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">knot_xvals1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>         <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
  <span class="n">knot_xvals2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>   <span class="mi">16</span><span class="p">,</span>   <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
  <span class="n">knot_xvals3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
 </pre></div>
@@ -2564,7 +2555,7 @@ Gaussian, the spline could fit the full curve.  By way of example, we’ll
 just try increasing the number of spline points to fit this data</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
  <span class="k">for</span> <span class="n">nknots</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">):</span>
      <span class="n">model</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;bkg_&#39;</span><span class="p">,</span>   <span class="n">xknots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">nknots</span><span class="p">))</span>
      <span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
@@ -2582,8 +2573,7 @@ just try increasing the number of spline points to fit this data</p>
 <p>which will show the fit below:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/builtin_models_36_0.svg" src="_images/builtin_models_36_0.svg" />
-</div>
+<img alt="_images/builtin_models_36_0.svg" src="_images/builtin_models_36_0.svg" /></div>
 </div>
 <p>By itself, 10 knots does not give a very good fit, but 25 knots or more
 does give a very good fit to the peak.  This should give some confidence
@@ -2624,8 +2614,8 @@ points to use.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

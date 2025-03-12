@@ -26,9 +26,7 @@ Fitting multiple (simulated) Gaussian data sets simultaneously.
 All minimizers require the residual array to be one-dimensional. Therefore, in
 the ``objective`` function we need to ``flatten`` the array before returning it.
 
-TODO: this could/should be using the Model interface / built-in models!
-
-.. GENERATED FROM PYTHON SOURCE LINES 13-45
+.. GENERATED FROM PYTHON SOURCE LINES 11-43
 
 .. code-block:: Python
 
@@ -71,11 +69,11 @@ TODO: this could/should be using the Model interface / built-in models!
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-47
+.. GENERATED FROM PYTHON SOURCE LINES 44-45
 
 Create five simulated Gaussian data sets
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-58
+.. GENERATED FROM PYTHON SOURCE LINES 45-56
 
 .. code-block:: Python
 
@@ -97,11 +95,11 @@ Create five simulated Gaussian data sets
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-60
+.. GENERATED FROM PYTHON SOURCE LINES 57-58
 
 Create five sets of fitting parameters, one per data set
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-66
+.. GENERATED FROM PYTHON SOURCE LINES 58-64
 
 .. code-block:: Python
 
@@ -118,12 +116,12 @@ Create five sets of fitting parameters, one per data set
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-69
+.. GENERATED FROM PYTHON SOURCE LINES 65-67
 
 Constrain the values of sigma to be the same for all peaks by assigning
 sig_2, ..., sig_5 to be equal to sig_1.
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-72
+.. GENERATED FROM PYTHON SOURCE LINES 67-70
 
 .. code-block:: Python
 
@@ -137,11 +135,11 @@ sig_2, ..., sig_5 to be equal to sig_1.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-74
+.. GENERATED FROM PYTHON SOURCE LINES 71-72
 
 Run the global fit and show the fitting result
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-77
+.. GENERATED FROM PYTHON SOURCE LINES 72-75
 
 .. code-block:: Python
 
@@ -184,11 +182,11 @@ Run the global fit and show the fitting result
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-79
+.. GENERATED FROM PYTHON SOURCE LINES 76-77
 
 Plot the data sets and fits
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-83
+.. GENERATED FROM PYTHON SOURCE LINES 77-81
 
 .. code-block:: Python
 
@@ -211,7 +209,7 @@ Plot the data sets and fits
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.229 seconds)
+   **Total running time of the script:** (0 minutes 0.307 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets.py:
@@ -227,10 +225,6 @@ Plot the data sets and fits
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_multi_datasets.py <example_fit_multi_datasets.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: example_fit_multi_datasets.zip <example_fit_multi_datasets.zip>`
 
 
 .. only:: html

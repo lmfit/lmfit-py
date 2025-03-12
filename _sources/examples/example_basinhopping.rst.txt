@@ -67,7 +67,7 @@ fitting algorithms too.
         Model(sine_decay)
     [[Fit Statistics]]
         # fitting method   = basinhopping
-        # function evals   = 24924
+        # function evals   = 25257
         # data points      = 201
         # variables        = 4
         chi-square         = 37.4526504
@@ -148,7 +148,7 @@ fitting algorithms too.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.289 seconds)
+   **Total running time of the script:** (0 minutes 3.740 seconds)
 
 
 .. _sphx_glr_download_examples_example_basinhopping.py:
@@ -164,10 +164,6 @@ fitting algorithms too.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_basinhopping.py <example_basinhopping.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: example_basinhopping.zip <example_basinhopping.zip>`
 
 
 .. only:: html

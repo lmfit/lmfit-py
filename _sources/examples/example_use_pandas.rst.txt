@@ -127,7 +127,7 @@ and plot below:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.290 seconds)
+   **Total running time of the script:** (0 minutes 0.352 seconds)
 
 
 .. _sphx_glr_download_examples_example_use_pandas.py:
@@ -143,10 +143,6 @@ and plot below:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_use_pandas.py <example_use_pandas.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: example_use_pandas.zip <example_use_pandas.zip>`
 
 
 .. only:: html

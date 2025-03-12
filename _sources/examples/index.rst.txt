@@ -21,7 +21,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of the DataFrame to lmfit.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th...">
 
 .. only:: html
 
@@ -38,7 +38,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models">
+    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit....">
 
 .. only:: html
 
@@ -55,7 +55,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (inequality) constraints are needed. In the example below the center of the Lorentzian peak is constrained to be between 0-5 away from the center of the Gaussian peak.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine...">
 
 .. only:: html
 
@@ -72,7 +72,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple problem.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob...">
 
 .. only:: html
 
@@ -89,7 +89,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even if the underlying algorithm in SciPy does not support this. For more information on how this is implemented, please refer to: https://lmfit.github.io/lmfit-py/bounds.html">
+    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even...">
 
 .. only:: html
 
@@ -123,7 +123,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minimizers. The default value is None (i.e., &quot;sum of squares of residual&quot;) - alternatives are: negentropy, neglogcauchy, or a user-specified callable. For more information please refer to: https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class">
+    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim...">
 
 .. only:: html
 
@@ -140,7 +140,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with SymPy and then apply that model to the data with lmfit. This example shows how to do that. Please note that this example requires both the sympy and matplotlib packages.">
+    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with...">
 
 .. only:: html
 
@@ -157,7 +157,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note that this can be used to compare other fitting algorithms too.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th...">
 
 .. only:: html
 
@@ -191,7 +191,24 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information please refer to: https://lmfit.github.io/lmfit-py/model.html#the-model-class.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously, using the Model interface.">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_example_fit_multi_datasets_Model-interface_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_example_fit_multi_datasets_Model-interface.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fit Multiple Data Sets Using Model Interface</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
 
 .. only:: html
 
@@ -225,7 +242,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess the influence of one point, we fit the dataset without the point and compare the result with the fit of the full dataset. The code below shows how to do this with lmfit. Note that the presented method is very basic.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th...">
 
 .. only:: html
 
@@ -259,7 +276,24 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and defining a custom Model class.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This examples shows a general way of fitting a model to y(x) data which has uncertainties in bo...">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_example_uncertainties_y_and_x_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_example_uncertainties_y_and_x.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fitting data with uncertainties in x and y</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def...">
 
 .. only:: html
 
@@ -276,7 +310,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was removed in emcee v3...">
+    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was...">
 
 .. only:: html
 
@@ -288,6 +322,23 @@ below currently do *not* follow these guidelines yet.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Model Selection using lmfit and emcee</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Providing a function that calculates the Jacobian matrix analytically can reduce the time spent...">
+
+.. only:: html
+
+  .. image:: /examples/images/thumb/sphx_glr_example_fit_jacobian_benchmark_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_example_fit_jacobian_benchmark.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Benchmarks of methods with and without computing the Jacobian analytically</div>
     </div>
 
 
@@ -362,12 +413,15 @@ below currently do *not* follow these guidelines yet.
    /examples/example_sympy
    /examples/example_basinhopping
    /examples/example_fit_multi_datasets
+   /examples/example_fit_multi_datasets_Model-interface
    /examples/example_Model_interface
    /examples/example_fit_with_derivfunc
    /examples/example_detect_outliers
    /examples/example_emcee_Model_interface
+   /examples/example_uncertainties_y_and_x
    /examples/example_complex_resonator_model
    /examples/lmfit_emcee_model_selection
+   /examples/example_fit_jacobian_benchmark
    /examples/example_confidence_interval
    /examples/example_two_dimensional_peak
    /examples/example_brute

@@ -51,7 +51,7 @@ Model - uncertainty pred
         amp:    82.4660404 +/- 0.99770817 (1.21%) (init = 90)
         off:    51.3218514 +/- 1.83125060 (3.57%) (init = 50)
         tau:    3.05525924 +/- 0.11068420 (3.62%) (init = 2)
-        gamma:  2.25386376 +/- 0.43544396 (19.32%) (init = 2)
+        gamma:  2.25386377 +/- 0.43544396 (19.32%) (init = 2)
     [[Correlations]] (unreported correlations are < 0.100)
         C(off, gamma) = +0.8634
         C(amp, gamma) = -0.7706
@@ -174,7 +174,7 @@ Model - uncertainty pred
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.236 seconds)
+   **Total running time of the script:** (0 minutes 0.320 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty_pred.py:
@@ -190,10 +190,6 @@ Model - uncertainty pred
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_uncertainty_pred.py <model_uncertainty_pred.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: model_uncertainty_pred.zip <model_uncertainty_pred.zip>`
 
 
 .. only:: html

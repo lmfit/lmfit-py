@@ -81,7 +81,7 @@ Model - with iter callback
      ITER  42 ['peak_amplitude = 39.94969', 'peak_center = 11.63266', 'peak_sigma = 17.05445', 'bkg_slope = -0.30912', 'bkg_intercept = 4.82241', 'peak_fwhm = 40.16016', 'peak_height = 0.93451']
      ITER  43 ['peak_amplitude = 39.94969', 'peak_center = 11.63266', 'peak_sigma = 17.05427', 'bkg_slope = -0.30911', 'bkg_intercept = 4.82241', 'peak_fwhm = 40.15974', 'peak_height = 0.93452']
      ITER  44 ['peak_amplitude = 39.94969', 'peak_center = 11.63266', 'peak_sigma = 17.05427', 'bkg_slope = -0.30912', 'bkg_intercept = 4.82246', 'peak_fwhm = 40.15974', 'peak_height = 0.93452']
-     ITER  45 ['peak_amplitude = 43.44365', 'peak_center = 7.65269', 'peak_sigma = 0.17915', 'bkg_slope = -0.30320', 'bkg_intercept = 3.85514', 'peak_fwhm = 0.42187', 'peak_height = 96.74097']
+     ITER  45 ['peak_amplitude = 43.44365', 'peak_center = 7.65269', 'peak_sigma = 0.17915', 'bkg_slope = -0.30320', 'bkg_intercept = 3.85514', 'peak_fwhm = 0.42188', 'peak_height = 96.74094']
      ITER  46 ['peak_amplitude = 40.21652', 'peak_center = 11.53095', 'peak_sigma = 15.41291', 'bkg_slope = -0.30665', 'bkg_intercept = 4.70376', 'peak_fwhm = 36.29462', 'peak_height = 1.04095']
      ITER  47 ['peak_amplitude = 40.21693', 'peak_center = 11.53095', 'peak_sigma = 15.41291', 'bkg_slope = -0.30665', 'bkg_intercept = 4.70376', 'peak_fwhm = 36.29462', 'peak_height = 1.04096']
      ITER  48 ['peak_amplitude = 40.21652', 'peak_center = 11.53065', 'peak_sigma = 15.41291', 'bkg_slope = -0.30665', 'bkg_intercept = 4.70376', 'peak_fwhm = 36.29462', 'peak_height = 1.04095']
@@ -219,7 +219,7 @@ Model - with iter callback
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.212 seconds)
+   **Total running time of the script:** (0 minutes 0.278 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_iter_callback.py:
@@ -235,10 +235,6 @@ Model - with iter callback
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_with_iter_callback.py <model_with_iter_callback.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: model_with_iter_callback.zip <model_with_iter_callback.zip>`
 
 
 .. only:: html

@@ -372,7 +372,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.648 seconds)
+   **Total running time of the script:** (0 minutes 2.970 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:
@@ -388,10 +388,6 @@ The process of making plots to check it worked is the same as before.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_two_dimensional_peak.py <example_two_dimensional_peak.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: example_two_dimensional_peak.zip <example_two_dimensional_peak.zip>`
 
 
 .. only:: html

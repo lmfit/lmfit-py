@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/documentation_options.js?v=28d163b9"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -164,7 +164,7 @@ model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
 sine wave, and so write an objective function like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
@@ -182,10 +182,10 @@ sine wave, and so write an objective function like this:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.14.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
 
 <span class="c1"># generate synthetic data with noise</span>
@@ -256,7 +256,7 @@ relying on the solver to support bounds itself.</p></li>
 for the decaying sine wave as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
 
@@ -294,7 +294,7 @@ separation of the objective function from the code using it.</p>
 </div>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 </pre></div>
@@ -313,7 +313,7 @@ Parameters can be fixed or bounded; setting attributes to control this
 behavior can be done during definition, as with:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
@@ -333,7 +333,7 @@ can be accomplished by providing a dictionary of attribute values to
 </div>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
                        <span class="n">decay</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.007</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
                        <span class="n">phase</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                        <span class="n">frequency</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
@@ -346,7 +346,7 @@ can be accomplished by providing a dictionary of attribute values to
 <p>Parameter attributes can also be modified after they have been created:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.10</span>
 </pre></div>
 </div>
@@ -400,8 +400,8 @@ determination of Parameters confidence levels.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

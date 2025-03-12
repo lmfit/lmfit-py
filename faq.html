@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/documentation_options.js?v=28d163b9"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -108,12 +108,10 @@
     <ul>
 <li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
 <li><a class="reference internal" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
-<li><a class="reference internal" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
-<li><a class="reference internal" href="#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
+<li><a class="reference internal" href="#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li><a class="reference internal" href="#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
 <li><a class="reference internal" href="#how-can-i-fit-multiple-data-sets">How can I fit multiple data sets?</a></li>
 <li><a class="reference internal" href="#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
-<li><a class="reference internal" href="#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li><a class="reference internal" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit. What can I do?</a><ul>
 <li><a class="reference internal" href="#nan-policy"><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code></a></li>
 <li><a class="reference internal" href="#common-sources-of-nan">Common sources of NaN</a></li>
@@ -122,6 +120,8 @@
 <li><a class="reference internal" href="#why-are-parameter-values-sometimes-stuck-at-initial-values">Why are Parameter values sometimes stuck at initial values?</a></li>
 <li><a class="reference internal" href="#why-are-uncertainties-in-parameters-sometimes-not-determined">Why are uncertainties in Parameters sometimes not determined?</a></li>
 <li><a class="reference internal" href="#can-parameters-be-used-for-array-indices-or-discrete-values">Can Parameters be used for Array Indices or Discrete Values?</a></li>
+<li><a class="reference internal" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
+<li><a class="reference internal" href="#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
 </ul>
 </li>
 </ul>
@@ -157,31 +157,28 @@
             
   <section id="frequently-asked-questions">
 <span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">¶</a></h1>
-<p>A list of common questions.</p>
+<p>A list of common questions and responses.</p>
 <section id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
 <h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Link to this heading">¶</a></h2>
 <p>See <a class="reference internal" href="support.html#support-chapter"><span class="std std-ref">Getting Help</span></a>.</p>
 </section>
-<section id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
-<h2>Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?<a class="headerlink" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0" title="Link to this heading">¶</a></h2>
-<p>See <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span class="std std-ref">Version 0.9.0 Release Notes</span></a>.</p>
-</section>
-<section id="i-get-import-errors-from-ipython">
-<h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Link to this heading">¶</a></h2>
-<p>If you see something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
-
-<span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;widgets&#39;</span>
-</pre></div>
-</div>
-<p>then you need to install the <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> package, try: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipywidgets</span></code>.</p>
+<section id="how-should-i-cite-lmfit">
+<h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Link to this heading">¶</a></h2>
+<p>To cite LMFIT, see <a class="reference external" href="https://doi.org/10.5281/zenodo.598352">https://doi.org/10.5281/zenodo.598352</a></p>
+<p>Each release will have its own DOI, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Version 1.3.3  <a class="reference external" href="https://zenodo.org/records/15014437">https://zenodo.org/records/15014437</a></p></li>
+<li><p>Version 1.3.2  <a class="reference external" href="https://zenodo.org/records/12785036">https://zenodo.org/records/12785036</a></p></li>
+</ul>
+</div></blockquote>
 </section>
 <section id="how-can-i-fit-multi-dimensional-data">
 <h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Link to this heading">¶</a></h2>
 <p>The fitting routines accept data arrays that are one-dimensional and double
 precision. So you need to convert the data and model (or the value
 returned by the objective function) to be one-dimensional. A simple way to
-do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
+do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -194,7 +191,7 @@ do this is to use <a class="extlink-numpydoc reference external" href="https://d
 <p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision. So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one-dimensional. A
-simple way to do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
+simple way to do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -215,7 +212,7 @@ different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision, floating point numbers. The simplest approach is to use
-<a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -230,11 +227,6 @@ that returns a complex vector. It will automatically apply the above
 prescription when calculating the residual. The benefit to this method
 is that you also get access to the plot routines from the ModelResult
 class, which are also complex-aware.</p>
-</section>
-<section id="how-should-i-cite-lmfit">
-<h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Link to this heading">¶</a></h2>
-<p>For LMFIT 1.3.2, use <a class="reference external" href="https://doi.org/10.5281/zenodo.12785036">https://doi.org/10.5281/zenodo.12785036</a>.</p>
-<p>For other versions, see <a class="reference external" href="https://zenodo.org/records/12785036">https://zenodo.org/records/12785036</a></p>
 </section>
 <section id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
 <h2>I get errors from NaN in my fit. What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Link to this heading">¶</a></h2>
@@ -360,7 +352,7 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
 <p>That you implement with a model function and use to fit data like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">lmfit</span>
 
@@ -392,19 +384,19 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 30
+    # function evals   = 15
     # data points      = 101
     # variables        = 4
-    chi-square         = 3.76233125
-    reduced chi-square = 0.03878692
-    Akaike info crit   = -324.298256
-    Bayesian info crit = -313.837773
-    R-squared          = 0.99998939
+    chi-square         = 4.24552058
+    reduced chi-square = 0.04376825
+    Akaike info crit   = -312.094863
+    Bayesian info crit = -301.634381
+    R-squared          = 0.99998804
 [[Variables]]
-    x0:  21.9999918 +/- 1.8426e-05 (0.00%) (init = 22)
-    a:   2.03296562 +/- 0.04073087 (2.00%) (init = 1)
-    b:   0.01999198 +/- 7.9466e-06 (0.04%) (init = 1)
-    c:   9.31498098 +/- 0.04198859 (0.45%) (init = 1)
+    x0:  21.9999995 +/- 1.9528e-05 (0.00%) (init = 22)
+    a:   2.00562197 +/- 0.04326739 (2.16%) (init = 1)
+    b:   0.02000323 +/- 8.4415e-06 (0.04%) (init = 1)
+    c:   9.28771126 +/- 0.04460343 (0.48%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(a, b)  = -0.8368
     C(x0, a) = +0.1871
@@ -428,7 +420,7 @@ The amount of leakage or width of the step can also be adjusted.</p>
 look like this and give better fit results:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erf</span>
 
 <span class="kn">import</span> <span class="nn">lmfit</span>
@@ -464,23 +456,23 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 79
+    # function evals   = 36
     # data points      = 101
     # variables        = 4
-    chi-square         = 0.89636203
-    reduced chi-square = 0.00924085
-    Akaike info crit   = -469.177672
-    Bayesian info crit = -458.717190
-    R-squared          = 0.99999747
+    chi-square         = 0.88264293
+    reduced chi-square = 0.00909941
+    Akaike info crit   = -470.735461
+    Bayesian info crit = -460.274978
+    R-squared          = 0.99999751
 [[Variables]]
-    x0:  19.1662782 +/- 0.38013036 (1.98%) (init = 22)
-    a:   2.03540224 +/- 0.01918472 (0.94%) (init = 1)
-    b:   0.01999287 +/- 3.7906e-06 (0.02%) (init = 1)
-    c:   9.20433010 +/- 0.02193768 (0.24%) (init = 1)
+    x0:  19.0836907 +/- 0.41286434 (2.16%) (init = 22)
+    a:   2.02667453 +/- 0.01896138 (0.94%) (init = 1)
+    b:   0.01999498 +/- 3.7519e-06 (0.02%) (init = 1)
+    c:   9.21394967 +/- 0.02188802 (0.24%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8284
-    C(x0, a) = +0.1749
-    C(x0, b) = -0.1402
+    C(a, b)  = -0.8274
+    C(x0, a) = +0.1597
+    C(x0, b) = -0.1278
 </pre></div>
 </div>
 </div>
@@ -488,6 +480,20 @@ look like this and give better fit results:</p>
 <p>The natural width of the error function is about 2 <code class="docutils literal notranslate"><span class="pre">x</span></code> units, but you can
 adjust this, shortening it with <code class="docutils literal notranslate"><span class="pre">erf((x-x0)*2)</span></code> to give a sharper
 transition for example.</p>
+</section>
+<section id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
+<h2>Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?<a class="headerlink" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span class="std std-ref">Version 0.9.0 Release Notes</span></a>.</p>
+</section>
+<section id="i-get-import-errors-from-ipython">
+<h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Link to this heading">¶</a></h2>
+<p>If you see something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
+
+<span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;widgets&#39;</span>
+</pre></div>
+</div>
+<p>then you need to install the <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> package, try: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipywidgets</span></code>.</p>
 </section>
 </section>
 
@@ -522,8 +528,8 @@ transition for example.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

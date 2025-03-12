@@ -110,7 +110,7 @@ Model - two components
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.192 seconds)
+   **Total running time of the script:** (0 minutes 0.254 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:
@@ -126,10 +126,6 @@ Model - two components
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_two_components.py <model_two_components.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: model_two_components.zip <model_two_components.zip>`
 
 
 .. only:: html

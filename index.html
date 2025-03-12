@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/documentation_options.js?v=28d163b9"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -99,7 +99,7 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3 style="text-align:center;">Getting LMFIT</h3>
-<p>Current version: <b><a href="whatsnew.html">1.3.2</b></a></p>
+<p>Current version: <b><a href="whatsnew.html">1.3.3</b></a></p>
 <p>Install:  &nbsp; <tt>pip install lmfit</tt>
 <p>Download: &nbsp; <a href="https://pypi.python.org/pypi/lmfit/">PyPI</a>
 <p>Develop:  &nbsp; <a href="https://github.com/lmfit/lmfit-py/">GitHub</a> <br>
@@ -141,7 +141,7 @@
 fitting problems for Python. It builds on and extends many of the
 optimization methods of <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>. Initially inspired by (and
 named for) extending the <a class="reference external" href="https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> method from
-<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, lmfit now provides a number of useful
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, lmfit now provides a number of useful
 enhancements to optimization and data fitting problems, including:</p>
 <blockquote>
 <div><ul class="simple">
@@ -156,7 +156,7 @@ standard error, after a fit that can estimate uncertainties.</p></li>
 one can change the fitting algorithm used to find the optimal solution
 without changing the objective function.</p></li>
 <li><p>Improved estimation of confidence intervals. While
-<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> will automatically calculate
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> will automatically calculate
 uncertainties and correlations from the covariance matrix, the accuracy
 of these estimates is sometimes questionable. To help address this,
 lmfit has functions to explicitly explore parameter space and determine
@@ -165,7 +165,7 @@ will use the <code class="docutils literal notranslate"><span class="pre">numdif
 uncertainties and correlations for algorithms that do not natively
 support this in SciPy.</p></li>
 <li><p>Improved curve-fitting with the <a class="reference internal" href="model.html#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class. This
-extends the capabilities of <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, allowing
+extends the capabilities of <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, allowing
 you to turn a function that models your data into a Python class
 that helps you parametrize and fit data with that model.</p></li>
 <li><p>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><span class="std std-ref">built-in models</span></a> for common
@@ -191,16 +191,16 @@ participating in this effort please use the <a class="reference external" href="
 <li class="toctree-l1"><a class="reference internal" href="support.html">Getting Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multiple-data-sets">How can I fit multiple data sets?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit. What can I do?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-are-parameter-values-sometimes-stuck-at-initial-values">Why are Parameter values sometimes stuck at initial values?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-are-uncertainties-in-parameters-sometimes-not-determined">Why are uncertainties in Parameters sometimes not determined?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#can-parameters-be-used-for-array-indices-or-discrete-values">Can Parameters be used for Array Indices or Discrete Values?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a><ul>
@@ -261,6 +261,7 @@ participating in this effort please use the <a class="reference external" href="
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-3-3-release-notes-2025-march-12">Version 1.3.3 Release Notes (2025-March-12)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-3-2-release-notes-july-19-2024">Version 1.3.2 Release Notes (July 19, 2024)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-3-1-release-notes-april-19-2024">Version 1.3.1 Release Notes (April 19, 2024)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-3-0-release-notes-april-4-2024">Version 1.3.0 Release Notes (April 4, 2024)</a></li>
@@ -319,8 +320,8 @@ participating in this effort please use the <a class="reference external" href="
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

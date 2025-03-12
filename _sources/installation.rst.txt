@@ -32,12 +32,12 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~
 
-Lmfit works with `Python`_ versions 3.8 and higher. Version
+Lmfit works with `Python`_ versions 3.9 and higher. Version
 0.9.15 is the final version to support Python 2.7.
 
 Lmfit requires the following Python packages, with versions given:
-   * `NumPy`_ version 1.23 or higher.
-   * `SciPy`_ version 1.8 or higher.
+   * `NumPy`_ version 1.24 or higher.
+   * `SciPy`_ version 1.10 or higher.
    * `asteval`_ version 1.0 or higher.
    * `uncertainties`_ version 3.2.2 or higher.
    * `dill`_ version 0.3.4 or higher.

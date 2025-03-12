@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="_static/documentation_options.js?v=28d163b9"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
@@ -176,7 +176,7 @@ functions. The constraint expressions are simple Python statements,
 allowing one to place constraints like:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
 
 <span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -218,7 +218,7 @@ as are several supported mathematical and trigonometric function:</p>
 expressions. Thus, with parameters for a few peak-like functions:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;cen_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;wid_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
@@ -231,7 +231,7 @@ expressions. Thus, with parameters for a few peak-like functions:</p>
 <p>The following expression are all valid:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(2.0 - amp_1**2)&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(2.0 - amp_1**2)&#39;</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;wid_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;sqrt(pi)*wid_1&#39;</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;cen_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;cen_1 * wid_2 / max(wid_1, 0.001)&#39;</span><span class="p">)</span>
 </pre></div>
@@ -244,7 +244,7 @@ expressions. Thus, with parameters for a few peak-like functions:</p>
 is that Python’s 1-line <em>if expression</em> is supported:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;param_a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;param_a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;param_b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;test_val&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
@@ -258,7 +258,7 @@ is that Python’s 1-line <em>if expression</em> is supported:</p>
 <p>which is equivalent to the more familiar:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;test_val&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">/</span><span class="mf">2.</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;test_val&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">/</span><span class="mf">2.</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
     <span class="n">bounded</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;param_a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">bounded</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;param_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -281,7 +281,7 @@ freely varying parameter <code class="docutils literal notranslate"><span class=
 define parameter <code class="docutils literal notranslate"><span class="pre">y</span></code> as <code class="docutils literal notranslate"><span class="pre">delta</span> <span class="pre">-</span> <span class="pre">x</span></code>:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;delta-x&#39;</span><span class="p">)</span>
@@ -323,7 +323,7 @@ dictionary. That means you can preload any Python symbol into the namespace
 for the constraints, for example this Lorentzian function:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
     <span class="s2">&quot;lorentzian function: wid = half-width at half-max&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
@@ -336,7 +336,7 @@ for the constraints, for example this Lorentzian function:</p>
 the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> class:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
 
 <span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">_asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s1">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
@@ -349,7 +349,7 @@ the <code class="xref py py-class docutils literal notranslate"><span class="pre
 <p>and then initialize the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class with this parameter set:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span>
 
 
 <span class="k">def</span> <span class="nf">userfcn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
@@ -368,7 +368,7 @@ add the function to the <a class="reference external" href="https://newville.git
 afterwards:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">userfcn</span><span class="p">,</span> <span class="n">pars</span><span class="p">)</span>
 <span class="n">fitter</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">_asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s1">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
 </pre></div>
@@ -413,8 +413,8 @@ used in constraint expressions.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.6.
+    &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

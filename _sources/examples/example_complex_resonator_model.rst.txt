@@ -214,9 +214,9 @@ And now fit the data using the ``guess``-ed values as a starting point:
         reduced chi-square = 4.3539e-04
         Akaike info crit   = -1543.89425
         Bayesian info crit = -1530.70099
-        R-squared          = (-12528141463701.6+2276419599932.454j)
+        R-squared          = (-12528141463346.541+2276419597604.5474j)
     [[Variables]]
-        f_0:       100.000096 +/- 7.0308e-05 (0.00%) (init = 100.0035)
+        f_0:       100.000096 +/- 7.0309e-05 (0.00%) (init = 100.0035)
         Q:         10059.4972 +/- 142.294636 (1.41%) (init = 3146.538)
         Q_e_real:  9180.62017 +/- 133.777681 (1.46%) (init = 5082.247)
         Q_e_imag: -9137.03667 +/- 133.769692 (1.46%) (init = 0)
@@ -295,7 +295,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.557 seconds)
+   **Total running time of the script:** (0 minutes 0.760 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
@@ -311,10 +311,6 @@ for plotting complex quantities:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-zip
-
-      :download:`Download zipped: example_complex_resonator_model.zip <example_complex_resonator_model.zip>`
 
 
 .. only:: html
