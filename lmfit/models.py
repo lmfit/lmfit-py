@@ -1428,7 +1428,7 @@ class DoniachModel(Model):
 
         f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma^{1-\gamma}}
         \frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
-        \arctan{((x - \mu)}/\sigma)\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+        \arctan{((x - \mu)/\sigma)}\bigr]} {\bigl[1 + {((x-\mu)/\sigma)}^2\bigr]^{(1-\gamma)/2}}
 
     For more information, see:
     https://www.casaxps.com/help_manual/line_shapes.htm
