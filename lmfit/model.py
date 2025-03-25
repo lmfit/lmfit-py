@@ -293,7 +293,7 @@ class Model:
 
         self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
-        self._func_allargs = []
+        self._func_allargs = set()
         self._func_haskeywords = False
         self.nan_policy = nan_policy
 
@@ -548,10 +548,10 @@ class Model:
         # inspection done
 
         self._func_haskeywords = keywords_ is not None
-        self._func_allargs = list(default_vals.keys())
+        self._func_allargs = set(default_vals.keys())
         for key in kw_args:
             if key not in self._func_allargs:
-                self._func_allargs.append(key)
+                self._func_allargs.add(key)
 
         if len(self._func_allargs) == 0 and keywords_ is not None:
             return
@@ -1275,7 +1275,7 @@ class CompositeModel(Model):
     def _parse_params(self):
         self._func_haskeywords = (self.left._func_haskeywords or
                                   self.right._func_haskeywords)
-        self._func_allargs = (self.left._func_allargs +
+        self._func_allargs = set(self.left._func_allargs +
                               self.right._func_allargs)
         self.def_vals = deepcopy(self.right.def_vals)
         self.def_vals.update(self.left.def_vals)
