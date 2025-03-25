@@ -1275,8 +1275,8 @@ class CompositeModel(Model):
     def _parse_params(self):
         self._func_haskeywords = (self.left._func_haskeywords or
                                   self.right._func_haskeywords)
-        self._func_allargs = set(self.left._func_allargs +
-                              self.right._func_allargs)
+        self._func_allargs = (set(self.left._func_allargs)
+                                .union(self.right._func_allargs))
         self.def_vals = deepcopy(self.right.def_vals)
         self.def_vals.update(self.left.def_vals)
         self.opts = deepcopy(self.right.opts)
