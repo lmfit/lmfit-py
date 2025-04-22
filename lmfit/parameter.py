@@ -574,7 +574,7 @@ class Parameters(dict):
             stderr = getattr(par, 'stderr', 0.0)
             if stderr is None:
                 stderr = 0.00
-            if stderr < 1.e-13*abs(par.value):
+            if stderr < tiny*max(tiny, abs(par.value)):
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
                     uvars[par.name] = ufloat(par.value, stderr)
@@ -596,7 +596,6 @@ class Parameters(dict):
             # parameters and reset the Parameters to best-fit value
             wrap_ueval = uwrap(asteval_with_uncertainties)
             for par in self.values():
-                print("xPAR ", par)
                 if getattr(par, '_expr_ast', None) is not None:
                     try:
                         uval = wrap_ueval(*corr_uvars, obj=par,
