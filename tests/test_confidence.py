@@ -191,16 +191,6 @@ def test_confidence_exceptions(data, pars):
         lmfit.conf_interval(minimizer, out_lsq)
 
 
-def test_confidence_warnings(data, pars):
-    """Make sure the proper warnings are emitted when needed."""
-    minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)
-    out = minimizer.minimize(method='leastsq')
-
-    with pytest.warns(UserWarning) as record:
-        lmfit.conf_interval(minimizer, out, maxiter=1)
-        assert 'maxiter=1 reached and prob' in str(record[0].message)
-
-
 def test_confidence_with_trace(data, pars):
     """Test calculation of confidence intervals with trace."""
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)

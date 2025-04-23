@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import json
+import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
@@ -572,8 +573,13 @@ class Parameters(dict):
                     par.stderr = sqrt(covar[vindex, vindex])
             stderr = getattr(par, 'stderr', 0.0)
             if stderr is None:
-                stderr = 0.0
-            uvars[par.name] = ufloat(par.value, stderr)
+                stderr = 0.00
+            if stderr < tiny*max(tiny, abs(par.value)):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    uvars[par.name] = ufloat(par.value, stderr)
+            else:
+                uvars[par.name] = ufloat(par.value, stderr)
 
         corr_uvars = None
         if covar is not None:
