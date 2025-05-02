@@ -16,10 +16,11 @@ s2 = sqrt(2.0)
 tiny = 1.0e-15
 
 functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
-             'moffat', 'pearson4', 'pearson7', 'breit_wigner', 'damped_oscillator',
-             'dho', 'logistic', 'lognormal', 'students_t', 'expgaussian',
-             'doniach', 'skewed_gaussian', 'skewed_voigt',
-             'thermal_distribution', 'step', 'rectangle', 'exponential',
+             'moffat', 'pearson4', 'pearson7', 'breit_wigner',
+             'damped_oscillator', 'dho', 'logistic', 'lognormal',
+             'students_t', 'expgaussian', 'doniach', 'skewed_gaussian',
+             'skewed_voigt', 'thermal_distribution', 'boltzmann',
+             'bose', 'fermi', 'step', 'rectangle', 'exponential',
              'powerlaw', 'linear', 'parabolic', 'sine', 'expsine',
              'split_lorentzian')
 
@@ -410,6 +411,57 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
         raise ValueError(msg)
 
     return real(1/(amplitude*exp((x - center)/not_zero(kt)) + offset + tiny*1j))
+
+
+def boltzmann(x, amplitude=1.0, center=0.0, kt=1.0):
+    """Return a Maxwell-Boltzmann thermal distribution function.
+
+    boltzmann(x, amplitude=1.0, center=0.0, kt=1.0) =  amplitude/(exp((x - center)/kt)
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x`. The Boltzmann
+      constant is ``kB = 8.617e-5 eV/K``.
+
+    See Also
+    --------
+    thermal_distribution, bose, fermi
+    """
+    return amplitude/(exp((x - center)/not_zero(kt)))
+
+
+def bose(x, amplitude=1.0, center=0.0, kt=1.0):
+    """Return a Bose-Einstein thermal distribution function.
+
+    bose(x, amplitude=1.0, center=0.0, kt=1.0) =  amplitude/(exp((x - center)/kt) - 1)
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x`. The Boltzmann
+      constant is ``kB = 8.617e-5 eV/K``.
+
+    See Also
+    --------
+    thermal_distribution, boltzmann, fermi
+    """
+    return amplitude/(exp((x - center)/not_zero(kt)) - 1)
+
+
+def fermi(x, amplitude=1.0, center=0.0, kt=1.0):
+    """Return a Fermi-Dirac thermal distribution function.
+
+    fermi(x, amplitude=1.0, center=0.0, kt=1.0) =  amplitude/(exp((x - center)/kt) -+ 1)
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x`. The Boltzmann
+      constant is ``kB = 8.617e-5 eV/K``.
+
+    See Also
+    --------
+    thermal_distribution, boltzmann, bose
+    """
+    return amplitude/(exp((x - center)/not_zero(kt)) + 1)
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
