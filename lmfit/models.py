@@ -6,12 +6,13 @@ import numpy as np
 from scipy.interpolate import splev, splrep
 
 from . import lineshapes
-from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
-                         expgaussian, exponential, gaussian, gaussian2d,
-                         linear, lognormal, lorentzian, moffat, parabolic,
-                         pearson4, pearson7, powerlaw, pvoigt, rectangle, sine,
-                         skewed_gaussian, skewed_voigt, split_lorentzian, step,
-                         students_t, thermal_distribution, tiny, voigt)
+from .lineshapes import (boltzmann, bose, breit_wigner, damped_oscillator, dho,
+                         doniach, expgaussian, exponential, fermi, gaussian,
+                         gaussian2d, linear, lognormal, lorentzian, moffat,
+                         parabolic, pearson4, pearson7, powerlaw, pvoigt,
+                         rectangle, sine, skewed_gaussian, skewed_voigt,
+                         split_lorentzian, step, students_t,
+                         thermal_distribution, tiny, voigt)
 from .model import Model
 
 tau = 2.0 * np.pi
@@ -92,6 +93,15 @@ def guess_from_peak2d(model, z, x, y, negative):
     pars[f'{model.prefix}sigmax'].set(min=0.0)
     pars[f'{model.prefix}sigmay'].set(min=0.0)
     return pars
+
+
+def guess_thermal(model, y, x):
+    "guess params for thermal distribution"
+    center = np.mean(x)
+    kt = (max(x) - min(x))/10
+    amplitude = y.max() * np.exp((x.min() - center)/max(1.e-15, kt))
+    pars = model.make_params()
+    return update_param_vals(pars, model.prefix, amplitude=amplitude, center=center, kt=kt)
 
 
 def update_param_vals(pars, prefix, **kwargs):
@@ -535,13 +545,6 @@ class GaussianModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
-#     def post_fit(self, result):
-#         addpar = result.params.add
-#         prefix = self.prefix
-#
-#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr(self))
-#         addpar(name=f'{prefix}height', expr=height_expr(self))
-
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
@@ -595,20 +598,6 @@ class Gaussian2dModel(Model):
         expr = fmt.format(tiny=tiny, factor=self.height_factor, prefix=self.prefix)
         self.set_param_hint('height', expr=expr)
 
-#     def post_fit(self, result):
-#         addpar = result.params.add
-#         prefix = self.prefix
-#         result.params.add(name=f'{prefix}fwhm', expr=fwhm_expr(self))
-#         result.params.add(name=f'{prefix}height', expr=height_expr(self))
-#
-#         expr = fwhm_expr(self)
-#         addpar('{prefix}fwhmx', expr=expr.replace('sigma', 'sigmax'))
-#         addpar('{prefix}fwhmy', expr=expr.replace('sigma', 'sigmay'))
-#         fmt = ("{factor:.7f}*{prefix:s}amplitude/(max({tiny}, {prefix:s}sigmax)"
-#                + "*max({tiny}, {prefix:s}sigmay))")
-#         expr = fmt.format(tiny=tiny, factor=self.height_factor, prefix=prefix)
-#         addpar(f'{prefix}height', expr=expr)
-
     def guess(self, data, x, y, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak2d(self, data, x, y, negative)
@@ -653,12 +642,6 @@ class LorentzianModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
-
-#     def post_fit(self, result):
-#         addpar = result.params.add
-#         prefix = self.prefix
-#         addpar(name=f'{prefix}fwhm', expr=fwhm_expr(self))
-#         addpar(name=f'{prefix}height', expr=height_expr(self))
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1406,11 +1389,91 @@ class ThermalDistributionModel(Model):
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
-        center = np.mean(x)
-        kt = (max(x) - min(x))/10
+        return guess_thermal(self, data, x)
 
-        pars = self.make_params()
-        return update_param_vals(pars, self.prefix, center=center, kt=kt)
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class BoltzmannModel(Model):
+    r"""Return a Maxwell-Boltzmann thermal distribution function, with functional form:
+
+    .. math::
+        :nowrap:
+
+        \begin{equation}
+         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) } \\
+        \end{equation}
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x` (:math:`k_B =
+      8.617\times10^{-5}` eV/K).
+    """
+    def __init__(self, prefix='', nan_policy='raise', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
+        super().__init__(boltzmann, **kwargs)
+        self._set_paramhints_prefix()
+
+    def guess(self, data, x, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        return guess_thermal(self, data, x)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class BoseModel(Model):
+    r"""Return a Bose-Einstein thermal distribution function, with functional form:
+
+    .. math::
+        :nowrap:
+
+        \begin{equation}
+         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) - 1} \\
+        \end{equation}
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x` (:math:`k_B =
+      8.617\times10^{-5}` eV/K).
+    """
+    def __init__(self, prefix='', nan_policy='raise', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
+        super().__init__(bose, **kwargs)
+        self._set_paramhints_prefix()
+
+    def guess(self, data, x, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        return guess_thermal(self, data, x)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class FermiModel(Model):
+    r"""Return a Fermi-Dirac thermal distribution function, with functional form:
+
+    .. math::
+        :nowrap:
+
+        \begin{equation}
+         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) + 1} \\
+        \end{equation}
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x` (:math:`k_B =
+      8.617\times10^{-5}` eV/K).
+    """
+    def __init__(self, prefix='', nan_policy='raise', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
+        super().__init__(fermi, **kwargs)
+        self._set_paramhints_prefix()
+
+    def guess(self, data, x, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        return guess_thermal(self, data, x)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
@@ -1798,6 +1861,9 @@ lmfit_models = {'Constant': ConstantModel,
                 'Skewed Gaussian': SkewedGaussianModel,
                 'Skewed Voigt': SkewedVoigtModel,
                 'Thermal Distribution': ThermalDistributionModel,
+                'Maxwell-Boltzmannn Distribution': BoltzmannModel,
+                'Bose-Einstein Distribution': BoseModel,
+                'Fermi-Dirac Distribution': FermiModel,
                 'Doniach': DoniachModel,
                 'Power Law': PowerLawModel,
                 'Exponential': ExponentialModel,
