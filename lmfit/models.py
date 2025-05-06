@@ -6,13 +6,12 @@ import numpy as np
 from scipy.interpolate import splev, splrep
 
 from . import lineshapes
-from .lineshapes import (boltzmann, bose, breit_wigner, damped_oscillator, dho,
-                         doniach, expgaussian, exponential, fermi, gaussian,
-                         gaussian2d, linear, lognormal, lorentzian, moffat,
-                         parabolic, pearson4, pearson7, powerlaw, pvoigt,
-                         rectangle, sine, skewed_gaussian, skewed_voigt,
-                         split_lorentzian, step, students_t,
-                         thermal_distribution, tiny, voigt)
+from .lineshapes import (bose, breit_wigner, damped_oscillator, dho, doniach,
+                         expgaussian, exponential, fermi, gaussian, gaussian2d,
+                         linear, lognormal, lorentzian, moffat, parabolic,
+                         pearson4, pearson7, powerlaw, pvoigt, rectangle, sine,
+                         skewed_gaussian, skewed_voigt, split_lorentzian, step,
+                         students_t, thermal_distribution, tiny, voigt)
 from .model import Model
 
 tau = 2.0 * np.pi
@@ -100,8 +99,7 @@ def guess_thermal(model, y, x):
     center = np.mean(x)
     kt = (max(x) - min(x))/10
     amplitude = y.max() * np.exp((x.min() - center)/max(1.e-15, kt))
-    pars = model.make_params()
-    return update_param_vals(pars, model.prefix, amplitude=amplitude, center=center, kt=kt)
+    return model.make_params(amplitude=amplitude, center=center, kt=kt)
 
 
 def update_param_vals(pars, prefix, **kwargs):
@@ -1395,34 +1393,6 @@ class ThermalDistributionModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
-class BoltzmannModel(Model):
-    r"""Return a Maxwell-Boltzmann thermal distribution function, with functional form:
-
-    .. math::
-        :nowrap:
-
-        \begin{equation}
-         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) } \\
-        \end{equation}
-
-    Notes
-    -----
-    - `kt` should be defined in the same units as `x` (:math:`k_B =
-      8.617\times10^{-5}` eV/K).
-    """
-    def __init__(self, prefix='', nan_policy='raise', **kwargs):
-        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
-        super().__init__(boltzmann, **kwargs)
-        self._set_paramhints_prefix()
-
-    def guess(self, data, x, negative=False, **kwargs):
-        """Estimate initial model parameter values from data."""
-        return guess_thermal(self, data, x)
-
-    __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__ = COMMON_GUESS_DOC
-
-
 class BoseModel(Model):
     r"""Return a Bose-Einstein thermal distribution function, with functional form:
 
@@ -1435,8 +1405,7 @@ class BoseModel(Model):
 
     Notes
     -----
-    - `kt` should be defined in the same units as `x` (:math:`k_B =
-      8.617\times10^{-5}` eV/K).
+    - `kt` should be defined in the same units as `x` (:math:`k_B = 8.617\times10^{-5}` eV/K).
     """
     def __init__(self, prefix='', nan_policy='raise', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
@@ -1463,8 +1432,7 @@ class FermiModel(Model):
 
     Notes
     -----
-    - `kt` should be defined in the same units as `x` (:math:`k_B =
-      8.617\times10^{-5}` eV/K).
+    - `kt` should be defined in the same units as `x` (:math:`k_B = 8.617\times10^{-5}` eV/K).
     """
     def __init__(self, prefix='', nan_policy='raise', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy})
@@ -1861,7 +1829,6 @@ lmfit_models = {'Constant': ConstantModel,
                 'Skewed Gaussian': SkewedGaussianModel,
                 'Skewed Voigt': SkewedVoigtModel,
                 'Thermal Distribution': ThermalDistributionModel,
-                'Maxwell-Boltzmannn Distribution': BoltzmannModel,
                 'Bose-Einstein Distribution': BoseModel,
                 'Fermi-Dirac Distribution': FermiModel,
                 'Doniach': DoniachModel,
