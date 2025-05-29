@@ -33,13 +33,13 @@ LMfit-py
 Overview
 ---------
 
-The lmfit Python library supports provides tools for non-linear least-squares
+The ``lmfit`` Python library provides tools for non-linear least-squares
 minimization and curve fitting.  The goal is to make these optimization
-algorithms more flexible, more comprehensible, and easier to use well, with the
+algorithms more flexible, more comprehensible, and easier to use, with the
 key feature of casting variables in minimization and fitting routines as named
 parameters that can have many attributes beside just a current value.
 
-LMfit is a pure Python package, built on top of Scipy and Numpy, and so easy to
+LMfit is a pure Python package -- built on top of Scipy and Numpy -- and is easy to
 install with ``pip install lmfit``.
 
 For questions, comments, and suggestions, please use the `LMfit google mailing
@@ -96,7 +96,7 @@ should return the residual (i.e., ``data-model``) array to be minimized.
 The advantage here is that the function to be minimized does not have to be
 changed if different bounds or constraints are placed on the fitting Parameters.
 The fitting model (as described in myfunc) is instead written in terms of
-physical parameters of the system, and remains remains independent of what is
+physical parameters of the system, and remains independent of what is
 actually varied in the fit. In addition, which parameters are adjusted and which
 are fixed happens at run-time, so that changing what is varied and what
 constraints are placed on the parameters can easily be modified by the user in
@@ -107,14 +107,14 @@ To perform the fit, the user calls::
     result = lmfit.minimize(myfunc, fit_params, args=(x, data), kws={'someflag':True}, ....)
 
 After the fit, a ``MinimizerResult`` class is returned that holds the results
-the fit (e.g., fitting statistics and optimized parameters). The dictionary
+of the fit (e.g. fitting statistics and optimized parameters). The dictionary
 ``result.params`` contains the best-fit values, estimated standard deviations,
 and correlations with other variables in the fit.
 
 By default, the underlying fit algorithm is the Levenberg-Marquardt algorithm
 with numerically-calculated derivatives from MINPACK's lmdif function, as used
 by ``scipy.optimize.leastsq``. Most other solvers that are present in ``scipy``
-(e.g., Nelder-Mead, differential_evolution, basin-hopping, and more) are also
+(e.g. Nelder-Mead, differential_evolution, basin-hopping, and more) are also
 supported.
 
 
@@ -124,20 +124,20 @@ Curve-Fitting with lmfit.Model
 One of the most common use of least-squares minimization is for curve fitting,
 where minimization of ``data-model``, or ``(data-model)*weights``.  Using
 ``lmfit.minimize`` as above, the objective function would take ``data`` and
-``weights`` and effectively calculated the model and then return the value of
+``weights``, effectively calculate the model, and return the value of
 ``(data-model)*weights``.
 
-To simplify this, and make curve-fitting more flexible, lmfit provides a Model
+To simplify this, and make curve-fitting more flexible, ``lmfit`` provides a ``Model``
 class that wraps a *model function* that represents the model (without the data
 or weights).  Parameters are then automatically found from the named arguments
 of the model function.  In addition, simple model functions can be readily
-combined and reused, and several common model functions are included in lmfit.
+combined and reused, and several common model functions are included in ``lmfit``.
 
 Exploration of Confidence Intervals
 -------------------------------------
 
-Lmfit tries to always estimate uncertainties in fitting parameters and
+LMfit tries to always estimate uncertainties in fitting parameters and
 correlations between them.  It does this even for those methods where the
-corresponding ``scipy.optimize`` routines do not estimate uncertainties.  Lmfit
-also provides methods to explicitly explore and evaluate the confidence
-intervals in fit results.
+corresponding ``scipy.optimize`` routines do not estimate uncertainties.  
+LMfit also provides methods to explicitly explore and evaluate the 
+confidence intervals in fit results.
