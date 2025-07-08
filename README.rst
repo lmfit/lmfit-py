@@ -138,6 +138,6 @@ Exploration of Confidence Intervals
 
 LMfit tries to always estimate uncertainties in fitting parameters and
 correlations between them.  It does this even for those methods where the
-corresponding ``scipy.optimize`` routines do not estimate uncertainties.  
-LMfit also provides methods to explicitly explore and evaluate the 
+corresponding ``scipy.optimize`` routines do not estimate uncertainties.
+LMfit also provides methods to explicitly explore and evaluate the
 confidence intervals in fit results.
