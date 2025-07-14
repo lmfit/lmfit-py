@@ -61,7 +61,7 @@ LaTex distributions).
 Please refer to ``pyproject.toml`` under ``project.optional-dependencies`` for a list of all
 dependencies that are needed if you want to participate in the development of lmfit.
 You can install all these dependencies automatically by doing ``pip install lmfit[all]``,
-or select only a subset (e.g., ``dev```, ``doc``, or ``test``).
+or select only a subset (e.g., ``dev``, ``doc``, or ``test``).
 
 Please note: the "original" ``python setup.py install`` is deprecated, but we will
 provide a shim ``setup.py`` file for as long as ``Python`` and/or ``setuptools``
