@@ -2058,8 +2058,7 @@ class Minimizer:
 
         ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
                          totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
-                         eps2=0.1, tabulistsize=5, tabustrategy='farthest',
-                         disp=False)
+                         eps2=0.1, tabulistsize=5, tabustrategy='farthest')
         ampgo_kws.update(self.kws)
         ampgo_kws.update(kws)
 

@@ -142,7 +142,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             print('\n{0}\nStarting MINIMIZATION Phase {1:d}\n{0}'
                   .format('='*72, global_iter+1))
 
-        options = {'maxiter': max(1, maxfunevals), 'disp': disp}
+        options = {'maxiter': max(1, maxfunevals)}
         if local_opts is not None:
             options.update(local_opts)
         res = minimize(objfun, x0, args=args, method=local, bounds=bounds,
@@ -201,7 +201,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
 
             tunnel_args = tuple([objfun, aspiration, tabulist] + list(args))
 
-            options = {'maxiter': max(1, maxfunevals), 'disp': disp}
+            options = {'maxiter': max(1, maxfunevals)}
             if local_opts is not None:
                 options.update(local_opts)
 
