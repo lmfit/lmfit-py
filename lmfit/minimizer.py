@@ -396,7 +396,7 @@ class Minimizer:
 
             - `'negentropy'` : neg entropy, using normal distribution
 
-               = rho*log(rho).sum()`, where rho = exp(-r*r/2)/(sqrt(2*pi))
+               = rho*log(rho).sum(), where rho = exp(-r*r/2)/(sqrt(2*pi))
 
             - `'neglogcauchy'` : neg log likelihood, using Cauchy distribution
 
@@ -1874,7 +1874,7 @@ class Minimizer:
             - upper bound (:attr:`max`) and :attr:`brute_step` are specified:
                 ``range = (max - Ns * brute_step, max, brute_step)``.
             - numerical value (:attr:`value`) and :attr:`brute_step` are specified:
-                ``range = (value - (Ns//2) * brute_step`, value +
+                ``range = (value - (Ns//2) * brute_step, value +
                 (Ns//2) * brute_step, brute_step)``.
 
         """

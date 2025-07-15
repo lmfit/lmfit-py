@@ -22,7 +22,7 @@ uses a *model function* -- a function that is meant to calculate a model for
 some phenomenon -- and then uses that to best match an array of supplied
 data.  Beyond that similarity, the :class:`Model` interface is rather different
 from :scipydoc:`optimize.curve_fit`.  These differences include a) being
-class-based and so having multiple methods for working with :class:`Model`s,
+class-based and so having multiple methods for working with :class:`Model`\ s,
 b) using :class:`~lmfit.parameter.Parameters`, and all of the advantages they
 provide, and c) being easy to combine into composite models.
 
