@@ -416,7 +416,8 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
 def bose(x, amplitude=1.0, center=0.0, kt=1.0):
     """Return a Bose-Einstein thermal distribution function.
 
-    bose(x, amplitude=1.0, center=0.0, kt=1.0) = amplitude/(exp((x - center)/kt) - 1)
+    bose(x, amplitude=1.0, center=0.0, kt=1.0)
+       = amplitude/(exp((x - center)/kt) - 1)
 
     Notes
     -----
@@ -427,13 +428,19 @@ def bose(x, amplitude=1.0, center=0.0, kt=1.0):
     --------
     thermal_distribution, fermi
     """
-    return amplitude/(exp((x - center)/not_zero(kt)) - 1)
+    denom = exp((x - center)/not_zero(kt)) - 1.0
+    if isinstance(x, (int, float)):
+        denom = max(tiny, x)*copysign(denom)
+    else:
+        denom[where(abs(denom) < tiny*tiny)] = tiny*tiny
+    return amplitude/denom
 
 
 def fermi(x, amplitude=1.0, center=0.0, kt=1.0):
     """Return a Fermi-Dirac thermal distribution function.
 
-    fermi(x, amplitude=1.0, center=0.0, kt=1.0) = amplitude/(exp((x - center)/kt) -+ 1)
+    fermi(x, amplitude=1.0, center=0.0, kt=1.0)
+       = 1/(amplitude *exp((x - center)/kt) + 1)
 
     Notes
     -----
@@ -444,7 +451,7 @@ def fermi(x, amplitude=1.0, center=0.0, kt=1.0):
     --------
     thermal_distribution, bose
     """
-    return amplitude/(exp((x - center)/not_zero(kt)) + 1)
+    return amplitude/(exp((x - center)/not_zero(kt)) + 1.0)
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
