@@ -46,6 +46,9 @@ def test_aborted_solvers(method):
 
     mod = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
 
+    max_nfev = 40
+    if method == 'coybla':
+        max_nfev = 30
     pars = mod.make_params(p1_amplitude={'value': 70, 'min': 0, 'max': 200},
                            p1_center={'value': 19.5, 'min': 8, 'max': 20.5},
                            p1_sigma={'value': 0.05, 'min': 0, 'max': 1},
@@ -53,7 +56,7 @@ def test_aborted_solvers(method):
                            p2_center={'value': 20.5, 'min': 19.5, 'max': 21.5},
                            p2_sigma={'value': 0.05, 'min': 0, 'max': 1})
 
-    result = mod.fit(y, pars, x=x, max_nfev=40, method=method)
+    result = mod.fit(y, pars, x=x, max_nfev=max_nfev, method=method)
     assert not result.success
     assert not result.errorbars
     assert result.redchi > 1000
