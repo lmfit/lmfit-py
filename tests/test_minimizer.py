@@ -47,7 +47,7 @@ def test_aborted_solvers(method):
     mod = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
 
     max_nfev = 40
-    if method == 'coybla':
+    if method == 'cobyla':
         max_nfev = 30
     pars = mod.make_params(p1_amplitude={'value': 70, 'min': 0, 'max': 200},
                            p1_center={'value': 19.5, 'min': 8, 'max': 20.5},
@@ -61,5 +61,5 @@ def test_aborted_solvers(method):
     assert not result.errorbars
     assert result.redchi > 1000
     assert result.redchi < 90000
-    assert result.nfev > 35
-    assert result.nfev < 45
+    assert result.nfev > max_nfev - 5
+    assert result.nfev < max_nfev + 5
