@@ -1400,7 +1400,7 @@ class BoseModel(Model):
         :nowrap:
 
         \begin{equation}
-         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) - 1} \\
+         f(x; A, x_0, kt) = \frac{A}{\exp(\frac{x - x_0}{kt}) - 1} \\
         \end{equation}
 
     Notes
@@ -1427,7 +1427,7 @@ class FermiModel(Model):
         :nowrap:
 
         \begin{equation}
-         f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}}) = \frac{A}{\exp(\frac{x - x_0}{kt}) + 1} \\
+         f(x; A, x_0, kt) = \frac{A}{\exp(\frac{x - x_0}{kt}) + 1} \\
         \end{equation}
 
     Notes
