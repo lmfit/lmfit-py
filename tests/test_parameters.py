@@ -476,10 +476,10 @@ def test_dump_load_parameters(parameters):
 
 def test_dumps_loads_parameters_usersyms():
     """Test for dumps/loads methods for a Parameters class with usersyms."""
-    def half(x):
+    def xhalf(x):
         return 0.5*x
 
-    pars = lmfit.Parameters(usersyms={"half": half, 'my_func': np.sqrt})
+    pars = lmfit.Parameters(usersyms={"half": xhalf, 'my_func': np.sqrt})
     pars.add(lmfit.Parameter(name='a', value=9.0, min=-100.0, max=100.0))
     pars.add(lmfit.Parameter(name='b', value=100.0, min=-250.0, max=250.0))
     pars.add("c", expr="half(b) + my_func(a)")

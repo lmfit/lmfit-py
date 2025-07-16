@@ -67,9 +67,9 @@ def encode4js(obj):
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,
                     __dtype__=obj.dtype.name, value=val)
-    if isinstance(obj, float):
+    if isinstance(obj, (float, np.float32, np.float64)):
         return float(obj)
-    if isinstance(obj, int):
+    if isinstance(obj, (int, np.int32, np.int64)):
         return int(obj)
     if isinstance(obj, str):
         try:

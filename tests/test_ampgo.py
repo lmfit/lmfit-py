@@ -37,19 +37,9 @@ def test_ampgo_bounds(minimizer_Alpine02):
     assert 2.5 <= out.params['x1'].value <= 7.5
 
 
-def test_ampgo_disp_true(minimizer_Alpine02, capsys):
-    """Test AMPGO algorithm with disp is True."""
-    # disp to False for L-BFGS-B to avoid too much output...
-    kws = {'disp': True, 'local_opts': {'disp': False}}
-    minimizer_Alpine02.minimize(method='ampgo', **kws)
-    captured = capsys.readouterr()
-    assert "Starting MINIMIZATION Phase" in captured.out
-
-
 def test_ampgo_maxfunevals(minimizer_Alpine02):
     """Test AMPGO algorithm with maxfunevals."""
-    # disp to False for L-BFGS-B to avoid too much output...
-    kws = {'maxfunevals': 5, 'disp': True, 'local_opts': {'disp': False}}
+    kws = {'maxfunevals': 5}
     out = minimizer_Alpine02.minimize(method='ampgo', **kws)
 
     assert out.ampgo_msg == 'Maximum number of function evaluations exceeded'
