@@ -459,7 +459,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee(self):
         # test emcee
         if not HAS_EMCEE:
-            return True
+            return
 
         np.random.seed(123456)
         out = self.mini.emcee(nwalkers=100, steps=200, burn=50, thin=10)
@@ -469,7 +469,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_method_kwarg(self):
         # test with emcee as method keyword argument
         if not HAS_EMCEE:
-            return True
+            return
         np.random.seed(123456)
         out = self.mini.minimize(method='emcee',
                                  nwalkers=50, steps=200,
@@ -490,7 +490,7 @@ class CommonMinimizerTest(unittest.TestCase):
         raise pytest.skip("Pytest fails with multiprocessing")
         pytest.importorskip("dill")
         if not HAS_EMCEE:
-            return True
+            return
         self.mini.emcee(steps=50, workers=4, nwalkers=20)
 
     def test_emcee_bounds_length(self):
@@ -499,7 +499,7 @@ class CommonMinimizerTest(unittest.TestCase):
         # are the right lengths for comparison. This can be done
         # if nvarys != nparams
         if not HAS_EMCEE:
-            return True
+            return
         self.mini.params['amp'].vary = False
         self.mini.params['period'].vary = False
         self.mini.params['shift'].vary = False
@@ -509,7 +509,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_partial_bounds(self):
         # mcmc with partial bounds
         if not HAS_EMCEE:
-            return True
+            return
 
         np.random.seed(123456)
         # test mcmc output vs lm, some parameters not bounded
@@ -522,7 +522,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_init_with_chain(self):
         # can you initialise with a previous chain
         if not HAS_EMCEE:
-            return True
+            return
 
         out = self.mini.emcee(nwalkers=100, steps=5)
         # can initialise with a chain
@@ -539,7 +539,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
     def test_emcee_reuse_sampler(self):
         if not HAS_EMCEE:
-            return True
+            return
 
         self.mini.emcee(nwalkers=20, steps=25)
 
@@ -586,11 +586,11 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_output(self):
         # test mcmc output
         if not HAS_EMCEE:
-            return True
+            return
         try:
             from pandas import DataFrame
         except ImportError:
-            return True
+            return
         out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
         assert isinstance(out, MinimizerResult)
         assert isinstance(out.flatchain, DataFrame)
@@ -613,7 +613,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_float(self):
         # test that it works if the residuals returns a float, not a vector
         if not HAS_EMCEE:
-            return True
+            return
 
         def resid(pars, x, data=None):
             return -0.5 * np.sum(self.residual(pars, x, data=data)**2)
@@ -636,7 +636,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_seed(self):
         # test emcee seeding can reproduce a sampling run
         if not HAS_EMCEE:
-            return True
+            return
 
         out = self.mini.emcee(params=self.fit_params,
                               nwalkers=100,
@@ -650,7 +650,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_emcee_ntemps(self):
         # check for DeprecationWarning when using ntemps > 1
         if not HAS_EMCEE:
-            return True
+            return
 
         with pytest.raises(DeprecationWarning):
             _ = self.mini.emcee(params=self.fit_params, ntemps=5)
@@ -659,7 +659,7 @@ class CommonMinimizerTest(unittest.TestCase):
         # tests use of a custom pool
 
         if not HAS_EMCEE:
-            return True
+            return
 
         global emcee_counter
         emcee_counter = 0

@@ -4,7 +4,6 @@ import sys
 import time
 
 import numpy as np
-import pytest
 
 from lmfit import Model
 from lmfit.lineshapes import gaussian
@@ -12,8 +11,8 @@ from lmfit.lineshapes import gaussian
 sys.setrecursionlimit(2000)
 
 
-@pytest.mark.flaky(max_runs=5)
 def test_manypeaks_speed():
+    "test making parameters for a model with many peaks"
     model = None
     t0 = time.time()
     for i in np.arange(500):
@@ -27,7 +26,6 @@ def test_manypeaks_speed():
     t2 = time.time()
     _cpars = deepcopy(pars)  # noqa: F841
     t3 = time.time()
-
     # these are very conservative tests that
     # should be satisfied on nearly any machine
     assert (t3-t2) < 0.5
