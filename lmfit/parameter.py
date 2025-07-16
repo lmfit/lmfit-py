@@ -147,7 +147,7 @@ class Parameters(dict):
         for key, par in self.items():
             if isinstance(par, Parameter):
                 param = Parameter(name=par.name,
-                                  value=par.value,
+                                  value=float(par.value),
                                   min=par.min,
                                   max=par.max)
                 param.vary = par.vary
@@ -172,7 +172,7 @@ class Parameters(dict):
         dict.__setitem__(self, key, par)
         par.name = key
         par._expr_eval = self._asteval
-        self._asteval.symtable[key] = par.value
+        self._asteval.symtable[key] = float(par.value)
 
     def __add__(self, other):
         """Add Parameters objects."""
@@ -281,7 +281,7 @@ class Parameters(dict):
             for dep in par._expr_deps:
                 if dep in updated_tracker:
                     _update_param(dep)
-            self._asteval.symtable[name] = par.value
+            self._asteval.symtable[name] = float(par.value)
             updated_tracker.discard(name)
 
         for name in requires_update:
@@ -448,7 +448,7 @@ class Parameters(dict):
         """
         if isinstance(name, Parameter):
             if name.value is None:
-                name.value = value
+                name.value = float(value)
             if name.expr is None:
                 name.expr = expr
             if name.min in (None, -inf):
@@ -534,7 +534,7 @@ class Parameters(dict):
             Parameter.
 
         """
-        return {p.name: p.value for p in self.values()}
+        return {p.name: float(p.value) for p in self.values()}
 
     def create_uvars(self, covar=None):
         """Return a dict of uncertainties ufloats from the current Parameter
@@ -568,7 +568,7 @@ class Parameters(dict):
             if par.vary:
                 vindex += 1
                 vnames.append(par.name)
-                vbest.append(par.value)
+                vbest.append(float(par.value))
                 if getattr(par, 'stderr', None) is None and covar is not None:
                     par.stderr = sqrt(covar[vindex, vindex])
             stderr = getattr(par, 'stderr', 0.0)
@@ -791,7 +791,7 @@ class Parameter:
         self._delay_asteval = False
         self.stderr = None
         self.correl = None
-        self.from_internal = lambda val: val
+        self.from_internal = lambda val: float(val)
         self._val = value
         self._init_bounds()
 
@@ -953,7 +953,7 @@ class Parameter:
         if self.max is None:
             self.max = inf
         if self.min == -inf and self.max == inf:
-            self.from_internal = lambda val: val
+            self.from_internal = lambda val: float(val)
             _val = self._val
         elif self.max == inf:
             self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
@@ -967,7 +967,7 @@ class Parameter:
             _val = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
         if abs(_val) < tiny:
             _val = 0.0
-        return _val
+        return float(_val)
 
     def scale_gradient(self, val):
         """Return scaling factor for gradient.

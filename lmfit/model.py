@@ -1747,6 +1747,8 @@ class ModelResult(Minimizer):
         scale = t.ppf((prob+1)/2.0, self.ndata-nvarys)
 
         # for complex data, convert back to real/imag pairs
+        if isinstance(feval, float):
+            feval = np.float64(feval)
         if feval.dtype in ('complex64', 'complex128'):
             for key in fjac:
                 df2[key] = df2[key].view(feval.dtype)

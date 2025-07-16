@@ -488,7 +488,7 @@ class Minimizer:
     @property
     def values(self):
         """Return Parameter values in a simple dictionary."""
-        return {name: p.value for name, p in self.result.params.items()}
+        return {name: float(p.value) for name, p in self.result.params.items()}
 
     def __residual(self, fvars, apply_bounds_transformation=True):
         """Residual function used for least-squares fit.
@@ -520,9 +520,9 @@ class Minimizer:
 
         for name, val in zip(self.result.var_names, fvars):
             if apply_bounds_transformation:
-                params[name].value = params[name].from_internal(val)
+                params[name].value = float(params[name].from_internal(val))
             else:
-                params[name].value = val
+                params[name].value = float(val)
         params.update_constraints()
 
         if self.max_nfev is None:
@@ -772,7 +772,7 @@ class Minimizer:
 
         # restore original values
         for name in self.result.var_names:
-            self.result.params[name].value = best_vals[name]
+            self.result.params[name].value = float(best_vals[name])
         return cov_x
 
     def _int2ext_cov_x(self, cov_int, fvars):
@@ -816,14 +816,15 @@ class Minimizer:
             par.stderr, par.correl = 0, None
         for ivar, name in enumerate(self.result.var_names):
             par = self.result.params[name]
-            par.stderr = np.sqrt(self.result.covar[ivar, ivar])
+            par.stderr = float(np.sqrt(self.result.covar[ivar, ivar]))
             par.correl = {}
             try:
                 self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
                 for jvar, varn2 in enumerate(self.result.var_names):
                     if jvar != ivar:
-                        par.correl[varn2] = (self.result.covar[ivar, jvar] /
-                                             (par.stderr * np.sqrt(self.result.covar[jvar, jvar])))
+                        par.correl[varn2] = float(self.result.covar[ivar, jvar] /
+                                                  (par.stderr *
+                                                   np.sqrt(self.result.covar[jvar, jvar])))
             except ZeroDivisionError:
                 self.result.errorbars = False
         if self.result.errorbars:
@@ -1343,7 +1344,7 @@ class Minimizer:
             else:
                 # don't want to append bounds if they're not being varied.
                 continue
-            param.from_internal = lambda val: val
+            param.from_internal = lambda val: float(val)
             lb, ub = param.min, param.max
             if lb is None or lb is np.nan:
                 lb = -np.inf
@@ -1436,8 +1437,8 @@ class Minimizer:
 
             for i, var_name in enumerate(result.var_names):
                 std_l, median, std_u = quantiles[:, i]
-                params[var_name].value = median
-                params[var_name].stderr = 0.5 * (std_u - std_l)
+                params[var_name].value = float(median)
+                params[var_name].stderr = 0.5 * float(std_u - std_l)
                 params[var_name].correl = {}
 
             params.update_constraints()
@@ -2052,14 +2053,14 @@ class Minimizer:
 
         http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
 
+
         """
         result = self.prepare_fit(params=params)
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
         ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
                          totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
-                         eps2=0.1, tabulistsize=5, tabustrategy='farthest',
-                         disp=False)
+                         eps2=0.1, tabulistsize=5, tabustrategy='farthest')
         ampgo_kws.update(self.kws)
         ampgo_kws.update(kws)
 
@@ -2079,7 +2080,7 @@ class Minimizer:
             result.ampgo_tunnel = ret[4]
 
             for i, par in enumerate(result.var_names):
-                result.params[par].value = result.ampgo_x0[i]
+                result.params[par].value = float(result.ampgo_x0[i])
 
             result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
