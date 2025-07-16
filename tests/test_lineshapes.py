@@ -143,3 +143,59 @@ def test_form_argument_thermal_distribution(form):
     else:
         fnc_output = func(*fnc_args)
         assert len(fnc_output) == len(xvals)
+
+
+def test_bose_model():
+    """Test 'bose' Model """
+    xdat = np.linspace(0, 300, 100)
+    ytrue = lmfit.lineshapes.bose(xdat, amplitude=15, center=-4.0, kt=26.3)
+    ydat = ytrue + np.random.normal(size=len(xdat), scale=0.4)
+
+    model = lmfit.models.BoseModel()
+    params = model.make_params(amplitude={'value': 10, 'min': 0},
+                               center={'value': -2, 'max': -0.001},
+                               kt={'value': 15, 'min': 0})
+
+    result = model.fit(ydat, params, x=xdat)
+
+    assert result.nfev > 10
+    assert result.nfev < 500
+    assert result.chisqr > 3
+    assert result.chisqr < 300
+    assert result.errorbars
+    assert result.params['amplitude'].value > 12.0
+    assert result.params['amplitude'].value < 20.0
+    assert result.params['amplitude'].stderr > 0.4
+    assert result.params['amplitude'].stderr < 2.0
+    assert result.params['center'].value > -8.0
+    assert result.params['center'].value < -1.0
+    assert result.params['center'].stderr > 0.002
+    assert result.params['center'].stderr < 0.4
+
+
+def test_fermi_model():
+    """Test 'fermi' Model """
+    xdat = np.linspace(0, 300, 100)
+    ytrue = lmfit.lineshapes.fermi(xdat, amplitude=15, center=123.0, kt=26.3)
+    ydat = ytrue + np.random.normal(size=len(xdat), scale=0.4)
+
+    model = lmfit.models.FermiModel()
+    params = model.make_params(amplitude={'value': 10, 'min': 0},
+                               center={'value': 100, 'min': 0},
+                               kt={'value': 15, 'min': 0})
+
+    result = model.fit(ydat, params, x=xdat)
+
+    assert result.nfev > 10
+    assert result.nfev < 500
+    assert result.chisqr > 3
+    assert result.chisqr < 300
+    assert result.errorbars
+    assert result.params['amplitude'].value > 12.0
+    assert result.params['amplitude'].value < 20.0
+    assert result.params['amplitude'].stderr > 0.02
+    assert result.params['amplitude'].stderr < 1.0
+    assert result.params['center'].value > 110.0
+    assert result.params['center'].value < 150.0
+    assert result.params['center'].stderr > 0.2
+    assert result.params['center'].stderr < 3.0
