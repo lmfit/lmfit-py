@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Fit Specifying Different Reduce Function &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -144,13 +144,13 @@ user-specified <code class="docutils literal notranslate"><span class="pre">call
 <a class="reference external" href="https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class">https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class</a></p>
 <p>Here, we use as an example the Student’s t log-likelihood for robust fitting
 of data with outliers.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lmfit</span>
 
 
-<span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
     <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -199,8 +199,8 @@ of data with outliers.</p>
 [[Variables]]
     offset:  1.10392444 +/- 0.05751441 (5.21%) (init = 2)
     omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
-    amp:     1.69977033 +/- 0.21587447 (12.70%) (init = 2.5)
-    decay:   7.65901723 +/- 1.87208954 (24.44%) (init = 1)
+    amp:     1.69977037 +/- 0.21587469 (12.70%) (init = 2.5)
+    decay:   7.65901703 +/- 1.87209242 (24.44%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(amp, decay) = -0.7733
 </pre></div>
@@ -218,15 +218,15 @@ of data with outliers.</p>
     # function evals   = 135
     # data points      = 101
     # variables        = 4
-    chi-square         = 33.5081361
-    reduced chi-square = 0.34544470
-    Akaike info crit   = -103.436556
-    Bayesian info crit = -92.9760742
+    chi-square         = 33.5081292
+    reduced chi-square = 0.34544463
+    Akaike info crit   = -103.436577
+    Bayesian info crit = -92.9760949
 [[Variables]]
-    offset:  1.02005967 +/- 0.06642640 (6.51%) (init = 2)
-    omega:   3.98224422 +/- 0.02898702 (0.73%) (init = 3.3)
-    amp:     1.83231484 +/- 0.27241903 (14.87%) (init = 2.5)
-    decay:   5.77326980 +/- 1.45140684 (25.14%) (init = 1)
+    offset:  1.02005970 +/- 0.06642640 (6.51%) (init = 2)
+    omega:   3.98224428 +/- 0.02898701 (0.73%) (init = 3.3)
+    amp:     1.83231341 +/- 0.27241877 (14.87%) (init = 2.5)
+    decay:   5.77328053 +/- 1.45140958 (25.14%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(amp, decay)  = -0.7584
     C(offset, amp) = -0.1067
@@ -240,13 +240,16 @@ of data with outliers.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_reduce_fcn_001.png" srcset="../_images/sphx_glr_example_reduce_fcn_001.png, ../_images/sphx_glr_example_reduce_fcn_001_3_00x.png 3.00x" alt="example reduce fcn" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.335 seconds)</p>
+<img src="../_images/sphx_glr_example_reduce_fcn_001.png" srcset="../_images/sphx_glr_example_reduce_fcn_001.png, ../_images/sphx_glr_example_reduce_fcn_001_3_00x.png 3.00x" alt="example reduce fcn" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.370 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-reduce-fcn-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/5d125e1fb5f23aa5a5473c67a4699244/example_reduce_fcn.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_reduce_fcn.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/d0e8e1e708ca0de18639372a3ff96a6a/example_reduce_fcn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_reduce_fcn.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/94d199f783ca5474abd6b2528828a3da/example_reduce_fcn.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_reduce_fcn.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -285,7 +288,7 @@ of data with outliers.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

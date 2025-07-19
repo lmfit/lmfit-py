@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -216,6 +216,17 @@
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer"><code class="docutils literal notranslate"><span class="pre">Minimizer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.minimize"><code class="docutils literal notranslate"><span class="pre">Minimizer.minimize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.leastsq"><code class="docutils literal notranslate"><span class="pre">Minimizer.leastsq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.least_squares"><code class="docutils literal notranslate"><span class="pre">Minimizer.least_squares()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.scalar_minimize"><code class="docutils literal notranslate"><span class="pre">Minimizer.scalar_minimize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.prepare_fit"><code class="docutils literal notranslate"><span class="pre">Minimizer.prepare_fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.brute"><code class="docutils literal notranslate"><span class="pre">Minimizer.brute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.basinhopping"><code class="docutils literal notranslate"><span class="pre">Minimizer.basinhopping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.ampgo"><code class="docutils literal notranslate"><span class="pre">Minimizer.ampgo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.shgo"><code class="docutils literal notranslate"><span class="pre">Minimizer.shgo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.dual_annealing"><code class="docutils literal notranslate"><span class="pre">Minimizer.dual_annealing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.emcee"><code class="docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
@@ -270,8 +281,13 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedvoigtmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#thermaldistributionmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#doniachmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#thermal-distribution-models">Thermal Distribution Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lmfit.models.ThermalDistributionModel"><code class="docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lmfit.models.BoseModel"><code class="docutils literal notranslate"><span class="pre">BoseModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lmfit.models.FermiModel"><code class="docutils literal notranslate"><span class="pre">FermiModel</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#linear-and-polynomial-models">Linear and Polynomial Models</a><ul>
@@ -364,7 +380,7 @@
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

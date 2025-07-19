@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Using Mathematical Constraints &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -176,7 +176,7 @@ functions. The constraint expressions are simple Python statements,
 allowing one to place constraints like:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameters</span>
 
 <span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -323,7 +323,7 @@ dictionary. That means you can preload any Python symbol into the namespace
 for the constraints, for example this Lorentzian function:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
     <span class="s2">&quot;lorentzian function: wid = half-width at half-max&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
@@ -336,7 +336,7 @@ for the constraints, for example this Lorentzian function:</p>
 the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> class:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameters</span>
 
 <span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">_asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s1">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
@@ -349,10 +349,10 @@ the <code class="xref py py-class docutils literal notranslate"><span class="pre
 <p>and then initialize the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class with this parameter set:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Minimizer</span>
 
 
-<span class="k">def</span> <span class="nf">userfcn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">userfcn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
@@ -414,7 +414,7 @@ used in constraint expressions.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

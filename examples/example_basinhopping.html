@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Fit comparing leastsq and basin hopping, or other methods &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -168,7 +168,7 @@ fitting algorithms too.</p>
     Model(sine_decay)
 [[Fit Statistics]]
     # fitting method   = basinhopping
-    # function evals   = 25257
+    # function evals   = 24867
     # data points      = 201
     # variables        = 4
     chi-square         = 37.4526504
@@ -189,12 +189,12 @@ fitting algorithms too.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lmfit</span>
 
 <span class="n">VALID_METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;least_squares&#39;</span><span class="p">,</span> <span class="s1">&#39;differential_evolution&#39;</span><span class="p">,</span> <span class="s1">&#39;brute&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;basinhopping&#39;</span><span class="p">,</span> <span class="s1">&#39;ampgo&#39;</span><span class="p">,</span> <span class="s1">&#39;nelder&#39;</span><span class="p">,</span> <span class="s1">&#39;lbfgsb&#39;</span><span class="p">,</span> <span class="s1">&#39;powell&#39;</span><span class="p">,</span> <span class="s1">&#39;cg&#39;</span><span class="p">,</span>
@@ -203,7 +203,7 @@ fitting algorithms too.</p>
                  <span class="s1">&#39;shgo&#39;</span><span class="p">,</span> <span class="s1">&#39;dual_annealing&#39;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">sine_decay</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">decay</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sine_decay</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">decay</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="o">*</span><span class="n">frequency</span><span class="p">)</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a></a><span class="p">(</span><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="o">/</span><span class="n">decay</span><span class="p">)</span>
 
 
@@ -224,8 +224,8 @@ fitting algorithms too.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">result0</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
 
 <span class="n">method2</span> <span class="o">=</span> <span class="s1">&#39;basinhopping&#39;</span>
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">VALID_METHODS</span><span class="p">:</span>
-    <span class="n">method2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><span class="n">sys</span><span class="o">.</span><span class="n">argv</span></a></a><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><span class="n">sys</span><span class="o">.</span><span class="n">argv</span></a></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">VALID_METHODS</span><span class="p">:</span>
+    <span class="n">method2</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><a href="https://docs.python.org/3/library/sys.html#sys.argv" title="sys.argv" class="sphx-glr-backref-module-sys sphx-glr-backref-type-py-data"><span class="n">sys</span><span class="o">.</span><span class="n">argv</span></a></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 
 <span class="c1"># fit with other method</span>
@@ -241,13 +241,16 @@ fitting algorithms too.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.740 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.016 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-basinhopping-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ae6f08d1acd42b44f92003d3b671ff34/example_basinhopping.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_basinhopping.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/165816e6cae13bf96b2272527b6d1d2b/example_basinhopping.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_basinhopping.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a77b5add2eaa4ab07fa4f0e915c3066a/example_basinhopping.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_basinhopping.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -286,7 +289,7 @@ fitting algorithms too.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

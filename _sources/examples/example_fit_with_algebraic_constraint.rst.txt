@@ -103,7 +103,7 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
         g_fwhm:           2.84758536 +/- 0.02757149 (0.97%) == '2.3548200*g_sigma'
         g_height:         6.98998378 +/- 0.05837066 (0.84%) == '0.3989423*g_amplitude/max(1e-15, g_sigma)'
         l_fwhm:           4.83703275 +/- 0.04683414 (0.97%) == '2.0000000*l_sigma'
-        l_height:         1.23882905 +/- 0.08992736 (7.26%) == '0.3183099*l_amplitude/max(1e-15, l_sigma)'
+        l_height:         1.23882905 +/- 0.08992735 (7.26%) == '0.3183099*l_amplitude/max(1e-15, l_sigma)'
         total_amplitude:  30.6003779 +/- 0.36481425 (1.19%) (init = 20)
     [[Correlations]] (unreported correlations are < 0.100)
         C(g_amplitude, g_sigma)            = +0.8662
@@ -125,7 +125,7 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.306 seconds)
+   **Total running time of the script:** (0 minutes 0.332 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:
@@ -141,6 +141,10 @@ Example on how to use algebraic constraints using the ``expr`` attribute.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_with_algebraic_constraint.py <example_fit_with_algebraic_constraint.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_fit_with_algebraic_constraint.zip <example_fit_with_algebraic_constraint.zip>`
 
 
 .. only:: html

@@ -81,7 +81,7 @@ Model - savemodelresult
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.049 seconds)
+   **Total running time of the script:** (0 minutes 0.059 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_savemodelresult.py:
@@ -97,6 +97,10 @@ Model - savemodelresult
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_savemodelresult.py <model_savemodelresult.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_savemodelresult.zip <model_savemodelresult.zip>`
 
 
 .. only:: html

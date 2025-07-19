@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Global minimization using the brute method (a.k.a. grid search) &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -144,13 +144,13 @@ grid of points, to find the global minimum of the function. It behaves
 identically to <code class="docutils literal notranslate"><span class="pre">scipy.optimize.brute</span></code> in case finite bounds are given on
 all varying parameters, but will also deal with non-bounded parameters
 (see below).</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">LogNorm</span></a></a>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">LogNorm</span></a></a>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">fit_report</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">fit_report</span>
 </pre></div>
 </div>
 <p>Let’s start with the example given in the documentation of SciPy:</p>
@@ -184,26 +184,26 @@ the <code class="docutils literal notranslate"><span class="pre">min</span></cod
 </pre></div>
 </div>
 <p>Second, create the three functions and the objective function:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">f1</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">par</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">+</span>
             <span class="n">par</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">+</span>
             <span class="n">par</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">])</span>
 
 
-<span class="k">def</span> <span class="nf">f2</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f2</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">par</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a></a><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
                                    <span class="p">(</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]))</span>
 
 
-<span class="k">def</span> <span class="nf">f3</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f3</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">par</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;j&#39;</span><span class="p">]</span><span class="o">*</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a></a><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
                                    <span class="p">(</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">par</span><span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]))</span>
 
 
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">f1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="n">f2</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="n">f3</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -297,7 +297,7 @@ wave, define an objective function, and create/initialize a Parameter set.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a></a><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a></a><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a></a><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model decaying sine wave, subtract data.&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
@@ -503,7 +503,7 @@ cases you’ll want to do another minimization using the solutions from the
 shown in the code below, where we now perform a <code class="docutils literal notranslate"><span class="pre">leastsq</span></code> minimization
 starting from the top-25 solutions and accept the solution if the <code class="docutils literal notranslate"><span class="pre">chisqr</span></code>
 is lower than the previously ‘optimal’ solution:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">best_result</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">result_brute</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">best_result</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="copy.deepcopy" class="sphx-glr-backref-module-copy sphx-glr-backref-type-py-function"><a href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="copy.deepcopy" class="sphx-glr-backref-module-copy sphx-glr-backref-type-py-function"><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span></a></a><span class="p">(</span><span class="n">result_brute</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">result_brute</span><span class="o">.</span><span class="n">candidates</span><span class="p">:</span>
     <span class="n">trial</span> <span class="o">=</span> <span class="n">fitter</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;leastsq&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">candidate</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
@@ -550,7 +550,7 @@ the plots below.</p>
 <img src="../_images/sphx_glr_example_brute_003.png" srcset="../_images/sphx_glr_example_brute_003.png, ../_images/sphx_glr_example_brute_003_3_00x.png 3.00x" alt="example brute" class = "sphx-glr-single-img"/><p>Finally, the results from the <code class="docutils literal notranslate"><span class="pre">brute</span></code> force grid-search can be visualized
 using the rather lengthy Python function below (which might get incorporated
 in lmfit at some point).</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_results_brute</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">best_vals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">varlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_results_brute</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">best_vals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">varlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize the result of the brute force grid search.</span>
 
@@ -658,13 +658,16 @@ in lmfit at some point).</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_brute_004.png" srcset="../_images/sphx_glr_example_brute_004.png, ../_images/sphx_glr_example_brute_004_3_00x.png 3.00x" alt="example brute" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 26.640 seconds)</p>
+<img src="../_images/sphx_glr_example_brute_004.png" srcset="../_images/sphx_glr_example_brute_004.png, ../_images/sphx_glr_example_brute_004_3_00x.png 3.00x" alt="example brute" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 19.744 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-brute-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/9254f2af7eef00978dc5823dc5418985/example_brute.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_brute.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c004866ac6395edd2609ff96cecdc255/example_brute.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_brute.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/9525432cdc678720dba934ae8fde54b3/example_brute.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_brute.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -703,7 +706,7 @@ in lmfit at some point).</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

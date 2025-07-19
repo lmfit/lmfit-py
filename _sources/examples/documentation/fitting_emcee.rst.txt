@@ -55,10 +55,10 @@ Fitting - emcee
  .. code-block:: none
 
     [[Variables]]
-        a1:  2.98623689 +/- 0.15010518 (5.03%) (init = 4)
-        a2: -4.33525597 +/- 0.11765816 (2.71%) (init = 4)
-        t1:  1.30993186 +/- 0.13449649 (10.27%) (init = 3)
-        t2:  11.8240752 +/- 0.47172578 (3.99%) (init = 3)
+        a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
+        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
+        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
+        t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) = +0.9876
         C(a2, t1) = -0.9278
@@ -220,7 +220,7 @@ Fitting - emcee
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.420 seconds)
+   **Total running time of the script:** (0 minutes 10.050 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:
@@ -236,6 +236,10 @@ Fitting - emcee
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: fitting_emcee.py <fitting_emcee.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: fitting_emcee.zip <fitting_emcee.zip>`
 
 
 .. only:: html

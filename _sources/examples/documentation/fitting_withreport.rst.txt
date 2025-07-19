@@ -100,7 +100,7 @@ Fitting - withreport
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.011 seconds)
+   **Total running time of the script:** (0 minutes 0.008 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_withreport.py:
@@ -116,6 +116,10 @@ Fitting - withreport
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: fitting_withreport.py <fitting_withreport.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: fitting_withreport.zip <fitting_withreport.zip>`
 
 
 .. only:: html

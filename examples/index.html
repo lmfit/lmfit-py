@@ -6,21 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Examples gallery &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Fit with Data in a pandas DataFrame" href="example_use_pandas.html" />
@@ -147,31 +146,31 @@ Click on any image to see the complete source code and output.</p>
 and preferably self-contained examples of how you use lmfit for
 inclusion in this gallery! Please note that many of the examples
 below currently do <em>not</em> follow these guidelines yet.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th..."><img alt="" src="../_images/sphx_glr_example_use_pandas_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of the DataFrame to lmfit."><img alt="" src="../_images/sphx_glr_example_use_pandas_thumb.png" />
 <p><a class="reference internal" href="example_use_pandas.html#sphx-glr-examples-example-use-pandas-py"><span class="std std-ref">Fit with Data in a pandas DataFrame</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit with Data in a pandas DataFrame</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit...."><img alt="" src="../_images/sphx_glr_example_expression_model_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models"><img alt="" src="../_images/sphx_glr_example_expression_model_thumb.png" />
 <p><a class="reference internal" href="example_expression_model.html#sphx-glr-examples-example-expression-model-py"><span class="std std-ref">Using an ExpressionModel</span></a></p>
   <div class="sphx-glr-thumbnail-title">Using an ExpressionModel</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine..."><img alt="" src="../_images/sphx_glr_example_fit_with_inequality_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (inequality) constraints are needed. In the example below the center of the Lorentzian peak is constrained to be between 0-5 away from the center of the Gaussian peak."><img alt="" src="../_images/sphx_glr_example_fit_with_inequality_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_inequality.html#sphx-glr-examples-example-fit-with-inequality-py"><span class="std std-ref">Fit Using Inequality Constraint</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using Inequality Constraint</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob..."><img alt="" src="../_images/sphx_glr_example_diffev_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple problem."><img alt="" src="../_images/sphx_glr_example_diffev_thumb.png" />
 <p><a class="reference internal" href="example_diffev.html#sphx-glr-examples-example-diffev-py"><span class="std std-ref">Fit Using differential_evolution Algorithm</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using differential_evolution Algorithm</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even..."><img alt="" src="../_images/sphx_glr_example_fit_with_bounds_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even if the underlying algorithm in SciPy does not support this. For more information on how this is implemented, please refer to: https://lmfit.github.io/lmfit-py/bounds.html"><img alt="" src="../_images/sphx_glr_example_fit_with_bounds_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_bounds.html#sphx-glr-examples-example-fit-with-bounds-py"><span class="std std-ref">Fit Using Bounds</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Using Bounds</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Fit with Algebraic Constraint"><img alt="" src="../_images/sphx_glr_example_fit_with_algebraic_constraint_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_algebraic_constraint.html#sphx-glr-examples-example-fit-with-algebraic-constraint-py"><span class="std std-ref">Fit with Algebraic Constraint</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit with Algebraic Constraint</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim..."><img alt="" src="../_images/sphx_glr_example_reduce_fcn_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minimizers. The default value is None (i.e., &quot;sum of squares of residual&quot;) - alternatives are: negentropy, neglogcauchy, or a user-specified callable. For more information please refer to: https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class"><img alt="" src="../_images/sphx_glr_example_reduce_fcn_thumb.png" />
 <p><a class="reference internal" href="example_reduce_fcn.html#sphx-glr-examples-example-reduce-fcn-py"><span class="std std-ref">Fit Specifying Different Reduce Function</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Specifying Different Reduce Function</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with..."><img alt="" src="../_images/sphx_glr_example_sympy_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with SymPy and then apply that model to the data with lmfit. This example shows how to do that. Please note that this example requires both the sympy and matplotlib packages."><img alt="" src="../_images/sphx_glr_example_sympy_thumb.png" />
 <p><a class="reference internal" href="example_sympy.html#sphx-glr-examples-example-sympy-py"><span class="std std-ref">Building a lmfit model with SymPy</span></a></p>
   <div class="sphx-glr-thumbnail-title">Building a lmfit model with SymPy</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th..."><img alt="" src="../_images/sphx_glr_example_basinhopping_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note that this can be used to compare other fitting algorithms too."><img alt="" src="../_images/sphx_glr_example_basinhopping_thumb.png" />
 <p><a class="reference internal" href="example_basinhopping.html#sphx-glr-examples-example-basinhopping-py"><span class="std std-ref">Fit comparing leastsq and basin hopping, or other methods</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit comparing leastsq and basin hopping, or other methods</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously."><img alt="" src="../_images/sphx_glr_example_fit_multi_datasets_thumb.png" />
@@ -180,28 +179,28 @@ below currently do <em>not</em> follow these guidelines yet.</p>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously, using the Model interface."><img alt="" src="../_images/sphx_glr_example_fit_multi_datasets_Model-interface_thumb.png" />
 <p><a class="reference internal" href="example_fit_multi_datasets_Model-interface.html#sphx-glr-examples-example-fit-multi-datasets-model-interface-py"><span class="std std-ref">Fit Multiple Data Sets Using Model Interface</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Multiple Data Sets Using Model Interface</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas..."><img alt="" src="../_images/sphx_glr_example_Model_interface_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information please refer to: https://lmfit.github.io/lmfit-py/model.html#the-model-class."><img alt="" src="../_images/sphx_glr_example_Model_interface_thumb.png" />
 <p><a class="reference internal" href="example_Model_interface.html#sphx-glr-examples-example-model-interface-py"><span class="std std-ref">Fit using the Model interface</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit using the Model interface</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure."><img alt="" src="../_images/sphx_glr_example_fit_with_derivfunc_thumb.png" />
 <p><a class="reference internal" href="example_fit_with_derivfunc.html#sphx-glr-examples-example-fit-with-derivfunc-py"><span class="std std-ref">Fit Specifying a Function to Compute the Jacobian</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fit Specifying a Function to Compute the Jacobian</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th..."><img alt="" src="../_images/sphx_glr_example_detect_outliers_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess the influence of one point, we fit the dataset without the point and compare the result with the fit of the full dataset. The code below shows how to do this with lmfit. Note that the presented method is very basic."><img alt="" src="../_images/sphx_glr_example_detect_outliers_thumb.png" />
 <p><a class="reference internal" href="example_detect_outliers.html#sphx-glr-examples-example-detect-outliers-py"><span class="std std-ref">Outlier detection via leave-one-out</span></a></p>
   <div class="sphx-glr-thumbnail-title">Outlier detection via leave-one-out</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Emcee and the Model Interface"><img alt="" src="../_images/sphx_glr_example_emcee_Model_interface_thumb.png" />
 <p><a class="reference internal" href="example_emcee_Model_interface.html#sphx-glr-examples-example-emcee-model-interface-py"><span class="std std-ref">Emcee and the Model Interface</span></a></p>
   <div class="sphx-glr-thumbnail-title">Emcee and the Model Interface</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This examples shows a general way of fitting a model to y(x) data which has uncertainties in bo..."><img alt="" src="../_images/sphx_glr_example_uncertainties_y_and_x_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This examples shows a general way of fitting a model to y(x) data which has uncertainties in both y and x."><img alt="" src="../_images/sphx_glr_example_uncertainties_y_and_x_thumb.png" />
 <p><a class="reference internal" href="example_uncertainties_y_and_x.html#sphx-glr-examples-example-uncertainties-y-and-x-py"><span class="std std-ref">Fitting data with uncertainties in x and y</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fitting data with uncertainties in x and y</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def..."><img alt="" src="../_images/sphx_glr_example_complex_resonator_model_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and defining a custom Model class."><img alt="" src="../_images/sphx_glr_example_complex_resonator_model_thumb.png" />
 <p><a class="reference internal" href="example_complex_resonator_model.html#sphx-glr-examples-example-complex-resonator-model-py"><span class="std std-ref">Complex Resonator Model</span></a></p>
   <div class="sphx-glr-thumbnail-title">Complex Resonator Model</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was..."><img alt="" src="../_images/sphx_glr_lmfit_emcee_model_selection_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was removed in emcee v3..."><img alt="" src="../_images/sphx_glr_lmfit_emcee_model_selection_thumb.png" />
 <p><a class="reference internal" href="lmfit_emcee_model_selection.html#sphx-glr-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">Model Selection using lmfit and emcee</span></a></p>
   <div class="sphx-glr-thumbnail-title">Model Selection using lmfit and emcee</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Providing a function that calculates the Jacobian matrix analytically can reduce the time spent..."><img alt="" src="../_images/sphx_glr_example_fit_jacobian_benchmark_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="Providing a function that calculates the Jacobian matrix analytically can reduce the time spent finding a solution. The results from benchmarks comparing two methods (``leastsq`` and least_squares) with and without a function to calculate the Jacobian matrix analytically are presented below."><img alt="" src="../_images/sphx_glr_example_fit_jacobian_benchmark_thumb.png" />
 <p><a class="reference internal" href="example_fit_jacobian_benchmark.html#sphx-glr-examples-example-fit-jacobian-benchmark-py"><span class="std std-ref">Benchmarks of methods with and without computing the Jacobian analytically</span></a></p>
   <div class="sphx-glr-thumbnail-title">Benchmarks of methods with and without computing the Jacobian analytically</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Calculate Confidence Intervals"><img alt="" src="../_images/sphx_glr_example_confidence_interval_thumb.png" />
@@ -345,7 +344,7 @@ below currently do <em>not</em> follow these guidelines yet.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

@@ -147,16 +147,21 @@ of 0 on the value of ``sigma``.
 
 .. autoclass:: SkewedVoigtModel
 
-:class:`ThermalDistributionModel`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. autoclass:: ThermalDistributionModel
 
 :class:`DoniachModel`
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DoniachModel
 
+
+Thermal Distribution Models
+----------------------------------
+
+.. autoclass:: ThermalDistributionModel
+
+.. autoclass:: BoseModel
+
+.. autoclass:: FermiModel
 
 Linear and Polynomial Models
 ----------------------------
@@ -325,9 +330,9 @@ could to define this in a script:
 
     script = """
     def mycurve(x, amp, cen, sig):
-	loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
-	gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
-	return log(loren) * gradient(gauss) / gradient(x)
+        loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
+        gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
+        return log(loren) * gradient(gauss) / gradient(x)
     """
 
 and then use this with :class:`ExpressionModel` as:
@@ -335,7 +340,7 @@ and then use this with :class:`ExpressionModel` as:
 .. jupyter-execute::
 
     mod = ExpressionModel('mycurve(x, height, mid, wid)', init_script=script,
-			  independent_vars=['x'])
+                          independent_vars=['x'])
 
 As above, this will interpret the parameter names to be ``height``, ``mid``,
 and ``wid``, and build a model that can be used to fit data.
@@ -614,10 +619,10 @@ this, and by defining an :func:`index_of` function to limit the data range.
 That is, with::
 
     def index_of(arrval, value):
-	"""Return index of array *at or below* value."""
-	if value < min(arrval):
-	    return 0
-	return max(np.where(arrval <= value)[0])
+        """Return index of array *at or below* value."""
+        if value < min(arrval):
+            return 0
+        return max(np.where(arrval <= value)[0])
 
 
     ix1 = index_of(x, 75)
@@ -879,10 +884,10 @@ just try increasing the number of spline points to fit this data
 
     plt.plot(x, y, 'o', label='data')
     for nknots in (10, 15, 20, 25):
-	model = SplineModel(prefix='bkg_',   xknots=np.linspace(0, 25, nknots))
-	params = model.guess(y, x)
-	out = model.fit(y, params, x=x)
-	plt.plot(x, out.best_fit, label=f'best-fit ({nknots} knots)')
+        model = SplineModel(prefix='bkg_',   xknots=np.linspace(0, 25, nknots))
+        params = model.guess(y, x)
+        out = model.fit(y, params, x=x)
+        plt.plot(x, out.best_fit, label=f'best-fit ({nknots} knots)')
 
     plt.legend()
     plt.show()
@@ -896,10 +901,10 @@ which will show the fit below:
 
     plt.plot(x, y, 'o', label='data')
     for nknots in (10, 15, 20, 25):
-	model = SplineModel(prefix='bkg_',   xknots=np.linspace(0, 25, nknots))
-	params = model.guess(y, x)
-	out = model.fit(y, params, x=x)
-	plt.plot(x, out.best_fit, label=f'best-fit ({nknots} knots)')
+        model = SplineModel(prefix='bkg_',   xknots=np.linspace(0, 25, nknots))
+        params = model.guess(y, x)
+        out = model.fit(y, params, x=x)
+        plt.plot(x, out.best_fit, label=f'best-fit ({nknots} knots)')
 
     plt.legend()
     plt.show()

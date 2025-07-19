@@ -21,7 +21,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of the DataFrame to lmfit.">
 
 .. only:: html
 
@@ -38,7 +38,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit....">
+    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models">
 
 .. only:: html
 
@@ -55,7 +55,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (inequality) constraints are needed. In the example below the center of the Lorentzian peak is constrained to be between 0-5 away from the center of the Gaussian peak.">
 
 .. only:: html
 
@@ -72,7 +72,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple problem.">
 
 .. only:: html
 
@@ -89,7 +89,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even...">
+    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even if the underlying algorithm in SciPy does not support this. For more information on how this is implemented, please refer to: https://lmfit.github.io/lmfit-py/bounds.html">
 
 .. only:: html
 
@@ -123,7 +123,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim...">
+    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minimizers. The default value is None (i.e., &quot;sum of squares of residual&quot;) - alternatives are: negentropy, neglogcauchy, or a user-specified callable. For more information please refer to: https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class">
 
 .. only:: html
 
@@ -140,7 +140,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with...">
+    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with SymPy and then apply that model to the data with lmfit. This example shows how to do that. Please note that this example requires both the sympy and matplotlib packages.">
 
 .. only:: html
 
@@ -157,7 +157,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and basinhopping algorithms on a decaying sine wave.  Note that this can be used to compare other fitting algorithms too.">
 
 .. only:: html
 
@@ -208,7 +208,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information please refer to: https://lmfit.github.io/lmfit-py/model.html#the-model-class.">
 
 .. only:: html
 
@@ -242,7 +242,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess the influence of one point, we fit the dataset without the point and compare the result with the fit of the full dataset. The code below shows how to do this with lmfit. Note that the presented method is very basic.">
 
 .. only:: html
 
@@ -276,7 +276,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This examples shows a general way of fitting a model to y(x) data which has uncertainties in bo...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This examples shows a general way of fitting a model to y(x) data which has uncertainties in both y and x.">
 
 .. only:: html
 
@@ -293,7 +293,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and defining a custom Model class.">
 
 .. only:: html
 
@@ -310,7 +310,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was...">
+    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful example; however, it doesn&#x27;t run correctly anymore as the PTSampler was removed in emcee v3...">
 
 .. only:: html
 
@@ -327,7 +327,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Providing a function that calculates the Jacobian matrix analytically can reduce the time spent...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Providing a function that calculates the Jacobian matrix analytically can reduce the time spent finding a solution. The results from benchmarks comparing two methods (``leastsq`` and least_squares) with and without a function to calculate the Jacobian matrix analytically are presented below.">
 
 .. only:: html
 

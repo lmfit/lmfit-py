@@ -123,8 +123,8 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
     [[Variables]]
         offset:  1.10392444 +/- 0.05751441 (5.21%) (init = 2)
         omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977033 +/- 0.21587447 (12.70%) (init = 2.5)
-        decay:   7.65901723 +/- 1.87208954 (24.44%) (init = 1)
+        amp:     1.69977037 +/- 0.21587469 (12.70%) (init = 2.5)
+        decay:   7.65901703 +/- 1.87209242 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.7733
 
@@ -157,15 +157,15 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         # function evals   = 135
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081361
-        reduced chi-square = 0.34544470
-        Akaike info crit   = -103.436556
-        Bayesian info crit = -92.9760742
+        chi-square         = 33.5081292
+        reduced chi-square = 0.34544463
+        Akaike info crit   = -103.436577
+        Bayesian info crit = -92.9760949
     [[Variables]]
-        offset:  1.02005967 +/- 0.06642640 (6.51%) (init = 2)
-        omega:   3.98224422 +/- 0.02898702 (0.73%) (init = 3.3)
-        amp:     1.83231484 +/- 0.27241903 (14.87%) (init = 2.5)
-        decay:   5.77326980 +/- 1.45140684 (25.14%) (init = 1)
+        offset:  1.02005970 +/- 0.06642640 (6.51%) (init = 2)
+        omega:   3.98224428 +/- 0.02898701 (0.73%) (init = 3.3)
+        amp:     1.83231341 +/- 0.27241877 (14.87%) (init = 2.5)
+        decay:   5.77328053 +/- 1.45140958 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.7584
         C(offset, amp) = -0.1067
@@ -198,7 +198,7 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.335 seconds)
+   **Total running time of the script:** (0 minutes 0.370 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:
@@ -214,6 +214,10 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_reduce_fcn.py <example_reduce_fcn.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_reduce_fcn.zip <example_reduce_fcn.zip>`
 
 
 .. only:: html

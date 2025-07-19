@@ -300,6 +300,10 @@ possible. For example, you might expect the prior to be Gaussian.
 
       :download:`Download Python source code: lmfit_emcee_model_selection.py <lmfit_emcee_model_selection.py>`
 
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: lmfit_emcee_model_selection.zip <lmfit_emcee_model_selection.zip>`
+
 
 .. only:: html
 

@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -178,8 +178,8 @@
 <p>The fitting routines accept data arrays that are one-dimensional and double
 precision. So you need to convert the data and model (or the value
 returned by the objective function) to be one-dimensional. A simple way to
-do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
@@ -191,13 +191,13 @@ do this is to use <a class="reference external" href="https://docs.scipy.org/doc
 <p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision. So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one-dimensional. A
-simple way to do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
+simple way to do this is to use <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>. As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">model1</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope1&#39;</span><span class="p">]</span>
     <span class="n">model2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope2&#39;</span><span class="p">]</span>
 
@@ -212,11 +212,11 @@ different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision, floating point numbers. The simplest approach is to use
-<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -352,12 +352,12 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
 <p>That you implement with a model function and use to fit data like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lmfit</span>
 
 
-<span class="k">def</span> <span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">model</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">c</span>
     <span class="k">return</span> <span class="n">model</span>
@@ -384,19 +384,19 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 15
+    # function evals   = 40
     # data points      = 101
     # variables        = 4
-    chi-square         = 4.24552058
-    reduced chi-square = 0.04376825
-    Akaike info crit   = -312.094863
-    Bayesian info crit = -301.634381
-    R-squared          = 0.99998804
+    chi-square         = 4.10470532
+    reduced chi-square = 0.04231655
+    Akaike info crit   = -315.501643
+    Bayesian info crit = -305.041161
+    R-squared          = 0.99998842
 [[Variables]]
-    x0:  21.9999995 +/- 1.9528e-05 (0.00%) (init = 22)
-    a:   2.00562197 +/- 0.04326739 (2.16%) (init = 1)
-    b:   0.02000323 +/- 8.4415e-06 (0.04%) (init = 1)
-    c:   9.28771126 +/- 0.04460343 (0.48%) (init = 1)
+    x0:  21.9999775 +/- 1.9528e-05 (0.00%) (init = 22)
+    a:   2.01736605 +/- 0.04254379 (2.11%) (init = 1)
+    b:   0.01999494 +/- 8.3003e-06 (0.04%) (init = 1)
+    c:   9.33553159 +/- 0.04385749 (0.47%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(a, b)  = -0.8368
     C(x0, a) = +0.1871
@@ -420,13 +420,13 @@ The amount of leakage or width of the step can also be adjusted.</p>
 look like this and give better fit results:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erf</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">erf</span>
 
-<span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lmfit</span>
 
 
-<span class="k">def</span> <span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="n">m1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">m2</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="c1"># step up from 0 to 1 at x0: (erf(x-x0)+1)/2</span>
@@ -456,23 +456,23 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 36
+    # function evals   = 50
     # data points      = 101
     # variables        = 4
-    chi-square         = 0.88264293
-    reduced chi-square = 0.00909941
-    Akaike info crit   = -470.735461
-    Bayesian info crit = -460.274978
-    R-squared          = 0.99999751
+    chi-square         = 1.03772615
+    reduced chi-square = 0.01069821
+    Akaike info crit   = -454.386948
+    Bayesian info crit = -443.926466
+    R-squared          = 0.99999707
 [[Variables]]
-    x0:  19.0836907 +/- 0.41286434 (2.16%) (init = 22)
-    a:   2.02667453 +/- 0.01896138 (0.94%) (init = 1)
-    b:   0.01999498 +/- 3.7519e-06 (0.02%) (init = 1)
-    c:   9.21394967 +/- 0.02188802 (0.24%) (init = 1)
+    x0:  18.9293783 +/- 0.46899832 (2.48%) (init = 22)
+    a:   1.99561090 +/- 0.02037361 (1.02%) (init = 1)
+    b:   0.01999907 +/- 4.0445e-06 (0.02%) (init = 1)
+    c:   9.20030214 +/- 0.02405748 (0.26%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.8274
-    C(x0, a) = +0.1597
-    C(x0, b) = -0.1278
+    C(a, b)  = -0.8252
+    C(x0, c) = -0.1684
+    C(x0, a) = +0.1131
 </pre></div>
 </div>
 </div>
@@ -488,7 +488,7 @@ transition for example.</p>
 <section id="i-get-import-errors-from-ipython">
 <h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Link to this heading">¶</a></h2>
 <p>If you see something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.html.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dropdown</span>
 
 <span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;widgets&#39;</span>
 </pre></div>
@@ -529,7 +529,7 @@ transition for example.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Model - uncertainty pred &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -146,7 +146,7 @@ to download the full example code.</p>
     amp:    82.4660404 +/- 0.99770817 (1.21%) (init = 90)
     off:    51.3218514 +/- 1.83125060 (3.57%) (init = 50)
     tau:    3.05525924 +/- 0.11068420 (3.62%) (init = 2)
-    gamma:  2.25386377 +/- 0.43544396 (19.32%) (init = 2)
+    gamma:  2.25386376 +/- 0.43544396 (19.32%) (init = 2)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(off, gamma) = +0.8634
     C(amp, gamma) = -0.7706
@@ -164,10 +164,10 @@ to download the full example code.</p>
 <span class="c1"># nonlinear regression lecture by Julien Chiquet</span>
 <span class="c1"># https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 <span class="c1"># data from the R base package datasets for the waiting time between eruptions</span>
 <span class="c1"># and the duration of the eruption for the Old Faithful geyser in Yellowstone</span>
@@ -225,7 +225,7 @@ to download the full example code.</p>
 
 
 <span class="c1"># model with a modified logistic function + offset</span>
-<span class="k">def</span> <span class="nf">logistic_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">off</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">logistic_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">off</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span><span class="o">-</span><span class="n">off</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a></a><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tau</span><span class="p">)))</span> <span class="o">+</span> <span class="n">off</span>
 
 
@@ -262,13 +262,16 @@ to download the full example code.</p>
 <span class="c1"># &lt;end examples/doc_model_uncertainty_pred.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.320 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.349 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-uncertainty-pred-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/9e9f302b1ad034bccd39c7927d6a4bc6/model_uncertainty_pred.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">model_uncertainty_pred.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ec61b8ff41c3777a5145f53e673063a0/model_uncertainty_pred.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_uncertainty_pred.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/7363f96a6e001e32810cbcbfcbaaaa9d/model_uncertainty_pred.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">model_uncertainty_pred.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -305,7 +308,7 @@ to download the full example code.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

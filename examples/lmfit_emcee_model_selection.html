@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Model Selection using lmfit and emcee &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=28d163b9"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=e358f374"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -143,14 +143,14 @@ the PTSampler was removed in emcee v3…</p>
 <p><cite>lmfit.emcee</cite> can be used to obtain the posterior probability distribution
 of parameters, given a set of experimental data. This notebook shows how it
 can be used for Bayesian model selection.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lmfit</span>
 </pre></div>
 </div>
 <p>Define a Gaussian lineshape and generate some data:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a_max</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a_max</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">a_max</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.exp.html#numpy.exp" title="numpy.exp" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><a href="https://numpy.org/doc/stable/reference/generated/numpy.exp.html#numpy.exp" title="numpy.exp" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a></a><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="n">sd</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
 
@@ -166,7 +166,7 @@ can be used for Bayesian model selection.</p>
 </pre></div>
 </div>
 <p>Define the normalised residual for the data:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">just_generative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">just_generative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
     <span class="n">generative</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
     <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
@@ -180,7 +180,7 @@ can be used for Bayesian model selection.</p>
 </pre></div>
 </div>
 <p>Create a Parameter set for the initial guesses:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">initial_peak_params</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initial_peak_params</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
 
     <span class="c1"># a and b give a linear background</span>
@@ -223,7 +223,7 @@ the parameters are outside their bounds. As such it’s a uniform prior.</p>
 <p>The log-likelihood function is given below. To use non-uniform priors then
 should include these terms in <cite>lnprob</cite>. This is the log-likelihood
 probability for the sampling.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">lnprob</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lnprob</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">just_generative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a></a><span class="p">(((</span><span class="n">resid</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">dy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html#numpy.log" title="numpy.log" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html#numpy.log" title="numpy.log" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a></a><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/constants.html#numpy.pi" title="numpy.pi" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><a href="https://numpy.org/doc/stable/reference/constants.html#numpy.pi" title="numpy.pi" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a></a> <span class="o">*</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
@@ -318,6 +318,9 @@ possible. For example, you might expect the prior to be Gaussian.</p>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c5b1d1ce60f76e20b3312a2697eca7f1/lmfit_emcee_model_selection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">lmfit_emcee_model_selection.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/cb0c48698554996e8733a1803c042898/lmfit_emcee_model_selection.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">lmfit_emcee_model_selection.zip</span></code></a></p>
+</div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
@@ -355,7 +358,7 @@ possible. For example, you might expect the prior to be Gaussian.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

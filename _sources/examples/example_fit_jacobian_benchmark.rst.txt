@@ -242,10 +242,10 @@ Finally, we present the results:
 
     | Method                  | Avg. time (ms) | # func. (+ Jac.) calls | Chi-squared | a     | b     | c     |
     |-------------------------|----------------|------------------------|-------------|-------|-------|-------|
-    | leastsq                 | 2.23           | 39                     | 1.092       | 2.564 | 1.359 | 0.824 |
-    | leastsq with Jac.       | 1.84           | 12 (+10)               | 1.092       | 2.564 | 1.359 | 0.824 |
-    | least_squares           | 5.09           | 38                     | 1.092       | 2.564 | 1.359 | 0.824 |
-    | least_squares with Jac. | 3.41           | 11 (+9)                | 1.092       | 2.564 | 1.359 | 0.824 |
+    | leastsq                 | 1.63           | 39                     | 1.092       | 2.564 | 1.359 | 0.824 |
+    | leastsq with Jac.       | 1.27           | 12 (+10)               | 1.092       | 2.564 | 1.359 | 0.824 |
+    | least_squares           | 4.13           | 38                     | 1.092       | 2.564 | 1.359 | 0.824 |
+    | least_squares with Jac. | 2.82           | 11 (+9)                | 1.092       | 2.564 | 1.359 | 0.824 |
 
 
 
@@ -253,7 +253,7 @@ Finally, we present the results:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.570 seconds)
+   **Total running time of the script:** (0 minutes 1.331 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_jacobian_benchmark.py:
@@ -269,6 +269,10 @@ Finally, we present the results:
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_jacobian_benchmark.py <example_fit_jacobian_benchmark.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_fit_jacobian_benchmark.zip <example_fit_jacobian_benchmark.zip>`
 
 
 .. only:: html

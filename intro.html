@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Getting started with Non-Linear Least-Squares Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -164,9 +164,9 @@ model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
 sine wave, and so write an objective function like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
 
-<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">residual</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -182,11 +182,11 @@ sine wave, and so write an objective function like this:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.16.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">leastsq</span>
 
 <span class="c1"># generate synthetic data with noise</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -256,12 +256,12 @@ relying on the solver to support bounds itself.</p></li>
 for the decaying sine wave as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
 
 
-<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">):</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
     <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span>
@@ -294,7 +294,7 @@ separation of the objective function from the code using it.</p>
 </div>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_params</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="n">create_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 </pre></div>
@@ -401,7 +401,7 @@ determination of Parameters confidence levels.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

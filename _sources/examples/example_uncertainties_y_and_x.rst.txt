@@ -202,7 +202,7 @@ For more in-depth discussion, see
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.277 seconds)
+   **Total running time of the script:** (0 minutes 0.311 seconds)
 
 
 .. _sphx_glr_download_examples_example_uncertainties_y_and_x.py:
@@ -218,6 +218,10 @@ For more in-depth discussion, see
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_uncertainties_y_and_x.py <example_uncertainties_y_and_x.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_uncertainties_y_and_x.zip <example_uncertainties_y_and_x.zip>`
 
 
 .. only:: html

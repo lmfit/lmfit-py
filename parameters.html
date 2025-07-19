@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Parameter and Parameters &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -175,13 +175,13 @@
 lmfit.</p>
 <p>A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
-optimization routines from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>. A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> has
+optimization routines from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.16.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>. A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> has
 a value that can either be varied in the fit or held at a fixed value, and
 can have lower and/or upper bounds placed on the value. It can even have a
 value that is constrained by an algebraic expression of other Parameter
 values. Since <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects live outside the core
 optimization routines, they can be used in <strong>all</strong> optimization routines
-from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>. By using <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects instead of
+from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.16.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>. By using <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects instead of
 plain variables, the objective function does not have to be modified to
 reflect every change of what is varied in the fit, or whether bounds can be
 applied. This simplifies the writing of models, allowing general models
@@ -189,8 +189,8 @@ that describe the phenomenon and gives the user more flexibility in using
 and testing variations of that model.</p>
 <p>Whereas a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> expands on an individual floating point
 variable, the optimization methods actually still need an ordered group of
-floating point variables. In the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> routines this is
-required to be a one-dimensional <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>. In lmfit, this one-dimensional
+floating point variables. In the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.16.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> routines this is
+required to be a one-dimensional <a class="extlink-numpydoc reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>. In lmfit, this one-dimensional
 array is replaced by a <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> object, which works as an
 ordered dictionary of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects with a few additional
 features and methods. That is, while the concept of a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>
@@ -204,7 +204,7 @@ parameter values, bounds, and other attributes can be printed using
 <h2>The <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class<a class="headerlink" href="#the-parameter-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.parameter.Parameter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Link to this definition">¶</a></dt>
 <dd><p>A Parameter is an object that can be varied in a fit.</p>
 <p>It is a central component of lmfit, and all minimization and modeling
 methods use Parameter objects.</p>
@@ -324,7 +324,7 @@ clear the expression.</p>
 <h2>The <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> class<a class="headerlink" href="#the-parameters-class" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.parameter.Parameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">usersyms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">usersyms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Link to this definition">¶</a></dt>
 <dd><p>A dictionary of Parameter objects.</p>
 <p>It should contain all Parameter objects that are required to specify
 a fit model. All minimization and Model fitting routines in lmfit will
@@ -641,9 +641,9 @@ might look like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_parameters_basic.py&gt;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">report_fit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">create_params</span><span class="p">,</span> <span class="n">report_fit</span>
 
 <span class="c1"># create data to be fitted</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
@@ -653,7 +653,7 @@ might look like this:</p>
 
 
 <span class="c1"># define objective function: returns the array to be minimized</span>
-<span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
@@ -688,7 +688,7 @@ might look like this:</p>
 
 <span class="c1"># try to plot results</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -706,7 +706,7 @@ can be simplified using the <a class="reference internal" href="#lmfit.parameter
 which would make the objective function <code class="docutils literal notranslate"><span class="pre">fcn2min</span></code> above look like:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
 
@@ -754,7 +754,7 @@ which would make the objective function <code class="docutils literal notranslat
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

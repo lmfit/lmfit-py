@@ -164,7 +164,7 @@ Model - uncertainty2
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.208 seconds)
+   **Total running time of the script:** (0 minutes 1.359 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty2.py:
@@ -180,6 +180,10 @@ Model - uncertainty2
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: model_uncertainty2.py <model_uncertainty2.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: model_uncertainty2.zip <model_uncertainty2.zip>`
 
 
 .. only:: html

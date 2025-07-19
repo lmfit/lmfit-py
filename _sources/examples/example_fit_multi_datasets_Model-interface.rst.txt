@@ -234,7 +234,7 @@ Plot the data sets and fits
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.367 seconds)
+   **Total running time of the script:** (0 minutes 0.414 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets_Model-interface.py:
@@ -250,6 +250,10 @@ Plot the data sets and fits
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: example_fit_multi_datasets_Model-interface.py <example_fit_multi_datasets_Model-interface.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: example_fit_multi_datasets_Model-interface.zip <example_fit_multi_datasets_Model-interface.zip>`
 
 
 .. only:: html

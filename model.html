@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Modeling Data and Curve Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css?v=aac77d10" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css?v=572af1d6" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="_static/documentation_options.js?v=28d163b9"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=e358f374"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -275,19 +275,19 @@
 <p>A common use of least-squares minimization is <em>curve fitting</em>, where one has a
 parametrized model function meant to explain some phenomena and wants to adjust
 the numerical values for the model so that it most closely matches some
-data. With <a class="reference external" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="(in SciPy v1.15.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy</span></code></a>, such problems are typically solved with
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, which is a wrapper around
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.  While <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>
+data. With <a class="reference external" href="https://docs.scipy.org/doc/scipy/index.html#module-scipy" title="(in SciPy v1.16.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy</span></code></a>, such problems are typically solved with
+<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, which is a wrapper around
+<a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.  While <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>
 can be used for curve-fitting problems, it is more general and not aimed
 specifically at this common use-case.</p>
 <p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class in lmfit provides a simple and flexible approach to
-curve-fitting problems. Like <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>
+curve-fitting problems. Like <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>
 uses a <em>model function</em> – a function that is meant to calculate a model for
 some phenomenon – and then uses that to best match an array of supplied
 data.  Beyond that similarity, the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> interface is rather different
-from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>.  These differences include a) being
-class-based and so having multiple methods for working with <code class="xref py py-class docutils literal notranslate"><span class="pre">Model`s,</span>
-<span class="pre">b)</span> <span class="pre">using</span> <span class="pre">:class:`~lmfit.parameter.Parameters</span></code>, and all of the advantages they
+from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>.  These differences include a) being
+class-based and so having multiple methods for working with <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>s,
+b) using <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, and all of the advantages they
 provide, and c) being easy to combine into composite models.</p>
 <p>In addition to allowing you to turn any model function into a curve-fitting
 model, lmfit also provides canonical definitions for many known line shapes
@@ -310,10 +310,10 @@ of the model function:</p>
 </div>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
 
 
-<span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -323,10 +323,10 @@ of the model function:</p>
 </div>
 <p>With that function, we can easily calculate a model for our data, and the goal
 here is to use this function to fit to data <span class="math notranslate nohighlight">\(y(x)\)</span> represented by the
-arrays <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">x</span></code>.  With <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
+arrays <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">x</span></code>.  With <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">2.33</span><span class="p">,</span> <span class="mf">0.21</span><span class="p">,</span> <span class="mf">1.51</span><span class="p">)</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
@@ -340,7 +340,7 @@ arrays <code class="docutils literal notranslate"><span class="pre">y</span></co
 </div>
 </div>
 <p>That is, we create data (maybe adding a little noise), make an initial guess of
-the model values, and run <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a> with the model
+the model values, and run <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a> with the model
 function, data arrays, and initial guesses. The results returned are the
 optimal values for the parameters and the covariance matrix.</p>
 <p>With lmfit, we create a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> that wraps the <code class="docutils literal notranslate"><span class="pre">gaussian</span></code> model
@@ -349,7 +349,7 @@ and determines the corresponding parameter names from the function
 signature itself:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 <span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;parameter names: </span><span class="si">{</span><span class="n">gmodel</span><span class="o">.</span><span class="n">param_names</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -463,17 +463,17 @@ source code, is:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_gaussian.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;model1d_gauss.dat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;1-d gaussian: gaussian(x, amp, cen, wid)&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">wid</span><span class="p">))</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">wid</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
@@ -528,7 +528,8 @@ the best fit parameter values. These can be used to generate the following
 plot:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_12_0.svg" src="_images/model_12_0.svg" /></div>
+<img alt="_images/model_12_0.svg" src="_images/model_12_0.svg" />
+</div>
 </div>
 <p>which shows the data in blue dots, the best fit as a solid green line, and
 the initial fit as a dashed orange line.</p>
@@ -557,7 +558,7 @@ detail.</p>
 function as a fitting model.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.model.Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">independent_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model" title="Link to this definition">¶</a></dt>
 <dd><p>Create a model from a user-supplied model function.</p>
 <p>The model function will normally take an independent variable
 (generally, the first argument) and a series of arguments that are
@@ -602,8 +603,8 @@ seen in the data. Should be one of:</p>
 (generally, the first argument) and a series of arguments that are
 meant to be parameters for the model. Thus, a simple peak using a
 Gaussian defined as:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -636,7 +637,7 @@ variables and parameters:</p>
 <dd class="field-even"><p>Value of model given the parameters and other arguments.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.13)">complex</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.13)">complex</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -893,7 +894,7 @@ The choices are:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">'propagate'</span></code>: Do not check for NaNs or missing values. The fit will
 try to ignore them.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'omit'</span></code>: Remove NaNs or missing observations in data. If pandas is
-installed, <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.isnull.html#pandas.isnull" title="(in pandas v2.2.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.isnull()</span></code></a> is used, otherwise
+installed, <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.isnull.html#pandas.isnull" title="(in pandas v2.3.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.isnull()</span></code></a> is used, otherwise
 <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.isnan()</span></code> is used.</p></li>
 </ul>
 </div></blockquote>
@@ -979,11 +980,11 @@ treated as variables.  An example is given below.</p>
 function is fairly easy. Let’s try another one:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 
-<span class="k">def</span> <span class="nf">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
    <span class="k">return</span> <span class="n">N</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span>
 
 
@@ -1055,7 +1056,7 @@ independent variables.</p>
 Parameters if the supplied default value was a valid number:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">decay2</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">check_positive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">decay2</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">check_positive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">check_positive</span><span class="p">:</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="mf">1.e-9</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1096,7 +1097,7 @@ acts like the integer 1, and <code class="docutils literal notranslate"><span cl
 builtin <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.lineshapes.voigt()</span></code> function is defined as</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">voigt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">voigt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a 1-dimensional Voigt function.</span>
 <span class="sd">        ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1141,7 +1142,7 @@ add a <code class="docutils literal notranslate"><span class="pre">prefix</span>
 for us.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="c1"># function definition, for now just ``pass``</span>
     <span class="k">pass</span>
 
@@ -1194,7 +1195,7 @@ in the process of defining and using the model.</p>
 function, you can simply supply a default value:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
 </pre></div>
 </div>
@@ -1205,7 +1206,7 @@ function, you can simply supply a default value:</p>
 <p>instead of using:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
 </pre></div>
 </div>
@@ -1249,7 +1250,7 @@ equivalent to <a class="reference internal" href="#lmfit.model.Model.make_params
 model prefixes and so on.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">create_params</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_params</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 
@@ -1486,12 +1487,12 @@ used for the model function and fit process.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_savemodel.py&gt;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.model</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">save_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">save_model</span>
 
 
-<span class="k">def</span> <span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
 
 
@@ -1510,19 +1511,19 @@ used for the model function and fit process.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_loadmodel.py&gt;</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.model</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_model</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;sinemodel.sav&#39;</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="si">}</span><span class="s2"> doc_model_savemodel.py&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
 
 
@@ -1575,7 +1576,7 @@ comparing different models, including <code class="docutils literal notranslate"
 and <code class="docutils literal notranslate"><span class="pre">bic</span></code>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.model.ModelResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModelResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leastsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcn_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcn_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModelResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leastsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcn_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcn_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nfev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_kws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Link to this definition">¶</a></dt>
 <dd><p>Result from the Model fit.</p>
 <p>This has many attributes and methods for viewing and working with the
 results of a fit using Model. It inherits from Minimizer, so that it
@@ -1621,7 +1622,7 @@ default value depends on the fitting method.</p></li>
 <dd class="field-even"><p>Array or value for the evaluated model.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>, or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.13)">complex</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)">numpy.ndarray</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>, or <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.13)">complex</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1783,7 +1784,7 @@ uncertainties in the best-fit parameters.</p>
 <dd class="field-even"><p>Uncertainty at each value of the model.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1835,11 +1836,11 @@ the initial conditions for the fit, pass the argument
 <li><p><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</p></li>
 <li><p><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</p></li>
 <li><p><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated
 not only at data points, but refined to contain <cite>numpoints</cite>
 points in total.</p></li>
-<li><p><strong>fig</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="(in Matplotlib v3.10.1)"><em>matplotlib.figure.Figure</em></a><em>, </em><em>optional</em>) – The figure to plot on. The default is None, which means use
+<li><p><strong>fig</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="(in Matplotlib v3.10.3)"><em>matplotlib.figure.Figure</em></a><em>, </em><em>optional</em>) – The figure to plot on. The default is None, which means use
 the current pyplot figure or create one if there is none.</p></li>
 <li><p><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for data points.</p></li>
 <li><p><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for fitted curve.</p></li>
@@ -1857,7 +1858,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="(in Matplotlib v3.10.1)">matplotlib.figure.Figure</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="(in Matplotlib v3.10.3)">matplotlib.figure.Figure</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1893,14 +1894,14 @@ errorbars will also be plotted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.1)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</p></li>
 <li><p><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</p></li>
 <li><p><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</p></li>
 <li><p><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</p></li>
 <li><p><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</p></li>
 <li><p><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated
 not only at data points, but refined to contain <cite>numpoints</cite>
 points in total.</p></li>
@@ -1918,7 +1919,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.1)">matplotlib.axes.Axes</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1951,10 +1952,10 @@ will also be plotted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.1)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><em>matplotlib.axes.Axes</em></a><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</p></li>
 <li><p><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</p></li>
-<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
+<li><p><strong>yerr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</p></li>
 <li><p><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for data points.</p></li>
 <li><p><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed to the plot function for fitted curve.</p></li>
 <li><p><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if a new one is created.</p></li>
@@ -1965,7 +1966,7 @@ correspond to the NumPy functions with the same name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.1)">matplotlib.axes.Axes</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -2155,13 +2156,13 @@ least-squares sense.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.ier">
 <span class="sig-name descname"><span class="pre">ier</span></span><a class="headerlink" href="#lmfit.model.ier" title="Link to this definition">¶</a></dt>
-<dd><p>Integer returned code from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
+<dd><p>Integer returned code from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lmfit.model.lmdif_message">
 <span class="sig-name descname"><span class="pre">lmdif_message</span></span><a class="headerlink" href="#lmfit.model.lmdif_message" title="Link to this definition">¶</a></dt>
-<dd><p>String message returned from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
+<dd><p>String message returned from <a class="extlink-scipydoc reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2314,7 +2315,8 @@ give 3-<span class="math notranslate nohighlight">\(\sigma\)</span> bands for th
 figure below.</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_31_0.svg" src="_images/model_31_0.svg" /></div>
+<img alt="_images/model_31_0.svg" src="_images/model_31_0.svg" />
+</div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.0.4.</span></p>
@@ -2330,10 +2332,10 @@ model can be calculated and used:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_uncertainty2.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
 
 <span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;NIST_Gauss2.dat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -2450,7 +2452,8 @@ model can be calculated and used:</p>
     C(g1_amplitude, bkg_decay)  = -0.5074
 </pre></div>
 </div>
-<img alt="_images/model_32_1.svg" src="_images/model_32_1.svg" /></div>
+<img alt="_images/model_32_1.svg" src="_images/model_32_1.svg" />
+</div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.2.3.</span></p>
@@ -2468,10 +2471,10 @@ predicted intervals is shown below:</p>
 <span class="c1"># nonlinear regression lecture by Julien Chiquet</span>
 <span class="c1"># https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 <span class="c1"># data from the R base package datasets for the waiting time between eruptions</span>
 <span class="c1"># and the duration of the eruption for the Old Faithful geyser in Yellowstone</span>
@@ -2529,7 +2532,7 @@ predicted intervals is shown below:</p>
 
 
 <span class="c1"># model with a modified logistic function + offset</span>
-<span class="k">def</span> <span class="nf">logistic_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">off</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">logistic_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">off</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span><span class="o">-</span><span class="n">off</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tau</span><span class="p">)))</span> <span class="o">+</span> <span class="n">off</span>
 
 
@@ -2584,7 +2587,7 @@ predicted intervals is shown below:</p>
     amp:    82.4660404 +/- 0.99770817 (1.21%) (init = 90)
     off:    51.3218514 +/- 1.83125060 (3.57%) (init = 50)
     tau:    3.05525924 +/- 0.11068420 (3.62%) (init = 2)
-    gamma:  2.25386377 +/- 0.43544396 (19.32%) (init = 2)
+    gamma:  2.25386376 +/- 0.43544396 (19.32%) (init = 2)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(off, gamma) = +0.8634
     C(amp, gamma) = -0.7706
@@ -2593,7 +2596,8 @@ predicted intervals is shown below:</p>
     C(tau, gamma) = +0.4699
 </pre></div>
 </div>
-<img alt="_images/model_33_1.svg" src="_images/model_33_1.svg" /></div>
+<img alt="_images/model_33_1.svg" src="_images/model_33_1.svg" />
+</div>
 </div>
 </section>
 <section id="using-uncertainties-in-the-fitted-parameters-for-post-fit-calculations">
@@ -2630,9 +2634,9 @@ calculations can have a noticeable influence on the resulting uncertainties.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_parameters_uvars.py&gt;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
 
 <span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;NIST_Gauss2.dat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -2681,7 +2685,7 @@ calculations can have a noticeable influence on the resulting uncertainties.</p>
 <span class="c1"># option 2: define corresponding variables after fit</span>
 
 
-<span class="k">def</span> <span class="nf">post_fit</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">post_fit</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
     <span class="s2">&quot;example post fit function&quot;</span>
     <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_area&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;g1_amplitude + g2_amplitude&#39;</span><span class="p">)</span>
     <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;post_centroid&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;</span><span class="p">)</span>
@@ -2773,7 +2777,7 @@ Peak Centroid: 124.10846+/-0.14074
     g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
     g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
     g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
-    post_area:      6751.19106 +/- 46.5080243 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
     post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.500)
     C(g1_amplitude, g1_sigma)   = +0.8243
@@ -2786,9 +2790,7 @@ Peak Centroid: 124.10846+/-0.14074
     C(g1_center, g2_center)     = +0.6205
     C(g1_center, g1_sigma)      = +0.5075
     C(g1_amplitude, exp_decay)  = -0.5074
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+[[Model]]
     ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
 [[Fit Statistics]]
     # fitting method   = leastsq
@@ -2813,9 +2815,9 @@ Peak Centroid: 124.10846+/-0.14074
     g1_height:      101.880229 +/- 0.59217051 (0.58%) == &#39;0.3989423*g1_amplitude/max(1e-15, g1_sigma)&#39;
     g2_fwhm:        32.5128709 +/- 0.43988398 (1.35%) == &#39;2.3548200*g2_sigma&#39;
     g2_height:      72.0455939 +/- 0.61721985 (0.86%) == &#39;0.3989423*g2_amplitude/max(1e-15, g2_sigma)&#39;
-    area:           6751.19106 +/- 46.5080243 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    area:           6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
     centroid:       124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
-    post_area:      6751.19106 +/- 46.5080243 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
+    post_area:      6751.19106 +/- 46.5080249 (0.69%) == &#39;g1_amplitude + g2_amplitude&#39;
     post_centroid:  124.108459 +/- 0.14074482 (0.11%) == &#39;(g1_amplitude*g1_center+ g2_amplitude*g2_center)/(g1_amplitude + g2_amplitude)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.500)
     C(g1_amplitude, g1_sigma)   = +0.8243
@@ -2887,10 +2889,10 @@ evaluate the model function or redo the fit.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_savemodelresult.py&gt;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.model</span> <span class="kn">import</span> <span class="n">save_modelresult</span>
-<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_modelresult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianModel</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;model1d_gauss.dat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
@@ -2913,13 +2915,13 @@ evaluate the model function or redo the fit.</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_loadmodelresult.py&gt;</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit.model</span> <span class="kn">import</span> <span class="n">load_modelresult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_modelresult</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;gauss_modelresult.sav&#39;</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="si">}</span><span class="s2"> doc_model_savemodelresult.py&quot;</span><span class="p">)</span>
@@ -2957,7 +2959,7 @@ to model a peak with a background. For such a simple problem, we could just
 build a model that included both components:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gaussian_plus_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gaussian_plus_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;line + 1-d gaussian&quot;&quot;&quot;</span>
 
     <span class="n">gauss</span> <span class="o">=</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">wid</span><span class="p">))</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">wid</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -2987,7 +2989,7 @@ As an alternative to including a linear background in our model function,
 we could define a linear function:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a line&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">slope</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">intercept</span>
 </pre></div>
@@ -3010,22 +3012,22 @@ we could define a linear function:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_two_components.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;model1d_gauss.dat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">1.0</span>
 
 
-<span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;1-d gaussian: gaussian(x, amp, cen, wid)&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">wid</span><span class="p">))</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">wid</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a line&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">slope</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">intercept</span>
 
@@ -3086,7 +3088,8 @@ we could define a linear function:</p>
 <p>and shows the plot on the left.</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_43_0.svg" src="_images/model_43_0.svg" /></div>
+<img alt="_images/model_43_0.svg" src="_images/model_43_0.svg" />
+</div>
 </div>
 <p>On the left, data is shown in blue dots, the total fit is shown in solid
 green line, and the initial fit is shown as a orange dashed line. The figure
@@ -3134,7 +3137,7 @@ see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="lmfit.model.CompositeModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CompositeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.CompositeModel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CompositeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">**kws</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.CompositeModel" title="Link to this definition">¶</a></dt>
 <dd><p>Combine two models (<cite>left</cite> and <cite>right</cite>) with binary operator (<cite>op</cite>).</p>
 <p>Normally, one does not have to explicitly create a <cite>CompositeModel</cite>,
 but can use normal Python operators <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, and <code class="docutils literal notranslate"><span class="pre">/</span></code> to
@@ -3183,9 +3186,9 @@ operator. For example, to convolve two models, you could define a simple
 convolution function, perhaps as:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="k">def</span> <span class="nf">convolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;simple convolution of two arrays&quot;&quot;&quot;</span>
     <span class="n">npts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">))</span>
     <span class="n">pad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npts</span><span class="p">)</span>
@@ -3206,11 +3209,11 @@ binary operator. A full script using this technique is here:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_model_composite.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">CompositeModel</span><span class="p">,</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">lmfit.lineshapes</span> <span class="kn">import</span> <span class="n">gaussian</span><span class="p">,</span> <span class="n">step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">CompositeModel</span><span class="p">,</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lmfit.lineshapes</span><span class="w"> </span><span class="kn">import</span> <span class="n">gaussian</span><span class="p">,</span> <span class="n">step</span>
 
 <span class="c1"># create data from broadened step</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
@@ -3219,7 +3222,7 @@ binary operator. A full script using this technique is here:</p>
 <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">jump</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jump</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Heaviside step function.&quot;&quot;&quot;</span>
     <span class="n">o</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
     <span class="n">imid</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
@@ -3227,7 +3230,7 @@ binary operator. A full script using this technique is here:</p>
     <span class="k">return</span> <span class="n">o</span>
 
 
-<span class="k">def</span> <span class="nf">convolve</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convolve</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple convolution of two arrays.&quot;&quot;&quot;</span>
     <span class="n">npts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">kernel</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
     <span class="n">pad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npts</span><span class="p">)</span>
@@ -3281,7 +3284,7 @@ binary operator. A full script using this technique is here:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
-    (Model(jump) &lt;function convolve at 0x7fd39ad744a0&gt; Model(gaussian))
+    (Model(jump) &lt;function convolve at 0x11ff7cc20&gt; Model(gaussian))
 [[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 33
@@ -3307,7 +3310,8 @@ binary operator. A full script using this technique is here:</p>
 <p>and shows the plots:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/model_51_0.svg" src="_images/model_51_0.svg" /></div>
+<img alt="_images/model_51_0.svg" src="_images/model_51_0.svg" />
+</div>
 </div>
 <p>Using composite models with built-in or custom operators allows you to
 build complex models from testable sub-components.</p>
@@ -3346,7 +3350,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>
