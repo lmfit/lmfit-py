@@ -18,13 +18,13 @@ authors = [
 ]
 description = "Least-Squares Minimization with Bounds and Constraints"
 readme = "README.rst"
-license = {file = "LICENSE"}
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 keywords = ["curve-fitting, least-squares minimization"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
