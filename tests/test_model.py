@@ -1127,7 +1127,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
                         reason="requires matplotlib.pyplot")
     def test_composite_plotting(self):
         # test that a composite model has non-empty best_values
-        import matplotlib
+        import matplotlib.pyplot
         try:
             matplotlib.pyplot.close('all')
         except ValueError:
