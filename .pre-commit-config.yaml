@@ -5,7 +5,7 @@ repos:
     rev: v3.21.0
     hooks:
     -   id: pyupgrade
-        args: [--py39-plus]
+        args: [--py310-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
