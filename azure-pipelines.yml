@@ -81,7 +81,7 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             python -m pip install --upgrade build pip wheel
-            python -m pip install asteval==1.0 numpy==1.24.0 scipy==1.10.0 uncertainties==3.2.2
+            python -m pip install asteval==1.0 numpy==2.0.0 scipy==1.14.0 uncertainties==3.2.2
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python -m build

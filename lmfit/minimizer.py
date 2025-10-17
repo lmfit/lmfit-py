@@ -22,7 +22,6 @@ import numbers
 import warnings
 
 import numpy as np
-from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -913,6 +912,7 @@ class Minimizer:
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
+
         if method == 'L-BFGS-B':
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
 
@@ -921,13 +921,7 @@ class Minimizer:
             # the users max nfev, and do not abort in _residual
             fmin_kws['options']['maxiter'] = self.max_nfev
             self.max_nfev = 5*self.max_nfev
-
-        # FIXME: update when SciPy requirement is >= 1.11
-        # ``maxiter`` deprecated in favor of ``maxfun``
-        elif method == "TNC" and int(scipy_version.split('.')[1]) >= 11:
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
-            fmin_kws['options'].pop('maxiter')
-
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:

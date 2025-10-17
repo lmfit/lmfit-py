@@ -7,8 +7,8 @@ name = "lmfit"
 dynamic = ["version"]
 dependencies = [
     "asteval>=1.0",
-    "numpy>=1.24",
-    "scipy>=1.10.0",
+    "numpy>=2.0.0",
+    "scipy>=1.14.0",
     "uncertainties>=3.2.2",
     "dill>=0.3.4",
 ]
