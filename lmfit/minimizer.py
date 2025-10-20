@@ -26,6 +26,7 @@ from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution
+from scipy.optimize import direct as scipy_direct
 from scipy.optimize import dual_annealing as scipy_dual_annealing
 from scipy.optimize import least_squares
 from scipy.optimize import leastsq as scipy_leastsq
@@ -615,7 +616,7 @@ class Minimizer:
             sum-of-squares, but can be replaced by other options.
 
         """
-        if self.result.method in ['brute', 'shgo', 'dual_annealing']:
+        if self.result.method in ['brute', 'shgo', 'dual_annealing', 'direct']:
             apply_bounds_transformation = False
         else:
             apply_bounds_transformation = True
@@ -2251,6 +2252,78 @@ class Minimizer:
 
         return result
 
+    def direct(self, params=None, max_nfev=None, **kws):
+        """Use the `DIRECT` algorithm to find the global minimum.
+
+        This method calls :scipydoc:`optimize.direct` using its default
+        arguments.
+
+        Parameters
+        ----------
+        params : Parameters, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        max_nfev : int or None, optional
+            Maximum number of function evaluations. Defaults to
+            ``200000*(nvars+1)``, where ``nvars`` is the number of variables.
+        **kws : dict, optional
+            Minimizer options to pass to the DIRECT algorithm.
+
+        Returns
+        -------
+        MinimizerResult
+            Object containing the parameters from the direct method.
+
+        .. versionadded:: 1.4.0
+
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'direct'
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
+
+        direct_kws = dict(eps=0.0001, maxfun=None, maxiter=1000,
+                          locally_biased=True, f_min=-np.inf,
+                          f_min_rtol=0.0001, vol_tol=1e-16, len_tol=1e-06,
+                          callback=None)
+
+        direct_kws.update(self.kws)
+        direct_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        bounds = np.asarray([(par.min, par.max) for par in self.params.values()])[varying]
+
+        result.call_kws = direct_kws
+
+        try:
+            ret = scipy_direct(self.penalty, list(bounds), **direct_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            for attr, value in ret.items():
+                if attr in ['success', 'message']:
+                    setattr(result, attr, value)
+                else:
+                    setattr(result, f'direct_{attr}', value)
+
+            result.residual = self.__residual(result.direct_x, False)
+            result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
+
+        result._calculate_statistics()
+
+        # calculate the cov_x and estimate uncertainties/correlations
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
+            result.covar = self._calculate_covariance_matrix(result.direct_x)
+            if result.covar is not None:
+                self._calculate_uncertainties_correlations()
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """Perform the minimization.
 
@@ -2284,6 +2357,7 @@ class Minimizer:
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
             - `'shgo'`: Simplicial Homology Global Optimization
             - `'dual_annealing'`: Dual Annealing optimization
+            - `'direct'`: DIRECT algorithm
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2340,6 +2414,8 @@ class Minimizer:
             function = self.shgo
         elif user_method == 'dual_annealing':
             function = self.dual_annealing
+        elif user_method == 'direct':
+            function = self.direct
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
