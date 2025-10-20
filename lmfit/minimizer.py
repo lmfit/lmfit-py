@@ -1642,7 +1642,7 @@ class Minimizer:
         # that value to the solver so it essentially never stops on its own
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
-        lskws = dict(Dfun=None, full_output=1, col_deriv=0, ftol=1.5e-8,
+        lskws = dict(Dfun=None, full_output=True, col_deriv=False, ftol=1.5e-8,
                      xtol=1.5e-8, gtol=0.0, maxfev=2*self.max_nfev,
                      epsfcn=1.e-10, factor=100, diag=None)
 
@@ -2133,7 +2133,7 @@ class Minimizer:
 
         shgo_kws = dict(constraints=None, n=None, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
-                        sampling_method='simplicial')
+                        sampling_method='simplicial', workers=1)
 
         shgo_kws.update(self.kws)
         shgo_kws.update(kws)
