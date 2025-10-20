@@ -415,8 +415,6 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     limits : tuple, optional
         Should have the form ``((x_upper, x_lower), (y_upper, y_lower))``.
         If not given, the default is nsigma*stderr in each direction.
-    prob_func : None or callable, deprecated
-        Starting with version 1.2, this argument is unused and has no effect.
     nsigma : float or int, optional
         Multiplier of stderr for limits (default is 5).
     chi2_out: bool
@@ -444,10 +442,6 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     >>> plt.contour(x,y,gr)
 
     """
-    if prob_func is not None:
-        msg = "'prob_func' has no effect and will be removed in version 1.4."
-        raise DeprecationWarning(msg)
-
     params = result.params
 
     best_chisqr = result.chisqr
