@@ -11,6 +11,43 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+
+.. _whatsnew_140_label:
+
+Version 1.4.0 Release Notes (unreleased)
+========================================
+
+- add support for Python 3.14, drop Python 3.9
+- update SciPy/NumPy requirements, minimum versions are now "numpy>=2.0.0" and "scipy>=1.14.0"
+- add DIRECT algorithm for global minimization, available since SciPy v1.9
+- update functions arguments to optimizers to support newer SciPy versions
+- remove deprecated ``_nan_policy`` and ``prob_function`` argument in ``conf_interval2d``
+
+
+
+.. _whatsnew_134_label:
+
+Version 1.3.4 Release Notes (2025-July-19)
+==========================================
+
+Fixes:
+
+- capture and ignore ``std_dev=0`` warnings from 'uncertainties' package
+- ensure values / std errors are ``floats`` instead of ``np.floats``
+- fix formula in docstring of ``DoniachModel``
+- update license name for PyPI compatibility
+
+Additions:
+
+- add bose and fermi lineshapes, and BoseModel and FermiModel (with tests)
+
+Build/maintenance:
+- use latest SciPy/NumPy version for CI tests
+- fix several DeprecationWarnings due to updated dependencies
+- fix typos in documentation and docstrings
+- update Zenodo link
+
+
 .. _whatsnew_133_label:
 
 Version 1.3.3 Release Notes (2025-March-12)
