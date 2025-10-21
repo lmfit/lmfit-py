@@ -22,11 +22,11 @@ import numbers
 import warnings
 
 import numpy as np
-from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution
+from scipy.optimize import direct as scipy_direct
 from scipy.optimize import dual_annealing as scipy_dual_annealing
 from scipy.optimize import least_squares
 from scipy.optimize import leastsq as scipy_leastsq
@@ -616,7 +616,7 @@ class Minimizer:
             sum-of-squares, but can be replaced by other options.
 
         """
-        if self.result.method in ['brute', 'shgo', 'dual_annealing']:
+        if self.result.method in ['brute', 'shgo', 'dual_annealing', 'direct']:
             apply_bounds_transformation = False
         else:
             apply_bounds_transformation = True
@@ -913,6 +913,7 @@ class Minimizer:
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
+
         if method == 'L-BFGS-B':
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
 
@@ -921,13 +922,7 @@ class Minimizer:
             # the users max nfev, and do not abort in _residual
             fmin_kws['options']['maxiter'] = self.max_nfev
             self.max_nfev = 5*self.max_nfev
-
-        # FIXME: update when SciPy requirement is >= 1.11
-        # ``maxiter`` deprecated in favor of ``maxfun``
-        elif method == "TNC" and int(scipy_version.split('.')[1]) >= 11:
             fmin_kws['options']['maxfun'] = 2*self.max_nfev
-            fmin_kws['options'].pop('maxiter')
-
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
@@ -1648,7 +1643,7 @@ class Minimizer:
         # that value to the solver so it essentially never stops on its own
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
-        lskws = dict(Dfun=None, full_output=1, col_deriv=0, ftol=1.5e-8,
+        lskws = dict(Dfun=None, full_output=True, col_deriv=False, ftol=1.5e-8,
                      xtol=1.5e-8, gtol=0.0, maxfev=2*self.max_nfev,
                      epsfcn=1.e-10, factor=100, diag=None)
 
@@ -2139,7 +2134,7 @@ class Minimizer:
 
         shgo_kws = dict(constraints=None, n=None, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
-                        sampling_method='simplicial')
+                        sampling_method='simplicial', workers=1)
 
         shgo_kws.update(self.kws)
         shgo_kws.update(kws)
@@ -2257,6 +2252,78 @@ class Minimizer:
 
         return result
 
+    def direct(self, params=None, max_nfev=None, **kws):
+        """Use the `DIRECT` algorithm to find the global minimum.
+
+        This method calls :scipydoc:`optimize.direct` using its default
+        arguments.
+
+        Parameters
+        ----------
+        params : Parameters, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        max_nfev : int or None, optional
+            Maximum number of function evaluations. Defaults to
+            ``200000*(nvars+1)``, where ``nvars`` is the number of variables.
+        **kws : dict, optional
+            Minimizer options to pass to the DIRECT algorithm.
+
+        Returns
+        -------
+        MinimizerResult
+            Object containing the parameters from the direct method.
+
+        .. versionadded:: 1.4.0
+
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'direct'
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
+
+        direct_kws = dict(eps=0.0001, maxfun=None, maxiter=1000,
+                          locally_biased=True, f_min=-np.inf,
+                          f_min_rtol=0.0001, vol_tol=1e-16, len_tol=1e-06,
+                          callback=None)
+
+        direct_kws.update(self.kws)
+        direct_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        bounds = np.asarray([(par.min, par.max) for par in self.params.values()])[varying]
+
+        result.call_kws = direct_kws
+
+        try:
+            ret = scipy_direct(self.penalty, list(bounds), **direct_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            for attr, value in ret.items():
+                if attr in ['success', 'message']:
+                    setattr(result, attr, value)
+                else:
+                    setattr(result, f'direct_{attr}', value)
+
+            result.residual = self.__residual(result.direct_x, False)
+            result.nfev -= 1
+        elif result.nfev > self.max_nfev-5:
+            result.nfev -= 2
+            _best = result.last_internal_values
+            result.residual = self.__residual(_best, False)
+
+        result._calculate_statistics()
+
+        # calculate the cov_x and estimate uncertainties/correlations
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
+            result.covar = self._calculate_covariance_matrix(result.direct_x)
+            if result.covar is not None:
+                self._calculate_uncertainties_correlations()
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """Perform the minimization.
 
@@ -2290,6 +2357,7 @@ class Minimizer:
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
             - `'shgo'`: Simplicial Homology Global Optimization
             - `'dual_annealing'`: Dual Annealing optimization
+            - `'direct'`: DIRECT algorithm
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2346,6 +2414,8 @@ class Minimizer:
             function = self.shgo
         elif user_method == 'dual_annealing':
             function = self.dual_annealing
+        elif user_method == 'direct':
+            function = self.direct
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -2459,15 +2529,6 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
                    'for more information.')
             raise ValueError(msg)
     return arr
-
-
-# coerce_float64 replaces _nan_policy.  That was never part of the public API,
-# but we'll have it raise a DeprecationWarning for a while.
-# This change happened in June, 2023, v 1.2.1, so this function can removed
-# sometime in 2024, or after v 1.3.
-def _nan_policy(arr, nan_policy='raise', handle_inf=True, **kws):
-    warnings.warn('`_nan_policy` has been replaced with coerce_float64`', DeprecationWarning)
-    return coerce_float64(arr, nan_policy=nan_policy, handle_inf=handle_inf, **kws)
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
