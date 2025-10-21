@@ -98,3 +98,17 @@ def test_direct_scipy_docstring_example():
 
     assert_allclose(result_scipy.nfev, funevals)
     assert_allclose(result_scipy.nfev, result.direct_nfev)
+
+    # specify ``len_tol`` to stop minimization earlier
+    global_xy_len_tol = [-2.9044353, -2.9044353]
+    fglob_len_tol = -78.33230330754142
+    funevals_len_tol = 207
+
+    result_scipy_len_tol = scipy.optimize.direct(styblinski_tang, bounds,
+                                                 len_tol=1e-3)
+    assert_allclose(result_scipy_len_tol.fun, fglob_len_tol)
+    assert_allclose(result_scipy_len_tol.x, global_xy_len_tol)
+    assert_allclose(result_scipy_len_tol.nfev, funevals_len_tol)
+
+    result = mini.minimize(params=pars_bounds, method="direct", len_tol=1e-3)
+    assert_allclose(result.call_kws["len_tol"], 1.e-3)
