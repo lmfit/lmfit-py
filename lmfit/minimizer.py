@@ -964,7 +964,7 @@ class Minimizer:
                 if (par.vary and
                         not (np.isfinite(par.min) and np.isfinite(par.max))):
                     raise ValueError('differential_evolution requires finite '
-                                     'bound for all varying parameters')
+                                     'bounds for all varying parameters')
 
             _bounds = [(-np.pi / 2., np.pi / 2.)] * len(variables)
             kwargs = dict(args=(), strategy='best1bin', maxiter=self.max_nfev,
@@ -2293,6 +2293,9 @@ class Minimizer:
 
         varying = np.asarray([par.vary for par in self.params.values()])
         bounds = np.asarray([(par.min, par.max) for par in self.params.values()])[varying]
+        if np.any(np.isinf(bounds)):
+            raise ValueError('direct requires finite bounds for all varying '
+                             'parameters')
 
         result.call_kws = direct_kws
 
