@@ -2253,7 +2253,8 @@ class Minimizer:
         return result
 
     def direct(self, params=None, max_nfev=None, **kws):
-        """Use the `DIRECT` algorithm to find the global minimum.
+        """Use the DIviding RECTangles (DIRECT) algorithm to find the global
+        minimum.
 
         This method calls :scipydoc:`optimize.direct` using its default
         arguments.
@@ -2273,6 +2274,7 @@ class Minimizer:
         -------
         MinimizerResult
             Object containing the parameters from the direct method.
+
 
         .. versionadded:: 1.4.0
 
@@ -2357,7 +2359,7 @@ class Minimizer:
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
             - `'shgo'`: Simplicial Homology Global Optimization
             - `'dual_annealing'`: Dual Annealing optimization
-            - `'direct'`: DIRECT algorithm
+            - `'direct'`: DIviding RECTangles (DIRECT) algorithm
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2581,6 +2583,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
         - `'shgo'`: Simplicial Homology Global Optimization
         - `'dual_annealing'`: Dual Annealing optimization
+        - `'direct'`: DIviding RECTangles (DIRECT) algorithm
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with
