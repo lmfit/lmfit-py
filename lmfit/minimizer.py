@@ -992,7 +992,8 @@ class Minimizer:
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
                           disp=False, polish=True, init='latinhypercube',
-                          atol=0, updating='immediate', workers=1)
+                          atol=0, updating='immediate', workers=1, x0=None,
+                          integrality=None, vectorized=False)
 
             for k, v in fmin_kws.items():
                 if k in kwargs:
