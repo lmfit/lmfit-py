@@ -172,7 +172,7 @@ stages:
         vmImage: 'windows-latest'
       strategy:
         matrix:
-          Python313:
+          Python314:
             python.version: '3.14'
 
       steps:
@@ -207,7 +207,7 @@ stages:
         vmImage: 'macos-latest'
       strategy:
         matrix:
-          Python313:
+          Python314:
             python.version: '3.14'
 
       steps:
