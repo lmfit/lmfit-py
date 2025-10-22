@@ -258,6 +258,9 @@ uncertainties and correlations if ``calc_covar`` is ``True`` (default).
  +--------------------------+------------------------------------------------------------------+
  | Dual Annealing           |  ``dual_annealing``                                              |
  +--------------------------+------------------------------------------------------------------+
+ | DIviding RECTangles      |  ``direct``                                                      |
+ | (DIRECT) algorithm       |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
  | Maximum likelihood via   |  ``emcee``                                                       |
  | Monte-Carlo Markov Chain |                                                                  |
  +--------------------------+------------------------------------------------------------------+
@@ -611,6 +614,8 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 .. automethod:: Minimizer.shgo
 
 .. automethod:: Minimizer.dual_annealing
+
+.. automethod:: Minimizer.direct
 
 .. automethod:: Minimizer.emcee
 

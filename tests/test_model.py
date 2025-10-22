@@ -7,7 +7,6 @@ import warnings
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
 import pytest
-from scipy import __version__ as scipy_version
 
 import lmfit
 from lmfit import Model, Parameters, models
@@ -1335,14 +1334,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         # `max_nfev=100000`:
         #   lmfit.minimizer.AbortFitException: fit aborted: too many function
         #   evaluations xxxxx
-        if int(scipy_version.split('.')[1]) < 10:
-            self.assertTrue(np.isnan(result.chisqr))
-            self.assertTrue(np.isnan(result.aic))
-            self.assertFalse(result.errorbars)
-            self.assertTrue(result.params['amplitude'].stderr is None)
-            self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 0.001)
-        else:
-            pass
+        self.assertRaises(lmfit.minimizer.AbortFitException)
 
         # with omit, should get good results
         result = mod.fit(y, params, x=x, nan_policy='omit')

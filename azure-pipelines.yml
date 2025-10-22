@@ -14,7 +14,7 @@ stages:
       steps:
         - task: UsePythonVersion@0
           inputs:
-            versionSpec: '3.13'
+            versionSpec: '3.14'
         - script: |
             python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install Python build tools and dependencies'
@@ -43,7 +43,7 @@ stages:
       steps:
         - task: UsePythonVersion@0
           inputs:
-            versionSpec: '3.13'
+            versionSpec: '3.14'
         - script: |
             python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install Python build tools'
@@ -67,8 +67,8 @@ stages:
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python39:
-            python.version: '3.9'
+          Python310:
+            python.version: '3.10'
 
       steps:
         - task: UsePythonVersion@0
@@ -81,7 +81,7 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             python -m pip install --upgrade build pip wheel
-            python -m pip install asteval==1.0 numpy==1.24.0 scipy==1.10.0 uncertainties==3.2.2
+            python -m pip install asteval==1.0 numpy==2.0.0 scipy==1.14.0 uncertainties==3.2.2
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python -m build
@@ -116,8 +116,6 @@ stages:
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python39:
-            python.version: '3.9'
           Python310:
             python.version: '3.10'
           Python311:
@@ -126,6 +124,8 @@ stages:
             python.version: '3.12'
           Python313:
             python.version: '3.13'
+          Python314:
+            python.version: '3.14'
 
       steps:
         - task: UsePythonVersion@0
@@ -172,8 +172,8 @@ stages:
         vmImage: 'windows-latest'
       strategy:
         matrix:
-          Python313:
-            python.version: '3.13'
+          Python314:
+            python.version: '3.14'
 
       steps:
         - task: UsePythonVersion@0
@@ -207,8 +207,8 @@ stages:
         vmImage: 'macos-latest'
       strategy:
         matrix:
-          Python313:
-            python.version: '3.13'
+          Python314:
+            python.version: '3.14'
 
       steps:
         - task: UsePythonVersion@0
@@ -234,13 +234,13 @@ stages:
   dependsOn: check_codestyle
   condition: succeededOrFailed()
   jobs:
-    - job: Python314_dev
+    - job: Python315_dev
       pool:
         vmImage: 'ubuntu-latest'
       steps:
         - script: |
             sudo add-apt-repository ppa:deadsnakes/nightly
-            sudo apt-get update && sudo apt-get install -y --no-install-recommends python3.14-dev python3.14-venv
+            sudo apt-get update && sudo apt-get install -y --no-install-recommends python3.15-dev python3.15-venv
           displayName: Install Python development version from the deadsnakes PPA
         - script: |
             sudo apt-get update && sudo apt-get install -yq --no-install-suggests --no-install-recommends \
@@ -248,47 +248,47 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            python3.14 -m ensurepip --upgrade
-            pip3.14 install -U build pip setuptools wheel pybind11 cython || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m ensurepip --upgrade
+            pip3.15 install -U build pip setuptools wheel pybind11 cython || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install build, pip, setuptools, wheel, pybind11, and cython'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            export numpy_version=2.3.2
+            export numpy_version=2.3.4
             wget https://github.com/numpy/numpy/releases/download/v${numpy_version}/numpy-${numpy_version}.tar.gz
             tar xzvf numpy-${numpy_version}.tar.gz
             cd numpy-${numpy_version}
-            python3.14 -m build || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
-            python3.14 -m pip install . --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m build || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m pip install . --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install latest available version of NumPy'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            pip3.14 install -U pythran || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            pip3.15 install -U pythran || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install pythran'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            export scipy_version=1.16.1
+            export scipy_version=1.16.2
             wget https://github.com/scipy/scipy/releases/download/v${scipy_version}/scipy-${scipy_version}.tar.gz
             tar xzvf scipy-${scipy_version}.tar.gz
             cd scipy-${scipy_version}
-            python3.14 -m build || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
-            python3.14 -m pip install . --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m build || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m pip install . --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install latest available version of SciPy'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             # remove numdifftools for now as it pulls in statsmodels, that wants to build with NumPy 1.14.5
-            pip3.14 install asteval uncertainties dill emcee flaky pytest pytest-cov || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            pip3.15 install asteval uncertainties dill emcee flaky pytest pytest-cov || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python3.14 -m build
-            python3.14 -m pip install '.[test]' --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            python3.15 -m build
+            python3.15 -m pip install '.[test]' --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Build wheel/sdist and install lmfit'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            pip3.14 list || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+            pip3.15 list || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'List installed Python packages'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            pip3.14 install pytest-azurepipelines
+            pip3.15 install pytest-azurepipelines
             cd $(Agent.BuildDirectory)/s/tests
             pytest || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Run test-suite'
