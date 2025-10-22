@@ -2469,21 +2469,21 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     ravel : bool, optional
         Whether to force to be 1D array (default is True).
     ravel_order : str, optional
-        array ordering to assume when unravelling array (default is 'C')
+        Array ordering to assume when unravelling array (default is 'C').
 
     Returns
     -------
     array
         ndarray of type np.float64, possibly after applying the `nan_policy`,
-        and usually raveling to 1-D array
+        and usually raveling to 1-D array.
 
     Notes
     -----
-    Parts of this fudtype=np.float64nction are based on scipy/stats/stats.py/_contains_nan
+    Parts of this function are based on scipy/stats/stats.py/_contains_nan
 
-    support for 'array-like` objects is from numpy `asarray`, which includes
+    Support for 'array-like` objects is from numpy `asarray`, which includes
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
-    Python objects
+    Python objects.
     """
     if issparse(arr):
         arr = arr.toarray().astype(np.float64)
