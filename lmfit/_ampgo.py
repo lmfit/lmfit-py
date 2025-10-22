@@ -205,8 +205,17 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             if local_opts is not None:
                 options.update(local_opts)
 
-            res = minimize(tunnel, x0, args=tunnel_args, method=local,
-                           bounds=bounds, tol=local_tol, options=options)
+            try:
+                res = minimize(tunnel, x0, args=tunnel_args, method=local,
+                               bounds=bounds, tol=local_tol, options=options)
+            except Exception as e:
+                if e.__class__.__name__ == "AbortFitException":
+                    return (best_x, best_f, evaluations,
+                            'Maximum number of function evaluations exceeded',
+                            (all_tunnel, success_tunnel))
+                else:
+                    raise
+
             xf, yf, num_fun = res['x'], res['fun'], res['nfev']
             if isinstance(yf, np.ndarray):
                 yf = yf[0]
