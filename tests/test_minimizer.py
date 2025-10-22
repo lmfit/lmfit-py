@@ -27,7 +27,8 @@ def test_scalar_minimize_neg_value():
 @pytest.mark.parametrize('method', ('leastsq', 'least_squares', 'nelder',
                                     'lbfgsb', 'powell', 'cg', 'bfgs', 'brute',
                                     'dual_annealing', 'differential_evolution',
-                                    'ampgo', 'shgo', 'cobyla', 'basinhopping'))
+                                    'ampgo', 'shgo', 'cobyla', 'cobyqa',
+                                    'basinhopping'))
 def test_aborted_solvers(method):
     # github discussion #894
     x = np.array([18.025, 18.075, 18.125, 18.175, 18.225, 18.275, 18.325, 18.375,
@@ -47,7 +48,7 @@ def test_aborted_solvers(method):
     mod = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
 
     max_nfev = 40
-    if method == 'cobyla':
+    if method in ('cobyla', 'cobyqa'):
         max_nfev = 30
     pars = mod.make_params(p1_amplitude={'value': 70, 'min': 0, 'max': 200},
                            p1_center={'value': 19.5, 'min': 8, 'max': 20.5},

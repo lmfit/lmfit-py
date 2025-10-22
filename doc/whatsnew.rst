@@ -22,8 +22,7 @@ Version 1.4.0 Release Notes (unreleased)
 - add DIRECT algorithm for global minimization, available since SciPy v1.9
 - update functions arguments to optimizers to support newer SciPy versions
 - remove deprecated ``_nan_policy`` and ``prob_function`` argument in ``conf_interval2d``
-
-
+- add support for COBYQA algorithm, available since SciPy v1.14.0
 
 .. _whatsnew_134_label:
 
