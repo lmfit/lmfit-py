@@ -2163,7 +2163,7 @@ class Minimizer:
 
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        shgo_kws = dict(constraints=None, n=None, iters=1, callback=None,
+        shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
                         sampling_method='simplicial', workers=1)
 
