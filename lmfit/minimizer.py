@@ -22,6 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
+from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -962,10 +963,22 @@ class Minimizer:
             self.jacfcn = None
             fmin_kws.pop('jac')
 
-        # workers / updating keywords only supported in differential_evolution
-        for kwd in ('workers', 'updating'):
-            if kwd in fmin_kws and method != 'differential_evolution':
-                fmin_kws.pop(kwd)
+        # 'updating' keyword only supported in differential_evolution
+        if 'updating' in fmin_kws and method != 'differential_evolution':
+            fmin_kws.pop('updating')
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        # For several algorithms a keyword 'workers' was added, to allow for
+        # parallelization of some calculations.
+
+        # The keyword is not available below 1.16 and/or for the methods listed
+        # below:
+        if 'workers' in fmin_kws and (int(scipy_version.split('.')[1]) < 16 or
+                                      method in ('Nelder-Mead', 'Powell',
+                                                 'COBYLA', 'COBYQA', 'dogleg',
+                                                 'trust-ncg', 'trust-kryolv',
+                                                 'trust-exact')):
+            fmin_kws.pop('workers')
 
         if method == 'differential_evolution':
             for par in params.values():
@@ -1548,10 +1561,20 @@ class Minimizer:
                                  loss='linear', f_scale=1.0, diff_step=None,
                                  tr_solver=None, tr_options={},
                                  jac_sparsity=None, max_nfev=2*self.max_nfev,
-                                 verbose=0, kwargs={})
+                                 verbose=0, kwargs={}, callback=None,
+                                 workers=None)
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        if int(scipy_version.split('.')[1]) >= 16:
+            least_squares_kws.update({'x_scale': None})
 
         least_squares_kws.update(self.kws)
         least_squares_kws.update(kws)
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        for kwd in ('workers', 'callback'):
+            if int(scipy_version.split('.')[1]) < 16:
+                least_squares_kws.pop(kwd)
 
         if least_squares_kws.get('Dfun', None) is not None:
             least_squares_kws['jac'] = least_squares_kws.pop('Dfun')
