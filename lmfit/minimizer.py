@@ -22,6 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
+from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -962,10 +963,22 @@ class Minimizer:
             self.jacfcn = None
             fmin_kws.pop('jac')
 
-        # workers / updating keywords only supported in differential_evolution
-        for kwd in ('workers', 'updating'):
-            if kwd in fmin_kws and method != 'differential_evolution':
-                fmin_kws.pop(kwd)
+        # 'updating' keyword only supported in differential_evolution
+        if 'updating' in fmin_kws and method != 'differential_evolution':
+            fmin_kws.pop('updating')
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        # For several algorithms a keyword 'workers' was added, to allow for
+        # parallelization of some calculations.
+
+        # The keyword is not available below 1.16 and/or for the methods listed
+        # below:
+        if 'workers' in fmin_kws and (int(scipy_version.split('.')[1]) < 16 or
+                                      method in ('Nelder-Mead', 'Powell',
+                                                 'COBYLA', 'COBYQA', 'dogleg',
+                                                 'trust-ncg', 'trust-kryolv',
+                                                 'trust-exact')):
+            fmin_kws.pop('workers')
 
         if method == 'differential_evolution':
             for par in params.values():
@@ -979,7 +992,8 @@ class Minimizer:
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
                           disp=False, polish=True, init='latinhypercube',
-                          atol=0, updating='immediate', workers=1)
+                          atol=0, updating='immediate', workers=1, x0=None,
+                          integrality=None, vectorized=False)
 
             for k, v in fmin_kws.items():
                 if k in kwargs:
@@ -1548,10 +1562,20 @@ class Minimizer:
                                  loss='linear', f_scale=1.0, diff_step=None,
                                  tr_solver=None, tr_options={},
                                  jac_sparsity=None, max_nfev=2*self.max_nfev,
-                                 verbose=0, kwargs={})
+                                 verbose=0, kwargs={}, callback=None,
+                                 workers=None)
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        if int(scipy_version.split('.')[1]) >= 16:
+            least_squares_kws.update({'x_scale': None})
 
         least_squares_kws.update(self.kws)
         least_squares_kws.update(kws)
+
+        # FIXME: update when SciPy requirement is >= 1.16
+        for kwd in ('workers', 'callback'):
+            if int(scipy_version.split('.')[1]) < 16:
+                least_squares_kws.pop(kwd)
 
         if least_squares_kws.get('Dfun', None) is not None:
             least_squares_kws['jac'] = least_squares_kws.pop('Dfun')
@@ -2140,7 +2164,7 @@ class Minimizer:
 
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        shgo_kws = dict(constraints=None, n=None, iters=1, callback=None,
+        shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
                         sampling_method='simplicial', workers=1)
 

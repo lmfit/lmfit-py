@@ -1,8 +1,9 @@
 import numpy as np
 import pytest
+from scipy import __version__ as scipy_version
 
 from lmfit import Minimizer, Parameters
-from lmfit.models import GaussianModel
+from lmfit.models import GaussianModel, VoigtModel
 
 
 def test_scalar_minimize_neg_value():
@@ -64,3 +65,37 @@ def test_aborted_solvers(method):
     assert result.redchi < 90000
     assert result.nfev > max_nfev - 5
     assert result.nfev < max_nfev + 5
+
+
+# FIXME: remove when SciPy requirement is >= 1.16
+@pytest.mark.parametrize('method', ('leastsq', 'least_squares', 'nelder',
+                                    'lbfgsb', 'powell', 'cg', 'bfgs',
+                                    'differential_evolution', 'cobyla',
+                                    'cobyqa'))
+def test_workers_keyword_solvers(peakdata, method):
+    """New solver keyword in SciPy v1.16.0."""
+    x = peakdata[0]
+    y = peakdata[1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['amplitude'].min = 0
+    params['amplitude'].max = 1000
+    params['center'].min = 0
+    params['center'].max = 1000
+    params['sigma'].min = 0
+    params['sigma'].max = 1000
+
+    result = mod.fit(y, params, x=x, method=method)
+
+    if (int(scipy_version.split('.')[1]) < 16 and method != 'differential_evolution'):
+        assert 'workers' not in result.call_kws
+
+    elif (int(scipy_version.split('.')[1]) > 16 and method in
+          ('least_squares', 'lbfgsb', 'bfgs', 'differential_evolution')):
+        assert 'workers' in result.call_kws
+        if method != 'differential_evolution':
+            assert result.call_kws['workers'] is None
+        else:
+            assert result.call_kws['workers'] == 1

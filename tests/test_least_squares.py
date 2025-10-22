@@ -2,6 +2,7 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
+from scipy import __version__ as scipy_version
 from scipy.sparse import bsr_matrix
 from scipy.sparse.linalg import aslinearoperator
 
@@ -213,3 +214,26 @@ def test_least_squares_jacobian():
     assert out2.nfev < out0.nfev
     assert out2.nfev == out1.nfev
     assert jac_count > 5
+
+
+# FIXME: remove when SciPy requirement is >= 1.16
+def test_least_squares_new_solver_options(peakdata):
+    """Test least_squares algorithm, new solver options in SciPy v1.16.0."""
+    x = peakdata[0]
+    y = peakdata[1]
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    solver_kws = {'workers': 1}
+    result_default = mod.fit(y, params, x=x, method='least_squares')
+    result_kws = mod.fit(y, params, x=x, method='least_squares', fit_kws=solver_kws)
+
+    if int(scipy_version.split('.')[1]) >= 16:
+        assert result_default.call_kws['workers'] is None
+        assert result_default.call_kws['x_scale'] is None
+        assert result_default.call_kws['callback'] is None
+
+        assert result_kws.call_kws['workers'] == 1
+    else:
+        assert 'callback' not in result_default.call_kws
+        assert 'workers' not in result_default.call_kws
+        assert result_default.call_kws['x_scale'] == 1.0
