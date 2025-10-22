@@ -2277,6 +2277,11 @@ class Minimizer:
 
         .. versionadded:: 1.4.0
 
+
+        Notes
+        -----
+        The algorithm requires finite bounds for each varying Parameter.
+
         """
         result = self.prepare_fit(params=params)
         result.method = 'direct'
