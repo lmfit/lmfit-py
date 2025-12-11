@@ -1254,8 +1254,11 @@ class CompositeModel(Model):
         # the unique ``independent_vars`` of the left and right model are
         # combined to ``independent_vars`` of the ``CompositeModel``
         if 'independent_vars' not in kws:
-            ivars = self.left.independent_vars + self.right.independent_vars
-            kws['independent_vars'] = list(np.unique(ivars))
+            ivars = [n for n in self.left.independent_vars]
+            for r_ivar in self.right.independent_vars:
+                if r_ivar not in ivars:
+                    ivars.append(r_ivar)
+            kws['independent_vars'] = ivars
         if 'nan_policy' not in kws:
             kws['nan_policy'] = self.left.nan_policy
 
@@ -2174,17 +2177,14 @@ class ModelResult(Minimizer):
         # The function reduce_complex will convert complex vectors into real vectors
         reduce_complex = get_reducer(parse_complex)
 
-        if len(self.model.independent_vars) == 1:
-            independent_var = self.model.independent_vars[0]
-        else:
-            print('Fit can only be plotted if the model function has one '
-                  'independent variable.')
-            return False
+        xvar = self.model.independent_vars[0]
+        if len(self.model.independent_vars) > 1 and xvar not in ('x', 't'):
+            warnings.warn(f"plotting will use '{xvar}' as X-axis")
 
         if not isinstance(ax, plt.Axes):
             ax = plt.axes(**ax_kws)
 
-        x_array = self.userkws[independent_var]
+        x_array = self.userkws[xvar]
 
         # make a dense array for x-axis if data is not dense
         if numpoints is not None and len(self.data) < numpoints:
@@ -2194,7 +2194,7 @@ class ModelResult(Minimizer):
 
         if show_init:
             y_eval_init = self.model.eval(self.init_params,
-                                          **{independent_var: x_array_dense})
+                                          **{xvar: x_array_dense})
             if isinstance(self.model, (lmfit.models.ConstantModel,
                                        lmfit.models.ComplexConstantModel)):
                 y_eval_init *= np.ones(x_array_dense.size)
@@ -2213,7 +2213,7 @@ class ModelResult(Minimizer):
             ax.plot(x_array, reduce_complex(self.data),
                     datafmt, label='data', **data_kws)
 
-        y_eval = self.model.eval(self.params, **{independent_var: x_array_dense})
+        y_eval = self.model.eval(self.params, **{xvar: x_array_dense})
         if isinstance(self.model, (lmfit.models.ConstantModel,
                                    lmfit.models.ComplexConstantModel)):
             y_eval *= np.ones(x_array_dense.size)
@@ -2226,7 +2226,7 @@ class ModelResult(Minimizer):
         elif ax.get_title() == '':
             ax.set_title(self.model.name)
         if xlabel is None:
-            ax.set_xlabel(independent_var)
+            ax.set_xlabel(xvar)
         else:
             ax.set_xlabel(xlabel)
         if ylabel is None:
@@ -2303,21 +2303,18 @@ class ModelResult(Minimizer):
         # The function reduce_complex will convert complex vectors into real vectors
         reduce_complex = get_reducer(parse_complex)
 
-        if len(self.model.independent_vars) == 1:
-            independent_var = self.model.independent_vars[0]
-        else:
-            print('Fit can only be plotted if the model function has one '
-                  'independent variable.')
-            return False
+        xvar = self.model.independent_vars[0]
+        if len(self.model.independent_vars) > 1 and xvar not in ('x', 't'):
+            warnings.warn(f"plotting will use '{xvar}' as X-axis")
 
         if not isinstance(ax, plt.Axes):
             ax = plt.axes(**ax_kws)
 
-        x_array = self.userkws[independent_var]
+        x_array = self.userkws[xvar]
 
         ax.axhline(0, **fit_kws, color='k')
 
-        y_eval = self.model.eval(self.params, **{independent_var: x_array})
+        y_eval = self.model.eval(self.params, **{xvar: x_array})
         if isinstance(self.model, (lmfit.models.ConstantModel,
                                    lmfit.models.ComplexConstantModel)):
             y_eval *= np.ones(x_array.size)
@@ -2440,11 +2437,6 @@ class ModelResult(Minimizer):
         fig_kws_ = dict(figsize=(figxsize, figxsize))
         if fig_kws is not None:
             fig_kws_.update(fig_kws)
-
-        if len(self.model.independent_vars) != 1:
-            print('Fit can only be plotted if the model function has one '
-                  'independent variable.')
-            return False
 
         if not isinstance(fig, plt.Figure):
             fig = plt.figure(**fig_kws_)

@@ -1402,8 +1402,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         BackgroundModel = Model(two_independent_vars,
                                 independent_vars=["y", "z"], prefix="yz_")
         PeakModel = Model(gaussian, independent_vars=["x"], prefix="x_")
-        CompModel = BackgroundModel + PeakModel
-        assert CompModel.independent_vars == ['x', 'y', 'z']
+        CompModel1 = PeakModel + BackgroundModel
+        CompModel2 = BackgroundModel + PeakModel
+        assert CompModel1.independent_vars == ['x', 'y', 'z']
+        assert CompModel2.independent_vars == ['y', 'z', 'x']
 
 
 class TestLinear(CommonTests, unittest.TestCase):
