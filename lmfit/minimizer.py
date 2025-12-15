@@ -39,6 +39,7 @@ from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 
 from ._ampgo import ampgo
+from .exceptions import AbortFitException, MinimizerException
 from .parameter import Parameter, Parameters
 from .printfuncs import fitreport_html_table
 
@@ -78,22 +79,6 @@ def thisfuncname():
         return inspect.stack()[1].function
     except AttributeError:
         return inspect.stack()[1][3]
-
-
-class MinimizerException(Exception):
-    """General Purpose Exception."""
-
-    def __init__(self, msg):
-        Exception.__init__(self)
-        self.msg = msg
-
-    def __str__(self):
-        """string"""
-        return f"{self.msg}"
-
-
-class AbortFitException(MinimizerException):
-    """Raised when a fit is aborted by the user."""
 
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
@@ -2097,9 +2082,9 @@ class Minimizer:
         try:
             ret = ampgo(self.penalty, values, **ampgo_kws)
         except AbortFitException:
-            pass
+            ret = None
 
-        if 'ret' in locals():
+        if ret is not None:
             result.ampgo_x0 = ret[0]
             result.ampgo_fval = ret[1]
             result.ampgo_eval = ret[2]
@@ -2109,12 +2094,8 @@ class Minimizer:
             for i, par in enumerate(result.var_names):
                 result.params[par].value = float(result.ampgo_x0[i])
 
-            if not result.aborted:
-                result.nfev -= 1
-
-            elif result.aborted:
-                result.nfev -= 2
-
+            nfev_offset = 2 if result.aborted else 1
+            result.nfev -= nfev_offset
             result.residual = self.__residual(result.ampgo_x0)
 
         elif result.nfev > self.max_nfev-5:

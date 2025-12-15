@@ -13,6 +13,8 @@ Implementation details can be found in this paper:
 import numpy as np
 from scipy.optimize import minimize
 
+from .exceptions import AbortFitException
+
 SCIPY_LOCAL_SOLVERS = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
 
 
@@ -208,13 +210,12 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             try:
                 res = minimize(tunnel, x0, args=tunnel_args, method=local,
                                bounds=bounds, tol=local_tol, options=options)
-            except Exception as e:
-                if e.__class__.__name__ == "AbortFitException":
-                    return (best_x, best_f, evaluations,
-                            'Maximum number of function evaluations exceeded',
-                            (all_tunnel, success_tunnel))
-                else:
-                    raise
+            except AbortFitException:
+                return (best_x, best_f, evaluations,
+                        'Maximum number of function evaluations exceeded',
+                        (all_tunnel, success_tunnel))
+            except Exception:
+                raise
 
             xf, yf, num_fun = res['x'], res['fun'], res['nfev']
             if isinstance(yf, np.ndarray):
