@@ -184,7 +184,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         if par.stderr is not None:
             serr = gformat(par.stderr)
             try:
-                spercent = f'({abs(par.stderr/par.value):.2%})'
+                spercent = f'({abs(float(par.stderr)/float(par.value)):.2%})'
             except ZeroDivisionError:
                 spercent = ''
             sval = f'{sval} +/-{serr} {spercent}'
@@ -390,7 +390,7 @@ def params_html_table(params):
             if par.stderr is not None:
                 serr = gformat(par.stderr)
                 try:
-                    spercent = f'({abs(par.stderr/par.value):.2%})'
+                    spercent = f'({abs(float(par.stderr)/float(par.value)):.2%})'
                 except ZeroDivisionError:
                     pass
             rows.extend([serr, spercent])
