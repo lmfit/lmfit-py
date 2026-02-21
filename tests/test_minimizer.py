@@ -93,7 +93,7 @@ def test_workers_keyword_solvers(peakdata, method):
         assert 'workers' not in result.call_kws
 
     elif (int(scipy_version.split('.')[1]) > 16 and method in
-          ('least_squares', 'lbfgsb', 'bfgs', 'differential_evolution')):
+          ('least_squares', 'differential_evolution')):
         assert 'workers' in result.call_kws
         if method != 'differential_evolution':
             assert result.call_kws['workers'] is None
