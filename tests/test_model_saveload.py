@@ -179,7 +179,7 @@ def test_saveload_modelresult_exception():
     model, _pars = create_model_params(x, y)
     save_model(model, SAVE_MODEL)
 
-    with pytest.raises(AttributeError, match=r'needs saved ModelResult'):
+    with pytest.raises(AttributeError, match=r'needs a saved ModelResult'):
         load_modelresult(SAVE_MODEL)
     clear_savefile(SAVE_MODEL)
 
