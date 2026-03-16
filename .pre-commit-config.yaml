@@ -29,7 +29,7 @@ repos:
         additional_dependencies: [flake8-deprecated, flake8-mutable, Flake8-pyproject]
 
 -   repo: https://github.com/PyCQA/isort/
-    rev: 7.0.0
+    rev: 8.0.1
     hooks:
     -   id: isort
 
@@ -51,7 +51,7 @@ repos:
     -   id: python-check-blanket-noqa
 
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
     -   id: codespell
         files: '.py|.rst'
