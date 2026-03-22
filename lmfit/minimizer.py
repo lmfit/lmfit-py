@@ -1605,7 +1605,7 @@ class Minimizer:
             # calculate the cov_x and estimate uncertainties/correlations
             try:
                 if issparse(ret.jac):
-                    hess = (ret.jac.T * ret.jac).toarray()
+                    hess = (ret.jac.T @ ret.jac).toarray()
                 elif isinstance(ret.jac, LinearOperator):
                     identity = np.eye(ret.jac.shape[1], dtype=ret.jac.dtype)
                     hess = (ret.jac.T * ret.jac) * identity
