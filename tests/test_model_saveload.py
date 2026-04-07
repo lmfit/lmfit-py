@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 import time
 
 import numpy as np
@@ -12,8 +13,8 @@ from lmfit import Parameters
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
                          save_model, save_modelresult)
-from lmfit.models import (ExponentialModel, ExpressionModel, GaussianModel,
-                          SplineModel, VoigtModel)
+from lmfit.models import (ConstantModel, ExponentialModel, ExpressionModel,
+                          GaussianModel, SplineModel, VoigtModel)
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
                                'examples', 'NIST_Gauss2.dat')).T
@@ -441,3 +442,46 @@ def test_load_model_versions():
         y = mod.eval(pars, x=x)
         assert y.max() > 1.55
         assert y.min() < -1.55
+
+
+@pytest.mark.xfail(
+    sys.version_info[:2] == (3, 10),
+    reason=(
+        "scipy symbols in asteval symtable are dill-encoded (Python 3.12 used)"
+        "and not deserializable with Python 3.10."
+    ),
+)
+def test_load_constantmodel_versions():
+    """Test loading saved ConstantModel from different Python versions.
+
+    Regression test for https://github.com/lmfit/lmfit-py/issues/1033
+    """
+    x = np.linspace(0, 10, 50)
+
+    for fname in ('constantmodel_py312.sav',):
+        fpath = os.path.join(os.path.dirname(__file__), 'saved_models', fname)
+        result = load_modelresult(fpath)
+        y = result.eval(x=x)
+        assert_allclose(y, 5.0, rtol=1e-5)
+        assert_allclose(result.params['c'].value, 5.0, rtol=1e-3)
+
+
+def test_saveload_constantmodel_no_dill():
+    """Test that ConstantModel roundtrips via dumps/loads without dill.
+
+    Regression test for https://github.com/lmfit/lmfit-py/issues/1033
+    """
+    xx = np.linspace(0, 10, 50)
+
+    # standalone ConstantModel
+    model = ConstantModel()
+    yy = np.full_like(xx, 5.0)
+    result = model.fit(yy, model.make_params(c=5.0), x=xx)
+
+    serialized = result.dumps()
+    assert '__dill__' not in serialized
+
+    result2 = ModelResult(model, model.make_params())
+    result2.loads(serialized)
+    assert_allclose(result2.eval(x=xx), result.eval(x=xx), rtol=1e-5)
+    assert_allclose(result2.params['c'].value, 5.0, rtol=1e-3)
