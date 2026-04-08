@@ -6,10 +6,11 @@ import numpy as np
 from scipy.interpolate import splev, splrep
 
 from . import lineshapes
-from .lineshapes import (bose, breit_wigner, damped_oscillator, dho, doniach,
-                         expgaussian, exponential, fermi, gaussian, gaussian2d,
-                         linear, lognormal, lorentzian, moffat, parabolic,
-                         pearson4, pearson7, powerlaw, pvoigt, rectangle, sine,
+from .lineshapes import (bose, breit_wigner, complex_constant, constant,
+                         damped_oscillator, dho, doniach, expgaussian,
+                         exponential, fermi, gaussian, gaussian2d, linear,
+                         lognormal, lorentzian, moffat, parabolic, pearson4,
+                         pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
                          students_t, thermal_distribution, tiny, voigt)
 from .model import Model
@@ -174,8 +175,6 @@ class ConstantModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
-        def constant(x, c=0.0):
-            return c * np.ones(np.shape(x))
         super().__init__(constant, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
@@ -204,9 +203,7 @@ class ComplexConstantModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
-        def constant(x, re=0., im=0.):
-            return (re + 1j*im) * np.ones(np.shape(x))
-        super().__init__(constant, **kwargs)
+        super().__init__(complex_constant, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""

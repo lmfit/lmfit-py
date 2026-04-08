@@ -58,6 +58,9 @@ def test_no_ZeroDivisionError_and_finite_output(lineshape):
         assert np.all(np.isfinite(fnc_output))
 
 
+COMPLEX_LINESHAPES = ('complex_constant',)
+
+
 @pytest.mark.parametrize("lineshape", lmfit.lineshapes.functions)
 def test_x_float_value(lineshape):
     """Test lineshapes when x is not an array but a float."""
@@ -73,7 +76,10 @@ def test_x_float_value(lineshape):
         fnc_args.append(sig.parameters[par].default)
 
     fnc_output = func(*fnc_args)
-    assert isinstance(fnc_output, float)
+    if lineshape in COMPLEX_LINESHAPES:
+        assert isinstance(fnc_output, complex)
+    else:
+        assert isinstance(fnc_output, float)
 
 
 rising_form = ['erf', 'logistic', 'atan', 'arctan', 'linear', 'unknown']

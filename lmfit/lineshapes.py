@@ -1,7 +1,8 @@
 """Basic model lineshapes and distribution functions."""
 
 from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
-                   maximum, minimum, pi, real, sign, sin, sqrt, where)
+                   maximum, minimum, ones, pi, real, shape, sign, sin, sqrt,
+                   where)
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -22,7 +23,8 @@ functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt',
              'skewed_gaussian', 'skewed_voigt',
              'thermal_distribution', 'bose', 'fermi', 'step',
              'rectangle', 'exponential', 'powerlaw', 'linear',
-             'parabolic', 'sine', 'expsine', 'split_lorentzian')
+             'parabolic', 'sine', 'expsine', 'split_lorentzian',
+             'constant', 'complex_constant')
 
 
 def not_zero(value):
@@ -563,3 +565,21 @@ def parabolic(x, a=0.0, b=0.0, c=0.0):
 
     """
     return a * x**2 + b * x + c
+
+
+def constant(x, c=0.0):
+    """Return a constant array.
+
+    constant(x, c) = c * ones_like(x)
+
+    """
+    return c * ones(shape(x))
+
+
+def complex_constant(x, re=0.0, im=0.0):
+    """Return a complex constant array.
+
+    complex_constant(x, re, im) = (re + 1j*im) * ones_like(x)
+
+    """
+    return (re + 1j*im) * ones(shape(x))

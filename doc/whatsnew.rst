@@ -24,6 +24,11 @@ Version 1.4.0 Release Notes (unreleased)
 - remove deprecated ``_nan_policy`` and ``prob_function`` argument in ``conf_interval2d``
 - add support for COBYQA algorithm, available since SciPy v1.14.0
 
+Fixes:
+
+- fix cross-Python-version serialization of ``ConstantModel`` and
+  ``ComplexConstantModel`` by moving their functions to ``lineshapes`` (Issue #1033)
+
 .. _whatsnew_134_label:
 
 Version 1.3.4 Release Notes (2025-July-19)
