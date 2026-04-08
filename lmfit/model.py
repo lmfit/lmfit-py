@@ -1078,7 +1078,7 @@ class Model:
 
         Returns
         -------
-        ModelResult
+        Dataset
 
         Notes
         -----
@@ -1091,7 +1091,7 @@ class Model:
         keyword arguments.
 
         3. Parameters are copied on input, so that the original Parameter objects
-        are unchanged, and the updated values are in the returned `ModelResult`.
+        are unchanged, and the updated values are in the returned `Dataset`.
 
         Examples
         --------
@@ -1174,10 +1174,10 @@ class Model:
         if fit_kws is None:
             fit_kws = {}
 
-        output = ModelResult(self, params, method=method, iter_cb=iter_cb,
-                             scale_covar=scale_covar, fcn_kws=kwargs,
-                             nan_policy=self.nan_policy, calc_covar=calc_covar,
-                             max_nfev=max_nfev, **fit_kws)
+        output = Dataset(self, params, method=method, iter_cb=iter_cb,
+                         scale_covar=scale_covar, fcn_kws=kwargs,
+                         nan_policy=self.nan_policy, calc_covar=calc_covar,
+                         max_nfev=max_nfev, **fit_kws)
         output.fit(data=data, weights=weights)
         output.components = self.components
         return output
@@ -1438,45 +1438,49 @@ def _buildmodel(state, funcdefs=None):
         return CompositeModel(lmodel, rmodel, getattr(operator, op))
 
 
-def save_modelresult(modelresult, fname):
-    """Save a ModelResult to a file.
+def save_dataset(dataset, fname):
+    """Save a Dataset to a file.
 
     Parameters
     ----------
-    modelresult : ModelResult
-        ModelResult to be saved.
+    dataset : Dataset
+        Dataset to be saved.
     fname : str
-        Name of file for saved ModelResult.
+        Name of file for saved Dataset
 
     """
     with open(fname, 'w') as fout:
-        modelresult.dump(fout)
+        dataset.dump(fout)
 
 
-def load_modelresult(fname, funcdefs=None):
-    """Load a saved ModelResult from a file.
+def load_dataset(fname, funcdefs=None):
+    """Load a saved Dataset from a file.
 
     Parameters
     ----------
     fname : str
-        Name of file containing saved ModelResult.
+        Name of file containing saved Dataset.
     funcdefs : dict, optional
         Dictionary of custom function names and definitions.
 
     Returns
     -------
-    ModelResult
-        ModelResult object loaded from file.
+    Dataset
+        Datasett object loaded from file.
 
     """
     params = Parameters()
-    modres = ModelResult(Model(lambda x: x, None), params)
+    dset = Dataset(Model(lambda x: x, None), params)
     with open(fname) as fh:
-        mresult = modres.load(fh, funcdefs=funcdefs)
-    return mresult
+        dsout = dset.load(fh, funcdefs=funcdefs)
+    return dsout
 
 
-class ModelResult(Minimizer):
+save_modelresult = save_dataset
+load_modelresult = load_dataset
+
+
+class Dataset(Minimizer):
     """Result from the Model fit.
 
     This has many attributes and methods for viewing and working with the
@@ -1488,7 +1492,7 @@ class ModelResult(Minimizer):
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 calc_covar=True, max_nfev=None, **fit_kws):
+                 calc_covar=True, max_nfev=None, label=None, **fit_kws):
         """
         Parameters
         ----------
@@ -1527,6 +1531,7 @@ class ModelResult(Minimizer):
         self.data = data
         self.weights = weights
         self.method = method
+        self.label = label
         self.ci_out = None
         self.user_options = None
         self.init_params = deepcopy(params)
@@ -1624,7 +1629,7 @@ class ModelResult(Minimizer):
         Parameters
         ----------
         params : Parameters, optional
-            Parameters, defaults to ModelResult.params.
+            Parameters, defaults to Dataset.params.
         **kwargs : optional
             Keyword arguments to pass to model function.
 
@@ -1650,7 +1655,7 @@ class ModelResult(Minimizer):
         Parameters
         ----------
         params : Parameters, optional
-            Parameters, defaults to ModelResult.params.
+            Parameters, defaults to Dataset.params.
         sigma : float, optional
             Confidence level, i.e. how many sigma (default is 1).
         dscale : float, optional
@@ -1853,12 +1858,12 @@ class ModelResult(Minimizer):
         return f"<h2>Fit Result</h2> <p>Model: {modname}</p> {report}"
 
     def summary(self):
-        """Return a dictionary with statistics and attributes of a ModelResult.
+        """Return a dictionary with statistics and attributes of a Dataset.
 
         Returns
         -------
         dict
-            Dictionary of statistics and many attributes from a ModelResult.
+            Dictionary of statistics and many attributes from a Dataset.
 
         Notes
         ------
@@ -1906,7 +1911,7 @@ class ModelResult(Minimizer):
         return summary
 
     def dumps(self, **kws):
-        """Represent ModelResult as a JSON string.
+        """Represent Dataset as a JSON string.
 
         Parameters
         ----------
@@ -1916,14 +1921,14 @@ class ModelResult(Minimizer):
         Returns
         -------
         str
-            JSON string representation of ModelResult.
+            JSON string representation of Dataset.
 
         See Also
         --------
         loads, json.dumps
 
         """
-        out = {'__class__': 'lmfit.ModelResult', '__version__': '2',
+        out = {'__class__': 'lmfit.Dataset', '__version__': '2',
                'model': encode4js(self.model._get_state())}
 
         for attr in ('params', 'init_params'):
@@ -1935,7 +1940,7 @@ class ModelResult(Minimizer):
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
                      'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws', 'values',
-                     'var_names', 'weights', 'user_options'):
+                     'var_names', 'weights', 'user_options', 'label'):
             try:
                 val = getattr(self, attr)
             except AttributeError:
@@ -1951,7 +1956,7 @@ class ModelResult(Minimizer):
         return json.dumps(out, **kws)
 
     def dump(self, fp, **kws):
-        """Dump serialization of ModelResult to a file.
+        """Dump serialization of Dataset to a file.
 
         Parameters
         ----------
@@ -1974,12 +1979,12 @@ class ModelResult(Minimizer):
         return fp.write(self.dumps(**kws))
 
     def loads(self, s, funcdefs=None, **kws):
-        """Load ModelResult from a JSON string.
+        """Load Dataset from a JSON string.
 
         Parameters
         ----------
         s : str
-            String representation of ModelResult, as from `dumps`.
+            String representation of Dataset, as from `dumps`.
         funcdefs : dict, optional
             Dictionary of custom function names and definitions.
         **kws : optional
@@ -1987,35 +1992,36 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        ModelResult
-            ModelResult instance from JSON string representation.
+        Dataset
+            Dataset instance from JSON string representation.
 
         See Also
         --------
         load, dumps, json.dumps
 
         """
-        modres = json.loads(s, **kws)
-        if 'modelresult' not in modres['__class__'].lower():
-            raise AttributeError('ModelResult.loads() needs saved ModelResult')
+        obj = json.loads(s, **kws)
+        classname = obj['__class__'].lower()
+        if 'modelresult' not in classname and 'dataset' not in classname:
+            raise AttributeError('Dataset.loads() needs a saved ModelResult or Dataset')
 
-        modres = decode4js(modres)
-        if 'model' not in modres or 'params' not in modres:
-            raise AttributeError('ModelResult.loads() needs valid ModelResult')
+        dat = decode4js(obj)
+        if 'model' not in dat or 'params' not in dat:
+            raise AttributeError('Dataset.loads() needs valid Dataset')
 
         # model
-        self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
+        self.model = _buildmodel(decode4js(dat['model']), funcdefs=funcdefs)
 
         if funcdefs:
             # Remove model function so as not pass it into the _asteval.symtable
             funcdefs.pop(self.model.func.__name__, None)
 
         # how params are saved was changed with version 2:
-        modres_vers = modres.get('__version__', '1')
-        if modres_vers == '1':
+        _vers = obj.get('__version__', '1')
+        if _vers == '1':
             for target in ('params', 'init_params'):
-                state = {'unique_symbols': modres['unique_symbols'], 'params': []}
-                for parstate in modres['params']:
+                state = {'unique_symbols': dat['unique_symbols'], 'params': []}
+                for parstate in dat['params']:
                     _par = Parameter(name='')
                     _par.__setstate__(parstate)
                     state['params'].append(_par)
@@ -2023,10 +2029,10 @@ class ModelResult(Minimizer):
                 _params.__setstate__(state)
                 setattr(self, target, _params)
 
-        elif modres_vers == '2':
+        elif _vers == '2':
             for target in ('params', 'init_params'):
                 _pars = Parameters()
-                _pars.loads(modres[target])
+                _pars.loads(dat[target])
                 if funcdefs:
                     for key, val in funcdefs.items():
                         _pars._asteval.symtable[key] = val
@@ -2039,8 +2045,8 @@ class ModelResult(Minimizer):
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
                      'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws',
-                     'var_names', 'weights', 'user_options'):
-            setattr(self, attr, decode4js(modres.get(attr, None)))
+                     'var_names', 'weights', 'user_options', 'label'):
+            setattr(self, attr, decode4js(dat.get(attr, None)))
 
         self.best_fit = self.model.eval(self.params, **self.userkws)
         if len(self.userargs) == 2:
@@ -2064,7 +2070,7 @@ class ModelResult(Minimizer):
         return self
 
     def load(self, fp, funcdefs=None, **kws):
-        """Load JSON representation of ModelResult from a file-like object.
+        """Load JSON representation of Dataset from a file-like object.
 
         Parameters
         ----------
@@ -2077,8 +2083,8 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        ModelResult
-            ModelResult created from `fp`.
+        Dataset
+            Dataset created from `fp`.
 
         See Also
         --------
@@ -2145,8 +2151,8 @@ class ModelResult(Minimizer):
 
         See Also
         --------
-        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
-        ModelResult.plot : Plot the fit results and residuals using matplotlib.
+        Dataset.plot_residuals : Plot the fit residuals using matplotlib.
+        Dataset.plot : Plot the fit results and residuals using matplotlib.
 
         Notes
         -----
@@ -2273,8 +2279,8 @@ class ModelResult(Minimizer):
 
         See Also
         --------
-        ModelResult.plot_fit : Plot the fit results using matplotlib.
-        ModelResult.plot : Plot the fit results and residuals using matplotlib.
+        Dataset.plot_fit : Plot the fit results using matplotlib.
+        Dataset.plot : Plot the fit results and residuals using matplotlib.
 
         Notes
         -----
@@ -2400,13 +2406,13 @@ class ModelResult(Minimizer):
 
         See Also
         --------
-        ModelResult.plot_fit : Plot the fit results using matplotlib.
-        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
+        Dataset.plot_fit : Plot the fit results using matplotlib.
+        Dataset.plot_residuals : Plot the fit residuals using matplotlib.
 
         Notes
         -----
-        The method combines `ModelResult.plot_fit` and
-        `ModelResult.plot_residuals`.
+        The method combines `Dataset.plot_fit` and
+        `Dataset.plot_residuals`.
 
         If `yerr` is specified or if the fit model included weights, then
         `matplotlib.axes.Axes.errorbar` is used to plot the data. If
@@ -2458,3 +2464,6 @@ class ModelResult(Minimizer):
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
         return fig
+
+
+ModelResult = Dataset
