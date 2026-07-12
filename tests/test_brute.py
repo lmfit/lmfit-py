@@ -245,6 +245,48 @@ def test_brute_one_parameter(params_lmfit):
     assert isinstance(out.candidates[0].score, float)
 
 
+def test_brute_one_parameter_candidates():
+    """TEST 9b: with a single varying parameter, all candidates must have
+    a scalar parameter value (not an array), 'keep' must not be silently
+    ignored, and candidates must be sorted best (lowest score) first.
+
+    Regression test: the special-cased branch for a single varying
+    parameter in Minimizer.brute mis-zipped the grid points and scores,
+    which collapsed the grid down to effectively one usable candidate and
+    assigned that candidate's parameter value as a full array of every
+    grid point rather than a single scalar.
+    """
+    def resid(params, x, data):
+        return params['a'] * x - data
+
+    x = np.linspace(0, 10, 50)
+    data = 2 * x
+    params = lmfit.Parameters()
+    params.add('a', value=1.0, min=0, max=5, brute_step=0.1)
+
+    mini = lmfit.Minimizer(resid, params, fcn_args=(x, data))
+    keep = 25
+    out = mini.minimize(method='brute', Ns=10, keep=keep)
+
+    # 'keep' candidates should be stored (grid is larger than 'keep' here),
+    # and must NOT be silently collapsed down to a single candidate
+    grid_size = len(out.brute_Jout.ravel())
+    assert grid_size > keep
+    assert_equal(len(out.candidates), keep)
+
+    prev_score = -np.inf
+    for candidate in out.candidates:
+        value = candidate.params['a'].value
+        assert isinstance(value, (int, float, np.floating)), (
+            f"candidate parameter value should be a scalar, got "
+            f"{type(value)}: {value!r}")
+        assert candidate.score >= prev_score  # sorted, best (lowest) first
+        prev_score = candidate.score
+
+    # the best candidate should match the true value used to generate data
+    assert_allclose(out.candidates[0].params['a'].value, 2.0, atol=0.2)
+
+
 def test_brute_keep(params_lmfit, capsys):
     """TEST 10: using 'keep' argument and check candidates attribute."""
     mini = lmfit.Minimizer(func_lmfit, params_lmfit)

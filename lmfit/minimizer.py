@@ -1943,14 +1943,14 @@ class Minimizer:
 
             # sort the results of brute and populate .candidates attribute
             grid_score = ret[3].ravel()  # chisqr
-            grid_points = [par.ravel() for par in ret[2]]
 
             if len(result.var_names) == 1:
-                grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
-                                       dtype=[('par', 'O'), ('score', 'float')])
+                grid_points = [np.asarray(ret[2]).ravel()]
             else:
-                grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
-                                       dtype=[('par', 'O'), ('score', 'float')])
+                grid_points = [par.ravel() for par in ret[2]]
+
+            grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
+                                   dtype=[('par', 'O'), ('score', 'float')])
             grid_result_sorted = grid_result[grid_result.argsort(order='score')]
 
             result.candidates = []
