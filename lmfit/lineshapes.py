@@ -432,7 +432,7 @@ def bose(x, amplitude=1.0, center=0.0, kt=1.0):
     """
     denom = exp((x - center)/not_zero(kt)) - 1.0
     if isinstance(x, (int, float)):
-        denom = max(tiny, x)*copysign(x, denom)
+        denom = not_zero(denom)
     else:
         denom[where(abs(denom) < tiny*tiny)] = tiny*tiny
     return amplitude/denom
