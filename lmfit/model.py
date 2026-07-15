@@ -5,6 +5,7 @@ from functools import wraps
 import inspect
 import json
 import operator
+from pathlib import Path
 import warnings
 
 from asteval import valid_symbol_name
@@ -21,6 +22,7 @@ from .minimizer import MinimizerResult
 from .printfuncs import ci_report, fit_report, fitreport_html_table
 
 tiny = 1.e-15
+MAXFILENAME_LENGTH = 2048
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
@@ -1353,7 +1355,7 @@ def load_model(fname, funcdefs=None):
     Parameters
     ----------
     fname : str
-        Name of file containing saved Model.
+        Name of file containing saved Model, or text of saved Model
     funcdefs : dict, optional
         Dictionary of custom function names and definitions.
 
@@ -1363,10 +1365,12 @@ def load_model(fname, funcdefs=None):
         Model object loaded from file.
 
     """
-    m = Model(lambda x: x)
-    with open(fname) as fh:
-        model = m.load(fh, funcdefs=funcdefs)
-    return model
+    mod = Model(lambda x: x)
+    mtext = fname
+    if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
+        with open(fname) as fh:
+            mtext = fh.read()
+    return mod.loads(mtext, funcdefs=funcdefs)
 
 
 def _buildmodel(state, funcdefs=None):
@@ -1459,7 +1463,7 @@ def load_modelresult(fname, funcdefs=None):
     Parameters
     ----------
     fname : str
-        Name of file containing saved ModelResult.
+        Name of file containing saved ModelResult, or text of saved ModelResult
     funcdefs : dict, optional
         Dictionary of custom function names and definitions.
 
@@ -1471,9 +1475,11 @@ def load_modelresult(fname, funcdefs=None):
     """
     params = Parameters()
     modres = ModelResult(Model(lambda x: x, None), params)
-    with open(fname) as fh:
-        mresult = modres.load(fh, funcdefs=funcdefs)
-    return mresult
+    mtext = fname
+    if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
+        with open(fname) as fh:
+            mtext = fh.read()
+    return modres.loads(mtext, funcdefs=funcdefs)
 
 
 class ModelResult(Minimizer):
