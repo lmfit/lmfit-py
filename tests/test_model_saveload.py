@@ -145,6 +145,29 @@ def test_save_load_modelresult():
     clear_savefile(SAVE_MODEL)
 
 
+def test_save_load_modelresult_as_text():
+    """Save/load ModelResult as text (not filename)."""
+    # create model, perform fit, save ModelResult and perform some tests
+    model, params = create_model_params(x, y)
+    result = model.fit(y, params, x=x)
+    save_modelresult(result, SAVE_MODELRESULT)
+
+    file_exists = wait_for_file(SAVE_MODELRESULT, timeout=10)
+    assert file_exists
+
+    text = ''
+    with open(SAVE_MODELRESULT) as fh:
+        text = fh.read()
+    assert 12000 < len(text) < 60000
+
+    # load the saved ModelResult from text and compare results
+    result_saved = load_modelresult(text)
+    assert result_saved.residual is not None
+    check_fit_results(result_saved)
+
+    clear_savefile(SAVE_MODEL)
+
+
 def test_load_legacy_modelresult():
     """Load legacy ModelResult."""
     fname = os.path.join(os.path.dirname(__file__), MODELRESULT_LMFIT_1_0)
