@@ -326,7 +326,7 @@ def test_saveload_modelresult_expression_model():
     os.unlink(savefile)
 
 
-def test_saveload_modelresult_spline_model(tmp_path):
+def test_saveload_modelresult_spline_model():
     """Test for ModelResult.loads()/dumps() for Spline Model.
 
     The spline model is a special case with a possibly indefinite
@@ -335,7 +335,7 @@ def test_saveload_modelresult_spline_model(tmp_path):
     discussed in https://github.com/lmfit/lmfit-py/issues/985.
     """
     number_of_knots = 80
-    model_file = tmp_path / 'spline_modelresult.sav'
+    model_file = 'spline_modelresult.sav'
     xx = np.linspace(-10, 10, 100)
     yy = 0.6*np.exp(-(xx**2)/(1.3**2))
 
@@ -381,6 +381,7 @@ def test_saveload_modelresult_spline_model(tmp_path):
             assert val2 is None
         else:
             assert val1 == val2
+    clear_savefile(model_file)
 
 
 def test_saveload_usersyms():
