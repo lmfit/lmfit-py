@@ -1,4 +1,4 @@
-# <examples/doc_model_loadmodelresult2.py>
+# <examples/doc_model_loadmodelresult3.py>
 import os
 import sys
 
