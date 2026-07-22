@@ -22,7 +22,7 @@ from .minimizer import MinimizerResult
 from .printfuncs import ci_report, fit_report, fitreport_html_table
 
 tiny = 1.e-15
-MAXFILENAME_LENGTH = 2048
+MAXFILENAME_LENGTH = 255
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
@@ -1366,10 +1366,14 @@ def load_model(fname, funcdefs=None):
 
     """
     mod = Model(lambda x: x)
-    mtext = fname
+    if isinstance(fname, Path):
+        fname = fname.name
+
     if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
         with open(fname) as fh:
             mtext = fh.read()
+    else:
+        mtext = fname
     return mod.loads(mtext, funcdefs=funcdefs)
 
 
@@ -1475,10 +1479,14 @@ def load_modelresult(fname, funcdefs=None):
     """
     params = Parameters()
     modres = ModelResult(Model(lambda x: x, None), params)
-    mtext = fname
+    if isinstance(fname, Path):
+        fname = fname.name
+
     if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
         with open(fname) as fh:
             mtext = fh.read()
+    else:
+        mtext = fname
     return modres.loads(mtext, funcdefs=funcdefs)
 
 
