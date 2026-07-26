@@ -197,12 +197,22 @@ def coerce_arraylike(x):
     coerce lists, tuples, and pandas Series, hdf5 Groups, etc to an
     ndarray float64 or complex128, but leave other data structures
     and objects unchanged
+
+    Only data that can actually be represented as float64/complex128 is
+    coerced. ``numpy.isrealobj`` returns ``True`` for an object-dtype
+    array (for example a list of custom, non-float objects), so relying on
+    it would attempt -- and fail with a ``TypeError`` -- to cast such data
+    to float64 (see GitHub issue #1040). Instead the conversion is tried
+    and any array-like that cannot be cast to a numeric ndarray is returned
+    unchanged.
     """
     if isinstance(x, (list, tuple, Series)) or hasattr(x, '__array__'):
-        if np.isrealobj(x):
-            return np.asarray(x, dtype=np.float64)
         if np.iscomplexobj(x):
             return np.asarray(x, dtype=np.complex128)
+        try:
+            return np.asarray(x, dtype=np.float64)
+        except (TypeError, ValueError):
+            pass
     return x
 
 

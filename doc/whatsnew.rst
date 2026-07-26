@@ -28,6 +28,9 @@ Fixes:
 
 - fix cross-Python-version serialization of ``ConstantModel`` and
   ``ComplexConstantModel`` by moving their functions to ``lineshapes`` (Issue #1033)
+- fix ``TypeError`` when an independent variable is a list/tuple of custom,
+  non-float objects by only coercing array-like inputs that can actually be
+  cast to a numeric ndarray (Issue #1040)
 
 .. _whatsnew_134_label:
 
