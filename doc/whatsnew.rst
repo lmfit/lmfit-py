@@ -31,6 +31,10 @@ Fixes:
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,
   non-float objects by only coercing array-like inputs that can actually be
   cast to a numeric ndarray (Issue #1040)
+- fix cross-Python-version serialization of ``PolynomialModel`` and
+  ``SplineModel`` by moving their functions to ``lineshapes``; ``SplineModel``
+  now passes ``knots`` and ``order`` as Model options, so they are saved with
+  the Model and shown in its representation (Issue #1033)
 
 .. _whatsnew_134_label:
 
