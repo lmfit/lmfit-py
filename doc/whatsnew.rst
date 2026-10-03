@@ -31,6 +31,11 @@ Fixes:
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,
   non-float objects by only coercing array-like inputs that can actually be
   cast to a numeric ndarray (Issue #1040)
+- fix loading saved functions that have moved within their library: functions
+  are now saved under their public package path, and on loading lmfit falls
+  back to the parent packages of the saved path (e.g., SciPy 1.16 moved
+  ``erf`` and ``wofz`` to a different private module, so a ``ModelResult``
+  saved with SciPy 1.16 or later could not be loaded with an older SciPy)
 
 .. _whatsnew_134_label:
 

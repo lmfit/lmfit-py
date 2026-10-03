@@ -1,9 +1,11 @@
 """Tests for the JSON utilities."""
-from types import BuiltinFunctionType, FunctionType
+import sys
+from types import BuiltinFunctionType, FunctionType, ModuleType
 
 import numpy as np
 import pytest
 from scipy.optimize import basinhopping
+from scipy.special import erf
 
 import lmfit
 from lmfit.jsonutils import decode4js, encode4js, find_importer, import_from
@@ -16,6 +18,60 @@ def test_import_from(obj):
     importer = find_importer(obj)
     assert isinstance(import_from(importer, obj.__name__),
                       (BuiltinFunctionType, FunctionType))
+
+
+def test_find_importer_public_package(monkeypatch):
+    """Check that find_importer records the topmost package holding obj."""
+    def func():
+        pass
+
+    func.__module__ = 'fakepkg._impl'
+    # 'fakeuser' only re-imports func: it is not a parent of 'fakepkg._impl'
+    for modname in ('fakeuser', 'fakepkg', 'fakepkg._impl'):
+        module = ModuleType(modname)
+        module.func = func
+        monkeypatch.setitem(sys.modules, modname, module)
+
+    assert find_importer(func) == 'fakepkg'
+    assert find_importer(erf) == 'scipy.special'
+
+
+@pytest.mark.parametrize('importer', ['fakepkg._old', 'fakepkg._gone.impl'])
+def test_decode4js_relocated_callable(monkeypatch, importer):
+    """Check that decode4js finds a callable that moved within its package."""
+    def func():
+        pass
+
+    pkg = ModuleType('fakepkg')
+    pkg.func = func
+    monkeypatch.setitem(sys.modules, 'fakepkg', pkg)
+    # fakepkg._old still exists (importable), but without func
+    monkeypatch.setitem(sys.modules, 'fakepkg._old', ModuleType('fakepkg._old'))
+
+    encoded = encode4js(func)
+    encoded['importer'] = importer  # as saved before func moved
+    assert decode4js(encoded) is func
+
+
+def test_decode4js_submodule_not_imported(monkeypatch):
+    """Check that decode4js imports the saved module before trying parents."""
+    def func():
+        pass
+
+    def other_func():
+        pass
+
+    pkg = ModuleType('fakepkg')
+    pkg.func = other_func  # a different object under the same name
+    impl = ModuleType('fakepkg._impl')
+    impl.func = func
+    monkeypatch.setitem(sys.modules, 'fakepkg', pkg)
+    # importable, but not an attribute of fakepkg: not imported yet on loading
+    monkeypatch.setitem(sys.modules, 'fakepkg._impl', impl)
+
+    encoded = encode4js(func)
+    assert encoded['importer'] == 'fakepkg._impl'
+    assert decode4js(encoded) is func
 
 
 # test-case missing for string object that causes a UnicodeError; cannot find

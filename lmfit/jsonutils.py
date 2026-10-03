@@ -1,6 +1,7 @@
 """JSON utilities."""
 
 from base64 import b64decode, b64encode
+import importlib
 from io import StringIO
 import sys
 import warnings
@@ -22,25 +23,43 @@ pyvers = f'{sys.version_info.major}.{sys.version_info.minor}'
 
 
 def find_importer(obj):
-    """Find importer of an object."""
+    """Find importer of an object.
+
+    This is the module that defines the object (or else the first module
+    found to hold it), replaced by its topmost parent package that holds
+    the same object. Public package paths are more stable than private
+    modules, which libraries may reorganize.
+
+    """
     oname = obj.__name__
-    for modname, module in sys.modules.copy().items():
-        if modname.startswith('__main__'):
-            continue
-        t = getattr(module, oname, None)
-        if t is obj:
-            return modname
-    return None
+    modname = getattr(obj, '__module__', None)
+    if (not isinstance(modname, str) or modname.startswith('__main__')
+            or getattr(sys.modules.get(modname), oname, None) is not obj):
+        for modname, module in sys.modules.copy().items():
+            if modname.startswith('__main__'):
+                continue
+            t = getattr(module, oname, None)
+            if t is obj:
+                break
+        else:
+            return None
+    parts = modname.split('.')
+    for i in range(1, len(parts)):
+        parent = '.'.join(parts[:i])
+        if getattr(sys.modules.get(parent), oname, None) is obj:
+            return parent
+    return modname
 
 
 def import_from(modulepath, objectname):
-    """Wrapper for __import__ for nested objects."""
-    path = modulepath.split('.')
-    top = path.pop(0)
-    parent = __import__(top)
-    while len(path) > 0:
-        parent = getattr(parent, path.pop(0))
-    return getattr(parent, objectname)
+    """Import `objectname` from the module `modulepath`.
+
+    The module itself is imported, so a submodule that is not imported yet
+    is found too, instead of failing like an attribute lookup on its parent
+    package would.
+
+    """
+    return getattr(importlib.import_module(modulepath), objectname)
 
 
 def encode4js(obj):
@@ -134,11 +153,16 @@ def decode4js(obj):
         out = uncertainties.ufloat(obj['val'], obj['err'])
     elif classname == 'Callable':
         out = obj['__name__']
-        try:
-            out = import_from(obj['importer'], out)
-            unpacked = True
-        except (ImportError, AttributeError):
-            unpacked = False
+        importer = obj['importer']
+        unpacked = False
+        # if the callable moved to another module within its package, it
+        # may still be found in a parent package: try them, nearest first
+        while importer and not unpacked:
+            try:
+                out = import_from(importer, out)
+                unpacked = True
+            except (ImportError, AttributeError):
+                importer = importer.rpartition('.')[0]
         if not unpacked:
             spyvers = obj.get('pyversion', '?')
             if not pyvers == spyvers:
