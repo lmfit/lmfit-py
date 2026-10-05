@@ -1,9 +1,8 @@
 """Basic model lineshapes and distribution functions."""
 
-from numpy import (arctan, array, copysign, cos, exp, isclose, isnan, log,
-                   log1p, maximum, minimum, ones, pi, polyval, real, shape,
-                   sign, sin, sqrt, where)
-from scipy.interpolate import splev
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
+                   maximum, minimum, ones, pi, polyval, real, shape, sign, sin,
+                   sqrt, where)
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -594,44 +593,3 @@ def polynomial(x, c0=0.0, c1=0.0, c2=0.0, c3=0.0, c4=0.0, c5=0.0, c6=0.0,
 
     """
     return polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
-
-
-def spline_model(x, s0=1, s1=1, s2=1, s3=1, s4=1, s5=1, s6=1, s7=1,
-                 s8=1, s9=1, s10=1, s11=1, s12=1, s13=1, s14=1, s15=1,
-                 s16=1, s17=1, s18=1, s19=1, s20=1, s21=1, s22=1, s23=1,
-                 s24=1, s25=1, s26=1, s27=1, s28=1, s29=1, s30=1, s31=1,
-                 s32=1, s33=1, s34=1, s35=1, s36=1, s37=1, s38=1, s39=1,
-                 s40=1, s41=1, s42=1, s43=1, s44=1, s45=1, s46=1, s47=1,
-                 s48=1, s49=1, s50=1, s51=1, s52=1, s53=1, s54=1, s55=1,
-                 s56=1, s57=1, s58=1, s59=1, s60=1, s61=1, s62=1, s63=1,
-                 s64=1, s65=1, s66=1, s67=1, s68=1, s69=1, s70=1, s71=1,
-                 s72=1, s73=1, s74=1, s75=1, s76=1, s77=1, s78=1, s79=1,
-                 s80=1, s81=1, s82=1, s83=1, s84=1, s85=1, s86=1, s87=1,
-                 s88=1, s89=1, s90=1, s91=1, s92=1, s93=1, s94=1, s95=1,
-                 s96=1, s97=1, s98=1, s99=1, knots=None, order=None):
-    """Return a 1-D B-spline, as used by `SplineModel`.
-
-    spline_model(x, s0, ..., s99, knots, order) =
-        splev(x, [knots, [s0, s1, ...], order])
-
-    `knots` is the knot vector from `scipy.interpolate.splrep` and is
-    required. `order` defaults to 3 (cubic).
-
-    """
-    coefs = [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
-             s12, s13, s14, s15, s16, s17, s18, s19, s20, s21,
-             s22, s23, s24, s25, s26, s27, s28, s29, s30, s31,
-             s32, s33, s34, s35, s36, s37, s38, s39, s40, s41,
-             s42, s43, s44, s45, s46, s47, s48, s49, s50, s51,
-             s52, s53, s54, s55, s56, s57, s58, s59, s60, s61,
-             s62, s63, s64, s65, s66, s67, s68, s69, s70, s71,
-             s72, s73, s74, s75, s76, s77, s78, s79, s80, s81,
-             s82, s83, s84, s85, s86, s87, s88, s89, s90, s91,
-             s92, s93, s94, s95, s96, s97, s98, s99]
-    if knots is None:
-        raise ValueError("spline_model requires the spline 'knots'")
-    if order is None:
-        order = 3
-    coefs = coefs[:len(knots)]
-    coefs.extend([coefs[-1]]*(order+1))
-    return splev(x, [knots, array(coefs), order])

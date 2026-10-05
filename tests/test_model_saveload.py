@@ -12,7 +12,7 @@ from numpy.testing import assert_allclose, assert_array_equal
 import pytest
 
 import lmfit
-from lmfit import Parameters, lineshapes
+from lmfit import Parameters
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
                          save_model, save_modelresult)
@@ -503,9 +503,9 @@ def test_load_constantmodel_versions():
         assert_allclose(result.params['c'].value, 5.0, rtol=1e-3)
 
 
-def assert_funcdefs_by_reference(serialized):
+def assert_funcdefs_by_reference(serialized, importer='lmfit.lineshapes'):
     """Assert that all model functions in a dumped Model/ModelResult are
-    saved by reference to `lmfit.lineshapes`.
+    saved by reference, with the given `importer`.
 
     A function saved by value (bytecode, dill '_create_code') cannot be
     loaded with a different Python version (Issue #1033).
@@ -526,7 +526,7 @@ def assert_funcdefs_by_reference(serialized):
     assert len(funcdefs) > 0
     for funcdef in funcdefs:
         assert funcdef['__class__'] == 'Callable'
-        assert funcdef['importer'] == 'lmfit.lineshapes'
+        assert funcdef['importer'] == importer
         assert b'_create_code' not in base64.b64decode(funcdef['value'])
 
 
@@ -563,19 +563,22 @@ BUILTIN_MODELS = sorted(
 def test_builtin_model_function_saved_by_reference(model_class):
     """Test that every built-in Model saves its function by reference.
 
+    SplineModel's function is a method: it has no module-level importer,
+    and dill saves it as the model instance and the method name.
+
     Regression test for https://github.com/lmfit/lmfit-py/issues/1033
     """
     if model_class is SplineModel:
         model = SplineModel(xknots=np.linspace(-5, 5, 8))
+        assert_funcdefs_by_reference(model.dumps(), importer=None)
     else:
-        model = model_class()
-    assert_funcdefs_by_reference(model.dumps())
+        assert_funcdefs_by_reference(model_class().dumps())
 
 
 def test_saveload_spline_model_eval():
     """Test that a loaded SplineModel ModelResult evaluates identically.
 
-    The knots are saved as Model options and the function by reference.
+    The function is a method of a SplineModel restored with its knots.
     """
     xx = np.linspace(-10, 10, 100)
     yy = 0.6*np.exp(-(xx**2)/(1.3**2))
@@ -584,8 +587,8 @@ def test_saveload_spline_model_eval():
 
     result2 = load_modelresult(result.dumps())
 
-    assert result2.model.func is lineshapes.spline_model
-    assert_array_equal(result2.model.opts['knots'], model.knots)
+    assert isinstance(result2.model.func.__self__, SplineModel)
+    assert_array_equal(result2.model.func.__self__.knots, model.knots)
     assert_array_equal(result2.eval(x=xx), result.eval(x=xx))
 
 

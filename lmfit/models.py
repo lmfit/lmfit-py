@@ -3,7 +3,7 @@ import inspect
 
 from asteval import Interpreter, get_ast_names
 import numpy as np
-from scipy.interpolate import splrep
+from scipy.interpolate import splev, splrep
 
 from . import lineshapes
 from .lineshapes import (bose, breit_wigner, complex_constant, constant,
@@ -11,9 +11,8 @@ from .lineshapes import (bose, breit_wigner, complex_constant, constant,
                          exponential, fermi, gaussian, gaussian2d, linear,
                          lognormal, lorentzian, moffat, parabolic, pearson4,
                          pearson7, polynomial, powerlaw, pvoigt, rectangle,
-                         sine, skewed_gaussian, skewed_voigt, spline_model,
-                         split_lorentzian, step, students_t,
-                         thermal_distribution, tiny, voigt)
+                         sine, skewed_gaussian, skewed_voigt, split_lorentzian,
+                         step, students_t, thermal_distribution, tiny, voigt)
 from .model import Model
 
 tau = 2.0 * np.pi
@@ -395,18 +394,48 @@ class SplineModel(Model):
         self.order = 3   # cubic splines only
         self.knots, _c, _k = splrep(self.xknots, np.ones(self.nknots), k=self.order)
 
-        # knots and order are passed as Model options (not closed over) so
-        # that they are saved with the Model and the function is saved by
-        # reference.
-        kwargs.update({'knots': self.knots, 'order': self.order})
-
-        super().__init__(spline_model, **kwargs)
+        # The model function is a method, not a closure: dill saves it by
+        # reference as this model (its class and attributes, including the
+        # knots) and the method name, so it loads with another Python version.
+        super().__init__(self.spline_model, **kwargs)
 
         if 'x' not in independent_vars:
             self.independent_vars.pop('x')
 
         self._param_root_names = [f's{d}' for d in range(self.nknots)]
         self._param_names = [f'{prefix}{s}' for s in self._param_root_names]
+
+    def spline_model(self, x, s0=1, s1=1, s2=1, s3=1, s4=1, s5=1, s6=1, s7=1,
+                     s8=1, s9=1, s10=1, s11=1, s12=1, s13=1, s14=1, s15=1,
+                     s16=1, s17=1, s18=1, s19=1, s20=1, s21=1, s22=1, s23=1,
+                     s24=1, s25=1, s26=1, s27=1, s28=1, s29=1, s30=1, s31=1,
+                     s32=1, s33=1, s34=1, s35=1, s36=1, s37=1, s38=1, s39=1,
+                     s40=1, s41=1, s42=1, s43=1, s44=1, s45=1, s46=1, s47=1,
+                     s48=1, s49=1, s50=1, s51=1, s52=1, s53=1, s54=1, s55=1,
+                     s56=1, s57=1, s58=1, s59=1, s60=1, s61=1, s62=1, s63=1,
+                     s64=1, s65=1, s66=1, s67=1, s68=1, s69=1, s70=1, s71=1,
+                     s72=1, s73=1, s74=1, s75=1, s76=1, s77=1, s78=1, s79=1,
+                     s80=1, s81=1, s82=1, s83=1, s84=1, s85=1, s86=1, s87=1,
+                     s88=1, s89=1, s90=1, s91=1, s92=1, s93=1, s94=1, s95=1,
+                     s96=1, s97=1, s98=1, s99=1, knots=None, order=None):
+        """spline evaluation"""
+        coefs = [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
+                 s12, s13, s14, s15, s16, s17, s18, s19, s20, s21,
+                 s22, s23, s24, s25, s26, s27, s28, s29, s30, s31,
+                 s32, s33, s34, s35, s36, s37, s38, s39, s40, s41,
+                 s42, s43, s44, s45, s46, s47, s48, s49, s50, s51,
+                 s52, s53, s54, s55, s56, s57, s58, s59, s60, s61,
+                 s62, s63, s64, s65, s66, s67, s68, s69, s70, s71,
+                 s72, s73, s74, s75, s76, s77, s78, s79, s80, s81,
+                 s82, s83, s84, s85, s86, s87, s88, s89, s90, s91,
+                 s92, s93, s94, s95, s96, s97, s98, s99]
+        if knots is None:
+            knots = self.knots
+        if order is None:
+            order = self.order
+        coefs = coefs[:len(knots)]
+        coefs.extend([coefs[-1]]*(order+1))
+        return splev(x, [knots, np.array(coefs), order])
 
     def guess(self, data, x, **kwargs):
         """Estimate initial model parameter values from data."""
