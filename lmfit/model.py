@@ -1924,10 +1924,6 @@ class ModelResult(Minimizer):
                 val = bool(val)
             elif isinstance(val, bytes):
                 val = str(val, encoding='UTF-8')
-            elif attr in ('init_values', 'best_values') and isinstance(val, dict):
-                # e.g. SplineModel 'knots'
-                val = {k: v.tolist() if isinstance(v, np.ndarray) else v
-                       for k, v in val.items()}
             summary[attr] = val
 
         summary['params'] = [par.__getstate__() for par in self.params.values()]
