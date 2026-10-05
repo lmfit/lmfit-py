@@ -106,7 +106,7 @@ stages:
             chmod +x codecov
           displayName: 'Download and verify codecov uploader'
         - script: |
-            ./codecov -v -f "coverage.xml"
+            echo 'not  uploading to code cov'  # # ./codecov -v -f "coverage.xml"
           displayName: 'Upload to codecov.io'
 
 - stage: tests_latest_dependencies
