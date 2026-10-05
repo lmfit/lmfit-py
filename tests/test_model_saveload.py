@@ -509,3 +509,88 @@ def test_saveload_constantmodel_no_dill():
     result2.loads(serialized)
     assert_allclose(result2.eval(x=xx), result.eval(x=xx), rtol=1e-5)
     assert_allclose(result2.params['c'].value, 5.0, rtol=1e-3)
+
+
+# SplineModel keeps its knots internal, as in lmfit 1.3.4: they are not in
+# best_values/init_values, the repr or the fit report, and the model
+# function evaluates the spline from the coefficients alone. This must also
+# hold after a save/load round trip.
+SPLINE_XX = np.linspace(-10, 10, 100)
+SPLINE_YY = 0.6*np.exp(-(SPLINE_XX**2)/(1.3**2))
+SPLINE_NAMES = sorted(f'bkg_s{i}' for i in range(15))
+SPLINE_REPR = "Model(spline_model, prefix='bkg_')"
+
+
+def spline_coefs(model, params):
+    """Return the spline coefficients as the model function takes them."""
+    return {name[len(model.prefix):]: params[name].value
+            for name in model.param_names}
+
+
+def fit_report_model_line(result):
+    """Return the line below '[[Model]]' in the fit report."""
+    lines = result.fit_report().splitlines()
+    return lines[lines.index('[[Model]]') + 1].strip()
+
+
+@pytest.mark.parametrize('reload', [False, True], ids=['fresh', 'reloaded'])
+def test_spline_model_hides_knots(reload):
+    """Test that a SplineModel fit does not expose its knots."""
+    model = SplineModel(xknots=np.linspace(-10, 10, 15), prefix='bkg_')
+    result = model.fit(SPLINE_YY, model.guess(SPLINE_YY, SPLINE_XX),
+                       x=SPLINE_XX)
+    expected = model.eval(result.params, x=SPLINE_XX)
+    if reload:
+        result = load_modelresult(result.dumps())
+
+    assert sorted(result.best_values) == SPLINE_NAMES
+    assert sorted(result.init_values) == SPLINE_NAMES
+    assert repr(result.model) == SPLINE_REPR
+    assert fit_report_model_line(result) == SPLINE_REPR
+    svals = spline_coefs(result.model, result.params)
+    assert_allclose(result.model.func(SPLINE_XX, **svals), expected,
+                    rtol=1e-12)
+
+
+def test_saveload_spline_model_hides_knots(tmp_path):
+    """Test that a SplineModel loaded with load_model hides its knots."""
+    original = SplineModel(xknots=np.linspace(-10, 10, 15), prefix='bkg_')
+    params = original.guess(SPLINE_YY, SPLINE_XX)
+    fname = str(tmp_path / 'spline_model.sav')
+    save_model(original, fname)
+    model = load_model(fname)
+
+    assert sorted(model.make_params()) == SPLINE_NAMES
+    assert repr(model) == SPLINE_REPR
+    assert_allclose(model.func(SPLINE_XX, **spline_coefs(model, params)),
+                    original.eval(params, x=SPLINE_XX), rtol=1e-12)
+
+
+def test_saveload_composite_spline_model_hides_knots():
+    """Test two SplineModels and a Gaussian after a save/load round trip.
+
+    Each SplineModel keeps its own knots and does not expose them.
+    """
+    model = (SplineModel(xknots=np.linspace(-10, 10, 6), prefix='a_')
+             + SplineModel(xknots=np.linspace(-12, 12, 9), prefix='b_')
+             + GaussianModel(prefix='g_'))
+    yy = 2.0*np.exp(-(SPLINE_XX-1)**2/(2*0.8**2)) + 0.3 + 0.02*SPLINE_XX
+    params = model.make_params(g_amplitude=4, g_center=0.5, g_sigma=1)
+    result = model.fit(yy, params, x=SPLINE_XX)
+    result2 = load_modelresult(result.dumps())
+
+    names = sorted([f'a_s{i}' for i in range(6)]
+                   + [f'b_s{i}' for i in range(9)]
+                   + ['g_amplitude', 'g_center', 'g_sigma'])
+    assert sorted(result2.best_values) == names
+    assert sorted(result2.init_values) == names
+    expected = ("((Model(spline_model, prefix='a_') + "
+                "Model(spline_model, prefix='b_')) + "
+                "Model(gaussian, prefix='g_'))")
+    assert repr(result2.model) == expected
+    assert fit_report_model_line(result2) == expected
+    for comp2, comp in zip(result2.model.components[:2],
+                           model.components[:2]):
+        assert_allclose(comp2.func(SPLINE_XX,
+                                   **spline_coefs(comp2, result2.params)),
+                        comp.eval(result.params, x=SPLINE_XX), rtol=1e-12)
