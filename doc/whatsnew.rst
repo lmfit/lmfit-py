@@ -31,6 +31,8 @@ Fixes:
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,
   non-float objects by only coercing array-like inputs that can actually be
   cast to a numeric ndarray (Issue #1040)
+- fix ``expgaussian`` returning ``nan`` far below the center, where ``exp(gamma*(center - x))``
+  overflowed and was multiplied by ``erfc(...) = 0``
 
 .. _whatsnew_134_label:
 
