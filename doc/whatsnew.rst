@@ -33,6 +33,8 @@ Fixes:
   cast to a numeric ndarray (Issue #1040)
 - fix the ``height`` parameter of ``DoniachModel``, which was the value at ``center`` instead of
   the maximum of the lineshape for ``gamma > 0``
+- fix the ``height`` parameter of ``DampedOscillatorModel``, which used the small-``sigma`` limit
+  ``0.5*amplitude/sigma`` instead of the maximum of the lineshape
 
 .. _whatsnew_134_label:
 

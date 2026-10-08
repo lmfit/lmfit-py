@@ -1152,7 +1152,12 @@ class DampedOscillatorModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
-        self.set_param_hint('height', expr=height_expr(self))
+        # The maximum is amplitude/(2*sigma*sqrt(1-sigma**2)), at
+        # x = center*sqrt(1-2*sigma**2), for sigma**2 < 1/2, and amplitude
+        # (at x = 0) otherwise
+        fmt = ("{prefix:s}amplitude/max({0}, 2*{prefix:s}sigma*sqrt(1-{prefix:s}sigma**2)) "
+               "if {prefix:s}sigma**2 < 0.5 else {prefix:s}amplitude")
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
