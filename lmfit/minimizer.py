@@ -14,11 +14,14 @@ Original copyright:
 See LICENSE for more complete authorship information and license.
 
 """
+from __future__ import annotations
+
 from collections import namedtuple
 from copy import deepcopy
 import inspect
 import multiprocessing
 import numbers
+from typing import Any
 import warnings
 
 import numpy as np
@@ -37,6 +40,7 @@ from scipy.sparse import issparse
 from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
+import uncertainties
 
 from ._ampgo import ampgo
 from .exceptions import AbortFitException, MinimizerException
@@ -178,85 +182,75 @@ class MinimizerResult:
     Minimization results include data such as status and error messages,
     fit statistics, and the updated (i.e., best-fit) parameters themselves
     in the :attr:`params` attribute.
-
-    The list of (possible) `MinimizerResult` attributes is given below:
-
-    Attributes
-    ----------
-    residual : numpy.ndarray
-        Residual array :math:`{\rm Resid_i}`. Return value of the objective
-        function when using the best-fit values of the parameters.
-    params : Parameters
-        The best-fit Parameters resulting from the fit.
-    uvars : dict
-        Dictionary of uncertainties ufloats from Parameters
-    var_names : list
-        list of variable Parameter names used in optimization in the
-        same order as the values in :attr:`init_vals` and :attr:`covar`.
-    covar : numpy.ndarray or None
-        Covariance matrix from minimization, with rows and columns
-        corresponding to :attr:`var_names`.  If uncertainties cannot
-        be determined, this value will be ``None``.
-    init_vals : list
-        List of initial values for variable parameters using
-        :attr:`var_names`.
-    init_values : dict
-        Dictionary of initial values for variable parameters.
-    aborted : bool
-        Whether the fit was aborted.
-    status : int
-        Termination status of the optimizer. Its value depends on the
-        underlying solver. Refer to `message` for details.
-    success : bool
-        True if the fit succeeded, otherwise False. This is an optimistic
-        view of success, meaning that the method finished without error.
-    errorbars : bool
-        whether uncertainties were estimated for variable Parameters.
-    message : str
-        Message about fit success.
-    ier : int
-        Integer error value from :scipydoc:`optimize.leastsq` (`'leastsq'`
-        method only).
-    lmdif_message : str
-        Message from :scipydoc:`optimize.leastsq` (`'leastsq'` method only).
-    call_kws : dict
-        Keyword arguments sent to underlying solver.
-    flatchain : pandas.DataFrame
-        A flatchain view of the sampling chain from the `emcee` method.
-    nfev : int
-        Number of function evaluations.
-    nvarys : int
-        Number of variables in fit: :math:`N_{\rm varys}`.
-    ndata : int
-        Number of data points: :math:`N`.
-    nfree : int
-        Degrees of freedom in fit: :math:`N - N_{\rm varys}`.
-    chisqr : float
-        Chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`.
-    redchi : float
-        Reduced chi-square:
-        :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}`.
-    aic : float
-        Akaike Information Criterion statistic:
-        :math:`N \ln(\chi^2/N) + 2 N_{\rm varys}`.
-    bic : float
-        Bayesian Information Criterion statistic:
-        :math:`N \ln(\chi^2/N) + \ln(N) N_{\rm varys}`.
-
-    Methods
-    -------
-    show_candidates
-        :meth:`pretty_print` representation of candidates from the `brute`
-        fitting method.
-
     """
+
+    params: Parameters
+    "The best-fit Parameters resulting from the fit."
+    uvars: dict[str, uncertainties.Variable] | None
+    "Dictionary of uncertainties ufloats from Parameters."
+    var_names: list[str]
+    """Variable Parameter names used in optimization.
+    Same order as the values in :attr:`init_vals` and :attr:`covar`.
+    """
+    covar: np.ndarray | None
+    """Covariance matrix from minimization.
+    Rows and columns correspond to :attr:`var_names`. If uncertainties
+    cannot be determined, this value will be ``None``.
+    """
+    init_vals: list[float]
+    "List of initial values for variable parameters using :attr:`var_names`."
+    init_values: dict[str, float]
+    "Dictionary of initial values for variable parameters."
+    aborted: bool
+    "Whether the fit was aborted."
+    status: int
+    """Termination status of the optimizer.
+    Its value depends on the underlying solver. Refer to `message` for
+    details.
+    """
+    success: bool
+    """True if the fit succeeded, otherwise False.
+    This is an optimistic view of success, meaning that the method finished
+    without error.
+    """
+    errorbars: bool
+    "Whether uncertainties were estimated for variable Parameters."
+    message: str
+    "Message about fit success."
+    ier: int
+    "Integer error value from :scipydoc:`optimize.leastsq` (`'leastsq'` method only)."
+    lmdif_message: str
+    "Message from :scipydoc:`optimize.leastsq` (`'leastsq'` method only)."
+    call_kws: dict[str, Any]
+    "Keyword arguments sent to underlying solver."
+    nfev: int
+    "Number of function evaluations."
+    residual: np.ndarray | float
+    r"""Residual array :math:`{\rm Resid_i}`.
+    Return value of the objective function when using the best-fit values
+    of the parameters.
+    """
+    nvarys: int
+    r"Number of variables in fit: :math:`N_{\rm varys}`."
+    ndata: int
+    "Number of data points: :math:`N`."
+    nfree: int
+    r"Degrees of freedom in fit: :math:`N - N_{\rm varys}`."
+    chisqr: float
+    r"Chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`."
+    redchi: float
+    r"Reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}`."
+    aic: float
+    r"Akaike Information Criterion statistic: :math:`N \ln(\chi^2/N) + 2 N_{\rm varys}`."
+    bic: float
+    r"Bayesian Information Criterion statistic: :math:`N \ln(\chi^2/N) + \ln(N) N_{\rm varys}`."
 
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
 
     @property
-    def flatchain(self):
+    def flatchain(self) -> None | pd.DataFrame:
         """Show flatchain view of the sampling chain from `emcee` method."""
         if not hasattr(self, 'chain'):
             return None
