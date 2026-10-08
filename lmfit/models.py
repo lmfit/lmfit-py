@@ -1471,8 +1471,11 @@ class DoniachModel(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
+        # The maximum is at arctan((x-center)/sigma) = -pi*gamma/(2*(2-gamma)),
+        # where the lineshape equals amplitude/sigma**(1-gamma) times
+        # cos(pi*gamma/(2*(2-gamma)))**(2-gamma)
         fmt = ("{prefix:s}amplitude/max({0}, ({prefix:s}sigma**(1-{prefix:s}gamma)))"
-               "*cos(pi*{prefix:s}gamma/2)")
+               "*cos(pi*{prefix:s}gamma/(2*(2-{prefix:s}gamma)))**(2-{prefix:s}gamma)")
         self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x, negative=False, **kwargs):

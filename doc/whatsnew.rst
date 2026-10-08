@@ -31,6 +31,8 @@ Fixes:
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,
   non-float objects by only coercing array-like inputs that can actually be
   cast to a numeric ndarray (Issue #1040)
+- fix the ``height`` parameter of ``DoniachModel``, which was the value at ``center`` instead of
+  the maximum of the lineshape for ``gamma > 0``
 
 .. _whatsnew_134_label:
 
