@@ -258,6 +258,7 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     if isinstance(x, (int, float)):
         x = max(tiny, x)
     else:
+        x = x.copy()
         x[where(x <= tiny)] = tiny
     return ((amplitude/(x*max(tiny, sigma*s2pi))) *
             exp(-(log(x)-center)**2 / max(tiny, (2*sigma**2))))
