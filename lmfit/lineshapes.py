@@ -4,7 +4,7 @@ from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
                    maximum, minimum, ones, pi, polyval, real, shape, sign, sin,
                    sqrt, where)
 from scipy.special import betaln as betalnfcn
-from scipy.special import erf, erfc
+from scipy.special import erf, erfc, erfcx
 from scipy.special import gamma as gamfcn
 from scipy.special import loggamma as loggammafcn
 from scipy.special import wofz
@@ -293,7 +293,12 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     gss = gamma*sigma*sigma
     arg1 = gamma*(center + gss/2.0 - x)
     arg2 = (center + gss - x)/max(tiny, (s2*sigma))
-    return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
+    # For arg2 > 0, exp(arg1)*erfc(arg2) = exp(arg1 - arg2**2)*erfcx(arg2)
+    # and arg1 - arg2**2 = -(x-center)**2/(2*sigma**2), which avoids the
+    # overflow of exp(arg1) (and inf*0 = nan) far below the center
+    gauss = exp(-(x - center)**2 / max(tiny, (2*sigma*sigma)))
+    return amplitude*(gamma/2) * where(arg2 > 0, gauss * erfcx(maximum(arg2, 0)),
+                                       exp(minimum(arg1, 0)) * erfc(arg2))
 
 
 def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
