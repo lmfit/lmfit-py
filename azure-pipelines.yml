@@ -95,19 +95,7 @@ stages:
         - script: |
             python -m pip install pytest-azurepipelines
             pytest
-          displayName: 'Run test-suite and collect coverage'
-        - script: |
-            curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --import # One-time step
-            curl -Os https://uploader.codecov.io/latest/linux/codecov
-            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-            gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM
-            shasum -a 256 -c codecov.SHA256SUM
-            chmod +x codecov
-          displayName: 'Download and verify codecov uploader'
-        - script: |
-            ./codecov -v -f "coverage.xml"
-          displayName: 'Upload to codecov.io'
+          displayName: 'Run test-suite'
 
 - stage: tests_latest_dependencies
   dependsOn: check_codestyle
@@ -152,18 +140,6 @@ stages:
             python -m pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
-        - script: |
-            curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --import # One-time step
-            curl -Os https://uploader.codecov.io/latest/linux/codecov
-            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-            curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-            gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM
-            shasum -a 256 -c codecov.SHA256SUM
-            chmod +x codecov
-          displayName: 'Download and verify codecov uploader'
-        - script: |
-            ./codecov -v -f "coverage.xml"
-          displayName: 'Upload to codecov.io'
 
 - stage: test_Windows_latest
   dependsOn: check_codestyle

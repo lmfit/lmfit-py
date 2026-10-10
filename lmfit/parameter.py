@@ -17,9 +17,10 @@ from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma,
                    'loggammafcn': scipy.special.loggamma,
-                   'betalnfnc': scipy.special.betaln}
-for fnc_name in ('erf', 'erfc', 'wofz'):
-    SCIPY_FUNCTIONS[fnc_name] = getattr(scipy.special, fnc_name)
+                   'betalnfnc': scipy.special.betaln,
+                   'erf': scipy.special.erf,
+                   'erfc': scipy.special.erfc,
+                   'wofz': scipy.special.wofz}
 
 
 def check_ast_errors(expr_eval):
@@ -628,8 +629,11 @@ class Parameters(dict):
 
         """
         params = [p.__getstate__() for p in self.values()]
+        usyms = [sym for sym in self._asteval.user_defined_symbols()
+                 if sym not in SCIPY_FUNCTIONS]
+
         unique_symbols = {key: encode4js(deepcopy(self._asteval.symtable[key]))
-                          for key in self._asteval.user_defined_symbols()}
+                          for key in usyms}
         return json.dumps({'unique_symbols': unique_symbols,
                            'params': params}, **kws)
 
@@ -660,8 +664,8 @@ class Parameters(dict):
 
         tmp = json.loads(s, **kws)
         unique_symbols = {key: decode4js(tmp['unique_symbols'][key]) for key
-                          in tmp['unique_symbols']}
-
+                          in tmp['unique_symbols'] if key not in SCIPY_FUNCTIONS}
+        unique_symbols.update(SCIPY_FUNCTIONS)
         state = {'unique_symbols': unique_symbols, 'params': []}
         for parstate in tmp['params']:
             _par = Parameter(name='')
