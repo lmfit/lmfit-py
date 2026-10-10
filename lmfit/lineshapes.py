@@ -1,8 +1,8 @@
 """Basic model lineshapes and distribution functions."""
 
 from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
-                   maximum, minimum, ones, pi, real, shape, sign, sin, sqrt,
-                   where)
+                   maximum, minimum, ones, pi, polyval, real, shape, sign, sin,
+                   sqrt, where)
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc, erfcx
 from scipy.special import gamma as gamfcn
@@ -24,7 +24,7 @@ functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt',
              'thermal_distribution', 'bose', 'fermi', 'step',
              'rectangle', 'exponential', 'powerlaw', 'linear',
              'parabolic', 'sine', 'expsine', 'split_lorentzian',
-             'constant', 'complex_constant')
+             'constant', 'complex_constant', 'polynomial')
 
 
 def not_zero(value):
@@ -588,3 +588,13 @@ def complex_constant(x, re=0.0, im=0.0):
 
     """
     return (re + 1j*im) * ones(shape(x))
+
+
+def polynomial(x, c0=0.0, c1=0.0, c2=0.0, c3=0.0, c4=0.0, c5=0.0, c6=0.0,
+               c7=0.0):
+    """Return a polynomial function of degree up to 7.
+
+    polynomial(x, c0, ..., c7) = c0 + c1*x + c2*x**2 + ... + c7*x**7
+
+    """
+    return polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)

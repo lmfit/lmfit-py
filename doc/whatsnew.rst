@@ -33,6 +33,11 @@ Fixes:
   cast to a numeric ndarray (Issue #1040)
 - fix ``expgaussian`` returning ``nan`` far below the center, where ``exp(gamma*(center - x))``
   overflowed and was multiplied by ``erfc(...) = 0``
+- fix cross-Python-version serialization of ``PolynomialModel`` and
+  ``SplineModel``: ``PolynomialModel`` now uses ``lineshapes.polynomial``, and
+  the ``SplineModel`` function is now a method of the model instead of a
+  local function, so both are saved by reference rather than as bytecode
+  (Issue #1046)
 
 .. _whatsnew_134_label:
 
