@@ -4,7 +4,6 @@ import base64
 import inspect
 import json
 import os
-import sys
 import time
 
 import numpy as np
@@ -481,17 +480,12 @@ def test_load_model_versions():
         assert y.min() < -1.55
 
 
-@pytest.mark.xfail(
-    sys.version_info[:2] == (3, 10),
-    reason=(
-        "scipy symbols in asteval symtable are dill-encoded (Python 3.12 used)"
-        "and not deserializable with Python 3.10."
-    ),
-)
 def test_load_constantmodel_versions():
     """Test loading saved ConstantModel from different Python versions.
 
-    Regression test for https://github.com/lmfit/lmfit-py/issues/1033
+    Regression test for https://github.com/lmfit/lmfit-py/issues/1033 and
+    https://github.com/lmfit/lmfit-py/issues/1045 (the file was saved with
+    SciPy >= 1.16 and must also load with older SciPy).
     """
     x = np.linspace(0, 10, 50)
 
