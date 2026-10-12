@@ -38,6 +38,9 @@ Fixes:
   the ``SplineModel`` function is now a method of the model instead of a
   local function, so both are saved by reference rather than as bytecode
   (Issue #1046)
+- fix loading a ``ModelResult`` saved with SciPy >= 1.16 using an older SciPy:
+  the SciPy special functions in the ``Parameters`` symbol table are no longer
+  saved, but added again on load (Issue #1045)
 
 .. _whatsnew_134_label:
 
