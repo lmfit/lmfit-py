@@ -3,10 +3,77 @@ import os
 
 import numpy as np
 from numpy.testing import assert_allclose
+import pytest
+from scipy.stats import t
 
 from lmfit.lineshapes import gaussian
 from lmfit.model import Model
 from lmfit.models import ExponentialModel, GaussianModel, LinearModel
+
+
+@pytest.mark.parametrize('array_output', [False, True])
+def test_python_complex_scalar_uncertainty(array_output):
+    """Evaluate a scalar complex model with the existing complex-pair convention."""
+    def constant(x, a, b):
+        value = complex(a, b)
+        return np.asarray(value) if array_output else value
+
+    rng = np.random.default_rng(123)
+    data = rng.normal(size=20) + 1j*rng.normal(size=20)
+    result = Model(constant).fit(data, x=np.arange(20), a=0, b=0)
+    scale = t.ppf(0.975, result.ndata-result.nvarys)
+    expected = scale*np.sqrt(result.covar[0, 0] + 1j*result.covar[1, 1])
+    actual = result.eval_uncertainty(sigma=0.95)
+    assert_allclose(actual, expected, rtol=1e-8)
+    assert np.shape(actual) == ()
+
+
+@pytest.mark.parametrize('layout', ['C', 'F', 'strided', 'reversed'])
+def test_complex_array_uncertainty_layout(layout):
+    """Compare complex array propagation with an analytic Jacobian."""
+    def gain(x, a, b):
+        value = (a + 1j*b)*x
+        if layout == 'F':
+            return np.asfortranarray(value)
+        if layout == 'strided':
+            return np.stack([value, value], axis=-1)[..., 0]
+        if layout == 'reversed':
+            return value[..., ::-1].copy()[..., ::-1]
+        return value
+
+    rng = np.random.default_rng(123)
+    x = (np.linspace(-1, 1, 15) + 1j*np.linspace(0.2, 1.2, 15)).reshape(3, 5)
+    data = (0.8 + 0.3j)*x + 0.03*(rng.normal(size=x.shape) + 1j*rng.normal(size=x.shape))
+    result = Model(gain).fit(data, x=x, a=0.7, b=0.2)
+    jr = np.stack([x.real, -x.imag], axis=-1)
+    ji = np.stack([x.imag, x.real], axis=-1)
+    variance = (np.einsum('...i,ij,...j->...', jr, result.covar, jr)
+                + 1j*np.einsum('...i,ij,...j->...', ji, result.covar, ji))
+    scale = t.ppf(0.975, result.ndata-result.nvarys)
+    actual = result.eval_uncertainty(sigma=0.95)
+    assert_allclose(actual, scale*np.sqrt(variance), rtol=1e-8)
+    assert_allclose(result.dely_predicted, scale*np.sqrt(variance + result.redchi), rtol=1e-8)
+    assert actual.shape == x.shape
+
+
+@pytest.mark.parametrize('scalar', [False, True])
+def test_real_component_of_complex_model_uncertainty(scalar):
+    """Real components contribute only to the real derivative channels."""
+    def gain(x, a, b):
+        return (a + 1j*b)*x
+
+    def offset(x, c):
+        return float(c) if scalar else np.full(x.shape, c, dtype=float)
+
+    rng = np.random.default_rng(123)
+    x = (np.linspace(-1, 1, 15) + 1j*np.linspace(0.2, 1.2, 15)).reshape(3, 5)
+    data = (0.8 + 0.3j)*x + 0.2 + 0.03*(rng.normal(size=x.shape) + 1j*rng.normal(size=x.shape))
+    model = Model(gain, prefix='gain_') + Model(offset, prefix='bias_')
+    result = model.fit(data, x=x, gain_a=0.7, gain_b=0.2, bias_c=0.1)
+    result.eval_uncertainty(sigma=0.95)
+    scale = t.ppf(0.975, result.ndata-result.nvarys)
+    expected_bias = np.full(x.shape, scale*np.sqrt(result.covar[2, 2]))
+    assert_allclose(result.dely_comps['bias_'], expected_bias, rtol=1e-8)
 
 
 def get_linearmodel(slope=0.8, intercept=0.5, noise=1.5):

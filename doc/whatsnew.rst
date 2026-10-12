@@ -39,6 +39,11 @@ Fixes:
   local function, so both are saved by reference rather than as bytecode
   (Issue #1046)
 
+- support complex scalar and non-contiguous model outputs, and real components
+  of complex models, in ``ModelResult.eval_uncertainty``
+- avoid a ``len`` error when calculating fit statistics for a scalar array
+  model output
+
 .. _whatsnew_134_label:
 
 Version 1.3.4 Release Notes (2025-July-19)
