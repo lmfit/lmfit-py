@@ -35,11 +35,16 @@ Fixes:
   the maximum of the lineshape for ``gamma > 0``
 - fix the ``height`` parameter of ``DampedOscillatorModel``, which used the small-``sigma`` limit
   ``0.5*amplitude/sigma`` instead of the maximum of the lineshape
+- fix ``expgaussian`` returning ``nan`` far below the center, where ``exp(gamma*(center - x))``
+  overflowed and was multiplied by ``erfc(...) = 0``
 - fix cross-Python-version serialization of ``PolynomialModel`` and
   ``SplineModel``: ``PolynomialModel`` now uses ``lineshapes.polynomial``, and
   the ``SplineModel`` function is now a method of the model instead of a
   local function, so both are saved by reference rather than as bytecode
   (Issue #1046)
+- fix loading a ``ModelResult`` saved with SciPy >= 1.16 using an older SciPy:
+  the SciPy special functions in the ``Parameters`` symbol table are no longer
+  saved, but added again on load (Issue #1045)
 
 .. _whatsnew_134_label:
 

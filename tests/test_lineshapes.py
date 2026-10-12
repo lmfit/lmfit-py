@@ -205,3 +205,20 @@ def test_fermi_model():
     assert result.params['center'].value < 150.0
     assert result.params['center'].stderr > 0.2
     assert result.params['center'].stderr < 3.0
+
+
+@pytest.mark.parametrize("center, sigma, gamma",
+                         [(1.0, 0.7, 1.3), (0.0, 1.0, 20.0), (0.0, 0.05, 3.0)])
+def test_expgaussian_far_from_center(center, sigma, gamma):
+    """Test that expgaussian stays finite far below the center.
+
+    exp(gamma*(center - x)) overflowed there and multiplied by
+    erfc(...) = 0 gave nan.
+    """
+    from scipy.stats import exponnorm
+
+    xvals = np.linspace(center - 1000, center + 1000, 401)
+    yvals = lmfit.lineshapes.expgaussian(xvals, 2.0, center, sigma, gamma)
+    expected = 2.0 * exponnorm.pdf(xvals, 1.0/(gamma*sigma), center, sigma)
+    assert np.all(np.isfinite(yvals))
+    np.testing.assert_allclose(yvals, expected, rtol=1e-10, atol=1e-300)
