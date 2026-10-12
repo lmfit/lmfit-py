@@ -28,6 +28,8 @@ Fixes:
 
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
+- avoid overflowing gamma factors in ``pearson7``, ``students_t``, and
+  their model height constraints for large shape parameters
 - fix cross-Python-version serialization of ``ConstantModel`` and
   ``ComplexConstantModel`` by moving their functions to ``lineshapes`` (Issue #1033)
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,

@@ -16,6 +16,7 @@ from .lineshapes import tiny
 from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma,
+                   'betafcn': scipy.special.beta,
                    'loggammafcn': scipy.special.loggamma,
                    'betalnfnc': scipy.special.betaln,
                    'erf': scipy.special.erf,

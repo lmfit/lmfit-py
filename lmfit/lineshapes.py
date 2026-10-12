@@ -3,6 +3,7 @@
 from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
                    maximum, minimum, ones, pi, polyval, real, shape, sign, sin,
                    sqrt, where)
+from scipy.special import beta as betafcn
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc, erfcx
 from scipy.special import gamma as gamfcn
@@ -183,7 +184,7 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     """
     expon = max(tiny, expon)
     arg = (x-center)/max(tiny, sigma)
-    scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
+    scale = amplitude / betafcn(expon-0.5, 0.5)
     return scale*(1+arg**2)**(-expon)/max(tiny, sigma)
 
 
@@ -275,8 +276,12 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 
     """
     s1 = (sigma+1)/2.0
-    denom = max(tiny, (sqrt(sigma*pi)*gamfcn(max(tiny, sigma/2))))
-    return amplitude*(1 + (x-center)**2/max(tiny, sigma))**(-s1) * gamfcn(s1) / denom
+    if sigma > 2*tiny:
+        scale = 1 / (sqrt(sigma)*betafcn(0.5, max(tiny, sigma/2)))
+    else:
+        denom = max(tiny, (sqrt(sigma*pi)*gamfcn(max(tiny, sigma/2))))
+        scale = gamfcn(s1) / denom
+    return amplitude*scale*(1 + (x-center)**2/max(tiny, sigma))**(-s1)
 
 
 def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
