@@ -313,6 +313,7 @@ with ``results`` being a ``MinimizerResult`` object. Note that the method
 for customizing the output (e.g., column width, numeric format, etcetera).
 
 .. autoclass:: MinimizerResult
+    :members:
 
 
 Goodness-of-Fit Statistics
