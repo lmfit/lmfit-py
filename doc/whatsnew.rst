@@ -31,6 +31,10 @@ Fixes:
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,
   non-float objects by only coercing array-like inputs that can actually be
   cast to a numeric ndarray (Issue #1040)
+- fix the ``height`` parameter of ``DoniachModel``, which was the value at ``center`` instead of
+  the maximum of the lineshape for ``gamma > 0``
+- fix the ``height`` parameter of ``DampedOscillatorModel``, which used the small-``sigma`` limit
+  ``0.5*amplitude/sigma`` instead of the maximum of the lineshape
 - fix ``expgaussian`` returning ``nan`` far below the center, where ``exp(gamma*(center - x))``
   overflowed and was multiplied by ``erfc(...) = 0``
 - fix cross-Python-version serialization of ``PolynomialModel`` and

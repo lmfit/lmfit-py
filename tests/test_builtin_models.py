@@ -22,6 +22,11 @@ def check_height_fwhm(x, y, lineshape, model):
         cen = np.exp(mu - out.params['sigma']**2)
     elif lineshape is lineshapes.pearson4:
         cen = out.params['position']
+    elif lineshape is lineshapes.damped_oscillator:
+        cen = mu * np.sqrt(max(0, 1 - 2*out.params['sigma'].value**2))
+    elif lineshape is lineshapes.doniach:
+        gam = out.params['gamma'].value
+        cen = mu - out.params['sigma'] * np.tan(np.pi*gam/(2*(2-gam)))
     else:
         cen = mu
 
@@ -55,6 +60,37 @@ def check_height_fwhm(x, y, lineshape, model):
                                                'program', 'Difference',
                                                'FWHM', fwhm_act, fwhm_pro,
                                                diff)
+
+
+def test_doniach_height_is_the_maximum():
+    """Test that the height of DoniachModel is the maximum of the lineshape.
+
+    For gamma > 0 the maximum is not at center, so the value at center
+    underestimated it (by about 37% for gamma=0.9).
+    """
+    x = np.linspace(-50, 50, 2000001)
+    mod = models.DoniachModel()
+    for gamma in (0.0, 0.3, 0.9):
+        for sigma in (0.5, 2.0):
+            pars = mod.make_params(amplitude=2.0, center=1.0, sigma=sigma,
+                                   gamma=gamma)
+            assert_allclose(pars['height'].value,
+                            lineshapes.doniach(x, 2.0, 1.0, sigma, gamma).max(),
+                            rtol=1e-9)
+
+
+def test_damped_oscillator_height_is_the_maximum():
+    """Test that the height of DampedOscillatorModel is the maximum.
+
+    0.5*amplitude/sigma is only the limit for small sigma.
+    """
+    x = np.linspace(0, 20, 2000001)
+    mod = models.DampedOscillatorModel()
+    for sigma in (0.05, 0.3, 0.6, 0.9):
+        pars = mod.make_params(amplitude=2.0, center=3.0, sigma=sigma)
+        assert_allclose(pars['height'].value,
+                        lineshapes.damped_oscillator(x, 2.0, 3.0, sigma).max(),
+                        rtol=1e-9)
 
 
 def test_height_fwhm_calculation(peakdata):
