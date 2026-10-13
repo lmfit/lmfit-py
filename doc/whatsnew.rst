@@ -26,6 +26,8 @@ Version 1.4.0 Release Notes (unreleased)
 
 Fixes:
 
+- prevent log-normal evaluations from modifying input arrays and allow read-only
+  coordinate arrays
 - fix cross-Python-version serialization of ``ConstantModel`` and
   ``ComplexConstantModel`` by moving their functions to ``lineshapes`` (Issue #1033)
 - fix ``TypeError`` when an independent variable is a list/tuple of custom,

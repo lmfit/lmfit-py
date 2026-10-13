@@ -3,8 +3,10 @@
 import inspect
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import (assert_allclose, assert_almost_equal,
+                           assert_array_equal)
 import pytest
+from scipy.stats import lognorm
 
 import lmfit
 from lmfit.lineshapes import not_zero, tiny
@@ -16,6 +18,33 @@ from lmfit.lineshapes import not_zero, tiny
 def test_not_zero(value, expected_result):
     """Test that not_zero gives the expected results"""
     assert_almost_equal(not_zero(value), expected_result)
+
+
+@pytest.mark.parametrize('storage', ['array', 'readonly', 'view'])
+@pytest.mark.parametrize('clipped', [False, True])
+def test_lognormal_preserves_input(storage, clipped):
+    """Clipping uses a local copy, including for views and read-only arrays."""
+    values = [-1.0, 0.0, tiny/2, 0.5, 2.0] if clipped else [0.5, 1.0, 2.0]
+    x = np.array(values)
+    if storage == 'view':
+        parent = np.column_stack((x, np.full_like(x, 42.0)))
+        parent_original = parent.copy()
+        x = parent[:, 0]
+    elif storage == 'readonly':
+        x.setflags(write=False)
+    original = x.copy()
+    amplitude, center, sigma = 2.5, 0.2, 0.8
+    expected_x = np.array([tiny, tiny, tiny, 0.5, 2.0]) if clipped else original
+    expected = amplitude*lognorm.pdf(expected_x, s=sigma, scale=np.exp(center))
+
+    result = lmfit.lineshapes.lognormal(x, amplitude, center, sigma)
+
+    assert_allclose(result, expected)
+    assert_array_equal(x, original)
+    if storage == 'view':
+        assert_array_equal(parent, parent_original)
+    if storage == 'readonly':
+        assert not x.flags.writeable
 
 
 @pytest.mark.parametrize("lineshape", lmfit.lineshapes.functions)

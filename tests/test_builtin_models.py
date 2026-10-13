@@ -6,9 +6,47 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 from scipy.optimize import fsolve
+from scipy.stats import lognorm
 
 from lmfit import lineshapes, models
 from lmfit.models import GaussianModel
+
+
+def test_lognormal_model_readonly_coordinates():
+    """A lognormal fit accepts read-only coordinates without changing them."""
+    x = np.linspace(0.1, 6.0, 80)
+    original = x.copy()
+    y = 2.5*lognorm.pdf(x, s=0.8, scale=np.exp(0.2))
+    x.setflags(write=False)
+    model = models.LognormalModel()
+    params = model.make_params(amplitude=2.0, center=0.0, sigma=1.0)
+
+    result = model.fit(y, params, x=x)
+
+    assert result.success
+    assert_allclose(result.best_fit, y, rtol=1.e-6)
+    assert_allclose([result.params[name].value for name in
+                     ('amplitude', 'center', 'sigma')], [2.5, 0.2, 0.8], rtol=1.e-6)
+    np.testing.assert_array_equal(x, original)
+    assert not x.flags.writeable
+
+
+@pytest.mark.parametrize('lognormal_first', [True, False])
+def test_lognormal_composite_background(lognormal_first):
+    """Clipping the peak coordinates does not change the linear background."""
+    x = np.array([-1.0, 0.0, 0.5, 1.0, 2.0])
+    original = x.copy()
+    peak, background = models.LognormalModel(), models.LinearModel()
+    model = peak+background if lognormal_first else background+peak
+    params = model.make_params(amplitude=2.5, center=0.2, sigma=0.8,
+                               slope=1.3, intercept=0.2)
+    clipped = np.array([lineshapes.tiny, lineshapes.tiny, 0.5, 1.0, 2.0])
+    expected = 2.5*lognorm.pdf(clipped, s=0.8, scale=np.exp(0.2)) + 1.3*x + 0.2
+
+    result = model.eval(params, x=x)
+
+    assert_allclose(result, expected)
+    np.testing.assert_array_equal(x, original)
 
 
 def check_height_fwhm(x, y, lineshape, model):
