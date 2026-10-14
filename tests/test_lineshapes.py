@@ -12,6 +12,42 @@ import lmfit
 from lmfit.lineshapes import not_zero, tiny
 
 
+@pytest.mark.parametrize('expon', [1.0, 100.0, 172.0, 180.0, 1000.0])
+@pytest.mark.parametrize('amplitude', [2.0, -2.0])
+def test_pearson7_normalization(expon, amplitude):
+    """Compare Pearson VII with a scaled Student distribution."""
+    from scipy.stats import t
+
+    center, sigma = 1.2, 0.7
+    x = np.linspace(center - sigma, center + sigma, 101)
+    degrees = 2*expon - 1
+    expected = amplitude*t.pdf(x, degrees, loc=center,
+                               scale=sigma/np.sqrt(degrees))
+    actual = lmfit.lineshapes.pearson7(x, amplitude, center, sigma, expon)
+    np.testing.assert_allclose(actual, expected, rtol=1e-11, atol=1e-300)
+    actual_center = lmfit.lineshapes.pearson7(center, amplitude, center,
+                                              sigma, expon)
+    expected_center = amplitude*t.pdf(center, degrees, loc=center,
+                                      scale=sigma/np.sqrt(degrees))
+    np.testing.assert_allclose(actual_center, expected_center, rtol=1e-11)
+
+
+@pytest.mark.parametrize('sigma', [1.0e-8, 1.0, 100.0, 342.0, 350.0, 1000.0])
+@pytest.mark.parametrize('amplitude', [2.0, -2.0])
+def test_students_t_normalization(sigma, amplitude):
+    """Compare Student peaks with SciPy across the gamma overflow boundary."""
+    from scipy.stats import t
+
+    center = 1.2
+    x = np.linspace(center - 5, center + 5, 101)
+    expected = amplitude*t.pdf(x, sigma, loc=center)
+    actual = lmfit.lineshapes.students_t(x, amplitude, center, sigma)
+    np.testing.assert_allclose(actual, expected, rtol=1e-11)
+    actual_center = lmfit.lineshapes.students_t(center, amplitude, center, sigma)
+    expected_center = amplitude*t.pdf(center, sigma, loc=center)
+    np.testing.assert_allclose(actual_center, expected_center, rtol=1e-11)
+
+
 @pytest.mark.parametrize(
     "value, expected_result",
     [(1, 1.0), (-1, -1.0), (0, tiny), (-0, -tiny)])

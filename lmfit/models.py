@@ -987,8 +987,8 @@ class Pearson7Model(Model):
         self.set_param_hint('expon', value=1.5, max=100)
         fmt = ("sqrt(2**(1/{prefix:s}expon)-1)*2*{prefix:s}sigma")
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
-        fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
-               "max({0}, (gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma))")
+        fmt = ("{prefix:s}amplitude / (max({0}, {prefix:s}sigma)*"
+               "betafcn({prefix:s}expon-0.5, 0.5))")
         self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x, negative=False, **kwargs):
@@ -1029,8 +1029,8 @@ class StudentsTModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0.0, max=100)
-        fmt = ("{prefix:s}amplitude*gamfcn(({prefix:s}sigma+1)/2)/"
-               "(sqrt({prefix:s}sigma*pi)*gamfcn({prefix:s}sigma/2))")
+        fmt = ("{prefix:s}amplitude / (sqrt({prefix:s}sigma)*"
+               "betafcn(0.5, {prefix:s}sigma/2))")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
         fmt = ("2*sqrt(2**(2/({prefix:s}sigma+1))*"
                "{prefix:s}sigma-{prefix:s}sigma)")

@@ -49,6 +49,30 @@ def test_lognormal_composite_background(lognormal_first):
     np.testing.assert_array_equal(x, original)
 
 
+@pytest.mark.parametrize('prefix', ['', 'peak_'])
+@pytest.mark.parametrize('shape', [100.0, 172.0, 342.0, 1000.0])
+@pytest.mark.parametrize('model_class',
+                         [models.Pearson7Model, models.StudentsTModel])
+def test_large_shape_peak_height(model_class, shape, prefix):
+    """Keep the height constraint finite when callers raise shape bounds."""
+    from scipy.stats import t
+
+    model = model_class(prefix=prefix)
+    pars = model.make_params(amplitude=2.0, center=1.2, sigma=0.7)
+    if model_class is models.Pearson7Model:
+        pars[f'{prefix}expon'].set(max=np.inf, value=shape)
+        expected = 2*t.pdf(1.2, 2*shape-1, loc=1.2,
+                           scale=0.7/np.sqrt(2*shape-1))
+    else:
+        pars[f'{prefix}sigma'].set(max=np.inf, value=shape)
+        expected = 2*t.pdf(1.2, shape, loc=1.2)
+
+    assert_allclose(pars[f'{prefix}height'].value, expected, rtol=1e-11)
+    assert_allclose(model.eval(pars, x=1.2), expected, rtol=1e-11)
+    restored = pars.copy().loads(pars.dumps())
+    assert_allclose(restored[f'{prefix}height'].value, expected, rtol=1e-11)
+
+
 def check_height_fwhm(x, y, lineshape, model):
     """Check height and fwhm parameters."""
     pars = model.guess(y, x=x)
