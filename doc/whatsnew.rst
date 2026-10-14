@@ -48,6 +48,11 @@ Fixes:
   the SciPy special functions in the ``Parameters`` symbol table are no longer
   saved, but added again on load (Issue #1045)
 
+- support complex scalar and non-contiguous model outputs, and real components
+  of complex models, in ``ModelResult.eval_uncertainty``
+- avoid a ``len`` error when calculating fit statistics for a scalar array
+  model output
+
 .. _whatsnew_134_label:
 
 Version 1.3.4 Release Notes (2025-July-19)

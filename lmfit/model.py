@@ -1614,6 +1614,7 @@ class ModelResult(Minimizer):
         self.best_fit = self.model.eval(params=_ret.params, **self.userkws)
         if (self.data is not None and len(self.data) > 1
            and isinstance(self.best_fit, np.ndarray)
+           and self.best_fit.ndim > 0
            and len(self.best_fit) > 1):
             dat = coerce_arraylike(self.data)
             resid = ((dat - self.best_fit)**2).sum()
@@ -1726,8 +1727,10 @@ class ModelResult(Minimizer):
 
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
-        feval = self.model.eval(params, **userkws)
-        ndata = np.atleast_1d(feval).view('float64').ravel().size  # allows feval to be complex
+        feval = np.asarray(self.model.eval(params, **userkws))
+        dtype = np.complex128 if np.iscomplexobj(feval) else np.float64
+        feval = feval.astype(dtype, copy=False)
+        ndata = feval.size * (2 if np.iscomplexobj(feval) else 1)
         covar = self.covar
         if any(p.stderr is None for p in params.values()):
             return np.zeros(ndata)
@@ -1758,8 +1761,10 @@ class ModelResult(Minimizer):
 
             pars[pname].value = val0
             for key in fjac:
-                fjac[key][i] = (np.atleast_1d(res1[key]).view('float64').ravel()
-                                - np.atleast_1d(res2[key]).view('float64').ravel()) / (2*dval)
+                f1 = np.asarray(np.broadcast_to(res1[key], feval.shape), dtype=dtype)
+                f2 = np.asarray(np.broadcast_to(res2[key], feval.shape), dtype=dtype)
+                fjac[key][i] = (f1.ravel().view('float64')
+                                - f2.ravel().view('float64')) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
@@ -1774,8 +1779,6 @@ class ModelResult(Minimizer):
         scale = t.ppf((prob+1)/2.0, self.ndata-nvarys)
 
         # for complex data, convert back to real/imag pairs
-        if isinstance(feval, float):
-            feval = np.float64(feval)
         if feval.dtype in ('complex64', 'complex128'):
             for key in fjac:
                 df2[key] = df2[key].view(feval.dtype)
