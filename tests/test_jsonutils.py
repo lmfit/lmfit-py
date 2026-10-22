@@ -1,4 +1,5 @@
 """Tests for the JSON utilities."""
+import json
 from types import BuiltinFunctionType, FunctionType
 
 import numpy as np
@@ -47,6 +48,33 @@ def test_encode_decode(obj, obj_type):
         assert decoded == obj
 
     assert isinstance(decoded, obj_type)
+
+
+@pytest.mark.parametrize('dtype', ['complex64', 'complex128'])
+@pytest.mark.parametrize('shape', [(), (3,), (2, 3), (2, 1, 3), (0, 2)])
+def test_complex_array_json_roundtrip(dtype, shape):
+    """Preserve complex array values, shape, and dtype through JSON."""
+    real = np.arange(int(np.prod(shape))).reshape(shape)
+    original = np.asarray(real + 1j * (real + 0.5), dtype=dtype)
+    encoded = json.loads(json.dumps(encode4js(original)))
+    decoded = decode4js(encoded)
+    np.testing.assert_array_equal(decoded, original)
+    assert decoded.shape == original.shape
+    assert decoded.dtype == original.dtype
+
+
+@pytest.mark.parametrize('dtype', ['complex64', 'complex128'])
+def test_complex_array_json_nonfinite(dtype):
+    """Decode real and imaginary non-finite values without mixing components."""
+    original = np.empty(4, dtype=dtype)
+    original.real = [1, np.nan, np.inf, -np.inf]
+    original.imag = [np.inf, 2, np.nan, -np.inf]
+    encoded = json.loads(json.dumps(encode4js(original)))
+    with np.errstate(invalid='raise'):
+        decoded = decode4js(encoded)
+    np.testing.assert_array_equal(decoded.real, original.real)
+    np.testing.assert_array_equal(decoded.imag, original.imag)
+    assert decoded.dtype == original.dtype
 
 
 def test_encode_decode_pandas():

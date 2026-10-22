@@ -117,9 +117,8 @@ def decode4js(obj):
             out = tuple(out)
     elif classname == 'NDArray':
         if obj['__dtype__'].startswith('complex'):
-            re = np.fromiter(obj['value'][0], dtype='double')
-            im = np.fromiter(obj['value'][1], dtype='double')
-            out = re + 1j*im
+            out = np.asarray(obj['value'][0], dtype=obj['__dtype__'])
+            out.imag = obj['value'][1]
         elif obj['__dtype__'].startswith('object'):
             val = [decode4js(v) for v in obj['value']]
             out = np.array(val, dtype=obj['__dtype__'])
