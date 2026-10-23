@@ -62,7 +62,7 @@ def encode4js(obj):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
         elif obj.dtype.name == 'object':
-            val = [encode4js(item) for item in obj]
+            val = [encode4js(item) for item in obj.flatten()]
         else:
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,

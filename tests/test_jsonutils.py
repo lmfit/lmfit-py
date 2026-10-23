@@ -1,4 +1,5 @@
 """Tests for the JSON utilities."""
+import json
 from types import BuiltinFunctionType, FunctionType
 
 import numpy as np
@@ -47,6 +48,32 @@ def test_encode_decode(obj, obj_type):
         assert decoded == obj
 
     assert isinstance(decoded, obj_type)
+
+
+@pytest.mark.parametrize('shape', [(), (2,), (2, 3), (0, 2)])
+@pytest.mark.parametrize('value', ['sample', 3.5, None])
+def test_encode_decode_object_array_json(shape, value):
+    """Object arrays retain their shape through JSON serialization."""
+    original = np.full(shape, value, dtype=object)
+    decoded = decode4js(json.loads(json.dumps(encode4js(original))))
+    assert isinstance(decoded, np.ndarray)
+    np.testing.assert_array_equal(decoded, original)
+    assert decoded.shape == original.shape
+    assert decoded.dtype == original.dtype
+
+
+def test_parameters_scalar_object_array_symbol():
+    """Round-trip a scalar object array stored as a user symbol."""
+    original = np.array('sample', dtype=object)
+    params = lmfit.Parameters(usersyms={'sample_label': original})
+    params.add('amplitude', 1.0)
+    restored = lmfit.Parameters().loads(params.dumps())
+    actual = restored._asteval.symtable['sample_label']
+    assert isinstance(actual, np.ndarray)
+    np.testing.assert_array_equal(actual, original)
+    assert actual.shape == ()
+    assert actual.dtype == original.dtype
+    assert restored['amplitude'].value == 1.0
 
 
 def test_encode_decode_pandas():
