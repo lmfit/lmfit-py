@@ -164,7 +164,7 @@ Note that creation of Parameters here could also be done as:
 
 where keyword/value pairs set Parameter names and their initial values.
 
-Either when using :func:`create_param` or :class:`Parameters`, the resulting
+Either when using :func:`create_params` or :class:`Parameters`, the resulting
 ``params`` object is an instance of :class:`Parameters`, which acts like a
 dictionary, with keys being the Parameter name and values being individual
 :class:`Parameter` objects. These :class:`Parameter` objects hold the value
