@@ -2511,7 +2511,9 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects.
     """
-    if issparse(arr):
+    if type(arr) is np.ndarray and arr.dtype is np.dtype('d'):
+        pass
+    elif issparse(arr):
         arr = arr.toarray().astype(np.float64)
     elif isinstance(arr, LinearOperator):
         identity = np.eye(arr.shape[1], dtype=np.float64)
@@ -2521,24 +2523,29 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     else:
         arr = np.asarray(arr, dtype=np.float64)
 
+    if nan_policy == 'omit':
+        # Boolean indexing already gives a flat result in C order.
+        if ravel and not (type(ravel_order) is str and ravel_order == 'C'):
+            arr = arr.ravel(order=ravel_order)
+            ravel = False
+        filtered = arr[np.isfinite(arr)] if handle_inf else arr[~isnull(arr)]
+        if filtered.size != arr.size:
+            return filtered
+        if ravel:
+            arr = arr.ravel(order=ravel_order)
+        return arr
+
     if ravel:
         arr = arr.ravel(order=ravel_order)
 
     if nan_policy not in ('propagate', 'omit', 'raise'):
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
 
-    if handle_inf:
-        handler_func = lambda x: ~np.isfinite(x)
-    else:
-        handler_func = isnull
-
-    if nan_policy == 'omit':
-        # mask locates any values to remove
-        mask = ~handler_func(arr)
-        if not np.all(mask):  # there are some NaNs/infs/missing values
-            return arr[mask]
-
     if nan_policy == 'raise':
+        if handle_inf:
+            handler_func = lambda x: ~np.isfinite(x)
+        else:
+            handler_func = isnull
         try:
             # Calling np.sum to avoid creating a huge array into memory
             # e.g. np.isnan(a).any()
