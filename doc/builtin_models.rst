@@ -193,8 +193,8 @@ to a cubic spline.
 
 .. autoclass:: PolynomialModel
 
-:class:`SplinelModel`
-~~~~~~~~~~~~~~~~~~~~~
+:class:`SplineModel`
+~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SplineModel
 
@@ -572,7 +572,7 @@ where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter). The ``prefix`` values are attached transparently
 to the models.
 
-Note that the calls to :meth:`make_param` used the bare name, without the
+Note that the calls to :meth:`make_params` used the bare name, without the
 prefix. We could have used the prefixes, but because we used the
 individual model ``gauss1`` and ``gauss2``, there was no need.
 
