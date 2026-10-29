@@ -2528,9 +2528,9 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
         if ravel and not (type(ravel_order) is str and ravel_order == 'C'):
             arr = arr.ravel(order=ravel_order)
             ravel = False
-        filtered = arr[np.isfinite(arr)] if handle_inf else arr[~isnull(arr)]
-        if filtered.size != arr.size:
-            return filtered
+        mask = np.isfinite(arr) if handle_inf else ~isnull(arr)
+        if not mask.all():
+            return arr[mask]
         if ravel:
             arr = arr.ravel(order=ravel_order)
         return arr
