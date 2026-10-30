@@ -2524,21 +2524,20 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     if ravel:
         arr = arr.ravel(order=ravel_order)
 
+    if nan_policy == 'omit':
+        mask = np.isfinite(arr) if handle_inf else ~isnull(arr)
+        if not mask.all():
+            return arr[mask]
+        return arr
+
     if nan_policy not in ('propagate', 'omit', 'raise'):
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
 
-    if handle_inf:
-        handler_func = lambda x: ~np.isfinite(x)
-    else:
-        handler_func = isnull
-
-    if nan_policy == 'omit':
-        # mask locates any values to remove
-        mask = ~handler_func(arr)
-        if not np.all(mask):  # there are some NaNs/infs/missing values
-            return arr[mask]
-
     if nan_policy == 'raise':
+        if handle_inf:
+            handler_func = lambda x: ~np.isfinite(x)
+        else:
+            handler_func = isnull
         try:
             # Calling np.sum to avoid creating a huge array into memory
             # e.g. np.isnan(a).any()
