@@ -344,6 +344,38 @@ def test_stderr_propagation():
     assert_allclose(opars['thing_1'].stderr, opars['thing_2'].stderr, rtol=1.e-5)
 
 
+@pytest.mark.parametrize('order', ['C', 'F', 'A', 'K', None, np.str_('C')])
+@pytest.mark.parametrize('missing', [False, True])
+def test_coerce_float64_omit_order(order, missing):
+    """Omission preserves the requested order for multidimensional input."""
+    arr = np.asfortranarray([[1., 2., 3.], [4., 5., 6.]])
+    if missing:
+        arr[0, 1] = np.nan
+    expected = arr.ravel(order=order)
+    expected = expected[np.isfinite(expected)]
+
+    result = coerce_float64(arr, nan_policy='omit', ravel_order=order)
+    assert_equal(result, expected)
+
+
+@pytest.mark.parametrize('ravel', [False, True])
+@pytest.mark.parametrize('missing', [False, True])
+def test_coerce_float64_omit_array_subclass(ravel, missing):
+    """Convert array subclasses to plain float64 arrays before omission."""
+    class ArraySubclass(np.ndarray):
+        pass
+
+    arr = np.array([[1., 2.], [3., 4.]]).view(ArraySubclass)
+    if missing:
+        arr[0, 1] = np.nan
+    expected = [1., 3., 4.] if missing else ([1., 2., 3., 4.] if ravel else arr)
+
+    result = coerce_float64(arr, nan_policy='omit', ravel=ravel)
+    assert not isinstance(result, ArraySubclass)
+    assert result.dtype == np.float64
+    assert_equal(result, expected)
+
+
 class CommonMinimizerTest(unittest.TestCase):
 
     def setUp(self):

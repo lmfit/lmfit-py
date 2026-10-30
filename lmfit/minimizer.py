@@ -2511,9 +2511,7 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     lists of numbers, pandas.Series, h5py.Datasets, and many other array-like
     Python objects.
     """
-    if type(arr) is np.ndarray and arr.dtype is np.dtype('d'):
-        pass
-    elif issparse(arr):
+    if issparse(arr):
         arr = arr.toarray().astype(np.float64)
     elif isinstance(arr, LinearOperator):
         identity = np.eye(arr.shape[1], dtype=np.float64)
@@ -2523,20 +2521,14 @@ def coerce_float64(arr, nan_policy='raise', handle_inf=True,
     else:
         arr = np.asarray(arr, dtype=np.float64)
 
+    if ravel:
+        arr = arr.ravel(order=ravel_order)
+
     if nan_policy == 'omit':
-        # Boolean indexing already gives a flat result in C order.
-        if ravel and not (type(ravel_order) is str and ravel_order == 'C'):
-            arr = arr.ravel(order=ravel_order)
-            ravel = False
         mask = np.isfinite(arr) if handle_inf else ~isnull(arr)
         if not mask.all():
             return arr[mask]
-        if ravel:
-            arr = arr.ravel(order=ravel_order)
         return arr
-
-    if ravel:
-        arr = arr.ravel(order=ravel_order)
 
     if nan_policy not in ('propagate', 'omit', 'raise'):
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
