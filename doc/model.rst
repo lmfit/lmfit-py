@@ -687,6 +687,13 @@ the calculation of your model function, and the data and weights you pass in
 when it is passed to the solver. If it cannot be coerced, an error will occur
 and the fit will be aborted.
 
+For complex data or model output, real and imaginary residual components are
+handled separately. Real weights apply equally to both components. With
+complex weights, ``weights.real`` multiplies the real residual and
+``weights.imag`` multiplies the imaginary residual, rather than performing
+complex multiplication. For example, a residual ``1+2j`` with weight
+``3+4j`` contributes ``3**2 + 8**2`` to chi-square.
+
 That coercion will usually work for "array like" data that is not already a
 float64 ndarray.  But, depending on the model function, the calculations within
 the model function may not always work well for some "array like" data types

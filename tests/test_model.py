@@ -471,6 +471,97 @@ def test_coercion_of_input_data(peakdata, input_dtype):
             assert result.userargs[0].dtype == expected_dtype
 
 
+@pytest.mark.parametrize('method', ['leastsq', 'least_squares'])
+@pytest.mark.parametrize('weight_dtype', [np.complex64, np.complex128, '>c16'])
+@pytest.mark.parametrize('layout', ['C', 'F', 'strided', 'reversed'])
+def test_complex_model_weighted_fit(method, weight_dtype, layout):
+    """Complex weights minimize the independent quadrature objective."""
+    x = np.arange(1., 7.)
+    if layout in ('F', 'strided'):
+        x = x.reshape(2, 3)
+    data = 2j*x
+    weights = np.full(x.shape, 1+10j, dtype=weight_dtype)
+    if layout == 'F':
+        x, data, weights = (np.asfortranarray(arr) for arr in (x, data, weights))
+    elif layout == 'strided':
+        x, data, weights = (np.stack((arr, arr), axis=-1)[..., 0]
+                            for arr in (x, data, weights))
+    elif layout == 'reversed':
+        x, data, weights = (arr[::-1] for arr in (x, data, weights))
+    originals = [arr.copy() for arr in (x, data, weights)]
+    for arr in (x, data, weights):
+        arr.setflags(write=False)
+
+    def complex_model(x, a):
+        return a*(1+1j)*x
+
+    result = Model(complex_model).fit(data, x=x, a=0.5, weights=weights,
+                                      method=method)
+
+    # The objective is sum(x**2)*(a**2 + 100*(2-a)**2).
+    expected_a = 200/101
+    expected_residual = np.column_stack((-200*x.ravel()/101,
+                                         20*x.ravel()/101)).ravel()
+    assert result.success
+    assert_allclose(result.params['a'].value, expected_a, rtol=1.e-7)
+    assert_allclose(result.residual, expected_residual, rtol=1.e-7)
+    assert_allclose(result.chisqr, 400*np.sum(x*x)/101, rtol=1.e-7)
+    for original, actual in zip(originals, (x, data, weights)):
+        np.testing.assert_array_equal(actual, original, strict=True)
+
+
+@pytest.mark.parametrize('method', ['leastsq', 'least_squares'])
+@pytest.mark.parametrize('weight_kind', ['none', 'real', 'equal', 'scalar',
+                                         'list', 'broadcast', 'flat', 'real_only'])
+def test_complex_model_weight_controls(method, weight_kind):
+    """Weighting preserves ordinary fits and supported array-like inputs."""
+    x = np.arange(1., 7.).reshape(2, 3)
+    data = 2j*x
+    if weight_kind == 'none':
+        weights = None
+    elif weight_kind in ('real', 'real_only'):
+        weights = 1+0.1*x
+    elif weight_kind == 'equal':
+        weights = np.full(x.shape, 1+1j)
+    elif weight_kind == 'scalar':
+        weights = 1+10j
+    elif weight_kind == 'flat':
+        weights = np.full(x.size, 1+10j)
+    elif weight_kind == 'list':
+        weights = np.full(x.shape, 1+10j).tolist()
+    else:
+        weights = np.full((1, 3), 1+10j)
+    is_real = weight_kind == 'real_only'
+    if is_real:
+        data = 2*x+0.1*np.sin(x)
+    originals = [np.copy(arr) for arr in (x, data, weights)
+                 if arr is not None]
+
+    def model(x, a):
+        return a*x if is_real else a*(1+1j)*x
+
+    result = Model(model).fit(data, x=x, a=0.5, weights=weights, method=method)
+    expected_weights = weights
+    if weight_kind == 'flat':
+        expected_weights = weights.reshape(x.shape)
+    wr = 1 if weights is None else np.real(expected_weights)
+    wi = np.imag(expected_weights) if np.iscomplexobj(weights) else wr
+    if is_real:
+        expected_a = np.sum(wr**2*x*data)/np.sum(wr**2*x*x)
+        expected_residual = ((data-expected_a*x)*wr).ravel()
+    else:
+        expected_a = 200/101 if weight_kind in ('scalar', 'list', 'broadcast', 'flat') else 1
+        expected_residual = np.stack((-expected_a*x*wr,
+                                      (2-expected_a)*x*wi), axis=-1).ravel()
+    assert result.success
+    assert_allclose(result.params['a'].value, expected_a, rtol=1.e-7)
+    assert_allclose(result.residual, expected_residual, rtol=1.e-7, atol=1.e-7)
+    assert_allclose(result.chisqr, np.sum(expected_residual**2), rtol=1.e-7)
+    actuals = [np.asarray(arr) for arr in (x, data, weights) if arr is not None]
+    for original, actual in zip(originals, actuals):
+        np.testing.assert_array_equal(actual, original, strict=True)
+
+
 def test_figure_default_title(peakdata):
     """Test default figure title."""
     pytest.importorskip('matplotlib')
