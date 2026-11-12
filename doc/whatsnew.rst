@@ -26,6 +26,8 @@ Version 1.4.0 Release Notes (unreleased)
 
 Fixes:
 
+- apply complex weights independently to real and imaginary model residuals,
+  restoring the documented weighted objective and fit statistics
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
 - avoid overflowing gamma factors in ``pearson7``, ``students_t``, and

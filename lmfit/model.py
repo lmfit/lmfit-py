@@ -878,11 +878,8 @@ class Model:
         real part of the weights are applied to the real part of the
         residual and the imaginary part is treated correspondingly.
 
-        Since the underlying `scipy.optimize` routines expect
-        ``numpy.float`` arrays, the only complex type supported is
-        ``complex``.
-
-        The "ravels" throughout are necessary to support `pandas.Series`.
+        Complex residuals are converted to a one-dimensional array of
+        interleaved real and imaginary parts for `scipy.optimize`.
 
         """
         model = self.eval(params, **kwargs)
@@ -895,16 +892,19 @@ class Model:
 
         diff = data - model
 
-        if diff.dtype is complex:
-            # data/model are complex
-            diff = diff.ravel().view(float)
+        if np.iscomplexobj(diff):
+            diff = np.asarray(diff, dtype=complex)
             if weights is not None:
-                if weights.dtype is complex:
-                    # weights are complex
-                    weights = weights.ravel().view(float)
+                weights = np.asarray(weights)
+                if weights.size == diff.size:
+                    # Weights need the same size, not necessarily the same shape.
+                    weights = weights.reshape(diff.shape)
+                if np.iscomplexobj(weights):
+                    diff.real *= np.real(weights)
+                    diff.imag *= np.imag(weights)
                 else:
-                    # real weights but complex data
-                    weights = (weights + 1j * weights).ravel().view(float)
+                    diff *= weights
+            return diff.ravel().view(float)
         if weights is not None:
             diff *= weights
         return diff
