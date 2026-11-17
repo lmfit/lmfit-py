@@ -408,3 +408,30 @@ def test_guess_requires_x():
     msg = r"guess\(\) missing 1 required positional argument: 'x'"
     with pytest.raises(TypeError, match=msg):
         mod.guess(y)
+
+
+@pytest.mark.parametrize('seq_type', [list, tuple])
+@pytest.mark.parametrize('negative', [False, True])
+def test_guess_from_peak_sequences(seq_type, negative):
+    """Test guess_from_peak with Python list and tuple array_like inputs."""
+    x = np.linspace(-5, 5, 51)
+    y = lineshapes.lorentzian(x, amplitude=0.8, center=1.7, sigma=0.3)
+    if negative:
+        y = -y
+
+    model = models.LorentzianModel()
+    expected = model.guess(y, x=x, negative=negative)
+    actual = model.guess(seq_type(y.tolist()), x=seq_type(x.tolist()),
+                         negative=negative)
+
+    assert actual == expected
+
+
+def test_guess_from_peak_narrow_negative():
+    """Use argmin for center fallback when negative peak has <= 2 half-max pts."""
+    x = np.linspace(0, 10, 21)
+    y = np.zeros_like(x)
+    y[7] = -5.0  # minimum at x=3.5; max at x=0.0
+
+    pars = models.GaussianModel().guess(y, x=x, negative=True)
+    assert pars['center'].value == pytest.approx(3.5)

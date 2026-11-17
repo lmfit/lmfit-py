@@ -26,6 +26,9 @@ Version 1.4.0 Release Notes (unreleased)
 
 Fixes:
 
+- fix ``guess_from_peak`` failing with ``KeyError`` on ``pandas.Series``
+  inputs (with ``negative=True`` or non-zero-based indices) and ``TypeError``
+  on Python sequences (Issue #1066)
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
 - avoid overflowing gamma factors in ``pearson7``, ``students_t``, and
