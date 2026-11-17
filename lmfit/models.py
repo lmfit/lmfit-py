@@ -42,19 +42,22 @@ def height_expr(model):
 
 def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     """Estimate starting values from 1D peak data and create Parameters."""
+    # Convert array-like inputs (e.g., pandas.Series, lists) upfront so
+    # positional indexing and half-max slicing work uniformly.
+    x = np.asarray(x)
+    y = np.asarray(y)
+
     sort_increasing = np.argsort(x)
     x = x[sort_increasing]
     y = y[sort_increasing]
 
     maxy, miny = max(y), min(y)
     maxx, minx = max(x), min(x)
-    cen = x[np.argmax(y)]
+    cen = x[np.argmin(y) if negative else np.argmax(y)]
     height = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
 
-    # the explicit conversion to a NumPy array is to make sure that the
-    # indexing on line 65 also works if the data is supplied as pandas.Series
-    x_halfmax = np.array(x[y > (maxy+miny)/2.0])
+    x_halfmax = x[y > (maxy+miny)/2.0]
     if negative:
         height = -(maxy - miny)*3.0
         x_halfmax = x[y < (maxy+miny)/2.0]
