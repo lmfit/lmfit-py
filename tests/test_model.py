@@ -1720,3 +1720,29 @@ def test_model_bareslash():
         that_failed = True
 
     assert that_failed
+
+
+@pytest.mark.parametrize('sequence', [list, tuple])
+@pytest.mark.parametrize('convert', ['data', 'x', 'weights', 'all'])
+@pytest.mark.parametrize('missing', [False, True])
+def test_nan_policy_omit_sequences(peakdata, sequence, convert, missing):
+    """Apply the omission mask to sequence data, coordinates, and weights."""
+    x, y = (arr.copy() for arr in peakdata)
+    weights = np.linspace(0.5, 2.0, y.size)
+    if missing:
+        y[10] = np.nan
+    mask = np.isfinite(y)
+    model = models.LinearModel()
+    reference = model.fit(y[mask], x=x[mask], weights=weights[mask])
+    inputs = {'data': y, 'x': x, 'weights': weights}
+    for key in inputs:
+        if convert in (key, 'all'):
+            inputs[key] = sequence(inputs[key])
+    result = model.fit(nan_policy='omit', **inputs)
+    assert result.ndata == mask.sum()
+    assert_allclose(result.best_fit, reference.best_fit)
+    assert_allclose(result.residual, reference.residual)
+    assert_allclose(result.chisqr, reference.chisqr)
+    assert_allclose(result.weights, weights[mask])
+    assert_allclose(result.userkws['x'], x[mask])
+    assert_allclose(result.data, y[mask])

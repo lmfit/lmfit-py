@@ -38,6 +38,8 @@ def _align(var, mask, data):
     if isinstance(data, Series) and isinstance(var, Series):
         return var.reindex_like(data).dropna()
     elif mask is not None:
+        if isinstance(var, (list, tuple)):
+            var = np.asarray(var)
         return var[mask]
     return var
 
@@ -1160,6 +1162,8 @@ class Model:
 
         mask = None
         if self.nan_policy == 'omit':
+            if isinstance(data, (list, tuple)):
+                data = np.asarray(data)
             mask = ~isnull(data)
             if mask is not None:
                 data = data[mask]
