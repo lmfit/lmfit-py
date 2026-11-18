@@ -27,7 +27,7 @@ Version 1.4.0 Release Notes (unreleased)
 Fixes:
 
 - preserve directories when loading a saved model or fit result from a
-  ``pathlib.Path``, including paths longer than 255 characters (PR #PRNUM)
+  ``pathlib.Path``, including paths longer than 255 characters (PR #1070)
 
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
