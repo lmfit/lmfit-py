@@ -669,3 +669,41 @@ def test_saveload_composite_spline_model_hides_knots():
         assert_allclose(comp2.func(SPLINE_XX,
                                    **spline_coefs(comp2, result2.params)),
                         comp.eval(result.params, x=SPLINE_XX), rtol=1e-12)
+
+
+@pytest.mark.parametrize('save_result', [False, True])
+@pytest.mark.parametrize('path_kind', ['relative', 'absolute', 'long'])
+@pytest.mark.parametrize('decoy', [False, True])
+def test_load_saved_path_preserves_directory(tmp_path, monkeypatch, save_result,
+                                             path_kind, decoy):
+    """Load the requested Path even when another file has the same basename."""
+    monkeypatch.chdir(tmp_path)
+    model = lmfit.models.LinearModel(prefix='line_')
+    xx = np.linspace(-2, 2, 21)
+    result = model.fit(2*xx + 1 + 0.01*np.cos(xx), x=xx,
+                       line_slope=1, line_intercept=0)
+    saver = save_modelresult if save_result else save_model
+    loader = load_modelresult if save_result else load_model
+    original = result if save_result else model
+    parent = tmp_path / 'results'
+    if path_kind == 'long':
+        parent = parent / ('a'*120) / ('b'*120)
+    parent.mkdir(parents=True)
+    target = parent / 'fit.json'
+    saver(original, target)
+    if decoy:
+        other = lmfit.models.LinearModel(prefix='other_')
+        if save_result:
+            other = other.fit(3*xx - 4, x=xx, other_slope=1,
+                              other_intercept=0)
+        saver(other, tmp_path / target.name)
+    if path_kind == 'relative':
+        target = target.relative_to(tmp_path)
+    loaded = loader(target)
+    if save_result:
+        assert loaded.model.prefix == model.prefix
+        assert_array_equal(loaded.best_fit, result.best_fit)
+        assert_allclose(loaded.chisqr, result.chisqr)
+    else:
+        assert loaded.prefix == model.prefix
+        assert_array_equal(loaded.eval(result.params, x=xx), result.best_fit)
