@@ -27,7 +27,7 @@ Version 1.4.0 Release Notes (unreleased)
 Fixes:
 
 - apply ``nan_policy='omit'`` to list and tuple data, independent
-  variables, and weights without requiring NumPy indexing (PR #PRNUM)
+  variables, and weights without requiring NumPy indexing (PR #1069)
 
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
