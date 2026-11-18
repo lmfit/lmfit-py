@@ -1377,7 +1377,7 @@ def load_model(fname, funcdefs=None):
     """
     mod = Model(lambda x: x)
     if isinstance(fname, Path):
-        fname = fname.name
+        return mod.loads(fname.read_text(), funcdefs=funcdefs)
 
     if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
         with open(fname) as fh:
@@ -1490,7 +1490,7 @@ def load_modelresult(fname, funcdefs=None):
     params = Parameters()
     modres = ModelResult(Model(lambda x: x, None), params)
     if isinstance(fname, Path):
-        fname = fname.name
+        return modres.loads(fname.read_text(), funcdefs=funcdefs)
 
     if len(fname) < MAXFILENAME_LENGTH and Path(fname).exists():
         with open(fname) as fh:
