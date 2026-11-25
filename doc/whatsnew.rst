@@ -49,6 +49,11 @@ Fixes:
 - fix loading a ``ModelResult`` saved with SciPy >= 1.16 using an older SciPy:
   the SciPy special functions in the ``Parameters`` symbol table are no longer
   saved, but added again on load (Issue #1045)
+- fix ``emcee`` failing with "Initial state has a large condition number" when a varying
+  parameter has an initial value of exactly zero, by spreading the initial walkers around zero with
+  an absolute instead of a relative perturbation. Initial walkers that fall outside a parameter's
+  bounds are reflected back inside, so a starting value at a bound no longer gives walkers with
+  zero probability.
 
 - support complex scalar and non-contiguous model outputs, and real components
   of complex models, in ``ModelResult.eval_uncertainty``

@@ -1394,6 +1394,17 @@ class Minimizer:
         else:
             p0 = 1 + rng.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
+            # a relative perturbation cannot spread walkers out when the
+            # starting value is exactly zero, so use an absolute one there
+            zeros = var_arr == 0
+            if zeros.any():
+                p0[:, zeros] = rng.randn(nwalkers, zeros.sum()) * 1.e-4
+            # walkers outside the bounds have zero probability, so reflect
+            # them back in (a starting value is often also a bound)
+            if self.nvarys:
+                lb, ub = bounds[:, 0], bounds[:, 1]
+                p0 = np.where(p0 < lb, 2*lb - p0, p0)
+                p0 = np.where(p0 > ub, 2*ub - p0, p0)
             sampler_kwargs.setdefault('pool', auto_pool)
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
                                                  self._lnprob, **sampler_kwargs)

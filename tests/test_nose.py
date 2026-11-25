@@ -1,5 +1,6 @@
 import sys
 import unittest
+import warnings
 
 import numpy as np
 from numpy import pi
@@ -568,6 +569,35 @@ class CommonMinimizerTest(unittest.TestCase):
                       nwalkers=100,
                       steps=1,
                       pos=out.chain[-1, :-1, ...])
+
+    def test_emcee_zero_initial_value(self):
+        # walkers must be spread out around a starting value of exactly zero
+        if not HAS_EMCEE:
+            return
+
+        x = np.linspace(0, 10, 101)
+        rng = np.random.RandomState(1)
+        data = 2.0*x + 1.0 + rng.normal(scale=0.1, size=x.size)
+
+        def residual(params, x, data):
+            return params['slope']*x + params['intercept'] - data
+
+        # a starting value of zero is often also the lower bound
+        for intercept_min in (-np.inf, 0):
+            params = Parameters()
+            params.add('slope', value=1.0)
+            params.add('intercept', value=0.0, min=intercept_min)
+            mini = Minimizer(residual, params, fcn_args=(x, data))
+            with warnings.catch_warnings():
+                warnings.simplefilter('error', RuntimeWarning)
+                out = mini.emcee(nwalkers=20, steps=300, burn=100, seed=1,
+                                 progress=False)
+
+            assert out.chain.shape == (200, 20, 2)
+            assert np.all(np.std(out.chain[0], axis=0) > 0)
+            assert np.all(out.chain[..., 1] >= intercept_min)
+            assert_allclose(out.params['slope'].value, 2.0, atol=0.1)
+            assert_allclose(out.params['intercept'].value, 1.0, atol=0.5)
 
     def test_emcee_reuse_sampler(self):
         if not HAS_EMCEE:
