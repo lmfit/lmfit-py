@@ -54,6 +54,10 @@ Fixes:
   of complex models, in ``ModelResult.eval_uncertainty``
 - avoid a ``len`` error when calculating fit statistics for a scalar array
   model output
+- fix the ``workers`` keyword for the scalar minimizers: it is now passed as a
+  solver option to the ``scipy.optimize.minimize`` methods that support it
+  (SciPy >= 1.16) instead of raising a ``TypeError``, and it is no longer
+  dropped for ``differential_evolution`` with SciPy < 1.16
 
 .. _whatsnew_134_label:
 
