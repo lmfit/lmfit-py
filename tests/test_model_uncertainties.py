@@ -215,3 +215,33 @@ def test_multidim_model():
 
     assert_allclose(mr.eval_uncertainty(x=np.array([3, 4])), np.array([[0, 0], [0.18432744, 0.24576991]]))
     assert_allclose(mr.eval_uncertainty(x=np.array([3j, 4j])), np.array([[0, 0], [0.13033918+0.13033918j, 0.17378557+0.17378557j]]))
+
+
+@pytest.mark.parametrize('prefix', ['', 'g', 'g_'])
+@pytest.mark.parametrize('composite', [False, True])
+def test_uncertainty_component_prefix(peakdata, prefix, composite):
+    """Use the same component labels as eval_components for every prefix."""
+    x, y = peakdata
+    model = GaussianModel(prefix=prefix)
+    params = model.guess(y, x=x)
+    if composite:
+        background = LinearModel(prefix='bkg_')
+        params.update(background.make_params(slope=0, intercept=0))
+        model += background
+    result = model.fit(y, params, x=x)
+    actual = result.eval_uncertainty()
+    assert np.isfinite(actual).all()
+    assert np.any(actual > 0)
+    assert set(result.dely_comps) == set(result.eval_components())
+
+    # Prefixes only rename parameters: uncertainties must be unchanged.
+    control = GaussianModel(prefix='peak_')
+    control_params = control.guess(y, x=x)
+    if composite:
+        control_params.update(background.make_params(slope=0, intercept=0))
+        control += background
+    reference = control.fit(y, control_params, x=x)
+    assert_allclose(actual, reference.eval_uncertainty(), rtol=1e-7)
+    label = prefix if prefix else 'gaussian'
+    assert_allclose(result.dely_comps[label], reference.dely_comps['peak_'],
+                    rtol=1e-7)

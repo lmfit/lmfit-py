@@ -28,6 +28,8 @@ Fixes:
 
 - preserve directories when loading a saved model or fit result from a
   ``pathlib.Path``, including paths longer than 255 characters (PR #1070)
+- allow one-character model prefixes when evaluating model and component
+  uncertainty bands (PR #1068)
 
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays

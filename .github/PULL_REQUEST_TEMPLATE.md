@@ -1,16 +1,42 @@
 <!--
 Thank you for submitting a PR to lmfit!
 
-To ease the process of reviewing your PR, do make sure to complete the following boxes.
+To help the review process for your PR, make sure to read these
+instructions and complete the appropriate boxes.
 -->
+
+
+** DO NOT IGNORE **
+
+
+Please read [this](https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md).
+
+Unless you are a core developer, your Pull Request must refer to an
+existing Discussion or Issue, and preferrably be invited.  Unsolicited
+Pull Request that do not have a related Discussion or Issue are
+proposing change to the code for a perceived problem.  The core
+developers and maintainers may not agree with the characterization of
+the issue. Even if we do agree tha there is a problem, we may not
+agree on the solution you propose.
+
+If your Issue or Discussion does not provice a a minimal and complete
+example (https://stackoverflow.com/help/mcve), it is probably not
+ready for a Pull Request unless told otherwise by a core developer.
+
+If your PR is reviewed and questions are asked or changes suggested,
+these are not idle requests.  It is unlikely that Your PR will be
+further considered until you address the review comments.
+
+#### Issue or Discussion
+
+<!--- Include a link to an open Issue, Discussion or URL to the discussion on the mailing list. -->
+
 
 #### Description
 <!--- Describe your changes in detail: why is it required, what problem does it solve? -->
-<!--- If it fixes an open issue, please link to the issue here. -->
-<!--- If applicable, please provide the URL to the discussion on the mailing list. -->
 
 
-###### Type of Changes
+###### Type of Changesxs
 <!--- What type of changes does your code introduce? Put an `x` in all the boxes that apply: -->
 - [ ] Bug fix
 - [ ] New feature
