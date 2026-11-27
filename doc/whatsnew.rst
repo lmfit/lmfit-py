@@ -26,6 +26,9 @@ Version 1.4.0 Release Notes (unreleased)
 
 Fixes:
 
+- allow one-character model prefixes when evaluating model and component
+  uncertainty bands (PR #1068)
+
 - prevent log-normal evaluations from modifying input arrays and allow read-only
   coordinate arrays
 - avoid overflowing gamma factors in ``pearson7``, ``students_t``, and
