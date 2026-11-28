@@ -954,16 +954,19 @@ class Minimizer:
 
         # FIXME: update when SciPy requirement is >= 1.16
         # For several algorithms a keyword 'workers' was added, to allow for
-        # parallelization of some calculations.
+        # parallelization of some calculations. It is a solver option for
+        # scipy.optimize.minimize, but an argument of differential_evolution.
 
         # The keyword is not available below 1.16 and/or for the methods listed
         # below:
-        if 'workers' in fmin_kws and (int(scipy_version.split('.')[1]) < 16 or
-                                      method in ('Nelder-Mead', 'Powell',
-                                                 'COBYLA', 'COBYQA', 'dogleg',
-                                                 'trust-ncg', 'trust-kryolv',
-                                                 'trust-exact')):
-            fmin_kws.pop('workers')
+        if 'workers' in fmin_kws and method != 'differential_evolution':
+            workers = fmin_kws.pop('workers')
+            if (int(scipy_version.split('.')[1]) >= 16 and
+                    method not in ('Nelder-Mead', 'Powell', 'COBYLA', 'COBYQA',
+                                   'dogleg', 'trust-ncg', 'trust-krylov',
+                                   'trust-exact')):
+                fmin_kws['options'] = {**(fmin_kws.get('options') or {}),
+                                       'workers': workers}
 
         if method == 'differential_evolution':
             for par in params.values():

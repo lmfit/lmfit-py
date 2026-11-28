@@ -99,3 +99,71 @@ def test_workers_keyword_solvers(peakdata, method):
             assert result.call_kws['workers'] is None
         else:
             assert result.call_kws['workers'] == 1
+
+
+# FIXME: update when SciPy requirement is >= 1.16
+@pytest.mark.parametrize('method', ('nelder', 'powell', 'cg', 'bfgs', 'lbfgsb',
+                                    'tnc', 'cobyla', 'cobyqa', 'slsqp',
+                                    'trust-constr', 'differential_evolution'))
+def test_workers_keyword_scalar_minimize(peakdata, method):
+    """Pass 'workers' on to the solvers that support it."""
+    x = peakdata[0]
+    y = peakdata[1]
+
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    for name in ('amplitude', 'center', 'sigma'):
+        params[name].set(min=0, max=1000)
+
+    nmap = []
+
+    def workers(func, iterable):
+        """Map-like callable that records that the solver used it."""
+        nmap.append(True)
+        return map(func, iterable)
+
+    result = mod.fit(y, params, x=x, method=method,
+                     fit_kws={'workers': workers})
+    options = result.call_kws.get('options', {})
+
+    if method == 'differential_evolution':
+        assert result.call_kws['workers'] is workers
+        assert nmap
+    elif (int(scipy_version.split('.')[1]) >= 16 and method in
+          ('cg', 'bfgs', 'lbfgsb', 'tnc', 'slsqp', 'trust-constr')):
+        assert 'workers' not in result.call_kws
+        assert options['workers'] is workers
+        assert nmap
+    else:
+        assert 'workers' not in result.call_kws
+        assert 'workers' not in options
+        assert not nmap
+
+
+# FIXME: update when SciPy requirement is >= 1.16
+@pytest.mark.parametrize('method', ('Newton-CG', 'dogleg', 'trust-ncg',
+                                    'trust-exact', 'trust-krylov'))
+def test_workers_keyword_jacobian_solvers(method):
+    """Pass 'workers' on to the solvers needing a Jacobian that support it."""
+    def objective(pars):
+        return (pars['a'] - 1.0)**2 + (pars['b'] + 2.0)**2
+
+    def gradient(pars):
+        return np.array([2.0*(pars['a'] - 1.0), 2.0*(pars['b'] + 2.0)])
+
+    def hessian(fvars):
+        return 2.0*np.eye(2)
+
+    params = Parameters()
+    params.add('a', value=0.0)
+    params.add('b', value=0.0)
+
+    result = Minimizer(objective, params).scalar_minimize(
+        method=method, Dfun=gradient, hess=hessian, workers=map)
+
+    supported = (int(scipy_version.split('.')[1]) >= 16 and
+                 method == 'Newton-CG')
+    assert 'workers' not in result.call_kws
+    assert ('workers' in result.call_kws['options']) == supported
+    assert abs(result.params['a'].value - 1.0) < 1e-6
+    assert abs(result.params['b'].value + 2.0) < 1e-6
